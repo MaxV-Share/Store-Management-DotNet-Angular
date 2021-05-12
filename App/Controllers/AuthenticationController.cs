@@ -38,7 +38,7 @@ namespace App.Controllers
 
         [HttpPost]
         [Route("Login")]
-        public async Task<IActionResult> Login([FromForm] LoginDTO request)
+        public async Task<IActionResult> Login([FromBody] LoginDTO request)
         {
             var result = await _authenticationService.Login(request);
             if (result.StatusCode >= 400)

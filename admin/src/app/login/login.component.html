@@ -7,7 +7,8 @@
                 <div class="form-content">
                     <div class="form-group">
                         <input
-                            [placeholder]="'Email' | translate"
+                            [(ngModel)]="loginModel.userName" name="username"
+                            [placeholder]="'UserName' | translate"
                             class="form-control input-underline input-lg"
                             type="text"
                         />
@@ -15,13 +16,14 @@
 
                     <div class="form-group">
                         <input
+                            [(ngModel)]="loginModel.password" name="password"
                             [placeholder]="'Password' | translate"
                             class="form-control input-underline input-lg"
                             type="password"
                         />
                     </div>
                 </div>
-                <a (click)="onLoggedin()" [routerLink]="['/dashboard']" class="btn rounded-btn">{{
+                <a (click)="onLogin()" [routerLink]="['/dashboard']" class="btn rounded-btn">{{
                     'Log in' | translate
                 }}</a>
                 &nbsp;

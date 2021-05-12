@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 
 namespace App.Infrastructures.Startup.ServicesExtensions
 {
@@ -67,6 +68,8 @@ namespace App.Infrastructures.Startup.ServicesExtensions
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
                 };
             });
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddControllersWithViews();
             services.AddSwaggerGen(c =>
             {

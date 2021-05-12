@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormsModule, NgModel, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { FormModule } from './layout/form/form.module';
 import { AuthGuard } from './shared';
+import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
 import { LanguageTranslationModule } from './shared/modules/language-translation/language-translation.module';
 
 @NgModule({
@@ -19,10 +19,15 @@ import { LanguageTranslationModule } from './shared/modules/language-translation
         HttpClientModule,
         LanguageTranslationModule,
         AppRoutingModule,
-        FormModule
+        FormsModule,
+        ReactiveFormsModule
     ],
     declarations: [AppComponent],
-    providers: [AuthGuard],
+    providers: [AuthGuard, {
+        provide: HTTP_INTERCEPTORS,
+        useClass: AuthInterceptor,
+        multi: true
+    }],
     bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

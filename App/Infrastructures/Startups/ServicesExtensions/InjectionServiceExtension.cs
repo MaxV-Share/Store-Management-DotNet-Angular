@@ -9,7 +9,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace S4.Infrastructures.Startup.ServicesExtensions
+namespace App.Infrastructures.Startup.ServicesExtensions
 {
     public static class InjectionServiceExtension
     {
