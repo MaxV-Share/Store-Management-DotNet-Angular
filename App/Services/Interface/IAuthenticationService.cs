@@ -14,6 +14,6 @@ namespace App.Services.Interface
         Task<Response<bool>> Register(RegisterDTO request);
         Task<Response<string>> Login(LoginDTO request);
         Task Logout(string request);
-        Task<bool> CheckToken(string token);
+        Task<string> CheckToken(string authorization);
     }
 }

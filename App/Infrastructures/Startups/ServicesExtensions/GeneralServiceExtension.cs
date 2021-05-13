@@ -46,9 +46,8 @@ namespace App.Infrastructures.Startup.ServicesExtensions
 
 
             services.AddDistributedMemoryCache();
-            var jwtSection = configuration.GetSection("JWT");
-            services.Configure<JwtOptions>(jwtSection);
-            var appSettings = jwtSection.Get<JwtOptions>();
+            services.Configure<JwtOptions>(configuration.GetSection("JWT"));
+            var appSettings = configuration.GetSection("JWT").Get<JwtOptions>();
 
             services.AddAuthentication(o =>
             {
@@ -65,7 +64,7 @@ namespace App.Infrastructures.Startup.ServicesExtensions
                     ValidateAudience = true,
                     ValidAudience = appSettings.ValidAudience,
                     ValidIssuer = appSettings.ValidIssuer,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appSettings.Secret))
                 };
             });
 

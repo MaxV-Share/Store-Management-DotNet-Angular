@@ -2,9 +2,9 @@
 using App.DTO;
 using App.Repositories.Interface;
 using App.Services.Interface;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,18 +13,20 @@ namespace App.Controllers
     public class UsersController : ApiController
     {
         public readonly IUserService _userService;
-        public UsersController(IUserService userService)
+        public readonly Microsoft.Extensions.Configuration.IConfiguration _configuration;
+        public UsersController(IUserService userService, Microsoft.Extensions.Configuration.IConfiguration configuration)
         {
             _userService = userService;
+            _configuration = configuration;
         }
 
         [HttpGet]
-
-        [Authorize(Roles = AuthorizeAttributeRole.Admin)]
-        public async Task<IEnumerable<UserNonRequest>> GetUsers()
+        [Authorize]
+        public async Task<IActionResult> GetUsers()
         {
+            //Request.Headers
             var result = await _userService.GetAllAsync("");
-            return result;
+            return Ok(result);
         }
     }
 }

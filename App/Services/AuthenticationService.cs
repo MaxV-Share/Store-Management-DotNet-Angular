@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -44,8 +45,7 @@ namespace App.Services
             if (user == null || !await _userManager.CheckPasswordAsync(user, request.Password))
                 return new Response<string>(StatusCodes.Status404NotFound, "UserName or Password is incorrect");
 
-            var userRoles = await _userManager.GetRolesAsync(user);
-
+            IEnumerable<string> userRoles = await _userManager.GetRolesAsync(user);
             var authClaims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name,
@@ -57,6 +57,8 @@ namespace App.Services
             {
                 authClaims.Add(new Claim(ClaimTypes.Role, e));
             });
+
+            await _signInManager.SignInAsync(user, true);
 
             var authSigninKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
             var token = new JwtSecurityToken(
@@ -130,9 +132,32 @@ namespace App.Services
                 }
             }
         }
-        public async Task<bool> CheckToken(string token)
+        public async Task<string> CheckToken(string authorization)
         {
-            return await _cache.GetStringAsync($"tokens:{token}:deactivated") == null;
+            if (AuthenticationHeaderValue.TryParse(authorization, out var headerValue))
+            {
+                // we have a valid AuthenticationHeaderValue that has the following details:
+
+                var scheme = headerValue.Scheme;
+                var tokenHeader = headerValue.Parameter;
+
+                var validationParameters = new TokenValidationParameters()
+                {
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtOptions.Value.Secret)),
+                    ValidateIssuerSigningKey = true,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                };
+
+                var tokenHandler = new JwtSecurityTokenHandler();
+                tokenHandler.ValidateToken(tokenHeader, validationParameters, out var securityToken);
+                var jwtSecurityToken = (JwtSecurityToken)securityToken;
+                var userName = jwtSecurityToken.Claims.SingleOrDefault(x => x.Type == ClaimTypes.Name).Value;
+                return userName;
+                // scheme will be "Bearer"
+                // parameter will be the token itself.
+            }
+            return null;
         }
     }
 }

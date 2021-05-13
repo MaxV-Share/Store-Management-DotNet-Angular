@@ -26,7 +26,8 @@ export class LoginComponent implements OnInit {
         await this.auth.Login(this.loginModel).toPromise().then((response) => {
             this.cookieConsent.setCookie("token", response,1);
             token = response;
-        }, error => { });
+        }, ex => { console.error(ex);
+         });
         if (token || token != '')
         this.router.navigate(['/']);
         //localStorage.setItem('isLoggedin', token);

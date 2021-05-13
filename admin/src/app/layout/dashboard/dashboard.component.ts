@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UsersService } from '../../shared/services';
 import { routerTransition } from '../../router.animations';
 
 @Component({
@@ -11,7 +12,7 @@ export class DashboardComponent implements OnInit {
     public alerts: Array<any> = [];
     public sliders: Array<any> = [];
 
-    constructor() {
+    constructor(private usersServices: UsersService) {
         this.sliders.push(
             {
                 imagePath: 'assets/images/slider1.jpg',
@@ -48,12 +49,18 @@ export class DashboardComponent implements OnInit {
                 voluptatum veritatis quod aliquam! Rerum placeat necessitatibus, vitae dolorum`
             }
         );
+        usersServices.Gets().toPromise()
+            .then(e => console.log(e)
+            ).catch(ex => console.log(ex)
+            )
+
     }
 
-    ngOnInit() {}
+    ngOnInit() { }
 
     public closeAlert(alert: any) {
         const index: number = this.alerts.indexOf(alert);
         this.alerts.splice(index, 1);
+
     }
 }

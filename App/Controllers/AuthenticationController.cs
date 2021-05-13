@@ -8,6 +8,17 @@ using AutoMapper;
 using App.Controllers.Base;
 using App.Services.Interface;
 using MaxV.Base.DTOs;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Net.Http.Headers;
+using System.Net.Http.Headers;
+using System.Net;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using System.Linq;
+using System.Security.Claims;
 
 namespace App.Controllers
 {
@@ -29,9 +40,9 @@ namespace App.Controllers
                     return Ok();
                 return BadRequest(result.Message);
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
         }
@@ -51,6 +62,17 @@ namespace App.Controllers
         public async Task<IActionResult> Logout(string request)
         {
             await _authenticationService.Logout(request);
+            return Ok();
+        }
+
+        [HttpGet("validate-token")]
+        [Authorize]
+        public async Task<IActionResult> ValidateToken([FromHeader] string authorization)
+        {
+            //var token = Request.Headers[HeaderNames.Authorization];
+            var result = await _authenticationService.CheckToken(authorization);
+            if (string.IsNullOrEmpty(result))
+                return Unauthorized();
             return Ok();
         }
     }

@@ -15,9 +15,6 @@ namespace App.Infrastructures.Startup.ServicesExtensions
     {
         public static void AddInjectedServices(this IServiceCollection services)
         {
-            //services.AddTransient<IWebhookEventRepository<WebhookEvent>, WebhookEventRepository>();
-            //services.AddTransient<IWebhookEventService, WebhookEventService>();
-
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new AutoMapperProfile());
