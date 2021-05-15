@@ -9,6 +9,6 @@ namespace App.Services.Interface
 {
     public interface ISaleService
     {
-        public Task<SaleNonRequest> PostAsync(SaleRequest request);
+        public Task<SaleNonRequest> PostAsync(SaleRequest request);  
     }
 }
