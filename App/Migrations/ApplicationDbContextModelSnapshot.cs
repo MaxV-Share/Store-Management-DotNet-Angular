@@ -321,6 +321,10 @@ namespace App.Migrations
                         .HasColumnType("text")
                         .HasColumnName("deleted");
 
+                    b.Property<DateTime?>("FromDate")
+                        .HasColumnType("datetime")
+                        .HasColumnName("from_date");
+
                     b.Property<int>("Id")
                         .HasColumnType("int")
                         .HasColumnName("id");
@@ -332,6 +336,10 @@ namespace App.Migrations
                     b.Property<int?>("PercentDiscount")
                         .HasColumnType("int")
                         .HasColumnName("percent_discount");
+
+                    b.Property<DateTime?>("ToDate")
+                        .HasColumnType("datetime")
+                        .HasColumnName("to_date");
 
                     b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("datetime")
