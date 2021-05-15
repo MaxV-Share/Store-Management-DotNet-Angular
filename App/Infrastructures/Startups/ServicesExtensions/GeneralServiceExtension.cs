@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using App.Infrastructures.Dbcontexts;
-using App.Data.Entities;
+using App.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using AutoMapper;
 using App.Mapper;
@@ -32,17 +32,6 @@ namespace App.Infrastructures.Startup.ServicesExtensions
             }); 
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
-            var mapperConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(new AutoMapperProfile());
-            });
-
-            IMapper mapper = mapperConfig.CreateMapper();
-
-            //DI
-            services.AddSingleton(mapper);
-            services.AddTransient<IAuthenticationService, AuthenticationService>();
-            services.AddTransient<UserManager<User>, UserManager<User>>();
 
 
             services.AddDistributedMemoryCache();

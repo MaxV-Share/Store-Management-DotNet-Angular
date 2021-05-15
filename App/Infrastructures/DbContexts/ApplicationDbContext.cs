@@ -1,4 +1,4 @@
-﻿using App.Data.Entities;
+﻿using App.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +17,12 @@ namespace App.Infrastructures.Dbcontexts
         {
             _configuration = configuration;
         }
+        public virtual DbSet<Bill> Bills { set; get; }
+        public virtual DbSet<BillDetail> BillDetails { set; get; }
+        public virtual DbSet<Category> Categories { set; get; }
+        public virtual DbSet<Customer> Customers { set; get; }
+        public virtual DbSet<Product> Products { set; get; }
+        public virtual DbSet<Sale> Sale { set; get; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

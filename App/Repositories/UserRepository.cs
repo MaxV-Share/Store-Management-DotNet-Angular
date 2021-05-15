@@ -1,4 +1,4 @@
-﻿using App.Data.Entities;
+﻿using App.Models.Entities;
 using App.DTO;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;

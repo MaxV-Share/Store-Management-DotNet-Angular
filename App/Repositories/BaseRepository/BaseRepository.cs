@@ -1,4 +1,4 @@
-﻿using App.Data;
+﻿using App.Models;
 using AutoMapper;
 using MaxV.Base;
 using Microsoft.EntityFrameworkCore;

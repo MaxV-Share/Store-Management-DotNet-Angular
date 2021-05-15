@@ -1,4 +1,4 @@
-using App.Data;
+using App.Models;
 using App.Infrastructures.Dbcontexts;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +16,7 @@ namespace App
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var configuration = new ConfigurationBuilder()
                                 .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json")
@@ -27,7 +27,7 @@ namespace App
 
             var host = CreateHostBuilder(args).Build();
 
-            CreateDbIfNotExists(host);
+            await CreateDbIfNotExistsAsync(host);
 
             try
             {
@@ -38,7 +38,7 @@ namespace App
                 Log.CloseAndFlush();
             }
         }
-        private static void CreateDbIfNotExists(IHost host)
+        private static async Task CreateDbIfNotExistsAsync(IHost host)
         {
             using (var scope = host.Services.CreateScope())
             {
@@ -46,9 +46,9 @@ namespace App
                 try
                 {
                     var context = services.GetRequiredService<ApplicationDbContext>();
-                    context.Database.Migrate(); 
+                    await context.Database.MigrateAsync(); 
                     var dbInitializer = services.GetService<DBInitializer>();
-                    dbInitializer.Seed().Wait();
+                    await dbInitializer.Seed();
                 }
                 catch (Exception ex)
                 {

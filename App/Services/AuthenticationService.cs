@@ -1,4 +1,4 @@
-﻿using App.Data.Entities;
+﻿using App.Models.Entities;
 using App.DTO;
 using App.Services.Interface;
 using MaxV.Base.DTOs;

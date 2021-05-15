@@ -1,4 +1,4 @@
-﻿using App.Data.Entities;
+﻿using App.Models.Entities;
 using App.Infrastructures.Dbcontexts;
 using App.Mapper;
 using App.Repositories.BaseRepository;

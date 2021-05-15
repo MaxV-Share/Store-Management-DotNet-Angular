@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace App.Data.Entities
+namespace App.Models.Entities
 {
     public class User : IdentityUser
     {

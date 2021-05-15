@@ -1,4 +1,4 @@
-﻿using App.Data.Entities;
+﻿using App.Models.Entities;
 using App.DTO;
 using System;
 using System.Collections.Generic;

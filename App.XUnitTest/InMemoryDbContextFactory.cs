@@ -1,4 +1,4 @@
-﻿using App.Data;
+﻿using App.Models;
 using App.Infrastructures.Dbcontexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
