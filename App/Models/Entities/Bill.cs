@@ -9,7 +9,7 @@ namespace App.Models.Entities
 {
     public class Bill : BaseEntity
     {
-        public Customer Customer { get; set; }  
+        public Customer Customer { get; set; }
         public User UserPayment { get; set; }
         public double? TotalPrice { get; set; }
         public double? DiscountPrice { get; set; }
