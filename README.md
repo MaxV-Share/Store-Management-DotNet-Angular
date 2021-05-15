@@ -8,3 +8,4 @@
 - NodeJs: https://nodejs.org/en/download/
 - Angular: https://angular.io/guide/setup-local
 - TypeScript: npm install typescript --save-dev
+### Account admin/Admin@123
