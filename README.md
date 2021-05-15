@@ -1,4 +1,3 @@
-# Store-Management-DotNet-Angular
 
 ## Deverloper
 ### Download
