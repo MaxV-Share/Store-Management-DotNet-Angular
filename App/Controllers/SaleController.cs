@@ -26,6 +26,15 @@ namespace App.Controllers
                 return Ok(result);
             return NotFound();
         }
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetById(int id)
+        {
+            var result = await _saleService.GetByIdAsync(id);
+
+            if (result != null)
+                return Ok(result);
+            return NotFound();
+        }
 
     }
 }

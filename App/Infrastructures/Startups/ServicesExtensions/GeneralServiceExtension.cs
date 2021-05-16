@@ -27,7 +27,7 @@ namespace App.Infrastructures.Startup.ServicesExtensions
             {
                 options.EnableDetailedErrors(true);
 
-                options.UseMySQL(configuration.GetValue<string>("ConnectionStrings:DefaultConnection"));
+                options.UseMySQL(configuration.GetValue<string>("ConnectionStrings:DefaultConnection"), options => options.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.GetName().Name));
                 options.UseSnakeCaseNamingConvention();
             }); 
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();

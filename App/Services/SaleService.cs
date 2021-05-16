@@ -22,7 +22,17 @@ namespace App.Services
         }
         public async Task<SaleNonRequest> PostAsync(SaleRequest request)
         {
-            var response = await _saleRepository.PostAsync(request);
+            if (request == null)
+                return null;
+            Sale obj = new Sale()
+            {
+                PercentDiscount = request.PercentDiscount,
+                MaxDiscountPrice = request.MaxDiscountPrice,
+                FromDate = request.FromDate,
+                ToDate = request.ToDate
+
+            };
+            var response = await _saleRepository.CreateAsync(obj);
             var result = _mapper.Map<SaleNonRequest>(response);
             return result;
         }
