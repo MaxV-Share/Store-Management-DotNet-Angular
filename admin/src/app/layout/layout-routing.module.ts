@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { SaleComponent } from '../modules/components/sale/sale.component';
 import { LayoutComponent } from './layout.component';
 
 const routes: Routes = [
@@ -27,6 +28,10 @@ const routes: Routes = [
             {
                 path: 'blank-page',
                 loadChildren: () => import('./blank-page/blank-page.module').then((m) => m.BlankPageModule)
+            },
+            {
+                path: 'sale',
+                component: SaleComponent 
             }
         ]
     }

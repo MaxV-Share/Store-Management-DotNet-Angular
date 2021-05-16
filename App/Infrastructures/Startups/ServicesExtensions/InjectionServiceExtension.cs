@@ -8,6 +8,7 @@ using App.Services.Interface;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using App.Repositories;
 
 namespace App.Infrastructures.Startup.ServicesExtensions
 {
@@ -29,6 +30,8 @@ namespace App.Infrastructures.Startup.ServicesExtensions
             services.AddTransient<UserManager<User>, UserManager<User>>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<ISaleService, SaleService>();
+            services.AddTransient<ISaleRepository, SaleRepository>();
 
         }
     }
