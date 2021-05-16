@@ -19,10 +19,10 @@ namespace App.Migrations
 
             modelBuilder.Entity("App.Models.Entities.Bill", b =>
                 {
-                    b.Property<byte[]>("Uuid")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("varbinary(16)")
-                        .HasColumnName("uuid");
+                        .HasColumnType("int")
+                        .HasColumnName("id");
 
                     b.Property<DateTime?>("CreateAt")
                         .HasColumnType("datetime")
@@ -32,9 +32,9 @@ namespace App.Migrations
                         .HasColumnType("text")
                         .HasColumnName("create_by");
 
-                    b.Property<byte[]>("CustomerUuid")
-                        .HasColumnType("varbinary(16)")
-                        .HasColumnName("customer_uuid");
+                    b.Property<int?>("CustomerId")
+                        .HasColumnType("int")
+                        .HasColumnName("customer_id");
 
                     b.Property<string>("Deleted")
                         .HasColumnType("text")
@@ -43,10 +43,6 @@ namespace App.Migrations
                     b.Property<double?>("DiscountPrice")
                         .HasColumnType("double")
                         .HasColumnName("discount_price");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int")
-                        .HasColumnName("id");
 
                     b.Property<double?>("TotalPrice")
                         .HasColumnType("double")
@@ -64,11 +60,19 @@ namespace App.Migrations
                         .HasColumnType("varchar(767)")
                         .HasColumnName("user_payment_id");
 
-                    b.HasKey("Uuid")
+                    b.Property<byte[]>("Uuid")
+                        .IsRequired()
+                        .HasColumnType("varbinary(16)")
+                        .HasColumnName("uuid");
+
+                    b.HasKey("Id")
                         .HasName("pk_bills");
 
-                    b.HasIndex("CustomerUuid")
-                        .HasDatabaseName("ix_bills_customer_uuid");
+                    b.HasIndex("CustomerId")
+                        .HasDatabaseName("ix_bills_customer_id");
+
+                    b.HasIndex("Id")
+                        .HasDatabaseName("ix_bills_id");
 
                     b.HasIndex("UserPaymentId")
                         .HasDatabaseName("ix_bills_user_payment_id");
@@ -78,14 +82,14 @@ namespace App.Migrations
 
             modelBuilder.Entity("App.Models.Entities.BillDetail", b =>
                 {
-                    b.Property<byte[]>("Uuid")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("varbinary(16)")
-                        .HasColumnName("uuid");
+                        .HasColumnType("int")
+                        .HasColumnName("id");
 
-                    b.Property<byte[]>("BillUuid")
-                        .HasColumnType("varbinary(16)")
-                        .HasColumnName("bill_uuid");
+                    b.Property<int?>("BillId")
+                        .HasColumnType("int")
+                        .HasColumnName("bill_id");
 
                     b.Property<DateTime?>("CreateAt")
                         .HasColumnType("datetime")
@@ -103,10 +107,6 @@ namespace App.Migrations
                         .HasColumnType("double")
                         .HasColumnName("discount_price");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
                     b.Property<string>("Name")
                         .HasColumnType("text")
                         .HasColumnName("name");
@@ -119,9 +119,9 @@ namespace App.Migrations
                         .HasColumnType("text")
                         .HasColumnName("product_code");
 
-                    b.Property<byte[]>("ProductUuid")
-                        .HasColumnType("varbinary(16)")
-                        .HasColumnName("product_uuid");
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int")
+                        .HasColumnName("product_id");
 
                     b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("datetime")
@@ -131,24 +131,32 @@ namespace App.Migrations
                         .HasColumnType("text")
                         .HasColumnName("update_by");
 
-                    b.HasKey("Uuid")
+                    b.Property<byte[]>("Uuid")
+                        .IsRequired()
+                        .HasColumnType("varbinary(16)")
+                        .HasColumnName("uuid");
+
+                    b.HasKey("Id")
                         .HasName("pk_bill_details");
 
-                    b.HasIndex("BillUuid")
-                        .HasDatabaseName("ix_bill_details_bill_uuid");
+                    b.HasIndex("BillId")
+                        .HasDatabaseName("ix_bill_details_bill_id");
 
-                    b.HasIndex("ProductUuid")
-                        .HasDatabaseName("ix_bill_details_product_uuid");
+                    b.HasIndex("Id")
+                        .HasDatabaseName("ix_bill_details_id");
+
+                    b.HasIndex("ProductId")
+                        .HasDatabaseName("ix_bill_details_product_id");
 
                     b.ToTable("bill_details");
                 });
 
             modelBuilder.Entity("App.Models.Entities.Category", b =>
                 {
-                    b.Property<byte[]>("Uuid")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("varbinary(16)")
-                        .HasColumnName("uuid");
+                        .HasColumnType("int")
+                        .HasColumnName("id");
 
                     b.Property<DateTime?>("CreateAt")
                         .HasColumnType("datetime")
@@ -161,10 +169,6 @@ namespace App.Migrations
                     b.Property<string>("Deleted")
                         .HasColumnType("text")
                         .HasColumnName("deleted");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int")
-                        .HasColumnName("id");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
@@ -179,18 +183,26 @@ namespace App.Migrations
                         .HasColumnType("text")
                         .HasColumnName("update_by");
 
-                    b.HasKey("Uuid")
+                    b.Property<byte[]>("Uuid")
+                        .IsRequired()
+                        .HasColumnType("varbinary(16)")
+                        .HasColumnName("uuid");
+
+                    b.HasKey("Id")
                         .HasName("pk_categories");
+
+                    b.HasIndex("Id")
+                        .HasDatabaseName("ix_categories_id");
 
                     b.ToTable("categories");
                 });
 
             modelBuilder.Entity("App.Models.Entities.Customer", b =>
                 {
-                    b.Property<byte[]>("Uuid")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("varbinary(16)")
-                        .HasColumnName("uuid");
+                        .HasColumnType("int")
+                        .HasColumnName("id");
 
                     b.Property<DateTime?>("Birthday")
                         .HasColumnType("datetime")
@@ -213,10 +225,6 @@ namespace App.Migrations
                         .HasColumnType("varchar(256)")
                         .HasColumnName("full_name");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
                     b.Property<string>("PhoneNumber")
                         .HasMaxLength(10)
                         .HasColumnType("varchar(10)")
@@ -230,22 +238,30 @@ namespace App.Migrations
                         .HasColumnType("text")
                         .HasColumnName("update_by");
 
-                    b.HasKey("Uuid")
+                    b.Property<byte[]>("Uuid")
+                        .IsRequired()
+                        .HasColumnType("varbinary(16)")
+                        .HasColumnName("uuid");
+
+                    b.HasKey("Id")
                         .HasName("pk_customers");
+
+                    b.HasIndex("Id")
+                        .HasDatabaseName("ix_customers_id");
 
                     b.ToTable("customers");
                 });
 
             modelBuilder.Entity("App.Models.Entities.Product", b =>
                 {
-                    b.Property<byte[]>("Uuid")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("varbinary(16)")
-                        .HasColumnName("uuid");
+                        .HasColumnType("int")
+                        .HasColumnName("id");
 
-                    b.Property<byte[]>("CategoryUuid")
-                        .HasColumnType("varbinary(16)")
-                        .HasColumnName("category_uuid");
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int")
+                        .HasColumnName("category_id");
 
                     b.Property<string>("Code")
                         .HasMaxLength(256)
@@ -263,10 +279,6 @@ namespace App.Migrations
                     b.Property<string>("Deleted")
                         .HasColumnType("text")
                         .HasColumnName("deleted");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int")
-                        .HasColumnName("id");
 
                     b.Property<double?>("MaxDiscountPrice")
                         .HasColumnType("double")
@@ -293,21 +305,29 @@ namespace App.Migrations
                         .HasColumnType("text")
                         .HasColumnName("update_by");
 
-                    b.HasKey("Uuid")
+                    b.Property<byte[]>("Uuid")
+                        .IsRequired()
+                        .HasColumnType("varbinary(16)")
+                        .HasColumnName("uuid");
+
+                    b.HasKey("Id")
                         .HasName("pk_products");
 
-                    b.HasIndex("CategoryUuid")
-                        .HasDatabaseName("ix_products_category_uuid");
+                    b.HasIndex("CategoryId")
+                        .HasDatabaseName("ix_products_category_id");
+
+                    b.HasIndex("Id")
+                        .HasDatabaseName("ix_products_id");
 
                     b.ToTable("products");
                 });
 
             modelBuilder.Entity("App.Models.Entities.Sale", b =>
                 {
-                    b.Property<byte[]>("Uuid")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("varbinary(16)")
-                        .HasColumnName("uuid");
+                        .HasColumnType("int")
+                        .HasColumnName("id");
 
                     b.Property<DateTime?>("CreateAt")
                         .HasColumnType("datetime")
@@ -324,10 +344,6 @@ namespace App.Migrations
                     b.Property<DateTime?>("FromDate")
                         .HasColumnType("datetime")
                         .HasColumnName("from_date");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int")
-                        .HasColumnName("id");
 
                     b.Property<double?>("MaxDiscountPrice")
                         .HasColumnType("double")
@@ -349,8 +365,16 @@ namespace App.Migrations
                         .HasColumnType("text")
                         .HasColumnName("update_by");
 
-                    b.HasKey("Uuid")
+                    b.Property<byte[]>("Uuid")
+                        .IsRequired()
+                        .HasColumnType("varbinary(16)")
+                        .HasColumnName("uuid");
+
+                    b.HasKey("Id")
                         .HasName("pk_sale");
+
+                    b.HasIndex("Id")
+                        .HasDatabaseName("ix_sale_id");
 
                     b.ToTable("sale");
                 });
@@ -603,8 +627,8 @@ namespace App.Migrations
                 {
                     b.HasOne("App.Models.Entities.Customer", "Customer")
                         .WithMany()
-                        .HasForeignKey("CustomerUuid")
-                        .HasConstraintName("fk_bills_customers_customer_uuid");
+                        .HasForeignKey("CustomerId")
+                        .HasConstraintName("fk_bills_customers_customer_id");
 
                     b.HasOne("App.Models.Entities.User", "UserPayment")
                         .WithMany()
@@ -620,13 +644,13 @@ namespace App.Migrations
                 {
                     b.HasOne("App.Models.Entities.Bill", "Bill")
                         .WithMany()
-                        .HasForeignKey("BillUuid")
-                        .HasConstraintName("fk_bill_details_bills_bill_uuid");
+                        .HasForeignKey("BillId")
+                        .HasConstraintName("fk_bill_details_bills_bill_id");
 
                     b.HasOne("App.Models.Entities.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductUuid")
-                        .HasConstraintName("fk_bill_details_products_product_uuid");
+                        .HasForeignKey("ProductId")
+                        .HasConstraintName("fk_bill_details_products_product_id");
 
                     b.Navigation("Bill");
 
@@ -637,8 +661,8 @@ namespace App.Migrations
                 {
                     b.HasOne("App.Models.Entities.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("CategoryUuid")
-                        .HasConstraintName("fk_products_categories_category_uuid");
+                        .HasForeignKey("CategoryId")
+                        .HasConstraintName("fk_products_categories_category_id");
 
                     b.Navigation("Category");
                 });
