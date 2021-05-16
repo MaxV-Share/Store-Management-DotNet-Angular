@@ -6,7 +6,7 @@ import { HttpHeaders } from "@angular/common/http";
 
 export const environment = {
     production: false,
-    apiUrl:`https://localhost:5000`,
+    apiUrl:`http://localhost:5000`,
     _sharedHeaders : new HttpHeaders({'Content-Type': 'application/json'})
 
 };
