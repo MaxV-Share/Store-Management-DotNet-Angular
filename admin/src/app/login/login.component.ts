@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { routerTransition } from '../router.animations';
 import { TranslateService } from '@ngx-translate/core';
-import { LoginModel } from '../shared/models';
+import { LoginModel } from '../models';
 import { AuthenticationService, CookieConsentService } from '../shared/services';
 
 @Component({

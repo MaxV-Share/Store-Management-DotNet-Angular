@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SaleComponent } from '../modules/components/sale/sale.component';
+import { CategoryComponent } from './category/category.component';
 import { LayoutComponent } from './layout.component';
 
 const routes: Routes = [
@@ -30,8 +30,13 @@ const routes: Routes = [
                 loadChildren: () => import('./blank-page/blank-page.module').then((m) => m.BlankPageModule)
             },
             {
-                path: 'sale',
-                component: SaleComponent 
+                path: 'discount',
+                loadChildren: () => import('../modules/components/discount/discount.module').then(m => m.DiscountModule)
+            },
+            {
+                path: 'category',
+                //component: CategoryComponent
+                loadChildren: () => import('./category/category.module').then(m => m.CategoryModule)
             }
         ]
     }

@@ -17,7 +17,14 @@
                         "tsConfig": "src/tsconfig.app.json",
                         "polyfills": "src/polyfills.ts",
                         "assets": ["src/assets", "src/favicon.ico"],
-                        "styles": ["node_modules/font-awesome/css/font-awesome.css", "src/styles/app.scss"],
+                        "styles": [
+                            "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+                            "node_modules/font-awesome/css/font-awesome.css",
+                            "src/styles/app.scss",
+                            "src/styles.css",
+                            "node_modules/bootstrap/dist/css/bootstrap.css",
+                            "node_modules/ngx-toastr/toastr.css" 
+                        ],
                         "scripts": ["node_modules/chart.js/dist/Chart.js"],
                         "allowedCommonJsDependencies": ["chart.js"]
                     },
@@ -25,7 +32,7 @@
                         "production": {
                             "fileReplacements": [
                                 {
-                                    "replace": "src/environments/environment.ts",
+                                    "replace": "src/environments/environment.const.ts",
                                     "with": "src/environments/environment.prod.ts"
                                 }
                             ],
@@ -72,7 +79,7 @@
                         "tsConfig": "src/tsconfig.spec.json",
                         "karmaConfig": "src/karma.conf.js",
                         "scripts": ["node_modules/chart.js/dist/Chart.js"],
-                        "styles": ["node_modules/font-awesome/css/font-awesome.css", "src/styles/app.scss"],
+                        "styles": ["./node_modules/@angular/material/prebuilt-themes/indigo-pink.css", "node_modules/font-awesome/css/font-awesome.css", "src/styles/app.scss"],
                         "assets": ["src/assets", "src/favicon.ico"]
                     }
                 },
