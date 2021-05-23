@@ -10,7 +10,7 @@
                             [(ngModel)]="loginModel.userName" name="username"
                             [placeholder]="'UserName' | translate"
                             class="form-control input-underline input-lg"
-                            type="text"
+                            type="text"(keyup.enter)="onLogin()"
                         />
                     </div>
 
@@ -19,11 +19,11 @@
                             [(ngModel)]="loginModel.password" name="password"
                             [placeholder]="'Password' | translate"
                             class="form-control input-underline input-lg"
-                            type="password"
+                            type="password"(keyup.enter)="onLogin()"
                         />
                     </div>
                 </div>
-                <a (click)="onLogin()" [routerLink]="['/dashboard']" class="btn rounded-btn">{{
+                <a (click)="onLogin()"  [routerLink]="['/dashboard']" class="btn rounded-btn">{{
                     'Log in' | translate
                 }}</a>
                 &nbsp;
