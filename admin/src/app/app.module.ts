@@ -8,6 +8,7 @@ import { MatTableModule } from '@angular/material/table';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { TableModule } from 'primeng-lts/table';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -25,9 +26,10 @@ import { LanguageTranslationModule } from './shared/modules/language-translation
         AppRoutingModule,
         FormsModule,
         ReactiveFormsModule,
-        ToastrModule.forRoot(),
         MatButtonModule,
-        MatTableModule
+        MatTableModule,
+        TableModule,
+        ToastrModule.forRoot()
     ],
     declarations: [AppComponent],
     providers: [AuthGuard, {
