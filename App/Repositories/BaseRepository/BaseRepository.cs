@@ -62,7 +62,11 @@ namespace App.Repositories.BaseRepository
             var entity = await GetNoTrackingEntities().SingleOrDefaultAsync(x => x.Id == id);
             return entity;
         }
-
+        public virtual async Task<T> GetByUuidTrackingAsync(Guid uuid)
+        {
+            var entity = await Entities.SingleOrDefaultAsync(x => x.Uuid == uuid);
+            return entity;
+        }
         public async Task<T> CreateAsync(T entity)
         {
             ValidateAndThrow(entity);

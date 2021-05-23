@@ -11,6 +11,7 @@ namespace App.Services.Interface
 {
     public interface ISaleService : IBaseService<Sale, SaleRequest, SaleNonRequest>
     {
-        public Task<SaleNonRequest> PostAsync(SaleRequest request);  
+        public Task<int> PutAsync(Guid uuid, SaleNonRequest request);
+        public Task<SaleNonRequest> PostAsync(SaleRequest request);
     }
 }

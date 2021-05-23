@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using App.Controllers.Base;
-using App.DTOs;
 using App.Models.DTOs;
 using App.Services.Interface;
 using Microsoft.AspNetCore.Http;
@@ -11,30 +10,28 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace App.Controllers
 {
-    public class SaleController : ApiController
+    public class CategoryController : ApiController
     {
-        public readonly ISaleService _saleService;
-        public SaleController(ISaleService saleService)
+        public readonly ICategoryService _categoryService;
+        public CategoryController(ICategoryService categoryService)
         {
-            _saleService = saleService;
+            _categoryService = categoryService;
         }
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] SaleRequest request)
+        public async Task<ActionResult> Post([FromBody] CategoryRequest request)
         {
-            if (request.FromDate <= request.ToDate)
-                return BadRequest("Từ ngày không được lớn hơn đến ngày.");
-            var result = await _saleService.PostAsync(request);
+            var result = await _categoryService.PostAsync(request);
 
             if (result != null)
                 return Ok(result);
             return NotFound();
         }
         [HttpPut]
-        public async Task<ActionResult> Put(Guid uuid, SaleNonRequest request)
+        public async Task<ActionResult> Put(int id, CategoryNonRequest request)
         {
-            if (uuid != request.Uuid)
+            if (id != request.Id)
                 return BadRequest();
-            var result = await _saleService.PutAsync(uuid, request);
+            var result = await _categoryService.PutAsync(id, request);
             if (result > 0)
                 return Ok();
             return NotFound();
@@ -42,12 +39,11 @@ namespace App.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> GetById(int id)
         {
-            var result = await _saleService.GetByIdAsync(id);
+            var result = await _categoryService.GetByIdAsync(id);
 
             if (result != null)
                 return Ok(result);
             return NotFound();
         }
-
     }
 }

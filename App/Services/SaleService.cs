@@ -36,5 +36,24 @@ namespace App.Services
             var result = _mapper.Map<SaleNonRequest>(response);
             return result;
         }
+        public async Task<int> PutAsync(Guid uuid, SaleNonRequest request)
+        {
+            if (uuid != request.Uuid)
+                return 0;
+
+            var entity = await _saleRepository.GetByUuidTrackingAsync(request.Uuid);
+            if (entity == null)
+                return 0;
+            var dateTimeNow = DateTime.UtcNow;
+
+            entity.PercentDiscount = request.PercentDiscount;
+            entity.MaxDiscountPrice = request.MaxDiscountPrice;
+            entity.FromDate = request.FromDate;
+            entity.ToDate = request.ToDate;
+            entity.UpdateAt = dateTimeNow;
+
+            var result = await _repository.UpdateAsync(entity);
+            return result;
+        }
     }
 }
