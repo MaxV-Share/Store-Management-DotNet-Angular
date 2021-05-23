@@ -53,7 +53,7 @@ namespace App.Repositories.BaseRepository
 
         public virtual async Task<T> GetByIdAsync(int id)
         {
-            var entity = await GetNoTrackingEntities().SingleOrDefaultAsync(x => x.Id == id);
+            var entity = await Entities.SingleOrDefaultAsync(x => x.Id == id && x.Deleted == null);
             return entity;
         }
 
