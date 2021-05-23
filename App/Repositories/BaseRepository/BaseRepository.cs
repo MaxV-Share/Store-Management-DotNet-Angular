@@ -53,7 +53,7 @@ namespace App.Repositories.BaseRepository
 
         public virtual async Task<T> GetByIdAsync(int id)
         {
-            var entity = await GetNoTrackingEntities().FirstOrDefaultAsync(x => x.Id == id);
+            var entity = await GetNoTrackingEntities().SingleOrDefaultAsync(x => x.Id == id);
             return entity;
         }
 
@@ -131,7 +131,11 @@ namespace App.Repositories.BaseRepository
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-
+        public virtual async Task<T> GetByUuidAsync(Guid uuid)
+        {
+            var entity = await Entities.SingleOrDefaultAsync(x => x.Uuid == uuid);
+            return entity;
+        }
         #endregion public
 
         #region private

@@ -10,6 +10,7 @@ namespace App.Repositories.BaseRepository
     {
         public IQueryable<T> GetQueryableTable();
         public Task<IEnumerable<T>> GetAllAsync();
+        public Task<T> GetByUuidAsync(Guid uuid);
         public Task<T> GetByIdAsync(int id);
         public Task<T> GetByIdNoTrackingAsync(int id);
         public Task<T> CreateAsync(T entity);
