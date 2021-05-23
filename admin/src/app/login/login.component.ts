@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { routerTransition } from '../router.animations';
 import { TranslateService } from '@ngx-translate/core';
-import { LoginModel } from '../shared/models';
+import { LoginModel } from '../models';
 import { AuthenticationService, CookieConsentService } from '../shared/services';
 
 @Component({
@@ -26,7 +26,8 @@ export class LoginComponent implements OnInit {
         await this.auth.Login(this.loginModel).toPromise().then((response) => {
             this.cookieConsent.setCookie("token", response,1);
             token = response;
-        }, ex => { console.error(ex);
+        }, ex => { 
+            console.error(ex);
          });
         if (token || token != '')
         this.router.navigate(['/']);

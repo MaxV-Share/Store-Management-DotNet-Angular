@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment, LoginModel } from '../models';
+import { environment, LoginModel } from '../../models';
 import { catchError, map } from 'rxjs/operators';
 
 @Injectable({
