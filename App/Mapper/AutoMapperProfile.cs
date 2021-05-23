@@ -16,6 +16,8 @@ namespace App.Mapper
         {
             CreateMap<User, UserRequest>();
             CreateMap<User, UserNonRequest>();
+            CreateMap<Customer, CustomerRequest>();
+            CreateMap<Customer, CustomerNonRequest>();
             CreateMap<Sale, SaleRequest>();
             CreateMap<Sale, SaleNonRequest>();
         }

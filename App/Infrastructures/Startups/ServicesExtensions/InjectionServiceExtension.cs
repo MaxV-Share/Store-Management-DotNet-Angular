@@ -32,6 +32,8 @@ namespace App.Infrastructures.Startup.ServicesExtensions
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<ISaleService, SaleService>();
             services.AddTransient<ISaleRepository, SaleRepository>();
+            services.AddTransient<ICustomerService, CustomerService>();
+            services.AddTransient<ICustomerRepository, CustomerRepository>();
 
         }
     }
