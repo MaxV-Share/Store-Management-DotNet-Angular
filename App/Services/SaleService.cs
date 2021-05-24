@@ -36,12 +36,12 @@ namespace App.Services
             var result = _mapper.Map<SaleNonRequest>(response);
             return result;
         }
-        public async Task<int> PutAsync(Guid uuid, SaleNonRequest request)
+        public async Task<int> PutAsync(int id, SaleNonRequest request)
         {
-            if (uuid != request.Uuid)
+            if (id != request.Id)
                 return 0;
 
-            var entity = await _saleRepository.GetByUuidTrackingAsync(request.Uuid);
+            var entity = await _saleRepository.GetByUuidTrackingAsync(request.Id);
             if (entity == null)
                 return 0;
             var dateTimeNow = DateTime.UtcNow;

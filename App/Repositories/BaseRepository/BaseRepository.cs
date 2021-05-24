@@ -59,12 +59,12 @@ namespace App.Repositories.BaseRepository
 
         public virtual async Task<T> GetByIdNoTrackingAsync(int id)
         {
-            var entity = await GetNoTrackingEntities().SingleOrDefaultAsync(x => x.Id == id);
+            var entity = await GetNoTrackingEntities().SingleOrDefaultAsync(x => x.Id == id && x.Deleted == null);
             return entity;
         }
-        public virtual async Task<T> GetByUuidTrackingAsync(Guid uuid)
+        public virtual async Task<T> GetByUuidTrackingAsync(int id)
         {
-            var entity = await Entities.SingleOrDefaultAsync(x => x.Uuid == uuid);
+            var entity = await Entities.SingleOrDefaultAsync(x => x.Id == id && x.Deleted == null);
             return entity;
         }
         public async Task<T> CreateAsync(T entity)
@@ -137,7 +137,7 @@ namespace App.Repositories.BaseRepository
         }
         public virtual async Task<T> GetByUuidAsync(Guid uuid)
         {
-            var entity = await Entities.SingleOrDefaultAsync(x => x.Uuid == uuid);
+            var entity = await Entities.SingleOrDefaultAsync(x => x.Uuid == uuid && x.Deleted == null);
             return entity;
         }
         #endregion public

@@ -30,11 +30,11 @@ namespace App.Controllers
             return NotFound();
         }
         [HttpPut]
-        public async Task<ActionResult> Put(Guid uuid, SaleNonRequest request)
+        public async Task<ActionResult> Put(int id, SaleNonRequest request)
         {
-            if (uuid != request.Uuid)
+            if (id != request.Id)
                 return BadRequest();
-            var result = await _saleService.PutAsync(uuid, request);
+            var result = await _saleService.PutAsync(id, request);
             if (result > 0)
                 return Ok();
             return NotFound();
