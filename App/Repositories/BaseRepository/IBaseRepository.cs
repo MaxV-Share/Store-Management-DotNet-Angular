@@ -13,6 +13,7 @@ namespace App.Repositories.BaseRepository
         public Task<T> GetByUuidAsync(Guid uuid);
         public Task<T> GetByIdAsync(int id);
         public Task<T> GetByIdNoTrackingAsync(int id);
+        public Task<T> GetByUuidTrackingAsync(int id);
         public Task<T> CreateAsync(T entity);
         public Task<IEnumerable<T>> CreateAsync(List<T> entities);
         public Task<int> UpdateAsync(T entity);
