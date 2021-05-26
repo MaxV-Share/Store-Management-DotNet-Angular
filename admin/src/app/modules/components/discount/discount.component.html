@@ -1,6 +1,15 @@
 <div>
-    <h2>Discount</h2>
+    <h2>{{ 'Discount' | translate }}</h2>
     <div class="mat-elevation-z8">
+        <div class="d-flex flex-row-reverse pt-3 pr-2">
+            <button mat-icon-button (click)="onSearch()">
+                <mat-icon>search</mat-icon>
+            </button>
+            <mat-form-field class="w-50">
+                <mat-label>{{ 'Search' | translate }}</mat-label>
+                <input type="text" matInput placeholder="{{ 'Search' | translate }}" [(ngModel)]="txtSearch" (keyup.enter)="onSearch()"/>
+            </mat-form-field>
+        </div>
         <table mat-table [dataSource]="dataSource" class="table table-hover p">
             <!-- Position Column -->
             <ng-container matColumnDef="no">

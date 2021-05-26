@@ -21,14 +21,15 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class DiscountComponent implements OnInit, AfterViewInit {
 
-    constructor(private modalService: BsModalService, private toastr: ToastrService,private translate: TranslateService) { }
-    twoFractionDigitNumberFormat : any;
+    constructor(private modalService: BsModalService, private toastr: ToastrService, private translate: TranslateService) { }
+    twoFractionDigitNumberFormat: any;
     pageEvent: PageEvent;
     test: string;
     isLoadingResults: boolean;
     displayedColumns: string[] = ['no', 'name', 'weight', 'edit'];
     dataSource = new MatTableDataSource<Discount>();
     itemModal: Discount;
+    txtSearch: string;
     public bsModalRef: BsModalRef;
     @ViewChild(MatPaginator) paginator: MatPaginator;
     eventsSubject: Subject<void> = new Subject<void>();
@@ -80,9 +81,14 @@ export class DiscountComponent implements OnInit, AfterViewInit {
             backdrop: 'static'
         });
 
-        this.bsModalRef.content.saved.subscribe(() => {
+        this.bsModalRef.content.saved.subscribe((e) => {
+            console.log(e);
             this.bsModalRef.hide();
-          });
+        });
+    }
+    public onSearch(){
+        console.log(this.txtSearch);
+        
     }
 }
 
@@ -94,24 +100,24 @@ export interface PeriodicElement {
 }
 
 const ELEMENT_DATA: Discount[] = [
-    { id: 1,  percentDiscount: 11, maxDiscountPrice: 11000, fromDate: null,toDate : null},
-    { id: 2,  percentDiscount: 12, maxDiscountPrice: 12000, fromDate: null,toDate : null},
-    { id: 3,  percentDiscount: 13, maxDiscountPrice: 13000, fromDate: null,toDate : null},
-    { id: 4,  percentDiscount: 14, maxDiscountPrice: 14000, fromDate: null,toDate : null},
-    { id: 5,  percentDiscount: 15, maxDiscountPrice: 15000, fromDate: null,toDate : null},
-    { id: 6,  percentDiscount: 16, maxDiscountPrice: 16007, fromDate: null,toDate : null},
-    { id: 7,  percentDiscount: 17, maxDiscountPrice: 17007, fromDate: null,toDate : null},
-    { id: 8,  percentDiscount: 18, maxDiscountPrice: 18004, fromDate: null,toDate : null},
-    { id: 9,  percentDiscount: 19, maxDiscountPrice: 19004, fromDate: null,toDate : null},
-    { id: 10, percentDiscount: 20, maxDiscountPrice: 20007, fromDate: null,toDate : null},
-    { id: 11, percentDiscount: 21, maxDiscountPrice: 21007, fromDate: null,toDate : null},
-    { id: 12, percentDiscount: 22, maxDiscountPrice: 22000, fromDate: null,toDate : null},
-    { id: 13, percentDiscount: 23, maxDiscountPrice: 23005, fromDate: null,toDate : null},
-    { id: 14, percentDiscount: 24, maxDiscountPrice: 24005, fromDate: null,toDate : null},
-    { id: 15, percentDiscount: 25, maxDiscountPrice: 25008, fromDate: null,toDate : null},
-    { id: 16, percentDiscount: 26, maxDiscountPrice: 26000, fromDate: null,toDate : null},
-    { id: 17, percentDiscount: 27, maxDiscountPrice: 27000, fromDate: null,toDate : null},
-    { id: 18, percentDiscount: 28, maxDiscountPrice: 28000, fromDate: null,toDate : null},
-    { id: 19, percentDiscount: 29, maxDiscountPrice: 29003, fromDate: null,toDate : null},
-    { id: 20, percentDiscount: 30, maxDiscountPrice: 30000, fromDate: null,toDate : null},
+    { id: 1,  percentDiscount: 11, maxDiscountPrice: 11000, fromDate: null, toDate: null },
+    { id: 2,  percentDiscount: 12, maxDiscountPrice: 12000, fromDate: null, toDate: null },
+    { id: 3,  percentDiscount: 13, maxDiscountPrice: 13000, fromDate: null, toDate: null },
+    { id: 4,  percentDiscount: 14, maxDiscountPrice: 14000, fromDate: null, toDate: null },
+    { id: 5,  percentDiscount: 15, maxDiscountPrice: 15000, fromDate: null, toDate: null },
+    { id: 6,  percentDiscount: 16, maxDiscountPrice: 16007, fromDate: null, toDate: null },
+    { id: 7,  percentDiscount: 17, maxDiscountPrice: 17007, fromDate: null, toDate: null },
+    { id: 8,  percentDiscount: 18, maxDiscountPrice: 18004, fromDate: null, toDate: null },
+    { id: 9,  percentDiscount: 19, maxDiscountPrice: 19004, fromDate: null, toDate: null },
+    { id: 10, percentDiscount: 20, maxDiscountPrice: 20007, fromDate: null, toDate: null },
+    { id: 11, percentDiscount: 21, maxDiscountPrice: 21007, fromDate: null, toDate: null },
+    { id: 12, percentDiscount: 22, maxDiscountPrice: 22000, fromDate: null, toDate: null },
+    { id: 13, percentDiscount: 23, maxDiscountPrice: 23005, fromDate: null, toDate: null },
+    { id: 14, percentDiscount: 24, maxDiscountPrice: 24005, fromDate: null, toDate: null },
+    { id: 15, percentDiscount: 25, maxDiscountPrice: 25008, fromDate: null, toDate: null },
+    { id: 16, percentDiscount: 26, maxDiscountPrice: 26000, fromDate: null, toDate: null },
+    { id: 17, percentDiscount: 27, maxDiscountPrice: 27000, fromDate: null, toDate: null },
+    { id: 18, percentDiscount: 28, maxDiscountPrice: 28000, fromDate: null, toDate: null },
+    { id: 19, percentDiscount: 29, maxDiscountPrice: 29003, fromDate: null, toDate: null },
+    { id: 20, percentDiscount: 30, maxDiscountPrice: 30000, fromDate: null, toDate: null },
 ];

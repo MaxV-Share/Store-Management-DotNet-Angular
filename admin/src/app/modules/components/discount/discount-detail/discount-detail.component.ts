@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, EventEmitter, OnInit } from '@angular/core';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from '@ngx-translate/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { Discount } from '../../../../models';
 
@@ -10,7 +11,7 @@ import { Discount } from '../../../../models';
 })
 export class DiscountDetailComponent implements OnInit{
 
-    constructor(private modalService: NgbModal, public bsModalRef: BsModalRef,) {
+    constructor(private modalService: NgbModal, public bsModalRef: BsModalRef, private translate: TranslateService) {
 
     }
     public entity: Discount;
@@ -19,7 +20,9 @@ export class DiscountDetailComponent implements OnInit{
         console.log(this.entity);
     }
 
-
+    onSave() {
+        this.saved.emit("Saved");
+    }
     // open(content) {
     //     this.modalService.open(content).result.then(
     //         (result) => {
