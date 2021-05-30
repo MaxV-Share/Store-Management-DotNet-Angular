@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MaxV.Base;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -7,14 +8,11 @@ using System.Threading.Tasks;
 
 namespace App.Models.Entities
 {
-    public class Categories_detail
+    public class CategoryDetail : BaseEntity
     {
-        [MaxLength(10,ErrorMessage ="")]
-        public Category Parent { get; set; }
-        public Lang langiId{ get; set; }
-        [Column("Name")]
+        public Category Category { get; set; }
+        public Lang Lang{ get; set; }
         public string Name { get; set; }
-        [Column("Description")]
         public string Description { get; set; }
     }
 }

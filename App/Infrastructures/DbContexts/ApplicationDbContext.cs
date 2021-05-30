@@ -25,6 +25,7 @@ namespace App.Infrastructures.Dbcontexts
         public virtual DbSet<Product> Products { set; get; }
         public virtual DbSet<Sale> Sale { set; get; }
         public virtual DbSet<Lang> Langs { set; get; }
+        public virtual DbSet<CategoryDetail> CategoryDetails { set; get; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
