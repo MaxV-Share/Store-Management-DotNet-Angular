@@ -1,0 +1,4 @@
+div.cdk-overlay-container {
+    position: fixed;
+    z-index: 2000 !important; //higher then fixed header z-index so it comes above
+}

@@ -1,15 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { CookieConsentService } from '../../../shared/services';
+import { CookieConsentService } from '../../shared/services';
 
 @Component({
-    selector: 'app-header',
-    templateUrl: './header.component.html',
-    styleUrls: ['./header.component.scss']
+    selector: 'app-sidebar',
+    templateUrl: './sidebar.component.html',
+    styleUrls: ['./sidebar.component.scss']
 })
-export class HeaderComponent implements OnInit {
-    public pushRightClass: string;
+export class SidebarComponent implements OnInit {
+    isActive: boolean;
+    collapsed: boolean;
+    showMenu: string;
+    pushRightClass: string;
+
+    @Output() collapsedEvent = new EventEmitter<boolean>();
 
     constructor(private translate: TranslateService, public router: Router, private cookieConsentService: CookieConsentService) {
         this.router.events.subscribe((val) => {
@@ -20,8 +25,27 @@ export class HeaderComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.isActive = false;
+        this.collapsed = false;
+        this.showMenu = '';
         this.pushRightClass = 'push-right';
-        //this.translate.use(localStorage.getItem('lang'));
+    }
+
+    eventCalled() {
+        this.isActive = !this.isActive;
+    }
+
+    addExpandClass(element: any) {
+        if (element === this.showMenu) {
+            this.showMenu = '0';
+        } else {
+            this.showMenu = element;
+        }
+    }
+
+    toggleCollapsed() {
+        this.collapsed = !this.collapsed;
+        this.collapsedEvent.emit(this.collapsed);
     }
 
     isToggled(): boolean {
@@ -39,13 +63,12 @@ export class HeaderComponent implements OnInit {
         dom.classList.toggle('rtl');
     }
 
-    onLoggedout() {
-        //localStorage.removeItem('isLoggedin');
-        this.cookieConsentService.deleteCookie('token');
-    }
-
     changeLang(language: string) {
         localStorage.setItem('lang',language)
         this.translate.use(language);
+    }
+
+    onLoggedout() {
+        this.cookieConsentService.deleteCookie('token');
     }
 }

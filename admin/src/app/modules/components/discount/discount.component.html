@@ -29,7 +29,7 @@
             <ng-container matColumnDef="weight">
                 <th mat-header-cell *matHeaderCellDef>Weight</th>
                 <td mat-cell *matCellDef="let element">
-                    <!-- <input type="text" class="form-control" [(ngModel)]="element.maxDiscountPrice" localizedNumericInput /> -->
+                    <input type="text" class="form-control" [(ngModel)]="element.maxDiscountPrice" localizedNumericInput/>
 
                     {{ twoFractionDigitNumberFormat.format(element.maxDiscountPrice) }}
                 </td>

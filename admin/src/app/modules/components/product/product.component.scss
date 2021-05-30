@@ -1,0 +1,32 @@
+table {
+    width: 100%;
+    th {
+        vertical-align: middle;
+        width: unset !important;
+        padding: 1rem 0.5rem !important;
+    }
+    td {
+        vertical-align: middle;
+        padding: 1rem;
+        padding: 0.5rem !important;
+    }
+    .mat-column-edit {
+        width: 70px !important;
+        text-align: center;
+        padding-right: unset !important;
+    }
+    td.mat-column-no {
+        text-align: center ;
+        width: 50px !important;
+    }
+}
+
+.mat-form-field {
+    font-size: 14px;
+    width: 100%;
+}
+
+td,
+th {
+    width: 25%;
+}

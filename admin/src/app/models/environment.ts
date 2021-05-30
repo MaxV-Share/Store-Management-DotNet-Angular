@@ -3,14 +3,24 @@
 // The list of file replacements can be found in `angular.json`.
 
 import { HttpHeaders } from "@angular/common/http";
+import { Lang } from "./lang";
 
 export const environment = {
     production: false,
-    apiUrl:`http://localhost:5000`,
-    _sharedHeaders : new HttpHeaders({'Content-Type': 'application/json'})
+    apiUrl: `http://localhost:5000`,
+    _sharedHeaders: new HttpHeaders({ 'Content-Type': 'application/json' })
 
 };
-
+export const langs: Lang[] = [
+    {
+        id: "vi",
+        name: "Tiếng Việt"
+    },
+    {
+        id: "en",
+        name: "English"
+    },
+]
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.

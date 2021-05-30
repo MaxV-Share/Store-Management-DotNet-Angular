@@ -45,8 +45,7 @@ import { DiscountDetailComponent } from './discount-detail/discount-detail.compo
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
-import LocalizedNumericInputDirective from '../../../shared/directives/localized-numeric-input.directive'
-import { MyCurrencyPipe } from '../../../shared/directives/my-currency-pipe.pipe';
+import { LayoutModule } from '../../../layout/layout.module';
 @NgModule({
     imports: [
         CommonModule,
@@ -55,6 +54,7 @@ import { MyCurrencyPipe } from '../../../shared/directives/my-currency-pipe.pipe
         ModalModule.forRoot(),
         TranslateModule,
         FormsModule,
+        LayoutModule,
 
         MatButtonModule,
         MatTableModule,
@@ -95,8 +95,6 @@ import { MyCurrencyPipe } from '../../../shared/directives/my-currency-pipe.pipe
         PortalModule,
         ScrollingModule
     ],
-    declarations: [DiscountComponent,DiscountDetailComponent,LocalizedNumericInputDirective, MyCurrencyPipe],
-    exports:    [ MyCurrencyPipe ],
-    providers:    [ MyCurrencyPipe ]
+    declarations: [DiscountComponent,DiscountDetailComponent],
 })
 export class DiscountModule { }

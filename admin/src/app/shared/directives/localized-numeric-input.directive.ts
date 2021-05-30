@@ -23,6 +23,12 @@ export default class LocalizedNumericInputDirective {
   
     ngOnInit() {
       this.el.value = this.currencyPipe.transform(this.el.value);
+    } 
+    
+    @HostListener('input', ['$event.target.value'])
+    input(value:string ) {  
+      // here to notify Angular Validators
+      this.el.value = this.currencyPipe.transform(this.el.value);
     }
   
     @HostListener("focus", ["$event.target.value"])
