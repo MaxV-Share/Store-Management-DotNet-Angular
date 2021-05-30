@@ -20,31 +20,32 @@ namespace App.Services
         }
         public async Task<CategoryNonRequest> PostAsync(CategoryRequest request)
         {
-            if (request == null)
+            //if (request == null)
                 return null;
-            Category obj = new Category()
-            {
-                Name = request.Name
-            };
-            var response = await _CategoryRepository.CreateAsync(obj);
-            var result = _mapper.Map<CategoryNonRequest>(response);
-            return result;
+            //Category obj = new Category()
+            //{
+            //    Name = request.Name
+            //};
+            //var response = await _CategoryRepository.CreateAsync(obj);
+            //var result = _mapper.Map<CategoryNonRequest>(response);
+            //return result;
         }
         public async Task<int> PutAsync(int id, CategoryNonRequest request)
         {
-            if (id != request.Id)
-                return 0;
+            //if (id != request.Id)
+            //    return 0;
 
-            var entity = await _CategoryRepository.GetByIdAsync(request.Id);
-            if (entity == null)
-                return 0;
-            var dateTimeNow = DateTime.UtcNow;
+            //var entity = await _CategoryRepository.GetByIdAsync(request.Id);
+            //if (entity == null)
+            //    return 0;
+            //var dateTimeNow = DateTime.UtcNow;
 
-            entity.Name = request.Name;
-            entity.UpdateAt = dateTimeNow;
+            //entity.Parent = request.Name;
+            //entity.UpdateAt = dateTimeNow;
 
-            var result = await _repository.UpdateAsync(entity);
-            return result;
+            //var result = await _repository.UpdateAsync(entity);
+            //return result;
+            return 0;
         }
     }
 }
