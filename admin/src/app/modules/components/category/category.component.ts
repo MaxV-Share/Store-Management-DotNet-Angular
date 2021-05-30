@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { kStringMaxLength } from 'buffer';
-import { Discount } from '../../models';
 
 @Component({
   selector: 'app-category',
@@ -10,6 +8,7 @@ import { Discount } from '../../models';
 export class CategoryComponent implements OnInit {
 
   constructor() { }
+
   ngOnInit() {
   }
 
