@@ -38,7 +38,7 @@ export class ProductDetailComponent implements OnInit {
                 description: "Mô tả về sản phẩm: Lorem Ipsum chỉ đơn giản là một đoạn văn bản giả, ",
                 product: null,
                 productId: 1
-            }, {
+            },{
                 langId: "en",
                 name: "Product 1",
                 description: "Product description: Lorem ipsum dolor sit amet, consectetur adipiscing elit,",
@@ -54,11 +54,11 @@ export class ProductDetailComponent implements OnInit {
         ];
 
         this.filteredOptions = this.myControl.valueChanges
-        .pipe(
-          startWith(''),
-          map(value => typeof value === 'string' ? value : value.name),
-          map(name => name ? this._filter(name) : this.categories.slice())
-        );
+            .pipe(
+                startWith(''),
+                map(value => typeof value === 'string' ? value : value.name),
+                map(name => name ? this._filter(name) : this.categories.slice())
+            );
 
     }
     ngOnInit(): void {
@@ -70,8 +70,8 @@ export class ProductDetailComponent implements OnInit {
     onSave() {
         // this.saved.emit("Saved");
         //console.log(this.entity);
-        
-        this.log(typeof this.myControl.value )
+
+        this.log(typeof this.myControl.value)
     }
     changeTab(index: number) {
         // console.log(this.langs[index].id);
@@ -81,15 +81,15 @@ export class ProductDetailComponent implements OnInit {
         console.log(item)
     }
     displayFn(user: CategoryDetail): string {
-      return user && user.name ? user.name : '';
+        return user && user.name ? user.name : '';
     }
-  
+
     private _filter(name: string): CategoryDetail[] {
-      const filterValue = name.toLowerCase();  
-      return this.categories.filter(option => option.name.toLowerCase().indexOf(filterValue) >= 0);
+        const filterValue = name.toLowerCase();
+        return this.categories.filter(option => option.name.toLowerCase().indexOf(filterValue) >= 0);
     }
     onUpload(event) {
-        for(let file of event.files) {
+        for (let file of event.files) {
             this.uploadedFiles.push(file);
         }
 

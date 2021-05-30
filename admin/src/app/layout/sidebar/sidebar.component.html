@@ -4,6 +4,10 @@
             <i class="fa fa-fw fa-dashboard"></i>&nbsp;
             <span>{{ 'Dashboard' | translate }}</span>
         </a>
+        <a [routerLinkActive]="['router-link-active']" [routerLink]="['/category']" class="list-group-item">
+            <i class="fa fa-fw fa-barcode"></i>&nbsp;
+            <span>{{ 'Category' | translate }}</span>
+        </a>
         <a [routerLinkActive]="['router-link-active']" [routerLink]="['/product']" class="list-group-item">
             <i class="fa fa-fw fa-barcode"></i>&nbsp;
             <span>{{ 'Product' | translate }}</span>

@@ -67,6 +67,18 @@ namespace App.Infrastructures.Dbcontexts
                 }
                 #endregion User
 
+                #region Lang
+                if(!_context.Langs.Any())
+                {
+                    await _context.Langs.AddAsync(new Lang
+                    {
+                        Id = "vi",
+                        Name = "Tiếng việt",
+                        Order = 1
+                    });
+                    await _context.SaveChangesAsync();
+                }
+                #endregion
                 await _context.SaveChangesAsync();
                 transaction.Commit();
             }
