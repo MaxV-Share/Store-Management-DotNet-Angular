@@ -10,8 +10,34 @@
   }/* You can add global styles to this file, and also import other style files */
 
 
+  .cdk-overlay-container {
+    position: fixed;
+    z-index: 2001 !important;
+}
 
-
+fieldset {
+    border-radius: 10px;
+    min-width: 0;
+    border: 1px #999999 solid !important;
+    padding: 5px;
+}
+legend {
+    display: block;
+    width: unset;
+    margin-left: 5px;
+    font-size: unset;
+    padding: 0 5px;
+    margin-bottom: .5rem;
+    line-height: inherit;
+    color: inherit;
+    white-space: normal;
+}
+.max-text-color-white{
+    color: white;
+}
+.max-bg-light-gray{
+    background-color: lightgray;
+}
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';

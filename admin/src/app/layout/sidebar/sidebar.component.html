@@ -1,12 +1,16 @@
 <nav [ngClass]="{ sidebarPushRight: isActive, collapsed: collapsed }" class="sidebar">
     <div class="list-group">
-        <a [routerLinkActive]="['router-link-active']" [routerLink]="['/discount']" class="list-group-item">
-            <i class="fa fa-fw fa-percent" ></i>&nbsp;
-            <span>{{ 'Discount' | translate }}</span>
-        </a>
         <a [routerLinkActive]="['router-link-active']" class="list-group-item" routerLink="/dashboard">
             <i class="fa fa-fw fa-dashboard"></i>&nbsp;
             <span>{{ 'Dashboard' | translate }}</span>
+        </a>
+        <a [routerLinkActive]="['router-link-active']" [routerLink]="['/product']" class="list-group-item">
+            <i class="fa fa-fw fa-barcode"></i>&nbsp;
+            <span>{{ 'Product' | translate }}</span>
+        </a>
+        <a [routerLinkActive]="['router-link-active']" [routerLink]="['/discount']" class="list-group-item">
+            <i class="fa fa-fw fa-percent" ></i>&nbsp;
+            <span>{{ 'Discount' | translate }}</span>
         </a>
         <a [routerLinkActive]="['router-link-active']" [routerLink]="['/charts']" class="list-group-item">
             <i class="fa fa-fw fa-bar-chart-o"></i>&nbsp;

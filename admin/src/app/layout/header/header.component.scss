@@ -2,7 +2,7 @@ $topnav-background-color: #222;
 :host {
     .navbar {
         background-color: $topnav-background-color;
-
+        height: 52px;
         .navbar-brand {
             color: #fff;
         }

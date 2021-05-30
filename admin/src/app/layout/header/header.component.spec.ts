@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
-import { LayoutModule } from '../../layout.module';
+import { LayoutModule } from '../layout.module';
 
 import { HeaderComponent } from './header.component';
 
