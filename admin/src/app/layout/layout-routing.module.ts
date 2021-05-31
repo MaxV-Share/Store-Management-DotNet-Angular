@@ -30,15 +30,15 @@ const routes: Routes = [
             },
             {
                 path: 'discounts',
-                loadChildren: () => import('../modules/components/discount/discount.module').then(m => m.DiscountModule)
+                loadChildren: () => import('../components/discount/discount.module').then(m => m.DiscountModule)
             },
             {
                 path: 'products',
-                loadChildren: () => import('../modules/components/product/product.module').then(m => m.ProductModule)
+                loadChildren: () => import('../components/product/product.module').then(m => m.ProductModule)
             },
             {
                 path: 'categories',
-                loadChildren: () => import('../modules/components/category/category.module').then(m => m.CategoryModule)
+                loadChildren: () => import('../components/category/category.module').then(m => m.CategoryModule)
             },
         ]
     }

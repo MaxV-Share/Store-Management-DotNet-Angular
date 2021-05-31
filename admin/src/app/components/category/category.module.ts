@@ -6,7 +6,7 @@ import { CategoryRoutingModule } from './category-routing.module';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
-import { LayoutModule } from '../../../../app/layout/layout.module';
+import { LayoutModule } from '../../../app/layout/layout.module';
 import { CategoryDetailComponent } from './category-detail/category-detail.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
