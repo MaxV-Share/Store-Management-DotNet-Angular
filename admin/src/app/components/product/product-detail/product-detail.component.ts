@@ -5,7 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { Lang, Category, Product, ProductDetail, environment, langs, CategoryDetail } from '../../../../models';
+import { Lang, Category, Product, ProductDetail, environment, langs, CategoryDetail } from '../../../models';
 
 @Component({
     selector: 'app-product-detail',
