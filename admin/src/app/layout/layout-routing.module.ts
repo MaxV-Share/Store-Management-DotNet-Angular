@@ -29,15 +29,15 @@ const routes: Routes = [
                 loadChildren: () => import('./blank-page/blank-page.module').then((m) => m.BlankPageModule)
             },
             {
-                path: 'discount',
+                path: 'discounts',
                 loadChildren: () => import('../modules/components/discount/discount.module').then(m => m.DiscountModule)
             },
             {
-                path: 'product',
+                path: 'products',
                 loadChildren: () => import('../modules/components/product/product.module').then(m => m.ProductModule)
             },
             {
-                path: 'category',
+                path: 'categories',
                 loadChildren: () => import('../modules/components/category/category.module').then(m => m.CategoryModule)
             },
         ]
