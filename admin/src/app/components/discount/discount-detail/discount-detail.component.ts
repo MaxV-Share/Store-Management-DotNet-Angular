@@ -11,7 +11,7 @@ import { Discount } from '../../../models';
 })
 export class DiscountDetailComponent implements OnInit{
 
-    constructor(private modalService: NgbModal, public bsModalRef: BsModalRef, private translate: TranslateService) {
+    constructor(private modalService: NgbModal, public bsModalRef: BsModalRef, public translate: TranslateService) {
 
     }
     public entity: Discount;

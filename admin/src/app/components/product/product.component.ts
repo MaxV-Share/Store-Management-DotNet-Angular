@@ -14,7 +14,7 @@ import { ProductDetailComponent } from './product-detail/product-detail.componen
 })
 export class ProductComponent implements OnInit {
 
-    constructor(private modalService: BsModalService, private toastr: ToastrService, private translate: TranslateService) { }
+    constructor(private modalService: BsModalService, private toastr: ToastrService, public translate: TranslateService) { }
 
     displayedColumns: string[] = ['no', 'name', 'weight', 'edit'];
     dataSource = new MatTableDataSource<ProductDetail>();
@@ -58,7 +58,7 @@ export class ProductComponent implements OnInit {
         // this.dataSource = new MatTableDataSource<Discount>(data);
     }
 
-    private pageEventHandle(event?: PageEvent) {
+    pageEventHandle(event?: PageEvent) {
         this.getDataPaging(event);
         return event;
     }

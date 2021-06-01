@@ -95,6 +95,7 @@ import { LayoutModule } from '../../layout/layout.module';
         PortalModule,
         ScrollingModule
     ],
+    exports: [TranslateModule],
     declarations: [DiscountComponent,DiscountDetailComponent],
 })
 export class DiscountModule { }

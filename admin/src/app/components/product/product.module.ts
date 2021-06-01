@@ -47,6 +47,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MyCurrencyPipe } from '../../shared/directives/my-currency-pipe.pipe';
 import LocalizedNumericInputDirective from '../../shared/directives/localized-numeric-input.directive';
 import { LayoutModule } from '../../layout/layout.module';
+import { CategoryDetailComponent } from '../category/category-detail/category-detail.component';
 
 @NgModule({
     imports: [
@@ -134,6 +135,6 @@ import { LayoutModule } from '../../layout/layout.module';
         PortalModule,
         ScrollingModule,
     ],
-    declarations: [ProductComponent, ProductDetailComponent],
+    declarations: [ProductComponent, ProductDetailComponent, CategoryDetailComponent],
 })
 export class ProductModule { }

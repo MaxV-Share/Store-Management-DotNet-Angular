@@ -132,6 +132,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     PortalModule,
     ScrollingModule,
   ],
+  exports:[TranslateModule],
   declarations: [CategoryComponent, CategoryDetailComponent]
 })
 export class CategoryModule { }

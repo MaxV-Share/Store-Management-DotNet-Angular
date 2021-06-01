@@ -2,10 +2,11 @@ import { Component, EventEmitter, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
-import { BsModalRef } from 'ngx-bootstrap/modal';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { Lang, Category, Product, ProductDetail, environment, langs, CategoryDetail } from '../../../models';
+import { CategoryDetailComponent } from '../../category/category-detail/category-detail.component';
 
 @Component({
     selector: 'app-product-detail',
@@ -14,9 +15,10 @@ import { Lang, Category, Product, ProductDetail, environment, langs, CategoryDet
 })
 export class ProductDetailComponent implements OnInit {
 
-    constructor(private modalService: NgbModal, public bsModalRef: BsModalRef, private translate: TranslateService) {
+    constructor(private modalService: BsModalService, public bsModalRef: BsModalRef, public translate: TranslateService) {
 
     }
+    showAddCategory = false;
     langs: Lang[];
     public productId: number;
     saved: EventEmitter<any> = new EventEmitter();
@@ -94,5 +96,21 @@ export class ProductDetailComponent implements OnInit {
         }
 
         //this.messageService.add({severity: 'info', summary: 'File Uploaded', detail: ''});
+    }
+    createCategory(){
+        const initialState = {
+            id: null,
+        };
+
+        this.bsModalRef = this.modalService.show(CategoryDetailComponent, {
+            initialState: initialState,
+            class: 'modal-lg',
+            backdrop: 'static'
+        });
+
+        this.bsModalRef.content.saved.subscribe((e) => {
+            console.log(e);
+            this.bsModalRef.hide();
+        });
     }
 }
