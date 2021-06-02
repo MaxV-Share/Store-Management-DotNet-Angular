@@ -18,14 +18,15 @@ namespace App.Repositories
         }
         public async Task<Category> PostAsync(CategoryRequest request)
         {
-            if (request == null)
-                return null;
-            Category obj = new Category()
-            {
-                Name = request.Name
-            };
-            var result = await CreateAsync(obj);
-            return result;
+            return null;
+            //if (request == null)
+            //    return null;
+            //Category obj = new Category()
+            //{
+            //    Name = request.Name
+            //};
+            //var result = await CreateAsync(obj);
+            //return result;
         }
     }
 }

@@ -3,14 +3,16 @@ using System;
 using App.Infrastructures.Dbcontexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace App.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210530145019_UpdateCategoriandAddCategories_detail")]
+    partial class UpdateCategoriandAddCategories_detail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -197,69 +199,6 @@ namespace App.Migrations
                         .HasDatabaseName("ix_categories_parent_id");
 
                     b.ToTable("categories");
-                });
-
-            modelBuilder.Entity("App.Models.Entities.CategoryDetail", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    b.Property<int?>("CategoryId")
-                        .HasColumnType("int")
-                        .HasColumnName("category_id");
-
-                    b.Property<DateTime?>("CreateAt")
-                        .HasColumnType("datetime")
-                        .HasColumnName("create_at");
-
-                    b.Property<string>("CreateBy")
-                        .HasColumnType("text")
-                        .HasColumnName("create_by");
-
-                    b.Property<string>("Deleted")
-                        .HasColumnType("text")
-                        .HasColumnName("deleted");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text")
-                        .HasColumnName("description");
-
-                    b.Property<string>("LangId")
-                        .HasColumnType("varchar(10)")
-                        .HasColumnName("lang_id");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text")
-                        .HasColumnName("name");
-
-                    b.Property<DateTime?>("UpdateAt")
-                        .HasColumnType("datetime")
-                        .HasColumnName("update_at");
-
-                    b.Property<string>("UpdateBy")
-                        .HasColumnType("text")
-                        .HasColumnName("update_by");
-
-                    b.Property<byte[]>("Uuid")
-                        .IsRequired()
-                        .HasColumnType("varbinary(16)")
-                        .HasColumnName("uuid");
-
-                    b.HasKey("Id")
-                        .HasName("pk_category_details");
-
-                    b.HasIndex("CategoryId")
-                        .HasDatabaseName("ix_category_details_category_id");
-
-                    b.HasIndex("Id")
-                        .HasDatabaseName("ix_category_details_id");
-
-                    b.HasIndex("LangId")
-                        .HasDatabaseName("ix_category_details_lang_id");
-
-                    b.ToTable("category_details");
                 });
 
             modelBuilder.Entity("App.Models.Entities.Customer", b =>
@@ -752,23 +691,6 @@ namespace App.Migrations
                         .HasConstraintName("fk_categories_categories_parent_id");
 
                     b.Navigation("Parent");
-                });
-
-            modelBuilder.Entity("App.Models.Entities.CategoryDetail", b =>
-                {
-                    b.HasOne("App.Models.Entities.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .HasConstraintName("fk_category_details_categories_category_id");
-
-                    b.HasOne("App.Models.Entities.Lang", "Lang")
-                        .WithMany()
-                        .HasForeignKey("LangId")
-                        .HasConstraintName("fk_category_details_langs_lang_id");
-
-                    b.Navigation("Category");
-
-                    b.Navigation("Lang");
                 });
 
             modelBuilder.Entity("App.Models.Entities.Product", b =>
