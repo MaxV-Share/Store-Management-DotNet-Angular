@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace App.Models.Entities
 {
-    public class Bill : BaseEntity
+    public class Bill : BaseEntity<int>
     {
         public Customer Customer { get; set; }
         public User UserPayment { get; set; }

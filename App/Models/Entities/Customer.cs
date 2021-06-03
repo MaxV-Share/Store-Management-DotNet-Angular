@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace App.Models.Entities
 {
-    public class Customer : BaseEntity
+    public class Customer : BaseEntity<int>
     {
         [MaxLength(10)]
         public string PhoneNumber { get; set; }

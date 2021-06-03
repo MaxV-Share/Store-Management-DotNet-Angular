@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace App.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210530133322_AddColumnOrderToLangTable")]
-    partial class AddColumnOrderToLangTable
+    [Migration("20210603121749_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -172,10 +172,9 @@ namespace App.Migrations
                         .HasColumnType("text")
                         .HasColumnName("deleted");
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256)")
-                        .HasColumnName("name");
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int")
+                        .HasColumnName("parent_id");
 
                     b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("datetime")
@@ -196,7 +195,73 @@ namespace App.Migrations
                     b.HasIndex("Id")
                         .HasDatabaseName("ix_categories_id");
 
+                    b.HasIndex("ParentId")
+                        .HasDatabaseName("ix_categories_parent_id");
+
                     b.ToTable("categories");
+                });
+
+            modelBuilder.Entity("App.Models.Entities.CategoryDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int")
+                        .HasColumnName("category_id");
+
+                    b.Property<DateTime?>("CreateAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("create_at");
+
+                    b.Property<string>("CreateBy")
+                        .HasColumnType("text")
+                        .HasColumnName("create_by");
+
+                    b.Property<string>("Deleted")
+                        .HasColumnType("text")
+                        .HasColumnName("deleted");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text")
+                        .HasColumnName("description");
+
+                    b.Property<string>("LangId")
+                        .HasColumnType("varchar(767)")
+                        .HasColumnName("lang_id");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<DateTime?>("UpdateAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("update_at");
+
+                    b.Property<string>("UpdateBy")
+                        .HasColumnType("text")
+                        .HasColumnName("update_by");
+
+                    b.Property<byte[]>("Uuid")
+                        .IsRequired()
+                        .HasColumnType("varbinary(16)")
+                        .HasColumnName("uuid");
+
+                    b.HasKey("Id")
+                        .HasName("pk_category_details");
+
+                    b.HasIndex("CategoryId")
+                        .HasDatabaseName("ix_category_details_category_id");
+
+                    b.HasIndex("Id")
+                        .HasDatabaseName("ix_category_details_id");
+
+                    b.HasIndex("LangId")
+                        .HasDatabaseName("ix_category_details_lang_id");
+
+                    b.ToTable("category_details");
                 });
 
             modelBuilder.Entity("App.Models.Entities.Customer", b =>
@@ -257,9 +322,21 @@ namespace App.Migrations
             modelBuilder.Entity("App.Models.Entities.Lang", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(10)
-                        .HasColumnType("varchar(10)")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varchar(767)")
                         .HasColumnName("id");
+
+                    b.Property<DateTime?>("CreateAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("create_at");
+
+                    b.Property<string>("CreateBy")
+                        .HasColumnType("text")
+                        .HasColumnName("create_by");
+
+                    b.Property<string>("Deleted")
+                        .HasColumnType("text")
+                        .HasColumnName("deleted");
 
                     b.Property<string>("Name")
                         .HasMaxLength(20)
@@ -270,8 +347,24 @@ namespace App.Migrations
                         .HasColumnType("int")
                         .HasColumnName("order");
 
+                    b.Property<DateTime?>("UpdateAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("update_at");
+
+                    b.Property<string>("UpdateBy")
+                        .HasColumnType("text")
+                        .HasColumnName("update_by");
+
+                    b.Property<byte[]>("Uuid")
+                        .IsRequired()
+                        .HasColumnType("varbinary(16)")
+                        .HasColumnName("uuid");
+
                     b.HasKey("Id")
                         .HasName("pk_langs");
+
+                    b.HasIndex("Id")
+                        .HasDatabaseName("ix_langs_id");
 
                     b.ToTable("langs");
                 });
@@ -679,6 +772,33 @@ namespace App.Migrations
                     b.Navigation("Bill");
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("App.Models.Entities.Category", b =>
+                {
+                    b.HasOne("App.Models.Entities.Category", "Parent")
+                        .WithMany()
+                        .HasForeignKey("ParentId")
+                        .HasConstraintName("fk_categories_categories_parent_id");
+
+                    b.Navigation("Parent");
+                });
+
+            modelBuilder.Entity("App.Models.Entities.CategoryDetail", b =>
+                {
+                    b.HasOne("App.Models.Entities.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .HasConstraintName("fk_category_details_categories_category_id");
+
+                    b.HasOne("App.Models.Entities.Lang", "Lang")
+                        .WithMany()
+                        .HasForeignKey("LangId")
+                        .HasConstraintName("fk_category_details_langs_lang_id");
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Lang");
                 });
 
             modelBuilder.Entity("App.Models.Entities.Product", b =>

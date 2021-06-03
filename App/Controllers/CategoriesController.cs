@@ -10,24 +10,24 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace App.Controllers
 {
-    public class CategoryController : ApiController
+    public class CategoriesController : ApiController
     {
-        public readonly ICategoryService _categoryService;
-        public CategoryController(ICategoryService categoryService)
+        public readonly ICategoriesService _categoryService;
+        public CategoriesController(ICategoriesService categoryService)
         {
             _categoryService = categoryService;
         }
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] CategoryRequest request)
+        public async Task<ActionResult> Post([FromBody] CategoryCR request)
         {
-            var result = await _categoryService.PostAsync(request);
-
+            var result = await _categoryService.CreateAsync(request);
+            
             if (result != null)
                 return Ok(result);
             return NotFound();
         }
         [HttpPut]
-        public async Task<ActionResult> Put(int id, CategoryNonRequest request)
+        public async Task<ActionResult> Put(int id, CategoryVm request)
         {
             if (id != request.Id)
                 return BadRequest();
@@ -44,6 +44,12 @@ namespace App.Controllers
             if (result != null)
                 return Ok(result);
             return NotFound();
+        }
+        [HttpGet("")]
+        public async Task<ActionResult> GetPaging(int pageIndex, int pageSize, string langId, string searchText = "")
+        {
+            var result = await _categoryService.GetPaging(langId, pageIndex, pageSize, searchText);
+            return Ok(result);
         }
     }
 }

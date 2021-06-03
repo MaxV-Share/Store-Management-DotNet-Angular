@@ -8,9 +8,7 @@ using System.Threading.Tasks;
 
 namespace App.Repositories.Interface
 {
-    public interface IBillRepository : IBaseRepository<Bill, int>
+    public interface ICategoriesRepository : IBaseRepository<Category, int>
     {
-        public Task<Bill> PostAsync(BillRequest request);
-
     }
 }

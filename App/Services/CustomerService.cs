@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace App.Services
 {
-    public class CustomerService : BaseService<Customer, CustomerRequest, CustomerNonRequest>, ICustomerService
+    public class CustomerService : BaseService<Customer, CustomerRequest, CustomerNonRequest, int>, ICustomerService
     {
         public readonly ICustomerRepository _CustomerRepository;
         public CustomerService(ICustomerRepository customerRepository, IMapper mapper) : base(customerRepository, mapper)

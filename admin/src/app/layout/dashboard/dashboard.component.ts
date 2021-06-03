@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UsersService } from '../../shared/services';
+import { UsersService } from '@app/shared/services';
 import { routerTransition } from '../../router.animations';
 
 @Component({

@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace App.Models.DTOs
 {
-    public class CategoryRequest
+    public class CategoryCR
     {
-        public string Name { get; set; }
+        public List<CategoryDetailCR> CategoryDetails { get; set; }
     }
 }

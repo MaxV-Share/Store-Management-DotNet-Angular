@@ -14,7 +14,7 @@
             <mat-hint align="start"></mat-hint>
             <mat-hint align="end"></mat-hint>
         </mat-form-field>
-        <form class="col-6" (mouseenter)="showAddCategory = true" (mouseleave)="showAddCategory = false">
+        <form class="col-6"  (mouseenter)="showAddCategory = true" (mouseleave)="showAddCategory = false">
             <mat-form-field class="w-100">
                 <mat-label>{{'Category' | translate}}</mat-label>
                 <input type="text" matInput [formControl]="myControl" [matAutocomplete]="auto" >
@@ -24,7 +24,7 @@
                     </mat-option>
                 </mat-autocomplete>
             </mat-form-field>
-            <button [hidden]="!showAddCategory" class="btn btn-sm btn-primary position-absolute" style="right: 15px; top: 5px" (click)="createCategory()"><i class="fa fa-plus" aria-hidden="true"></i></button>
+            <button [hidden]="!showAddCategory" class="btn btn-sm btn-primary position-absolute" style="right: 15px; top: 5px; " (click)="createCategory()"><i class="fa fa-plus" aria-hidden="true"></i></button>
         </form>
     </div>
     <h5>File</h5>

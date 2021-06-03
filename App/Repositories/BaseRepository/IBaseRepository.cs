@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -6,18 +7,35 @@ using System.Threading.Tasks;
 
 namespace App.Repositories.BaseRepository
 {
-    public interface IBaseRepository<T> : IDisposable
+    public interface IBaseRepository<T, TKey> : IDisposable
     {
-        public IQueryable<T> GetQueryableTable();
-        public Task<IEnumerable<T>> GetAllAsync();
-        public Task<T> GetByUuidAsync(Guid uuid);
-        public Task<T> GetByIdAsync(int id);
-        public Task<T> GetByIdNoTrackingAsync(int id);
-        public Task<T> GetByUuidTrackingAsync(int id);
-        public Task<T> CreateAsync(T entity);
-        public Task<IEnumerable<T>> CreateAsync(List<T> entities);
-        public Task<int> UpdateAsync(T entity);
-        public Task<int> DeleteHardAsync(int id);
-        public Task<int> DeleteSoftAsync(int id);
+        //public IQueryable<T> GetQueryableTable();
+        //public Task<IEnumerable<T>> GetAllAsync();
+        //public Task<T> GetByUuidAsync(Guid uuid);
+        //public Task<T> GetByUuidNoTrackingAsync(Guid uuid);
+        //public Task<T> GetByIdAsync(TKey id);
+        //public Task<T> GetByIdNoTrackingAsync(TKey id);
+        //public Task<T> CreateAsync(T entity);
+        //public Task<IEnumerable<T>> CreateAsync(List<T> entities);
+        //public Task<int> UpdateAsync(T entity);
+        //public Task<int> DeleteHardAsync(TKey id);
+        //public Task<int> DeleteSoftAsync(TKey id);
+        //Task ReleaseTransactionAsync();
+        Task BeginTransactionAsync();
+        Task CommitTransactionAsync();
+        Task<IEnumerable<T>> CreateAsync(List<T> entities);
+        Task<T> CreateAsync(T entity);
+        Task<int> DeleteHardAsync(TKey id);
+        Task<int> DeleteSoftAsync(TKey id);
+        Task<IEnumerable<T>> GetAllAsync();
+        Task<T> GetByIdAsync(TKey id);
+        Task<T> GetByIdNoTrackingAsync(TKey id);
+        Task<T> GetByUuidAsync(Guid uuid);
+        Task<T> GetByUuidNoTrackingAsync(Guid uuid);
+        IQueryable<T> GetNoTrackingEntities();
+        IQueryable<T> GetQueryableTable();
+        Task ReleaseTransactionAsync();
+        Task RollbackTransactionAsync();
+        Task<int> UpdateAsync(T entity);
     }
 }

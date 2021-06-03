@@ -8,15 +8,16 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 
 import { LayoutRoutingModule } from './layout-routing.module';
 import { LayoutComponent } from './layout.component';
-import LocalizedNumericInputDirective from '../shared/directives/localized-numeric-input.directive';
-import { MyCurrencyPipe } from '../shared/directives/my-currency-pipe.pipe';
+import LocalizedNumericInputDirective from '@app/shared/directives/localized-numeric-input.directive';
+import { MyCurrencyPipe } from '@app/shared/directives/my-currency-pipe.pipe';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FileUploadModule } from 'primeng-lts';
+import CategoryDetailComponent from '@app/components/category/category-detail/category-detail.component';
 
 @NgModule({
-    imports: [CommonModule, LayoutRoutingModule, TranslateModule, NgbDropdownModule,ReactiveFormsModule,FileUploadModule ],
-    declarations: [LayoutComponent, SidebarComponent, HeaderComponent, LocalizedNumericInputDirective, MyCurrencyPipe],
-    exports: [LocalizedNumericInputDirective, MyCurrencyPipe,ReactiveFormsModule,FileUploadModule],
+    imports: [CommonModule, LayoutRoutingModule, TranslateModule, NgbDropdownModule,ReactiveFormsModule,FileUploadModule],
+    declarations: [LayoutComponent, SidebarComponent, HeaderComponent, LocalizedNumericInputDirective, MyCurrencyPipe,CategoryDetailComponent],
+    exports: [LocalizedNumericInputDirective, MyCurrencyPipe,ReactiveFormsModule,FileUploadModule, CategoryDetailComponent],
     providers: [MyCurrencyPipe]
 })
 export class LayoutModule { }

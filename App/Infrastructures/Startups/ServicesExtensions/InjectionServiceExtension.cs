@@ -28,14 +28,18 @@ namespace App.Infrastructures.Startup.ServicesExtensions
             services.AddTransient<DBInitializer>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<UserManager<User>, UserManager<User>>();
+            //services.AddTransient<IEntityDatabaseTransaction, EntityDatabaseTransaction>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<ISaleService, SaleService>();
             services.AddTransient<ISaleRepository, SaleRepository>();
             services.AddTransient<ICustomerService, CustomerService>();
             services.AddTransient<ICustomerRepository, CustomerRepository>();
-            services.AddTransient<ICategoryService, CategoryService>();
-            services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<ILangRepository, LangRepository>();
+            services.AddTransient<ILangService, LangService>();
+            services.AddTransient<ICategoriesService, CategoriesService>();
+            services.AddTransient<ICategoriesRepository, CategoriesRepository>();
+            services.AddTransient<ICategoryDetailsRepository, CategoryDetailsRepository>();
 
         }
     }

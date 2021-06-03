@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace App.Repositories.Interface
 {
-    public interface ICustomerRepository : IBaseRepository<Customer>
+    public interface ICustomerRepository : IBaseRepository<Customer, int>
     {
         public Task<Customer> PostAsync(CustomerRequest request);
         public Task<Customer> GetByUuidAsync(Guid uuid);

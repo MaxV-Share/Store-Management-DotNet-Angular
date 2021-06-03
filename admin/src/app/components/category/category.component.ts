@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
-import { CategoryDetailComponent } from './category-detail/category-detail.component';
+import CategoryDetailComponent from './category-detail/category-detail.component';
 
 @Component({
     selector: 'app-category',

@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { CategoryDetailComponent } from './category-detail.component';
+import CategoryDetailComponent from './category-detail.component';
 
 describe('CategoryDetailComponent', () => {
   let component: CategoryDetailComponent;

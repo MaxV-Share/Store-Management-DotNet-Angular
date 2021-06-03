@@ -44,10 +44,7 @@ import { MatTreeModule } from '@angular/material/tree';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { PortalModule } from '@angular/cdk/portal';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { MyCurrencyPipe } from '../../shared/directives/my-currency-pipe.pipe';
-import LocalizedNumericInputDirective from '../../shared/directives/localized-numeric-input.directive';
-import { LayoutModule } from '../../layout/layout.module';
-import { CategoryDetailComponent } from '../category/category-detail/category-detail.component';
+import { LayoutModule } from '@app/layout/layout.module';
 
 @NgModule({
     imports: [
@@ -135,6 +132,6 @@ import { CategoryDetailComponent } from '../category/category-detail/category-de
         PortalModule,
         ScrollingModule,
     ],
-    declarations: [ProductComponent, ProductDetailComponent, CategoryDetailComponent],
+    declarations: [ProductComponent, ProductDetailComponent],
 })
 export class ProductModule { }

@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 
 namespace App.Repositories.Interface
 {
-    public interface ICategoryRepository : IBaseRepository<Category>
+    public interface ICategoryDetailsRepository : IBaseRepository<CategoryDetail, int>
     {
-        public Task<Category> PostAsync(CategoryRequest request);
     }
 }

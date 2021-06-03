@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace App.Services.Interface
 {
-    public interface  IBillService : IBaseService<Bill, BillRequest, BillNonRequest>
+    public interface  IBillService : IBaseService<Bill, BillRequest, BillNonRequest, int>
     { 
         public Task<SaleNonRequest> PostAsync(BillRequest request);
     }

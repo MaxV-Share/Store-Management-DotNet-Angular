@@ -1,12 +1,12 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import CategoryDetailComponent from '@app/components/category/category-detail/category-detail.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { Lang, Category, Product, ProductDetail, environment, langs, CategoryDetail } from '../../../models';
-import { CategoryDetailComponent } from '../../category/category-detail/category-detail.component';
+import { Lang, Category, Product, ProductDetail, environment, langs, CategoryDetail } from '@app/models';
 
 @Component({
     selector: 'app-product-detail',
@@ -15,7 +15,7 @@ import { CategoryDetailComponent } from '../../category/category-detail/category
 })
 export class ProductDetailComponent implements OnInit {
 
-    constructor(private modalService: BsModalService, public bsModalRef: BsModalRef, public translate: TranslateService) {
+    constructor(private modalService: BsModalService, public bsModalRef: BsModalRef, public bsCategoryModalRef: BsModalRef, public translate: TranslateService) {
 
     }
     showAddCategory = false;
@@ -102,15 +102,15 @@ export class ProductDetailComponent implements OnInit {
             id: null,
         };
 
-        this.bsModalRef = this.modalService.show(CategoryDetailComponent, {
+        this.bsCategoryModalRef = this.modalService.show(CategoryDetailComponent, {
             initialState: initialState,
             class: 'modal-lg',
             backdrop: 'static'
         });
 
-        this.bsModalRef.content.saved.subscribe((e) => {
+        this.bsCategoryModalRef.content.saved.subscribe((e) => {
             console.log(e);
-            this.bsModalRef.hide();
+            this.bsCategoryModalRef.hide();
         });
     }
 }

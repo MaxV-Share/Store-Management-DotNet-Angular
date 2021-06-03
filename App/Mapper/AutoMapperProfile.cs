@@ -20,8 +20,10 @@ namespace App.Mapper
             CreateMap<Customer, CustomerNonRequest>();
             CreateMap<Sale, SaleRequest>();
             CreateMap<Sale, SaleNonRequest>();
-            CreateMap<Category, CategoryRequest>();
-            CreateMap<Category, CategoryNonRequest>();
+            CreateMap<Category, CategoryCR>();
+            CreateMap<Category, CategoryVm>();
+            CreateMap<CategoryDetail, CategoryDetailCR>();
+            CreateMap<CategoryDetail, CategoryDetailVm>();
         }
 
     }

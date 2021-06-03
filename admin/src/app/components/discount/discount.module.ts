@@ -45,7 +45,7 @@ import { DiscountDetailComponent } from './discount-detail/discount-detail.compo
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
-import { LayoutModule } from '../../layout/layout.module';
+import { LayoutModule } from '@app/layout/layout.module';
 @NgModule({
     imports: [
         CommonModule,

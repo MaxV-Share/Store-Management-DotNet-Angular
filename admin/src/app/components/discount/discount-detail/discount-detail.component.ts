@@ -2,7 +2,7 @@ import { AfterViewInit, Component, EventEmitter, OnInit } from '@angular/core';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
-import { Discount } from '../../../models';
+import { Discount } from '@app/models';
 
 @Component({
     selector: 'app-discount-detail',

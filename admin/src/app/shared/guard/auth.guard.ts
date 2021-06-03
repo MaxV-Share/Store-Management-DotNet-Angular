@@ -2,7 +2,7 @@ import { ResourceLoader } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { AuthenticationService, CookieConsentService } from '../services';
+import { AuthenticationService, CookieConsentService } from '@app/shared/services';
 
 @Injectable()
 export class AuthGuard implements CanActivate {

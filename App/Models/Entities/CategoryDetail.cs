@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace App.Models.Entities
 {
-    public class CategoryDetail : BaseEntity
+    public class CategoryDetail : BaseEntity<int>
     {
         public Category Category { get; set; }
         public Lang Lang{ get; set; }

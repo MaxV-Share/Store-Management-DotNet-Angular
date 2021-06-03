@@ -1,23 +1,5 @@
 <div [@routerTransition]>
-    <h2 class="text-muted">Dashboard <small>Statistics Overview</small></h2>
-    <div class="row">
-        <div class="col-md-12">
-            <ngb-carousel>
-                <ng-template *ngFor="let slider of sliders" ngbSlide>
-                    <img
-                        [src]="slider.imagePath"
-                        alt="Random first slide"
-                        class="img-fluid mx-auto d-block"
-                        width="100%"
-                    />
-                    <div class="carousel-caption">
-                        <h3>{{ slider.label }}</h3>
-                        <p>{{ slider.text }}</p>
-                    </div>
-                </ng-template>
-            </ngb-carousel>
-        </div>
-    </div>
+    <h2 class="text-muted">Tổng quan <small>Hoạt động hôm nay</small></h2>
     <hr />
     <div class="row">
         <div class="col-xl-3 col-lg-6">
@@ -69,30 +51,3 @@
         <!-- /.col-lg-4 -->
     </div>
 </div>
-<table class="table table-hover table-striped">
-    <thead>
-        <tr>
-            <th>STT</th>
-            <th>Tên giảm giá</th>
-            <th>Phần trăm giảm</th>
-            <th>Giảm tối đa</th>
-            <th>Từ ngày</th>
-            <th>Đến ngày</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let item of sliders; let i = index">
-            <td>{{ i }}</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>
-                <button class="btn btn-sm btn-default" type="button" (click)="edit(saleDetails)">
-                    <i class="fa fa-pencil" aria-hidden="true"></i>
-                </button>
-            </td>
-        </tr>
-    </tbody>
-</table>

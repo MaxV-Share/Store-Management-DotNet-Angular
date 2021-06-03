@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace App.Services
 {
-    public class SaleService : BaseService<Sale, SaleRequest, SaleNonRequest>, ISaleService
+    public class SaleService : BaseService<Sale, SaleRequest, SaleNonRequest, int>, ISaleService
     {
         public readonly ISaleRepository _saleRepository;
         public SaleService(ISaleRepository saleRepository, IMapper mapper) : base(saleRepository, mapper)
@@ -41,7 +41,7 @@ namespace App.Services
             if (id != request.Id)
                 return 0;
 
-            var entity = await _saleRepository.GetByUuidTrackingAsync(request.Id);
+            var entity = await _saleRepository.GetByIdAsync(request.Id);
             if (entity == null)
                 return 0;
             var dateTimeNow = DateTime.UtcNow;

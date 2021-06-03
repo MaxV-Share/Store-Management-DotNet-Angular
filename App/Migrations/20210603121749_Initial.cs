@@ -4,7 +4,7 @@ using MySql.EntityFrameworkCore.Metadata;
 
 namespace App.Migrations
 {
-    public partial class Init : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -54,7 +54,7 @@ namespace App.Migrations
                 {
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    name = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
+                    parent_id = table.Column<int>(type: "int", nullable: true),
                     uuid = table.Column<byte[]>(type: "varbinary(16)", nullable: false),
                     create_at = table.Column<DateTime>(type: "datetime", nullable: true),
                     update_at = table.Column<DateTime>(type: "datetime", nullable: true),
@@ -65,6 +65,12 @@ namespace App.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_categories", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_categories_categories_parent_id",
+                        column: x => x.parent_id,
+                        principalTable: "categories",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -86,6 +92,25 @@ namespace App.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_customers", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "langs",
+                columns: table => new
+                {
+                    id = table.Column<string>(type: "varchar(256)", nullable: false),
+                    name = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: true),
+                    order = table.Column<int>(type: "int", nullable: false),
+                    uuid = table.Column<byte[]>(type: "varbinary(16)", nullable: false),
+                    create_at = table.Column<DateTime>(type: "datetime", nullable: true),
+                    update_at = table.Column<DateTime>(type: "datetime", nullable: true),
+                    create_by = table.Column<string>(type: "text", nullable: true),
+                    update_by = table.Column<string>(type: "text", nullable: true),
+                    deleted = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_langs", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -281,6 +306,40 @@ namespace App.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "category_details",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
+                    category_id = table.Column<int>(type: "int", nullable: true),
+                    lang_id = table.Column<string>(type: "varchar(256)", nullable: true),
+                    name = table.Column<string>(type: "text", nullable: true),
+                    description = table.Column<string>(type: "text", nullable: true),
+                    uuid = table.Column<byte[]>(type: "varbinary(16)", nullable: false),
+                    create_at = table.Column<DateTime>(type: "datetime", nullable: true),
+                    update_at = table.Column<DateTime>(type: "datetime", nullable: true),
+                    create_by = table.Column<string>(type: "text", nullable: true),
+                    update_by = table.Column<string>(type: "text", nullable: true),
+                    deleted = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_category_details", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_category_details_categories_category_id",
+                        column: x => x.category_id,
+                        principalTable: "categories",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "fk_category_details_langs_lang_id",
+                        column: x => x.lang_id,
+                        principalTable: "langs",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "bill_details",
                 columns: table => new
                 {
@@ -389,8 +448,33 @@ namespace App.Migrations
                 column: "id");
 
             migrationBuilder.CreateIndex(
+                name: "ix_categories_parent_id",
+                table: "categories",
+                column: "parent_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_category_details_category_id",
+                table: "category_details",
+                column: "category_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_category_details_id",
+                table: "category_details",
+                column: "id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_category_details_lang_id",
+                table: "category_details",
+                column: "lang_id");
+
+            migrationBuilder.CreateIndex(
                 name: "ix_customers_id",
                 table: "customers",
+                column: "id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_langs_id",
+                table: "langs",
                 column: "id");
 
             migrationBuilder.CreateIndex(
@@ -430,6 +514,9 @@ namespace App.Migrations
                 name: "bill_details");
 
             migrationBuilder.DropTable(
+                name: "category_details");
+
+            migrationBuilder.DropTable(
                 name: "sale");
 
             migrationBuilder.DropTable(
@@ -440,6 +527,9 @@ namespace App.Migrations
 
             migrationBuilder.DropTable(
                 name: "products");
+
+            migrationBuilder.DropTable(
+                name: "langs");
 
             migrationBuilder.DropTable(
                 name: "customers");

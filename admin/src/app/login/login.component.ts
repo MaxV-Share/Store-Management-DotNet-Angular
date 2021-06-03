@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { routerTransition } from '../router.animations';
+import { routerTransition } from '@app/router.animations';
 import { TranslateService } from '@ngx-translate/core';
-import { LoginModel } from '../models';
-import { AuthenticationService, CookieConsentService } from '../shared/services';
+import { LoginModel } from '@app/models';
+import { AuthenticationService, CookieConsentService } from '@app/shared/services';
 
 @Component({
     selector: 'app-login',

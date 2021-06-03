@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AuthenticationService, CookieConsentService } from '../services';
+import { AuthenticationService, CookieConsentService } from '@app/shared/services';
 @Injectable({
   providedIn: 'root'
 })

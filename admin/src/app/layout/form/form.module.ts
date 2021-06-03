@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { PageHeaderModule } from './../../shared';
+import { PageHeaderModule } from '@app/shared';
 
 import { FormRoutingModule } from './form-routing.module';
 import { FormComponent } from './form.component';

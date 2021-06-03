@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace App.Services.Interface
 {
-    public interface ISaleService : IBaseService<Sale, SaleRequest, SaleNonRequest>
+    public interface ISaleService : IBaseService<Sale, SaleRequest, SaleNonRequest, int>
     {
         public Task<int> PutAsync(int id, SaleNonRequest request);
         public Task<SaleNonRequest> PostAsync(SaleRequest request);
