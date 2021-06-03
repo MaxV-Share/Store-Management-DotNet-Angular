@@ -9,7 +9,7 @@ using App.Services.Base;
 
 namespace App.Services.Interface
 {
-    public interface ICustomerService : IBaseService<Customer, CustomerRequest, CustomerNonRequest>
+    public interface ICustomerService : IBaseService<Customer, CustomerRequest, CustomerNonRequest, int>
     {
        public Task<CustomerNonRequest> PostAsync(CustomerRequest request);
        public Task<int> PutAsync(Guid uuid, CustomerNonRequest request);

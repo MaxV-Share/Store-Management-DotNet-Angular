@@ -11,24 +11,22 @@ using System.Threading.Tasks;
 
 namespace App.Repositories.BaseRepository
 {
-    public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
+    public class BaseRepository<T, TKey> : IBaseRepository<T, TKey> where T : BaseEntity<TKey>
     {
         #region props
 
-        private readonly DbContext _context;
+        protected DbContext _context;
         private bool _disposed = false;
-        private DbSet<T> _entitiesDbSet { get; set; }
         private IDbContextTransaction _tx { get; set; }
-        public readonly IMapper _mapper;
+        private DbSet<T> _entitiesDbSet { get; set; }
 
         #endregion props
 
         #region ctor
 
-        public BaseRepository(DbContext context,IMapper mapper)
+        public BaseRepository(DbContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
         ~BaseRepository()
@@ -51,20 +49,20 @@ namespace App.Repositories.BaseRepository
             return entities;
         }
 
-        public virtual async Task<T> GetByIdAsync(int id)
+        public virtual async Task<T> GetByIdAsync(TKey id)
         {
-            var entity = await Entities.SingleOrDefaultAsync(x => x.Id == id && x.Deleted == null);
+            var entity = await Entities.SingleOrDefaultAsync(x => x.Id.Equals(id) && x.Deleted == null);
             return entity;
         }
 
-        public virtual async Task<T> GetByIdNoTrackingAsync(int id)
+        public virtual async Task<T> GetByIdNoTrackingAsync(TKey id)
         {
-            var entity = await GetNoTrackingEntities().SingleOrDefaultAsync(x => x.Id == id && x.Deleted == null);
+            var entity = await GetNoTrackingEntities().SingleOrDefaultAsync(x => x.Id.Equals(id) && x.Deleted == null);
             return entity;
         }
-        public virtual async Task<T> GetByUuidTrackingAsync(int id)
+        public virtual async Task<T> GetByUuidNoTrackingAsync(Guid uuid)
         {
-            var entity = await Entities.SingleOrDefaultAsync(x => x.Id == id && x.Deleted == null);
+            var entity = await GetNoTrackingEntities().SingleOrDefaultAsync(x => x.Uuid == uuid && x.Deleted == null);
             return entity;
         }
         public async Task<T> CreateAsync(T entity)
@@ -113,17 +111,17 @@ namespace App.Repositories.BaseRepository
             return effectedCount;
         }
 
-        public virtual async Task<int> DeleteHardAsync(int id)
+        public virtual async Task<int> DeleteHardAsync(TKey id)
         {
-            var entity = await _context.Set<T>().SingleOrDefaultAsync(e => e.Id == id);
+            var entity = await _context.Set<T>().SingleOrDefaultAsync(e => e.Id.Equals(id));
             ValidateAndThrow(entity);
             Entities.Remove(entity);
             var effectedCount = await _context.SaveChangesAsync();
             return effectedCount;
         }
-        public virtual async Task<int> DeleteSoftAsync(int id)
+        public virtual async Task<int> DeleteSoftAsync(TKey id)
         {
-            var entity = await _context.Set<T>().SingleOrDefaultAsync(e => e.Id == id);
+            var entity = await _context.Set<T>().SingleOrDefaultAsync(e => e.Id.Equals(id));
             ValidateAndThrow(entity);
             entity.Deleted = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
             var effectedCount = await UpdateAsync(entity);
@@ -154,12 +152,10 @@ namespace App.Repositories.BaseRepository
 
         private void AddDefaultValue(ref T entity)
         {
-            entity.Uuid = Guid.NewGuid();
-            entity.CreateAt = DateTime.UtcNow;
-            entity.UpdateAt = entity.CreateAt;
+            BaseEntity<TKey>.SetDefaultValue(ref entity);
         }
 
-        protected DbSet<T> Entities
+        public DbSet<T> Entities
         {
             get
             {
@@ -169,36 +165,36 @@ namespace App.Repositories.BaseRepository
             }
         }
 
-        protected IQueryable<T> GetNoTrackingEntities()
+        public IQueryable<T> GetNoTrackingEntities()
         {
             var table = Entities.AsNoTracking();
             return table;
         }
 
-        protected async Task BeginTransactionAsync()
+        public async Task BeginTransactionAsync()
         {
             _tx = await _context.Database.BeginTransactionAsync();
         }
 
-        protected async Task CommitTransactionAsync()
+        public async Task CommitTransactionAsync()
         {
             await _tx.CommitAsync();
             await ReleaseTransactionAsync();
         }
 
-        protected async Task RollbackTransactionAsync()
+        public async Task RollbackTransactionAsync()
         {
             await _tx.RollbackAsync();
             await ReleaseTransactionAsync();
         }
 
-        protected async Task ReleaseTransactionAsync()
+        public async Task ReleaseTransactionAsync()
         {
             await _tx.DisposeAsync();
             _tx = null;
         }
 
-        protected virtual void Dispose(bool disposing)
+        public virtual void Dispose(bool disposing)
         {
             if (_disposed)
             {
@@ -213,6 +209,7 @@ namespace App.Repositories.BaseRepository
 
             _disposed = true;
         }
+
 
         #endregion private
 

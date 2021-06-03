@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace App.Repositories
 {
-    public class CustomerRepository : BaseRepository<Customer>, ICustomerRepository
+    public class CustomerRepository : BaseRepository<Customer, int>, ICustomerRepository
     {
-        public CustomerRepository(ApplicationDbContext context, IMapper mapper) : base(context, mapper)
+        public CustomerRepository(ApplicationDbContext context) : base(context)
         {
         }
         public async Task<Customer> PostAsync(CustomerRequest request)
@@ -26,8 +26,9 @@ namespace App.Repositories
                 FullName = request.FullName,
                 Birthday = request.Birthday,
             };
-            var result = await CreateAsync(obj);
-            return result;
+            //var result = await CreateAsync(obj);
+            //return result;
+            return null;
         }
     }
 }

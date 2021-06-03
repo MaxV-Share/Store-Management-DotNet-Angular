@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace App.Repositories
 {
-    public class SaleRepository :  BaseRepository<Sale>,ISaleRepository
+    public class SaleRepository :  BaseRepository<Sale, int>,ISaleRepository
     {
-        public SaleRepository(ApplicationDbContext context, IMapper mapper) : base(context, mapper)
+        public SaleRepository(ApplicationDbContext context) : base(context)
         {
         }
         public async Task<Sale> PostAsync(SaleRequest request)

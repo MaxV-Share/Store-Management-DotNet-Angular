@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace App.Models.Entities
 {
-    public class Category : BaseEntity
+    public class Category : BaseEntity<int>
     {
         public Category Parent { get; set; }
+        public virtual List<CategoryDetail> CategoryDetails { get; set; }
     }
 }

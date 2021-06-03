@@ -74,7 +74,19 @@ namespace App.Infrastructures.Dbcontexts
                     {
                         Id = "vi",
                         Name = "Tiếng việt",
-                        Order = 1
+                        Order = 1,
+                        Uuid = Guid.NewGuid(),
+                        CreateAt = DateTime.UtcNow,
+                        CreateBy = "Seed"
+                    });
+                    await _context.Langs.AddAsync(new Lang
+                    {
+                        Id = "en",
+                        Name = "English",
+                        Order = 2,
+                        Uuid = Guid.NewGuid(),
+                        CreateAt = DateTime.UtcNow,
+
                     });
                     await _context.SaveChangesAsync();
                 }

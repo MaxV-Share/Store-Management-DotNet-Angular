@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace App.Models.DTOs
 {
-    public class SaleNonRequest : BaseDTO
+    public class SaleNonRequest : BaseDTO<int>
     {
         public int? PercentDiscount { get; set; }
         public double? MaxDiscountPrice { get; set; }

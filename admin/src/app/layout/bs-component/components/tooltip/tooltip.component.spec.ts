@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { BsComponentModule } from '../../bs-component.module';
+import { BsComponentModule } from '@app/layout/bs-component/bs-component.module';
 
 import { TooltipComponent } from './tooltip.component';
 

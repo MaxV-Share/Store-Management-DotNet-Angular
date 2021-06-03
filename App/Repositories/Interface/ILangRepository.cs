@@ -1,4 +1,4 @@
-﻿using App.Models.DTOs;
+﻿using App.Models.DTOs.CreateRequest;
 using App.Models.Entities;
 using App.Repositories.BaseRepository;
 using System;
@@ -8,9 +8,7 @@ using System.Threading.Tasks;
 
 namespace App.Repositories.Interface
 {
-    public interface IBillRepository : IBaseRepository<Bill, int>
+    public interface ILangRepository : IBaseRepository<Lang, string>
     {
-        public Task<Bill> PostAsync(BillRequest request);
-
     }
 }

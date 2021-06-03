@@ -6,8 +6,7 @@ import { CategoryRoutingModule } from './category-routing.module';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
-import { LayoutModule } from '../../../app/layout/layout.module';
-import { CategoryDetailComponent } from './category-detail/category-detail.component';
+import { LayoutModule } from '@app/layout/layout.module';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -132,6 +131,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     PortalModule,
     ScrollingModule,
   ],
-  declarations: [CategoryComponent, CategoryDetailComponent]
+  exports:[TranslateModule],
+  declarations: [CategoryComponent]
 })
 export class CategoryModule { }

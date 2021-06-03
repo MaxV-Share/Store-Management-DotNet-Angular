@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace App.Models.Entities
 {
-    public class Product : BaseEntity
+    public class Product : BaseEntity<int>
     {
         public Category Category { get; set; }
         [MaxLength(256)]

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace App.Models.Entities
 {
-    public class Sale : BaseEntity
+    public class Sale : BaseEntity<int>
     {
         [Range(0, 100)]
         public int? PercentDiscount { get; set; }

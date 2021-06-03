@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { routerTransition } from '../router.animations';
 import { TranslateService } from '@ngx-translate/core';
-import { Register } from '../models';
+import { Register } from '@app/models';
 
 @Component({
     selector: 'app-signup',

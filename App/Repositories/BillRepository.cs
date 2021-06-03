@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace App.Repositories
 {
-    public class BillRepository : BaseRepository<Bill>, IBillRepository
+    public class BillRepository : BaseRepository<Bill, int>, IBillRepository
     {
-        public BillRepository(ApplicationDbContext context, IMapper mapper) : base(context, mapper)
+        public BillRepository(ApplicationDbContext context) : base(context)
         {
         }
 

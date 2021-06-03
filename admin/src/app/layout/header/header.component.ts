@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { CookieConsentService } from '../../shared/services';
+import { CookieConsentService } from '@app/shared/services';
 
 @Component({
     selector: 'app-header',

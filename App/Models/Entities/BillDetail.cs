@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace App.Models.Entities
 {
-    public class BillDetail : BaseEntity
+    public class BillDetail : BaseEntity<int>
     {
         public Bill Bill { get; set; }
         public Product Product { get; set; }

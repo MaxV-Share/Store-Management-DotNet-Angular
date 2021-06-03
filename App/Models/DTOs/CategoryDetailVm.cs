@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace App.Models.DTOs
 {
-    public class CategoryNonRequest : BaseDTO
+    public class CategoryDetailVm : BaseDTO<int>
     {
+        public int CategoryId { get; set; }
+        public string LangId { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
     }
 }
