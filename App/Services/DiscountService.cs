@@ -13,18 +13,18 @@ using System.Threading.Tasks;
 
 namespace App.Services
 {
-    public class SaleService : BaseService<Sale, SaleRequest, SaleNonRequest, int>, ISaleService
+    public class DiscountService : BaseService<Discount, DiscountCR, DiscountVm, int>, IDiscountService
     {
-        public readonly ISaleRepository _saleRepository;
-        public SaleService(ISaleRepository saleRepository, IMapper mapper) : base(saleRepository, mapper)
+        public readonly IDiscountRepository _saleRepository;
+        public DiscountService(IDiscountRepository saleRepository, IMapper mapper) : base(saleRepository, mapper)
         {
             _saleRepository = saleRepository;
         }
-        public async Task<SaleNonRequest> PostAsync(SaleRequest request)
+        public async Task<DiscountVm> PostAsync(DiscountCR request)
         {
             if (request == null)
                 return null;
-            Sale obj = new Sale()
+            Discount obj = new Discount()
             {
                 PercentDiscount = request.PercentDiscount,
                 MaxDiscountPrice = request.MaxDiscountPrice,
@@ -33,10 +33,10 @@ namespace App.Services
 
             };
             var response = await _saleRepository.CreateAsync(obj);
-            var result = _mapper.Map<SaleNonRequest>(response);
+            var result = _mapper.Map<DiscountVm>(response);
             return result;
         }
-        public async Task<int> PutAsync(int id, SaleNonRequest request)
+        public async Task<int> PutAsync(int id, DiscountVm request)
         {
             if (id != request.Id)
                 return 0;

@@ -6,7 +6,7 @@ import { ProductRoutingModule } from './product-routing.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TranslateModule } from '@ngx-translate/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -45,93 +45,25 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { PortalModule } from '@angular/cdk/portal';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { LayoutModule } from '@app/layout/layout.module';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
     imports: [
         CommonModule,
+        //BrowserModule, 
+        // ToastrModule.forRoot(),
+        //BrowserAnimationsModule,
         ProductRoutingModule,
         NgbModule,
         ModalModule.forRoot(),
         TranslateModule,
         FormsModule,
         LayoutModule,
-
-        MatButtonModule,
-        MatTableModule,
-        MatAutocompleteModule,
-        MatBadgeModule,
-        MatBottomSheetModule,
-        MatButtonToggleModule,
-        MatCardModule,
-        MatChipsModule,
-        MatStepperModule,
-        MatDatepickerModule,
-        MatDialogModule,
-        MatDividerModule,
-        MatExpansionModule,
-        MatGridListModule,
-        MatIconModule,
-        MatInputModule,
-        MatListModule,
-        MatMenuModule,
-        MatNativeDateModule,
-        MatPaginatorModule,
-        MatProgressBarModule,
-        MatProgressSpinnerModule,
-        MatRadioModule,
-        MatRippleModule,
-        MatSelectModule,
-        MatSidenavModule,
-        MatSliderModule,
-        MatSlideToggleModule,
-        MatSnackBarModule,
-        MatSortModule,
-        MatTabsModule,
-        MatToolbarModule,
-        MatTooltipModule,
-        MatTreeModule,
-        OverlayModule,
-        PortalModule,
-        ScrollingModule,
-        MatAutocompleteModule,
-        MatBadgeModule,
-        MatBottomSheetModule,
-        MatButtonModule,
-        MatButtonToggleModule,
-        MatCardModule,
-        MatCheckboxModule,
-        MatChipsModule,
-        MatStepperModule,
-        MatDatepickerModule,
-        MatDialogModule,
-        MatDividerModule,
-        MatExpansionModule,
-        MatGridListModule,
-        MatIconModule,
-        MatInputModule,
-        MatListModule,
-        MatMenuModule,
-        MatNativeDateModule,
-        MatPaginatorModule,
-        MatProgressBarModule,
-        MatProgressSpinnerModule,
-        MatRadioModule,
-        MatRippleModule,
-        MatSelectModule,
-        MatSidenavModule,
-        MatSliderModule,
-        MatSlideToggleModule,
-        MatSnackBarModule,
-        MatSortModule,
-        MatTableModule,
-        MatTabsModule,
-        MatToolbarModule,
-        MatTooltipModule,
-        MatTreeModule,
-        OverlayModule,
-        PortalModule,
-        ScrollingModule,
+        ReactiveFormsModule,
     ],
     declarations: [ProductComponent, ProductDetailComponent],
+    exports: [ReactiveFormsModule,TranslateModule]
 })
 export class ProductModule { }

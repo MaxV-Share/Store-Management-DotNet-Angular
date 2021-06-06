@@ -18,8 +18,8 @@ namespace App.Mapper
             CreateMap<User, UserNonRequest>();
             CreateMap<Customer, CustomerRequest>();
             CreateMap<Customer, CustomerNonRequest>();
-            CreateMap<Sale, SaleRequest>();
-            CreateMap<Sale, SaleNonRequest>();
+            CreateMap<Discount, DiscountCR>();
+            CreateMap<Discount, DiscountVm>();
             CreateMap<Category, CategoryCR>();
             CreateMap<Category, CategoryVm>();
             CreateMap<CategoryDetail, CategoryDetailCR>();
