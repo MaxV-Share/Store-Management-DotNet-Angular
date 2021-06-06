@@ -38,7 +38,7 @@ namespace App.Infrastructures.Startup.ServicesExtensions
             services.AddTransient<ILangRepository, LangRepository>();
             services.AddTransient<ILangService, LangService>();
             services.AddTransient<ICategoriesService, CategoriesService>();
-            services.AddTransient<ICategoriesRepository, CategoriesRepository>();
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<ICategoryDetailsRepository, CategoryDetailsRepository>();
 
         }

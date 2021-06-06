@@ -1,4 +1,5 @@
-﻿using System;
+﻿using App.Models.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -11,5 +12,6 @@ namespace App.Models.DTOs
     {
         [JsonPropertyName("details")]
         public List<CategoryDetailCR> CategoryDetails { get; set; }
+        public int ParentId { get; set; }
     }
 }
