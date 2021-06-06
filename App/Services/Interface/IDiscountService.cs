@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace App.Services.Interface
 {
-    public interface ISaleService : IBaseService<Sale, SaleRequest, SaleNonRequest, int>
+    public interface IDiscountService : IBaseService<Discount, DiscountCR, DiscountVm, int>
     {
-        public Task<int> PutAsync(int id, SaleNonRequest request);
-        public Task<SaleNonRequest> PostAsync(SaleRequest request);
+        public Task<int> PutAsync(int id, DiscountVm request);
+        public Task<DiscountVm> PostAsync(DiscountCR request);
     }
 }

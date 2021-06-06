@@ -10,6 +10,6 @@ namespace App.Services.Interface
 {
     public interface  IBillService : IBaseService<Bill, BillRequest, BillNonRequest, int>
     { 
-        public Task<SaleNonRequest> PostAsync(BillRequest request);
+        public Task<DiscountVm> PostAsync(BillRequest request);
     }
 }

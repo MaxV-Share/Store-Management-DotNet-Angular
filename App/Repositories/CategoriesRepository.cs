@@ -17,11 +17,5 @@ namespace App.Repositories
         public CategoriesRepository(ApplicationDbContext context) : base(context)
         {
         }
-
-        //public override async Task<Category> GetByIdNoTrackingAsync(int id)
-        //{
-        //    var entity = await Entities.Include(e => e.CategoryDetails).SingleOrDefaultAsync(x => x.Id.Equals(id) && x.Deleted == null);
-        //    return entity;
-        //}
     }
 }

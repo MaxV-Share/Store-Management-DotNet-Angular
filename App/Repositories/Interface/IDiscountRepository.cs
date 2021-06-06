@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace App.Repositories.Interface
 {
-    public interface ISaleRepository : IBaseRepository<Sale, int>
+    public interface IDiscountRepository : IBaseRepository<Discount, int>
     {
-        public Task<Sale> PostAsync(SaleRequest request);
+        public Task<Discount> PostAsync(DiscountCR request);
     }
 }
