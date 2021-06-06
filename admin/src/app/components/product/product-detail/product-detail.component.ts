@@ -1,7 +1,6 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import CategoryDetailComponent from '@app/components/category/category-detail/category-detail.component';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Observable } from 'rxjs';
@@ -19,6 +18,7 @@ export class ProductDetailComponent implements OnInit {
 
     }
     showAddCategory = false;
+    showEditCategory = false;
     langs: Lang[];
     public productId: number;
     saved: EventEmitter<any> = new EventEmitter();

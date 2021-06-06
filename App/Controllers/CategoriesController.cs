@@ -20,13 +20,15 @@ namespace App.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] CategoryCR request)
         {
+            if (request == null)
+                return BadRequest();
             var result = await _categoryService.CreateAsync(request);
             
             if (result != null)
                 return Ok(result);
             return NotFound();
         }
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, CategoryVm request)
         {
             if (id != request.Id)

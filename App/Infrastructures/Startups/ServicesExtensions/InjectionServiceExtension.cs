@@ -31,8 +31,8 @@ namespace App.Infrastructures.Startup.ServicesExtensions
             //services.AddTransient<IEntityDatabaseTransaction, EntityDatabaseTransaction>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IUserRepository, UserRepository>();
-            services.AddTransient<ISaleService, SaleService>();
-            services.AddTransient<ISaleRepository, SaleRepository>();
+            services.AddTransient<IDiscountService, DiscountService>();
+            services.AddTransient<IDiscountRepository, DiscountRepository>();
             services.AddTransient<ICustomerService, CustomerService>();
             services.AddTransient<ICustomerRepository, CustomerRepository>();
             services.AddTransient<ILangRepository, LangRepository>();

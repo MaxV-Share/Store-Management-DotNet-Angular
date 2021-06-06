@@ -11,16 +11,16 @@ using System.Threading.Tasks;
 
 namespace App.Repositories
 {
-    public class SaleRepository :  BaseRepository<Sale, int>,ISaleRepository
+    public class DiscountRepository :  BaseRepository<Discount, int>,IDiscountRepository
     {
-        public SaleRepository(ApplicationDbContext context) : base(context)
+        public DiscountRepository(ApplicationDbContext context) : base(context)
         {
         }
-        public async Task<Sale> PostAsync(SaleRequest request)
+        public async Task<Discount> PostAsync(DiscountCR request)
         {
             if (request == null)
                 return null;
-            Sale obj = new Sale()
+            Discount obj = new Discount()
             {
                 PercentDiscount = request.PercentDiscount,
                 MaxDiscountPrice = request.MaxDiscountPrice,

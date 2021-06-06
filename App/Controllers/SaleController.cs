@@ -13,13 +13,13 @@ namespace App.Controllers
 {
     public class SaleController : ApiController
     {
-        public readonly ISaleService _saleService;
-        public SaleController(ISaleService saleService)
+        public readonly IDiscountService _saleService;
+        public SaleController(IDiscountService saleService)
         {
             _saleService = saleService;
         }
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] SaleRequest request)
+        public async Task<ActionResult> Post([FromBody] DiscountCR request)
         {
             if (request.FromDate <= request.ToDate)
                 return BadRequest("Từ ngày không được lớn hơn đến ngày.");
@@ -30,7 +30,7 @@ namespace App.Controllers
             return NotFound();
         }
         [HttpPut]
-        public async Task<ActionResult> Put(int id, SaleNonRequest request)
+        public async Task<ActionResult> Put(int id, DiscountVm request)
         {
             if (id != request.Id)
                 return BadRequest();

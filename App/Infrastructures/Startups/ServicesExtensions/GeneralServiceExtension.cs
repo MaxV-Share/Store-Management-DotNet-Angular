@@ -27,7 +27,10 @@ namespace App.Infrastructures.Startup.ServicesExtensions
             {
                 options.EnableDetailedErrors(true);
 
-                options.UseMySQL(configuration.GetValue<string>("ConnectionStrings:DefaultConnection"), options => options.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.GetName().Name));
+                options.UseMySQL(configuration.GetValue<string>("ConnectionStrings:DefaultConnection"),
+                    x => {
+                        x.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.GetName().Name);
+                        });
                 options.UseSnakeCaseNamingConvention();
             }); 
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
@@ -57,8 +60,7 @@ namespace App.Infrastructures.Startup.ServicesExtensions
                 };
             });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            services.AddControllersWithViews();
+            services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "App Api", Version = "v1" });

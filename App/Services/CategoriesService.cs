@@ -77,7 +77,7 @@ namespace App.Services
                 return 0;
             var dateTimeNow = DateTime.UtcNow;
 
-            entity.Parent = request.Name;
+            //entity.Parent = request.Name;
             entity.UpdateAt = dateTimeNow;
 
             var result = await _repository.UpdateAsync(entity);
