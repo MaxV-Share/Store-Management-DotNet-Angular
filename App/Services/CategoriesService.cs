@@ -16,10 +16,10 @@ namespace App.Services
 {
     public class CategoriesService : BaseService<Category, CategoryCR, CategoryVm, int>, ICategoriesService
     {
-        public readonly ICategoriesRepository _categoryRepository;
+        public readonly ICategoryRepository _categoryRepository;
         private readonly ILangRepository _langRepository;
         private readonly ICategoryDetailsRepository _categoryDetailsRepository;
-        public CategoriesService(ICategoriesRepository saleRepository, IMapper mapper, ILangRepository langRepository, ICategoryDetailsRepository categoryDetailsRepository) : base(saleRepository, mapper)
+        public CategoriesService(ICategoryRepository saleRepository, IMapper mapper, ILangRepository langRepository, ICategoryDetailsRepository categoryDetailsRepository) : base(saleRepository, mapper)
         {
             _categoryRepository = saleRepository;
             _langRepository = langRepository;
@@ -47,7 +47,8 @@ namespace App.Services
                     {
                         Category = category,
                         Name = detail.Name,
-                        Lang = lang
+                        Lang = lang,
+                        Description = detail.Description
                     });
                 }
                 await _categoryDetailsRepository.CreateAsync(categoryDetails);
@@ -68,20 +69,19 @@ namespace App.Services
         }
         public async Task<int> PutAsync(int id, CategoryVm request)
         {
-            //if (id != request.Id)
-            //    return 0;
+            if (id != request.Id)
+                return 0;
 
-            //var entity = await _CategoryRepository.GetByIdAsync(request.Id);
-            //if (entity == null)
-            //    return 0;
-            //var dateTimeNow = DateTime.UtcNow;
+            var entity = await _categoryRepository.GetByIdAsync(request.Id);
+            if (entity == null)
+                return 0;
+            var dateTimeNow = DateTime.UtcNow;
 
-            //entity.Parent = request.Name;
-            //entity.UpdateAt = dateTimeNow;
+            entity.Parent = request.Name;
+            entity.UpdateAt = dateTimeNow;
 
-            //var result = await _repository.UpdateAsync(entity);
-            //return result;
-            return 0;
+            var result = await _repository.UpdateAsync(entity);
+            return result;
         }
         public override async Task<CategoryVm> GetByIdAsync(int id)
         {

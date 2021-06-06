@@ -3,14 +3,16 @@ using System;
 using App.Infrastructures.Dbcontexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace App.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210605135316_AddProductDetail")]
+    partial class AddProductDetail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -227,7 +229,7 @@ namespace App.Migrations
                         .HasColumnName("description");
 
                     b.Property<string>("LangId")
-                        .HasColumnType("varchar(767)")
+                        .HasColumnType("varchar(10)")
                         .HasColumnName("lang_id");
 
                     b.Property<string>("Name")
@@ -320,21 +322,9 @@ namespace App.Migrations
             modelBuilder.Entity("App.Models.Entities.Lang", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("varchar(767)")
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)")
                         .HasColumnName("id");
-
-                    b.Property<DateTime?>("CreateAt")
-                        .HasColumnType("datetime")
-                        .HasColumnName("create_at");
-
-                    b.Property<string>("CreateBy")
-                        .HasColumnType("text")
-                        .HasColumnName("create_by");
-
-                    b.Property<string>("Deleted")
-                        .HasColumnType("text")
-                        .HasColumnName("deleted");
 
                     b.Property<string>("Name")
                         .HasMaxLength(20)
@@ -345,24 +335,8 @@ namespace App.Migrations
                         .HasColumnType("int")
                         .HasColumnName("order");
 
-                    b.Property<DateTime?>("UpdateAt")
-                        .HasColumnType("datetime")
-                        .HasColumnName("update_at");
-
-                    b.Property<string>("UpdateBy")
-                        .HasColumnType("text")
-                        .HasColumnName("update_by");
-
-                    b.Property<byte[]>("Uuid")
-                        .IsRequired()
-                        .HasColumnType("varbinary(16)")
-                        .HasColumnName("uuid");
-
                     b.HasKey("Id")
                         .HasName("pk_langs");
-
-                    b.HasIndex("Id")
-                        .HasDatabaseName("ix_langs_id");
 
                     b.ToTable("langs");
                 });
