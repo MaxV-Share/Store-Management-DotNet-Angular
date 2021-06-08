@@ -1,17 +1,17 @@
-﻿using App.Models.Entities;
+﻿using MaxV.Base.DTOs;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace App.Models.DTOs
 {
-    public class CategoryCR
+    public class CategoryViewModel : BaseDTO<int>
     {
-        [JsonPropertyName("details")]
-        public List<CategoryDetailCR> CategoryDetails { get; set; }
         public int ParentId { get; set; }
+        [JsonProperty("details")]
+        public List<CategoryDetailViewModel> categoryDetails { get; set; } 
     }
 }

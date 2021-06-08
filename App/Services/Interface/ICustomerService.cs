@@ -9,9 +9,9 @@ using App.Services.Base;
 
 namespace App.Services.Interface
 {
-    public interface ICustomerService : IBaseService<Customer, CustomerRequest, CustomerNonRequest, int>
+    public interface ICustomerService : IBaseService<Customer, CustomerCreateRequest, CustomerViewModel, int>
     {
-       public Task<CustomerNonRequest> PostAsync(CustomerRequest request);
-       public Task<int> PutAsync(Guid uuid, CustomerNonRequest request);
+       public Task<CustomerViewModel> PostAsync(CustomerCreateRequest request);
+       public Task<int> PutAsync(Guid uuid, CustomerViewModel request);
     }
 }

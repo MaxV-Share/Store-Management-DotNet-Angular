@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace App
 {
@@ -46,7 +47,7 @@ namespace App
                 try
                 {
                     var context = services.GetRequiredService<ApplicationDbContext>();
-                    await context.Database.MigrateAsync(); 
+                    await context.Database.MigrateAsync();
                     var dbInitializer = services.GetService<DBInitializer>();
                     await dbInitializer.Seed();
                 }
@@ -59,9 +60,14 @@ namespace App
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args).ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+            Host.CreateDefaultBuilder(args)
+                        .UseSerilog((hostingContext, loggerConfiguration) => loggerConfiguration
+                        .ReadFrom.Configuration(hostingContext.Configuration))
+                        .ConfigureWebHostDefaults(webBuilder =>
+                        {
+                            webBuilder.UseContentRoot(Directory.GetCurrentDirectory());
+                            webBuilder.UseStartup<Startup>();
+                            webBuilder.UseIISIntegration();
+                        });
     }
 }

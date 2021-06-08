@@ -1,4 +1,5 @@
-﻿using App.Models.Entities;
+﻿
+using App.Models.Entities;
 using App.DTO;
 using AutoMapper;
 using System;
@@ -14,16 +15,16 @@ namespace App.Mapper
     {
         public AutoMapperProfile()
         {
-            CreateMap<User, UserRequest>();
-            CreateMap<User, UserNonRequest>();
-            CreateMap<Customer, CustomerRequest>();
-            CreateMap<Customer, CustomerNonRequest>();
-            CreateMap<Discount, DiscountCR>();
-            CreateMap<Discount, DiscountVm>();
-            CreateMap<Category, CategoryCR>();
-            CreateMap<Category, CategoryVm>();
-            CreateMap<CategoryDetail, CategoryDetailCR>();
-            CreateMap<CategoryDetail, CategoryDetailVm>();
+            CreateMap<User, UserCreateRequest>();
+            CreateMap<User, UserViewModel>();
+            CreateMap<Customer, CustomerCreateRequest>();
+            CreateMap<Customer, CustomerViewModel>();
+            CreateMap<Discount, DiscountCreateRequest>();
+            CreateMap<Discount, DiscountViewModel>();
+            CreateMap<Category, CategoryCreateRequest>();
+            CreateMap<Category, CategoryViewModel>();
+            CreateMap<CategoryDetail, CategoryDetailCreateRequest>();
+            CreateMap<CategoryDetail, CategoryDetailViewModel>();
         }
 
     }

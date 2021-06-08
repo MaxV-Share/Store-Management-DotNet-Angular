@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace App.Services
 {
-    public class LangService : BaseService<Lang, LangCR, LangVm, string>, ILangService
+    public class LangService : BaseService<Lang, LangCreateRequest, LangViewModel, string>, ILangService
     {
         public readonly ILangRepository _categoryRepository;
         public LangService(ILangRepository saleRepository, IMapper mapper) : base(saleRepository, mapper)
@@ -22,16 +22,16 @@ namespace App.Services
             _categoryRepository = saleRepository;
         }
 
-        public Task<LangVm> CreateAsync(LangCR request)
+        public Task<LangViewModel> CreateAsync(LangCreateRequest request)
         {
             throw new NotImplementedException();
         }
-        public Task<LangVm> CreateAsync(List<LangCR> request)
+        public Task<LangViewModel> CreateAsync(List<LangCreateRequest> request)
         {
             throw new NotImplementedException();
         }
 
-        public Task<T> UpdateAsync<T>(string id, LangVm request)
+        public Task<T> UpdateAsync<T>(string id, LangViewModel request)
         {
             throw new NotImplementedException();
         }

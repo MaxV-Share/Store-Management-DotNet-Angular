@@ -16,11 +16,11 @@ namespace App.Repositories
         public CategoryRepository(ApplicationDbContext context) : base(context)
         {
         }
-        public async Task<Category> PostAsync(CategoryCR request)
+        public async Task<Category> PostAsync(CategoryCreateRequest request)
         {
             if (request == null)
                 return null;
-            var parent = await GetByIdAsync(request.ParentId);
+            var parent = await GetByIdAsync(request.ParentId.Value);
             Category obj = new Category()
             {
                 Parent = parent

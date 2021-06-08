@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace App.Models.DTOs.CreateRequest
 {
-    public class LangCR
+    public class LangCreateRequest
     {
         [MaxLength(10)]
         public string Id { get; set; }

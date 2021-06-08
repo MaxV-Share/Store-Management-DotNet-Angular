@@ -8,7 +8,7 @@ namespace App.Services.Interface
 {
     public interface IUserService
     {
-        Task<IEnumerable<UserNonRequest>> GetAllAsync(string filter);
-        Task<UserNonRequest> GetUserById(string id);
+        Task<IEnumerable<UserViewModel>> GetAllAsync(string filter);
+        Task<UserViewModel> GetUserById(string id);
     }
 }

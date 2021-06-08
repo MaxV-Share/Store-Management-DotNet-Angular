@@ -12,14 +12,14 @@ using System.Threading.Tasks;
 
 namespace App.Services
 {
-    public class CustomerService : BaseService<Customer, CustomerRequest, CustomerNonRequest, int>, ICustomerService
+    public class CustomerService : BaseService<Customer, CustomerCreateRequest, CustomerViewModel, int>, ICustomerService
     {
         public readonly ICustomerRepository _CustomerRepository;
         public CustomerService(ICustomerRepository customerRepository, IMapper mapper) : base(customerRepository, mapper)
         {
             _CustomerRepository = customerRepository;
         }
-        public async Task<CustomerNonRequest> PostAsync(CustomerRequest request)
+        public async Task<CustomerViewModel> PostAsync(CustomerCreateRequest request)
         {
             if (request == null)
                 return null;
@@ -30,10 +30,10 @@ namespace App.Services
                 Birthday = request.Birthday,
             };
             var response = await _CustomerRepository.CreateAsync(obj);
-            var result = _mapper.Map<CustomerNonRequest>(response);
+            var result = _mapper.Map<CustomerViewModel>(response);
             return result;
         }
-        public async Task<int> PutAsync(Guid uuid, CustomerNonRequest request)
+        public async Task<int> PutAsync(Guid uuid, CustomerViewModel request)
         {
             if (uuid != request.Uuid)
                 return 0;

@@ -40,7 +40,11 @@ namespace App.Infrastructures.Startup.ServicesExtensions
             services.AddTransient<ICategoriesService, CategoriesService>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<ICategoryDetailsRepository, CategoryDetailsRepository>();
+            services.AddTransient<IProductDetailRepository,ProductDetailRepository>();
+            services.AddTransient<IProductRepository, ProductRepository>();
+            services.AddTransient<IProductService, ProductService>();
 
+            services.AddTransient<IStorageService, FileStorageService>();
         }
     }
 }

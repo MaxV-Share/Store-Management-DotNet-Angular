@@ -18,18 +18,18 @@ namespace App.Controllers
             _categoryService = categoryService;
         }
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] CategoryCR request)
+        public async Task<ActionResult> Post([FromBody] CategoryCreateRequest request)
         {
-            if (request == null)
+            if (null == request)
                 return BadRequest();
             var result = await _categoryService.CreateAsync(request);
-            
-            if (result != null)
-                return Ok(result);
-            return NotFound();
+
+            if (null == result)
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            return Ok(result);
         }
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, CategoryVm request)
+        public async Task<ActionResult> Put(int id, CategoryViewModel request)
         {
             if (id != request.Id)
                 return BadRequest();
@@ -47,10 +47,16 @@ namespace App.Controllers
                 return Ok(result);
             return NotFound();
         }
-        [HttpGet("")]
+        [HttpGet("filter")]
         public async Task<ActionResult> GetPaging(int pageIndex, int pageSize, string langId, string searchText = "")
         {
             var result = await _categoryService.GetPaging(langId, pageIndex, pageSize, searchText);
+            return Ok(result);
+        }
+        [HttpGet("")]
+        public async Task<ActionResult> GetAll(string langId = "vi")
+        {
+            var result = await _categoryService.GetAllDTOAsync(langId);
             return Ok(result);
         }
     }

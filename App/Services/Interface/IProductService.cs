@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace App.Services.Interface
 {
-    public interface  IBillService : IBaseService<Bill, BillCreateRequest, BillViewModel, int>
-    { 
-        public Task<DiscountViewModel> PostAsync(BillCreateRequest request);
+    public interface IProductService : IBaseService<Product, ProductCreateRequest, ProductViewModel, int>
+    {
+        Task CreateProductAsync(ProductCreateRequest request);
     }
 }

@@ -22,7 +22,7 @@
                     <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
                         {{option.name}}
                         <button class="btn btn-sm btn-primary position-absolute"
-                            style="right: 15px; top: 5px; " (click)="createCategory()">
+                            style="right: 15px; top: 5px; " (click)="editCategory(option.categoryId)">
                             edit
                             <!-- <i class="fa fa-plus" aria-hidden="true"></i> -->
                         </button>
@@ -39,12 +39,7 @@
     <!-- multiple -->
     <!-- <p-fileUpload name="demo[]" (onUpload)="onUpload($event)"  accept="image/*" maxFileSize="1000000" multiple="multiple">-->
     <!-- single -->
-    <p-fileUpload name="demo[]" (onUpload)="onUpload($event)" accept="image/*" maxFileSize="1000000">
-        <ng-template pTemplate="content">
-            <ul *ngIf="uploadedFiles.length">
-                <li *ngFor="let file of uploadedFiles">{{file.name}} - {{file.size}} bytes</li>
-            </ul>
-        </ng-template>
+    <p-fileUpload name="demo[]" [showUploadButton]="false" (onSelect)="dealWithFiles($event)" accept="image/*" maxFileSize="1000000" multiple="multiple">
     </p-fileUpload>
     <fieldset>
         <legend>{{'Details' | translate}}</legend>
