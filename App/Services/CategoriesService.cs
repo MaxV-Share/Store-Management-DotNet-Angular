@@ -1,4 +1,5 @@
 ﻿using App.Models.DTOs;
+using App.Models.DTOs.Paging;
 using App.Models.Entities;
 using App.Repositories.BaseRepository;
 using App.Repositories.Interface;
@@ -9,37 +10,37 @@ using MaxV.Helper.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace App.Services
 {
-    public class CategoriesService : BaseService<Category, CategoryCR, CategoryVm, int>, ICategoriesService
+    public class CategoriesService : BaseService<Category, CategoryCreateRequest, CategoryViewModel, int>, ICategoriesService
     {
         public readonly ICategoryRepository _categoryRepository;
         private readonly ILangRepository _langRepository;
         private readonly ICategoryDetailsRepository _categoryDetailsRepository;
-        public CategoriesService(ICategoryRepository saleRepository, IMapper mapper, ILangRepository langRepository, ICategoryDetailsRepository categoryDetailsRepository) : base(saleRepository, mapper)
+        public CategoriesService(ICategoryRepository categoryRepository, IMapper mapper, ILangRepository langRepository, ICategoryDetailsRepository categoryDetailsRepository) : base(categoryRepository, mapper)
         {
-            _categoryRepository = saleRepository;
+            _categoryRepository = categoryRepository;
             _langRepository = langRepository;
             _categoryDetailsRepository = categoryDetailsRepository;
         }
-        public async Task<CategoryVm> CreateAsync(CategoryCR request)
+        public async Task<CategoryViewModel> CreateAsync(CategoryCreateRequest request)
         {
-            var result = new CategoryVm();
+            var result = new CategoryViewModel();
             if (request == null)
                 return null;
+            var category = new Category();
+
+            var categoryDetails = new List<CategoryDetail>();
             try
             {
-                var category = new Category();
-
-                var categoryDetails = new List<CategoryDetail>();
-
                 await _categoryRepository.BeginTransactionAsync();
 
                 category = await _categoryRepository.CreateAsync(category);
-                //throw new Exception();
+
                 foreach (var detail in request.CategoryDetails)
                 {
                     var lang = await _langRepository.GetByIdAsync(detail.LangId);
@@ -57,17 +58,15 @@ namespace App.Services
             }
             catch (Exception ex)
             {
+                Debug.WriteLine(ex.StackTrace);
                 await _categoryRepository.RollbackTransactionAsync();
+                return null;
             }
-            //Category obj = new Category()
-            //{
-            //    Name = request.Name
-            //};
-            //var response = await _CategoryRepository.CreateAsync(obj);
-            //var result = _mapper.Map<CategoryNonRequest>(response);
+            result = await GetByIdAsync(category.Id);
             return result;
+
         }
-        public async Task<int> PutAsync(int id, CategoryVm request)
+        public async Task<int> PutAsync(int id, CategoryViewModel request)
         {
             if (id != request.Id)
                 return 0;
@@ -77,34 +76,51 @@ namespace App.Services
                 return 0;
             var dateTimeNow = DateTime.UtcNow;
 
-            //entity.Parent = request.Name;
             entity.UpdateAt = dateTimeNow;
 
             var result = await _repository.UpdateAsync(entity);
             return result;
         }
-        public override async Task<CategoryVm> GetByIdAsync(int id)
+        public override async Task<CategoryViewModel> GetByIdAsync(int id)
         {
             var category = await _categoryRepository.GetByIdNoTrackingAsync(id);
             category.CategoryDetails = await _categoryDetailsRepository.GetQueryableTable()
-                                                                        .Include(e => e.Lang)
                                                                         .Where(e => e.Category.Id == id)
+                                                                        .Include(e => e.Lang)
+                                                                        .Include(e => e.Category)
                                                                         .OrderBy(e => e.Lang.Order)
                                                                         .ToListAsync();
-            var result = _mapper.Map<CategoryVm>(category);
+            var result = _mapper.Map<CategoryViewModel>(category);
             return result;
         }
 
-        public async Task<List<CategoryDetailVm>> GetPaging(string langId, int pageIndex, int pageSize, string searchText)
+        public async Task<CategoryDetailPaging> GetPaging(string langId, int pageIndex, int pageSize, string searchText)
+        {
+            var taskData = _categoryDetailsRepository.GetQueryableTable()
+                                                    .Include(e => e.Lang)
+                                                    .Include(e => e.Category)
+                                                    .Where(e => e.Lang.Id == langId && e.Name.Contains(searchText + ""))
+                                                    .OrderBy(e => e.Name)
+                                                    .Skip((pageIndex - 1) * pageSize)
+                                                    .Take(pageSize)
+                                                    .ToListAsync();
+            var taskTotalRow = _categoryDetailsRepository.GetQueryableTable()
+                                                        .CountAsync(e => e.Lang.Id == langId && e.Name.Contains(searchText + ""));
+            var result = new CategoryDetailPaging()
+            {
+                TotalRow = await taskTotalRow,
+                Data = _mapper.Map<IEnumerable<CategoryDetailViewModel>>(await taskData)
+            };
+            return result;
+        }
+        public async Task<IEnumerable<CategoryDetailViewModel>> GetAllDTOAsync(string langId)
         {
             var res = await _categoryDetailsRepository.GetQueryableTable()
                                                     .Include(e => e.Lang)
                                                     .Include(e => e.Category)
-                                                    .Where(e => e.Lang.Id == langId && e.Name.Contains(searchText + ""))
-                                                    .Skip((pageIndex - 1) * pageSize)
-                                                    .Take(pageSize)
+                                                    .Where(e => e.Lang.Id.Equals(langId) )
                                                     .ToListAsync();
-            var result = _mapper.Map<List<CategoryDetailVm>>(res);
+            var result = _mapper.Map<List<CategoryDetailViewModel>>(res);
             return result;
         }
     }

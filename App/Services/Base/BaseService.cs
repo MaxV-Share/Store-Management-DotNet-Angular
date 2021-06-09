@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace App.Services.Base
 {
-    public class BaseService<T, TRequest, TNonRequest, TKey> : IBaseService<T, TRequest, TNonRequest, TKey> where T : BaseEntity<TKey>
+    public class BaseService<T, TCreateRequest, TViewModel, TKey> : IBaseService<T, TCreateRequest, TViewModel, TKey> where T : BaseEntity<TKey>
     {
         public IBaseRepository<T, TKey> _repository;
         public readonly IMapper _mapper;
@@ -28,17 +28,17 @@ namespace App.Services.Base
             return await _repository.DeleteSoftAsync(id);
         }
 
-        public async Task<IEnumerable<TNonRequest>> GetAllDTOAsync()
+        public virtual async Task<IEnumerable<TViewModel>> GetAllDTOAsync()
         {
             var entities = await _repository.GetAllAsync();
-            var result = _mapper.Map<IEnumerable<TNonRequest>>(entities);
+            var result = _mapper.Map<IEnumerable<TViewModel>>(entities);
             return result;
         }
 
-        public virtual async Task<TNonRequest> GetByIdAsync(TKey id)
+        public virtual async Task<TViewModel> GetByIdAsync(TKey id)
         {
             var entity = await _repository.GetByIdAsync(id);
-            var result = _mapper.Map<TNonRequest>(entity);
+            var result = _mapper.Map<TViewModel>(entity);
             return result;
         }
     }

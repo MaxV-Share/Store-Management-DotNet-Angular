@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace App.Models.DTOs
 {
-    public class BillRequest
+    public class BillViewModel
     {
         public Customer Customer { get; set; }
         public User UserPayment { get; set; }

@@ -16,7 +16,7 @@ namespace App.Repositories
         public CustomerRepository(ApplicationDbContext context) : base(context)
         {
         }
-        public async Task<Customer> PostAsync(CustomerRequest request)
+        public async Task<Customer> PostAsync(CustomerCreateRequest request)
         {
             if (request == null)
                 return null;

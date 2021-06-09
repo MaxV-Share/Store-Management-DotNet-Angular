@@ -19,7 +19,7 @@ namespace App.Controllers
             _customerService = customerService;
         }
         [HttpPost]
-        public async Task<ActionResult> Post([FromForm] CustomerRequest request)
+        public async Task<ActionResult> Post(CustomerCreateRequest request)
         {
             var result = await _customerService.PostAsync(request);
 
@@ -37,7 +37,7 @@ namespace App.Controllers
             return NotFound();
         }
         [HttpPatch]
-        public async Task<ActionResult> Put(Guid uuid, CustomerNonRequest request)
+        public async Task<ActionResult> Put(Guid uuid, CustomerViewModel request)
         {
             if (uuid != request.Uuid)
                 return BadRequest();

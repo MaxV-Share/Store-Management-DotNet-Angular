@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace App.Models.DTOs
 {
-    public class LangVm
+    public class LangViewModel
     {
         [MaxLength(10)]
         public string Id { get; set; }

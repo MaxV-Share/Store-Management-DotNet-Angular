@@ -59,8 +59,8 @@ namespace App.Infrastructures.Startup.ServicesExtensions
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appSettings.Secret))
                 };
             });
-
-            services.AddControllers();
+            services.AddSwaggerGenNewtonsoftSupport();
+            services.AddControllers().AddNewtonsoftJson();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "App Api", Version = "v1" });

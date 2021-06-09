@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace App.Models.DTOs
 {
-    public class CategoryDetailVm : BaseDTO<int>
+    public class CategoryDetailViewModel : BaseDTO<int>
     {
         public int CategoryId { get; set; }
         public string LangId { get; set; }

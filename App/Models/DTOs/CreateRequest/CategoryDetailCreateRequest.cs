@@ -9,8 +9,9 @@ using System.Threading.Tasks;
 
 namespace App.Models.DTOs
 {
-    public class CategoryDetailCR
+    public class CategoryDetailCreateRequest
     {
+        [JsonProperty(PropertyName = "langId", Required = Required.Always)]
         public string LangId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

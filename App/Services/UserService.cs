@@ -19,17 +19,17 @@ namespace App.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<UserNonRequest>> GetAllAsync(string filter)
+        public async Task<IEnumerable<UserViewModel>> GetAllAsync(string filter)
         {
             var entities = await _userRepository.GetAllAsync(filter);
-            var result = _mapper.Map<IEnumerable<UserNonRequest>>(entities);
+            var result = _mapper.Map<IEnumerable<UserViewModel>>(entities);
             return result;
         }
 
-        public async Task<UserNonRequest> GetUserById(string id)
+        public async Task<UserViewModel> GetUserById(string id)
         {
             var entity = await _userRepository.GetUserById(id);
-            var result = _mapper.Map<UserNonRequest>(entity);
+            var result = _mapper.Map<UserViewModel>(entity);
             return result;
         }
     }

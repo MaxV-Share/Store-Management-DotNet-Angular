@@ -13,7 +13,7 @@ export class LayoutComponent implements OnInit {
 
     ngOnInit() {
         this.translate.use(localStorage.getItem('lang') || navigator.language.substring(0, 2));
-        console.log(navigator);
+        // console.log(navigator);
         // this.http.get('http://api.ipify.org/',{responseType: 'text'}).toPromise().then(res => {
         //     console.log(res);
         // }).catch(e => {

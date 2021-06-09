@@ -15,7 +15,7 @@ namespace App.Migrations
                     id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     product_id = table.Column<int>(type: "int", nullable: true),
-                    lang_id = table.Column<string>(type: "varchar(10)", nullable: true),
+                    lang_id = table.Column<string>(type: "varchar(256)", nullable: true),
                     name = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
                     description = table.Column<string>(type: "text", nullable: true),
                     uuid = table.Column<byte[]>(type: "varbinary(16)", nullable: false),

@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { CategoryDetail, CategoryDetailPaging } from '@app/models';
+import { CategoryService } from '@app/shared/services';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 import CategoryDetailComponent from './category-detail/category-detail.component';
 
 @Component({
@@ -11,27 +16,74 @@ import CategoryDetailComponent from './category-detail/category-detail.component
 })
 export class CategoryComponent implements OnInit {
 
-    constructor(private modalService: BsModalService, private toastr: ToastrService, public translate: TranslateService) { }
+    constructor(private modalService: BsModalService,
+        private categoryService: CategoryService,
+        private toastr: ToastrService,
+        public translate: TranslateService) { }
 
-    public bsModalRef: BsModalRef;
+    public bsCategoryModalRef: BsModalRef;
+    dataSource = new MatTableDataSource<CategoryDetail>();
+    txtSearch: string;
+    displayedColumns: string[] = ['no', 'name', 'description', 'edit'];
+    totalRow: number;
+    private subscription = new Subscription();
+    pageIndex: number;
+    pageSize: number;
     ngOnInit() {
+        this.pageIndex = 1;
+        this.pageSize = 5;
+        this.txtSearch = "";
+        this.getPaging(this.pageIndex, this.pageSize, this.translate.currentLang, "");
     }
+
     createOrUpdate(id: number = null) {
 
         const initialState = {
             id: id,
         };
 
-        this.bsModalRef = this.modalService.show(CategoryDetailComponent, {
+        this.bsCategoryModalRef = this.modalService.show(CategoryDetailComponent, {
             initialState: initialState,
             class: 'modal-lg',
             backdrop: 'static'
         });
 
-        this.bsModalRef.content.saved.subscribe((e) => {
-            console.log(e);
-            this.bsModalRef.hide();
+        this.bsCategoryModalRef.content.saved.subscribe((e) => {
+            this.bsCategoryModalRef.hide();
+            this.getPaging(this.pageIndex, 5, this.translate.currentLang, "");
         });
     }
 
+    getPaging(pageIndex: number, pageSize: number, langId: string, searchText: string) {
+        //this.subscription.add(
+        this.categoryService.getPaging(pageIndex, pageSize, langId, searchText).subscribe((res: CategoryDetailPaging) => {
+            this.dataSource = new MatTableDataSource<CategoryDetail>(res.data);
+            this.totalRow = res.totalRow;
+        })//)
+    }
+    onSearch() {
+
+    }
+    pageEventHandle(event: PageEvent) {
+        this.pageSize = event.pageSize;
+        this.pageIndex = event.pageIndex + 1;
+        this.getPaging(this.pageIndex, this.pageSize, this.translate.currentLang, this.txtSearch);
+    }
+    // editCategory(categoryId) {
+    //     const initialState = {
+    //         id: categoryId,
+    //     };
+
+    //     this.bsCategoryModalRef = this.modalService.show(CategoryDetailComponent, {
+    //         initialState: initialState,
+    //         class: 'modal-lg',
+    //         backdrop: 'static',
+    //         focus: false
+    //     });
+
+    //     this.bsCategoryModalRef.content.saved.subscribe((e) => {
+    //         this.bsCategoryModalRef.hide();
+    //         //this.getCategory();
+    //     });
+    // }
 }

@@ -18,7 +18,7 @@ namespace App.Controllers
             _billService = saleService;
         }
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] BillRequest request)
+        public async Task<ActionResult> Post([FromBody] BillCreateRequest request)
         {
             var result = await _billService.PostAsync(request);
 

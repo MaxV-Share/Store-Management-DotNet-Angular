@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace App.Services.Interface
 {
-    public interface ILangService : IBaseService<Lang, LangCR, LangVm, string>
+    public interface ILangService : IBaseService<Lang, LangCreateRequest, LangViewModel, string>
     {
-        Task<LangVm> CreateAsync(LangCR request);
-        Task<LangVm> CreateAsync(List<LangCR> request);
-        Task<T> UpdateAsync<T>(string id, LangVm request);
+        Task<LangViewModel> CreateAsync(LangCreateRequest request);
+        Task<LangViewModel> CreateAsync(List<LangCreateRequest> request);
+        Task<T> UpdateAsync<T>(string id, LangViewModel request);
     }
 }

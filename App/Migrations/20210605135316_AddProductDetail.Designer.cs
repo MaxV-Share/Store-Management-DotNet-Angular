@@ -229,7 +229,7 @@ namespace App.Migrations
                         .HasColumnName("description");
 
                     b.Property<string>("LangId")
-                        .HasColumnType("varchar(10)")
+                        .HasColumnType("varchar(256)")
                         .HasColumnName("lang_id");
 
                     b.Property<string>("Name")
@@ -435,7 +435,7 @@ namespace App.Migrations
                         .HasColumnName("description");
 
                     b.Property<string>("LangId")
-                        .HasColumnType("varchar(10)")
+                        .HasColumnType("varchar(256)")
                         .HasColumnName("lang_id");
 
                     b.Property<string>("Name")

@@ -32,21 +32,13 @@ namespace App.Infrastructures.Dbcontexts
         {
             base.OnModelCreating(modelBuilder);
 
-            //modelBuilder.HasSequence<int>("SEQ_SALSE_ID", schema: "SCHEMA")
-            //.StartsAt(1)
-            //.IncrementsBy(1);
             modelBuilder.Entity<Discount>().Property(e => e.Id).ValueGeneratedOnAdd();
             
-            //modelBuilder.HasSequence<int>("SEQ_BillDetail_ID", schema: "SCHEMA")
-            //.StartsAt(1)
-            //.IncrementsBy(1);
-            //modelBuilder.Entity<BillDetail>().HasIndex(e => new { e.Id, e.Bill });
-            //modelBuilder.Entity<BillDetail>().Property(e => e.Id).HasDefaultValueSql("NEXT VALUE FOR shared.OrderNumbers");
 
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-
+            // Method intentionally left empty.
         }
     }
 }

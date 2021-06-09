@@ -2,7 +2,7 @@ import { Component, EventEmitter, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
-import { Lang, Category, langs, CategoryDetail, CategoryCr } from '@app/models';
+import { Lang, Category, langs, CategoryDetail, CategoryCreateRequest } from '@app/models';
 import { CategoryService } from '@app/shared/services';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
@@ -29,29 +29,59 @@ export default class CategoryDetailComponent implements OnInit {
 
     ngOnInit() {
         this.langs = langs;
-        if (this.entity == null) {
-            let objCreate: CategoryCr = {
-                details: [
-                    {
-                        langId: 'vi',
-                        name: '',
-                        description: '1',
-                    },
-                    {
-                        langId: 'en',
-                        name: '',
-                        description: '2',
-                    }
-                ]
-            }
-            this.entity = objCreate;
+        let objCreate: CategoryCreateRequest = {
+            details: [
+                {
+                    langId: 'vi',
+                    name: '',
+                    description: '',
+                },
+                {
+                    langId: 'en',
+                    name: '',
+                    description: '',
+                }
+            ]
         }
+        this.entity = objCreate;
+        if (this.id != null) {
+            this.subscription.add(this.categoryService.getById(this.id, this.translate.currentLang).subscribe(res => {
+                console.log(res);
+
+                this.entity = res;
+            }))
+        }
+
     }
 
     onSave() {
-        this.toastr.success('Success');
-        // this.subscription.add(this.categoryService.add(this.entity)
+        if (this.id == null) {
+            this.add();
+        } else {
+            this.update(this.id);
+        }
+    }
+
+    add() {
+        
+        this.subscription.add(this.categoryService.add(this.entity)
+            .subscribe(() => {
+                this.toastr.success('Success');
+                this.saved.emit("success");
+                console.log("success");
+                // setTimeout(() => { this.blockedPanel = false; this.btnDisabled = false; }, 1000);
+            }, err => {
+                // this.notificationService.showError(MessageConstants.DEFAULT_ERROR_MSG);
+                // console.log(error);
+                // setTimeout(() => { this.blockedPanel = false; this.btnDisabled = false; }, 1000);
+                console.error(err)
+            }));
+    }
+
+    update(id: number) {
+        // this.subscription.add(this.categoryService.update(id, this.entity)
         //     .subscribe(() => {
+        //         this.toastr.success('Success');
         //         this.saved.emit("success");
         //         console.log("success")
         //         // setTimeout(() => { this.blockedPanel = false; this.btnDisabled = false; }, 1000);
@@ -61,13 +91,10 @@ export default class CategoryDetailComponent implements OnInit {
         //         // setTimeout(() => { this.blockedPanel = false; this.btnDisabled = false; }, 1000);
         //         console.error(err)
         //     }));
-        // this.saved.emit("Saved");
-        // console.log(this.entity);
     }
+
     changeTab(index: number) {
         // console.log(this.langs[index].id);
         // this.translate.use(this.langs[index].id);
-
     }
-
 }
