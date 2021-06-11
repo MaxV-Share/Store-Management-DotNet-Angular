@@ -14,7 +14,9 @@ import { ProductDetailComponent } from './product-detail/product-detail.componen
 })
 export class ProductComponent implements OnInit {
 
-    constructor(private modalService: BsModalService, private toastr: ToastrService, public translate: TranslateService) { }
+    constructor(private modalService: BsModalService, 
+        private toastr: ToastrService, 
+        public translate: TranslateService) { }
 
     displayedColumns: string[] = ['no', 'name', 'weight', 'edit'];
     dataSource = new MatTableDataSource<ProductDetail>();

@@ -17,7 +17,7 @@ namespace App.Repositories
         {
         }
 
-        public async Task<Bill> PostAsync(BillRequest request)
+        public async Task<Bill> PostAsync(BillCreateRequest request)
         {
             if (request == null)
                 return null;

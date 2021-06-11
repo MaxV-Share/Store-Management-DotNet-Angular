@@ -5,9 +5,7 @@ using System.Threading.Tasks;
 
 namespace App.Models.DTOs
 {
-    public class ProductRequest
+    public class ProductDetailViewModel
     {
-        public int CategoryId{ get; set; }
-        public string Name { get; set; }
     }
 }

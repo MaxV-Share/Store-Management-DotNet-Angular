@@ -19,7 +19,7 @@ namespace App.Controllers
             _saleService = saleService;
         }
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] DiscountCR request)
+        public async Task<ActionResult> Post([FromBody] DiscountCreateRequest request)
         {
             if (request.FromDate <= request.ToDate)
                 return BadRequest("Từ ngày không được lớn hơn đến ngày.");
@@ -30,7 +30,7 @@ namespace App.Controllers
             return NotFound();
         }
         [HttpPut]
-        public async Task<ActionResult> Put(int id, DiscountVm request)
+        public async Task<ActionResult> Put(int id, DiscountViewModel request)
         {
             if (id != request.Id)
                 return BadRequest();

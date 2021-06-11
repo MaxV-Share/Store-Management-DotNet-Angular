@@ -16,7 +16,7 @@ namespace App.Repositories
         public DiscountRepository(ApplicationDbContext context) : base(context)
         {
         }
-        public async Task<Discount> PostAsync(DiscountCR request)
+        public async Task<Discount> PostAsync(DiscountCreateRequest request)
         {
             if (request == null)
                 return null;

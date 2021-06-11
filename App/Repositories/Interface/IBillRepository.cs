@@ -10,7 +10,7 @@ namespace App.Repositories.Interface
 {
     public interface IBillRepository : IBaseRepository<Bill, int>
     {
-        public Task<Bill> PostAsync(BillRequest request);
+        public Task<Bill> PostAsync(BillCreateRequest request);
 
     }
 }
