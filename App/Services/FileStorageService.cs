@@ -10,11 +10,11 @@ namespace App.Services
 {
     public class FileStorageService : IStorageService
     {
-        private readonly string _pathFolder;
+        private readonly string _pathRootFolder;
 
         public FileStorageService(IWebHostEnvironment webHostEnvironment)
         {
-            _pathFolder = Path.Combine(webHostEnvironment.WebRootPath, "Files");
+            _pathRootFolder = Path.Combine(webHostEnvironment.WebRootPath, "Files");
         }
 
         public string GetFileUrl(string fileName)
@@ -22,19 +22,21 @@ namespace App.Services
             return $"/Files/{fileName}";
         }
 
-        public async Task SaveFileAsync(Stream mediaBinaryStream, string fileName)
+        public async Task SaveFileAsync(Stream mediaBinaryStream, string fileName, string folder ="")
         {
-            if (!Directory.Exists(_pathFolder))
-                Directory.CreateDirectory(_pathFolder);
+            var path = string.IsNullOrEmpty(folder) ? _pathRootFolder : Path.Combine(_pathRootFolder, folder);
 
-            var filePath = Path.Combine(_pathFolder, fileName);
+            if (!Directory.Exists(Path.Combine(path)))
+                Directory.CreateDirectory(path);
+
+            var filePath = Path.Combine(path, fileName);
             using var output = new FileStream(filePath, FileMode.Create);
             await mediaBinaryStream.CopyToAsync(output);
         }
 
         public async Task DeleteFileAsync(string fileName)
         {
-            var filePath = Path.Combine(_pathFolder, fileName);
+            var filePath = Path.Combine(_pathRootFolder, fileName);
             if (File.Exists(filePath))
             {
                 await Task.Run(() => File.Delete(filePath));

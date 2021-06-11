@@ -84,13 +84,39 @@ export class UtilitiesService extends BaseService {
         return slug;
     }
 
-    ToFormData(formValue: any) {
-        const formData = new FormData();
-        for (const key of Object.keys(formValue)) {
-            const value = formValue[key];
-            formData.append(key, value);
-        }
+    // ToFormData(formValue: any): FormData {
+    //     const formData = new FormData();
+    //     for (const key of Object.keys(formValue)) {
+    //         const value = formValue[key];
 
+    //         // if (typeof value === 'object') {
+    //         //     var blob = new Blob([value], { type: 'application/json' });
+    //         //     formData.append(key, blob)
+    //         // }
+    //         // else {
+    //             formData.append(key, value);
+    //         //}
+
+    //     }
+
+    //     return formData;
+    // }
+    
+    ToFormData(object: Object, form?: FormData, namespace?: string): FormData {
+        const formData = form || new FormData();
+        for (let property in object) {
+            if (!object.hasOwnProperty(property) || !object[property]) {
+                continue;
+            }
+            const formKey = namespace ? `${namespace}[${property}]` : property;
+            if (object[property] instanceof Date) {
+                formData.append(formKey, object[property].toISOString());
+            } else if (typeof object[property] === 'object' && !(object[property] instanceof File)) {
+                this.ToFormData(object[property], formData, formKey);
+            } else {
+                formData.append(formKey, object[property]);
+            }
+        }
         return formData;
     }
 }

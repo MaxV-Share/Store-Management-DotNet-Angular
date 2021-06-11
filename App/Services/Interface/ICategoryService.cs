@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace App.Services.Interface
 {
-    public interface ICategoriesService : IBaseService<Category, CategoryCreateRequest, CategoryViewModel, int>
+    public interface ICategoryService : IBaseService<Category, CategoryCreateRequest, CategoryViewModel, int>
     {
         Task<CategoryViewModel> CreateAsync(CategoryCreateRequest request);
         Task<int> PutAsync(int id, CategoryViewModel request);

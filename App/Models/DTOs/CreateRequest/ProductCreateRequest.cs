@@ -1,5 +1,6 @@
 ﻿using App.Models.DTOs.CreateRequest;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -12,10 +13,10 @@ namespace App.Models.DTOs
     {
         [JsonProperty("categoryId")]
         public int CategoryId{ get; set; }
-        public string Name { get; set; }
         [JsonProperty("file")]
         public IFormFile File{ get; set; }
         [JsonProperty("details")]
-        public List<ProductDetailCreateRequest> CategoryDetails { get; set; }
+        [FromForm(Name = "details")]
+        public List<ProductDetailCreateRequest> ProductDetails { get; set; }
     }
 }

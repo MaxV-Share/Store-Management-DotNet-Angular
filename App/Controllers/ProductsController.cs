@@ -13,7 +13,7 @@ namespace App.Controllers
 
     public class ProductsController : ApiController
     {
-        private IProductService _productService;
+        private readonly IProductService _productService;
         public ProductsController(IProductService productService) 
         {
             _productService = productService;
@@ -22,7 +22,7 @@ namespace App.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromForm] ProductCreateRequest request)
         {
-            await _productService.CreateProductAsync(request);
+            await _productService.CreateAsync(request);
             return Ok();
         }
     }

@@ -18,5 +18,7 @@ namespace App.Models.Entities
         [Range(0, 100)]
         public int? PercentDiscount { get; set; }
         public double? MaxDiscountPrice { get; set; }
+        public string ImageUrl { get; set; }
+        public virtual List<ProductDetail> ProductDetails { get; set; }
     }
 }

@@ -16,12 +16,12 @@ using System.Threading.Tasks;
 
 namespace App.Services
 {
-    public class CategoriesService : BaseService<Category, CategoryCreateRequest, CategoryViewModel, int>, ICategoriesService
+    public class CategoryService : BaseService<Category, CategoryCreateRequest, CategoryViewModel, int>, ICategoryService
     {
         public readonly ICategoryRepository _categoryRepository;
         private readonly ILangRepository _langRepository;
         private readonly ICategoryDetailsRepository _categoryDetailsRepository;
-        public CategoriesService(ICategoryRepository categoryRepository, IMapper mapper, ILangRepository langRepository, ICategoryDetailsRepository categoryDetailsRepository) : base(categoryRepository, mapper)
+        public CategoryService(ICategoryRepository categoryRepository, IMapper mapper, ILangRepository langRepository, ICategoryDetailsRepository categoryDetailsRepository) : base(categoryRepository, mapper)
         {
             _categoryRepository = categoryRepository;
             _langRepository = langRepository;
@@ -29,7 +29,6 @@ namespace App.Services
         }
         public async Task<CategoryViewModel> CreateAsync(CategoryCreateRequest request)
         {
-            var result = new CategoryViewModel();
             if (request == null)
                 return null;
             var category = new Category();
@@ -55,6 +54,9 @@ namespace App.Services
                 await _categoryDetailsRepository.CreateAsync(categoryDetails);
 
                 await _categoryRepository.CommitTransactionAsync();
+                 
+                var result = await GetByIdAsync(category.Id);
+                return result;
             }
             catch (Exception ex)
             {
@@ -62,8 +64,6 @@ namespace App.Services
                 await _categoryRepository.RollbackTransactionAsync();
                 return null;
             }
-            result = await GetByIdAsync(category.Id);
-            return result;
 
         }
         public async Task<int> PutAsync(int id, CategoryViewModel request)

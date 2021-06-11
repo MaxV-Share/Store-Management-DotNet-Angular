@@ -12,8 +12,8 @@ namespace App.Controllers
 {
     public class CategoriesController : ApiController
     {
-        public readonly ICategoriesService _categoryService;
-        public CategoriesController(ICategoriesService categoryService)
+        public readonly ICategoryService _categoryService;
+        public CategoriesController(ICategoryService categoryService)
         {
             _categoryService = categoryService;
         }

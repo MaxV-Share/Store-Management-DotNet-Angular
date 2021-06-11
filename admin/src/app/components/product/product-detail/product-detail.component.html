@@ -17,7 +17,7 @@
         <form class="col-6" (mouseenter)="showAddCategory = true" (mouseleave)="showAddCategory = false">
             <mat-form-field class="w-100">
                 <mat-label>{{'Category' | translate}}</mat-label>
-                <input type="text" matInput [formControl]="myControl" [matAutocomplete]="auto">
+                <input type="text" matInput [formControl]="ctrCategory" [matAutocomplete]="auto">
                 <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
                     <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
                         {{option.name}}

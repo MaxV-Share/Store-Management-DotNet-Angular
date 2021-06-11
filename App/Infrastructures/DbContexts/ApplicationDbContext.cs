@@ -33,8 +33,7 @@ namespace App.Infrastructures.Dbcontexts
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Discount>().Property(e => e.Id).ValueGeneratedOnAdd();
-            
-
+            modelBuilder.Entity<Lang>().Property(e => e.Id).HasMaxLength(256);
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

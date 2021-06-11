@@ -30,34 +30,30 @@ export class ProductDetailComponent implements OnInit {
     langs: Lang[];
     public productId: number;
     saved: EventEmitter<any> = new EventEmitter();
-    entity: Product;
-    myControl = new FormControl();
+    entity: Product = new Product();
+    ctrCategory = new FormControl();
     options: string[] = ['One', 'Two', 'Three'];
     filteredOptions: Observable<CategoryDetail[]>;
     categories: CategoryDetail[];
     uploadedFiles: any[] = [];
     private subscription = new Subscription();
+    test:any;
     getEntity() {
         this.entity = {
-            categoryId: 1,
-            id: 1,
-            price: 100000,
+            id: null,
             urlImage: "",
-            details: [{
-                langId: "vi",
-                name: "Sản phẩm 1",
-                description: "Mô tả về sản phẩm: Lorem Ipsum chỉ đơn giản là một đoạn văn bản giả, ",
-                product: null,
-                productId: 1
-            }, {
-                langId: "en",
-                name: "Product 1",
-                description: "Product description: Lorem ipsum dolor sit amet, consectetur adipiscing elit,",
-                product: null,
-                productId: 1
-            }
+            details: [
             ]
         };
+        this.langs.forEach(e => {
+            this.entity.details.push({
+                langId: e.id,
+                name: "",
+                description: "",
+                product: null,
+                productId: null
+            })
+        })
 
         // this.categories = [
         //     { categoryId: 1, name: "Danh mục 1", description: "11", category: { id: 1, parentId: null }, langId: "vi" },
@@ -75,9 +71,9 @@ export class ProductDetailComponent implements OnInit {
 
     onSave() {
         // this.saved.emit("Saved");
-        //console.log(this.entity);
-
+        this.entity.categoryId = this.ctrCategory.value.id;
         const formData = this.utilitiesService.ToFormData(this.entity);
+        
         formData.append('file', this.uploadedFiles[0], this.uploadedFiles[0].name);
         this.productService.add(formData).subscribe(() => {
             //this.log
@@ -86,9 +82,6 @@ export class ProductDetailComponent implements OnInit {
     changeTab(index: number) {
         // console.log(this.langs[index].id);
         // this.translate.use(this.langs[index].id);
-    }
-    log(item: any) {
-        console.log(item)
     }
     displayFn(user: CategoryDetail): string {
         return user && user.name ? user.name : '';
@@ -136,10 +129,9 @@ export class ProductDetailComponent implements OnInit {
         });
     }
     getCategory() {
-        this.log(this.translate.currentLang);
         this.subscription.add(this.categoryService.getAll(this.translate.currentLang).subscribe((res: CategoryDetail[]) => {
             this.categories = res;
-            this.filteredOptions = this.myControl.valueChanges
+            this.filteredOptions = this.ctrCategory.valueChanges
                 .pipe(
                     startWith(''),
                     map(value => typeof value === 'string' ? value : value.name),
