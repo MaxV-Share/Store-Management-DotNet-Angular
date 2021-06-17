@@ -28,12 +28,12 @@ namespace App.Infrastructures.Dbcontexts
         public virtual DbSet<Lang> Langs { set; get; }
         public virtual DbSet<CategoryDetail> CategoryDetails { set; get; }
         public virtual DbSet<ProductDetail> ProductDetails { set; get; }
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(builder);
 
-            modelBuilder.Entity<Discount>().Property(e => e.Id).ValueGeneratedOnAdd();
-            modelBuilder.Entity<Lang>().Property(e => e.Id).HasMaxLength(256);
+            builder.Entity<Discount>().Property(e => e.Id).ValueGeneratedOnAdd();
+            builder.Entity<Lang>().Property(e => e.Id).HasMaxLength(256);
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

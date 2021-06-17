@@ -86,7 +86,7 @@ namespace App.Infrastructures.Dbcontexts
                         Order = 2,
                         Uuid = Guid.NewGuid(),
                         CreateAt = DateTime.UtcNow,
-
+                        CreateBy = "Seed"
                     });
                     await _context.SaveChangesAsync();
                 }

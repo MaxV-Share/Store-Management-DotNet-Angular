@@ -11,8 +11,6 @@ namespace App.Models.Entities
     {
         public Category Category { get; set; }
         [MaxLength(256)]
-        public string Name { get; set; }
-        [MaxLength(256)]
         public string Code { get; set; }
         public double? Price { get; set; }
         [Range(0, 100)]

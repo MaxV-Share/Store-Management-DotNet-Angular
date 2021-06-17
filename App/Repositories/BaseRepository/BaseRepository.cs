@@ -15,7 +15,7 @@ namespace App.Repositories.BaseRepository
     {
         #region props
 
-        protected DbContext _context;
+        private readonly DbContext _context;
         private bool _disposed = false;
         private IDbContextTransaction _tx { get; set; }
         private DbSet<T> _entitiesDbSet { get; set; }
@@ -51,7 +51,7 @@ namespace App.Repositories.BaseRepository
 
         public virtual async Task<T> GetByIdAsync(TKey id)
         {
-            var entity = await Entities.SingleOrDefaultAsync(x => x.Id.Equals(id) && x.Deleted == null);
+            var entity = await Entities.SingleOrDefaultAsync(x => id.Equals(x.Id) && x.Deleted == null);
             return entity;
         }
 
@@ -155,7 +155,7 @@ namespace App.Repositories.BaseRepository
             BaseEntity<TKey>.SetDefaultValue(ref entity);
         }
 
-        public DbSet<T> Entities
+        protected DbSet<T> Entities
         {
             get
             {
@@ -165,7 +165,7 @@ namespace App.Repositories.BaseRepository
             }
         }
 
-        public IQueryable<T> GetNoTrackingEntities()
+        protected IQueryable<T> GetNoTrackingEntities()
         {
             var table = Entities.AsNoTracking();
             return table;
@@ -209,7 +209,6 @@ namespace App.Repositories.BaseRepository
 
             _disposed = true;
         }
-
 
         #endregion private
 

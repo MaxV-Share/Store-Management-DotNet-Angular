@@ -11,9 +11,9 @@ namespace App.Services.Interface
 {
     public interface IAuthenticationService
     {
-        Task<Response<bool>> Register(RegisterDTO request);
-        Task<Response<string>> Login(LoginDTO request);
-        Task Logout(string request);
-        Task<string> CheckToken(string authorization);
+        Task<Response<bool>> RegisterAsync(RegisterDTO request);
+        Task<Response<string>> LoginAsync(LoginDTO request);
+        Task LogoutAsync(string request);
+        string CheckToken(string authorization);
     }
 }

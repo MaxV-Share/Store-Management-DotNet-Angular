@@ -22,7 +22,7 @@ namespace App.Services
             return $"/Files/{fileName}";
         }
 
-        public async Task SaveFileAsync(Stream mediaBinaryStream, string fileName, string folder ="")
+        public async Task SaveFileAsync(Stream mediaBinaryStream, string fileName, string folder = "")
         {
             var path = string.IsNullOrEmpty(folder) ? _pathRootFolder : Path.Combine(_pathRootFolder, folder);
 

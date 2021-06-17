@@ -12,9 +12,18 @@ const routes: Routes = [
                 path: 'dashboard',
                 loadChildren: () => import('./dashboard/dashboard.module').then((m) => m.DashboardModule)
             },
-            { path: 'charts', loadChildren: () => import('./charts/charts.module').then((m) => m.ChartsModule) },
-            { path: 'tables', loadChildren: () => import('./tables/tables.module').then((m) => m.TablesModule) },
-            { path: 'forms', loadChildren: () => import('./form/form.module').then((m) => m.FormModule) },
+            {
+                path: 'charts',
+                loadChildren: () => import('./charts/charts.module').then((m) => m.ChartsModule)
+            },
+            {
+                path: 'tables',
+                loadChildren: () => import('./tables/tables.module').then((m) => m.TablesModule)
+            },
+            {
+                path: 'forms',
+                loadChildren: () => import('./form/form.module').then((m) => m.FormModule)
+            },
             {
                 path: 'bs-element',
                 loadChildren: () => import('./bs-element/bs-element.module').then((m) => m.BsElementModule)
@@ -40,6 +49,10 @@ const routes: Routes = [
                 path: 'categories',
                 loadChildren: () => import('@app/components/category/category.module').then(m => m.CategoryModule)
             },
+            {
+                path: 'orders',
+                loadChildren: () => import('@app/components/orders/orders.module').then(m => m.OrdersModule)
+            },
         ]
     }
 ];
@@ -48,4 +61,4 @@ const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule]
 })
-export class LayoutRoutingModule {}
+export class LayoutRoutingModule { }

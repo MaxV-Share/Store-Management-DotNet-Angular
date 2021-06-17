@@ -20,7 +20,7 @@ namespace App.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] BillCreateRequest request)
         {
-            var result = await _billService.PostAsync(request);
+            var result = await _billService.CreateAsync(request);
 
             if (result != null)
                 return Ok(result);

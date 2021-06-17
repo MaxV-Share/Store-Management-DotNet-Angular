@@ -25,8 +25,8 @@ export class CategoryComponent implements OnInit {
     dataSource = new MatTableDataSource<CategoryDetail>();
     txtSearch: string;
     displayedColumns: string[] = ['no', 'name', 'description', 'edit'];
-    totalRow: number;
     private subscription = new Subscription();
+    totalRow: number;
     pageIndex: number;
     pageSize: number;
     ngOnInit() {

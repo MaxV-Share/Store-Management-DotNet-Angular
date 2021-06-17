@@ -4,6 +4,7 @@ using App.Models.Entities;
 using App.Repositories.BaseRepository;
 using App.Repositories.Interface;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,11 @@ namespace App.Repositories
             //var result = await CreateAsync(obj);
             //return result;
             return null;
+        }
+
+        public Task<Customer> GetByPhoneNumberAsync(string phoneNumber)
+        {
+            return Entities.SingleOrDefaultAsync(e => e.PhoneNumber.Equals(phoneNumber));
         }
     }
 }

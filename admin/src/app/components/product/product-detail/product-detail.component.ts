@@ -71,9 +71,11 @@ export class ProductDetailComponent implements OnInit {
 
     onSave() {
         // this.saved.emit("Saved");
-        this.entity.categoryId = this.ctrCategory.value.id;
+        this.entity.categoryId = this.ctrCategory.value.categoryId;
+        //console.log(this.ctrCategory.value);
+
         const formData = this.utilitiesService.ToFormData(this.entity);
-        
+
         formData.append('file', this.uploadedFiles[0], this.uploadedFiles[0].name);
         this.productService.add(formData).subscribe(() => {
             //this.log

@@ -32,7 +32,6 @@ namespace App.Repositories.BaseRepository
         Task<T> GetByIdNoTrackingAsync(TKey id);
         Task<T> GetByUuidAsync(Guid uuid);
         Task<T> GetByUuidNoTrackingAsync(Guid uuid);
-        IQueryable<T> GetNoTrackingEntities();
         IQueryable<T> GetQueryableTable();
         Task ReleaseTransactionAsync();
         Task RollbackTransactionAsync();

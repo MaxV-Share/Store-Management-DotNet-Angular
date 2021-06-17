@@ -38,7 +38,7 @@ namespace App.Services
             _cache = cache;
             _jwtOptions = jwtOptions;
         }
-        public async Task<Response<string>> Login(LoginDTO request)
+        public async Task<Response<string>> LoginAsync(LoginDTO request)
         {
             var user = await _userManager.FindByNameAsync(request.UserName);
 
@@ -71,7 +71,7 @@ namespace App.Services
             return new Response<string>(StatusCodes.Status200OK,"Success", new JwtSecurityTokenHandler().WriteToken(token));
         }
 
-        public async Task Logout(string request)
+        public async Task LogoutAsync(string request)
         {
             await _cache.SetStringAsync($"tokens:{request}:deactivated",
                " ", new DistributedCacheEntryOptions
@@ -81,7 +81,7 @@ namespace App.Services
             await _signInManager.SignOutAsync();
         }
 
-        public async Task<Response<bool>> Register(RegisterDTO request)
+        public async Task<Response<bool>> RegisterAsync(RegisterDTO request)
         {
             var response = new Response<bool>();
             if (request.Password != request.ConfirmPassword)
@@ -132,7 +132,7 @@ namespace App.Services
                 }
             }
         }
-        public async Task<string> CheckToken(string authorization)
+        public string CheckToken(string authorization)
         {
             if (AuthenticationHeaderValue.TryParse(authorization, out var headerValue))
             {

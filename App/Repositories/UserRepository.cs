@@ -21,7 +21,7 @@ namespace App.Repositories.Interface
             _userManager = userManager;
             _mapper = mapper;
         }
-        public async Task<User> GetUserById(string id)
+        public async Task<User> GetByIdAsync(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
             return user;
