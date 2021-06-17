@@ -75,18 +75,20 @@ namespace App.Services
         }
         public override async Task<ProductViewModel> GetByIdAsync(int id)
         {
-            var product = await _repository.GetByIdNoTrackingAsync(id);
+            var product = await _repository.GetQueryableTable().Include(e => e.Category).SingleOrDefaultAsync(e => e.Id == id);
+            if (product == null)
+                return null;
             product.ProductDetails = await _productDetailsRepository.GetQueryableTable()
-                                                                        .Where(e => e.Product.Id == id)
-                                                                        .Include(e => e.Lang)
-                                                                        .Include(e => e.Product)
-                                                                        .OrderBy(e => e.Lang.Order)
-                                                                        .ToListAsync();
+                                                                    .Where(e => e.Product.Id == id)
+                                                                    .Include(e => e.Lang)
+                                                                    .Include(e => e.Product)
+                                                                    .OrderBy(e => e.Lang.Order)
+                                                                    .ToListAsync();
             var result = _mapper.Map<ProductViewModel>(product);
             return result;
         }
 
-        public async Task<ProductDetailPaging> GetPaging(string langId, int pageIndex, int pageSize, string searchText)
+        public async Task<ProductDetailPaging> GetPagingAsync(string langId, int pageIndex, int pageSize, string searchText)
         {
             var taskData = _productDetailsRepository.GetQueryableTable()
                                                     .Include(e => e.Lang)
@@ -96,13 +98,16 @@ namespace App.Services
                                                     .Skip((pageIndex - 1) * pageSize)
                                                     .Take(pageSize)
                                                     .ToListAsync();
+
             var taskTotalRow = _productDetailsRepository.GetQueryableTable()
                                                         .CountAsync(e => e.Lang.Id == langId && e.Name.Contains(searchText + ""));
+
             var result = new ProductDetailPaging()
             {
                 TotalRow = await taskTotalRow,
                 Data = _mapper.Map<IEnumerable<ProductDetailViewModel>>(await taskData)
             };
+
             return result;
         }
         public async Task<IEnumerable<ProductDetailViewModel>> GetAllDTOAsync(string langId)
@@ -112,6 +117,7 @@ namespace App.Services
                                                     .Include(e => e.Product)
                                                     .Where(e => e.Lang.Id.Equals(langId))
                                                     .ToListAsync();
+
             var result = _mapper.Map<List<ProductDetailViewModel>>(res);
             return result;
         }

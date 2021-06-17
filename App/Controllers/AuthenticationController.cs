@@ -35,7 +35,7 @@ namespace App.Controllers
         {
             try
             {
-                var result = await _authenticationService.Register(request);
+                var result = await _authenticationService.RegisterAsync(request);
                 if (result.Body)
                     return Ok();
                 return BadRequest(result.Message);
@@ -51,7 +51,7 @@ namespace App.Controllers
         [Route("Login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO request)
         {
-            var result = await _authenticationService.Login(request);
+            var result = await _authenticationService.LoginAsync(request);
             if (result.StatusCode >= 400)
                 return StatusCode(result.StatusCode, result.Message);
             return Ok(new { token = result.Body });
@@ -61,16 +61,16 @@ namespace App.Controllers
         [Route("Logout")]
         public async Task<IActionResult> Logout(string request)
         {
-            await _authenticationService.Logout(request);
+            await _authenticationService.LogoutAsync(request);
             return Ok();
         }
 
         [HttpGet("validate-token")]
         [Authorize]
-        public async Task<IActionResult> ValidateToken([FromHeader] string authorization)
+        public IActionResult ValidateToken([FromHeader] string authorization)
         {
             //var token = Request.Headers[HeaderNames.Authorization];
-            var result = await _authenticationService.CheckToken(authorization);
+            var result = _authenticationService.CheckToken(authorization);
             if (string.IsNullOrEmpty(result))
                 return Unauthorized();
             return Ok();

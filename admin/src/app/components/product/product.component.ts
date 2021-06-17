@@ -4,8 +4,10 @@ import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
-import { ProductDetail } from '@app/models';
+import { environment, ProductDetail } from '@app/models';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
+import { ProductService } from '@app/shared/services/product.service';
+import { ProductDetailPaging } from '@app/models/paging/product-detail-paging';
 
 @Component({
     selector: 'app-product',
@@ -14,22 +16,31 @@ import { ProductDetailComponent } from './product-detail/product-detail.componen
 })
 export class ProductComponent implements OnInit {
 
-    constructor(private modalService: BsModalService, 
-        private toastr: ToastrService, 
+    constructor(private modalService: BsModalService,
+        private toastr: ToastrService,
+        private productService: ProductService,
         public translate: TranslateService) { }
 
-    displayedColumns: string[] = ['no', 'name', 'weight', 'edit'];
+    displayedColumns: string[] = ['no', 'name','image-url', 'description', 'edit'];
     dataSource = new MatTableDataSource<ProductDetail>();
     txtSearch: string;
     public bsModalRef: BsModalRef;
+    totalRow: number;
+    pageIndex: number;
+    pageSize: number;
+    environment: any;
     ngOnInit() {
-        //this.createOrUpdate();
+        this.environment = environment
+        this.pageIndex = 1;
+        this.pageSize = 5;
+        this.txtSearch = "";
+        this.getPaging(this.pageIndex, this.pageSize, this.translate.currentLang, "");
     }
     onSearch(){
 
     }
     createOrUpdate(productId: number = null){
-        
+
         const initialState = {
             productId: productId,
         };
@@ -45,24 +56,21 @@ export class ProductComponent implements OnInit {
             this.bsModalRef.hide();
         });
     }
-    
-    private getDataPaging(event: PageEvent) {
-        // var data: Discount[] = [];
-        // let indexTo = event.pageIndex * event.pageSize + event.pageSize;
-        // let indexFrom = event.pageIndex * event.pageSize;
-        // for (let i = 0; i < ELEMENT_DATA.length; i++) {
-        //     if (i < indexFrom)
-        //         continue;
-        //     if (i >= indexTo)
-        //         break;
-        //     data.push(ELEMENT_DATA[i]);
-        // }
-        // this.dataSource = new MatTableDataSource<Discount>(data);
+
+    getPaging(pageIndex: number, pageSize: number, langId: string, searchText: string) {
+        //this.subscription.add(
+        this.productService.getPaging(pageIndex, pageSize, langId, searchText).subscribe((res: ProductDetailPaging) => {
+            this.dataSource = new MatTableDataSource<ProductDetail>(res.data);
+            console.log(res.data);
+
+            this.totalRow = res.totalRow;
+        })//)
     }
 
-    pageEventHandle(event?: PageEvent) {
-        this.getDataPaging(event);
-        return event;
+    pageEventHandle(event: PageEvent) {
+        this.pageSize = event.pageSize;
+        this.pageIndex = event.pageIndex + 1;
+        this.getPaging(this.pageIndex, this.pageSize, this.translate.currentLang, this.txtSearch);
     }
 
 }

@@ -28,7 +28,7 @@ namespace App.Services
 
         public async Task<UserViewModel> GetUserById(string id)
         {
-            var entity = await _userRepository.GetUserById(id);
+            var entity = await _userRepository.GetByIdAsync(id);
             var result = _mapper.Map<UserViewModel>(entity);
             return result;
         }

@@ -18,12 +18,37 @@ namespace App.Controllers
         {
             _productService = productService;
         }
+
         [Route("")]
         [HttpPost]
         public async Task<ActionResult> Post([FromForm] ProductCreateRequest request)
         {
             await _productService.CreateAsync(request);
             return Ok();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetById(int id)
+        {
+            var result = await _productService.GetByIdAsync(id);
+
+            if (result != null)
+                return Ok(result);
+            return NotFound();
+        }
+
+        [HttpGet("filter")]
+        public async Task<ActionResult> GetPaging(int pageIndex, int pageSize, string langId, string searchText = "")
+        {
+            var result = await _productService.GetPagingAsync(langId, pageIndex, pageSize, searchText);
+            return Ok(result);
+        }
+
+        [HttpGet("")]
+        public async Task<ActionResult> GetAll(string langId = "vi")
+        {
+            var result = await _productService.GetAllDTOAsync(langId);
+            return Ok(result);
         }
     }
 }

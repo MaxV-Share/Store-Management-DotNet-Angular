@@ -8,8 +8,9 @@ namespace App.Models.DTOs
 {
     public class BillCreateRequest
     {
-        public Customer Customer { get; set; }
-        public User UserPayment { get; set; }
+        public int CustomerId { get; set; }
+        public string CustomerPhoneNumber { get; set; }
+        public string UserPaymentId { get; set; }
         public double? TotalPrice { get; set; }
         public double? DiscountPrice { get; set; }
     }

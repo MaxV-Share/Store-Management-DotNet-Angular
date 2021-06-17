@@ -18,4 +18,13 @@ export class ProductService {
         })
         .pipe();
     }
+    getPaging(pageIndex:number, pageSize: number, langId:string, searchText: string) {
+        return this.http.get(`${environment.apiUrl}/api/products/filter?pageIndex=${pageIndex}&pageSize=${pageSize}&searchText=${searchText}&langId=${langId}`, { headers: this._sharedHeaders })
+            // .pipe(catchError(this.handleError));
+    }
+
+    getAll(langId: string) {
+        return this.http.get(`${environment.apiUrl}/api/products?langId=${langId}`, { headers: this._sharedHeaders })
+            // .pipe(catchError(this.handleError));
+    }
 }

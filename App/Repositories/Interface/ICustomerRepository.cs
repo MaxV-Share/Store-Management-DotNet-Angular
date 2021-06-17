@@ -11,6 +11,6 @@ namespace App.Repositories.Interface
     public interface ICustomerRepository : IBaseRepository<Customer, int>
     {
         public Task<Customer> PostAsync(CustomerCreateRequest request);
-        public Task<Customer> GetByUuidAsync(Guid uuid);
+        public Task<Customer> GetByPhoneNumberAsync(string phoneNumber);
     }
 }
