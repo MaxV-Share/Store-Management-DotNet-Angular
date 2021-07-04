@@ -4,7 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
-import { environment, ProductDetail } from '@app/models';
+import { ENVIRONMENT, ProductDetail } from '@app/models';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { ProductService } from '@app/shared/services/product.service';
 import { ProductDetailPaging } from '@app/models/paging/product-detail-paging';
@@ -28,9 +28,9 @@ export class ProductComponent implements OnInit {
     totalRow: number;
     pageIndex: number;
     pageSize: number;
-    environment: any;
+    ENVIRONMENT: any;
     ngOnInit() {
-        this.environment = environment
+        this.ENVIRONMENT = ENVIRONMENT
         this.pageIndex = 1;
         this.pageSize = 5;
         this.txtSearch = "";

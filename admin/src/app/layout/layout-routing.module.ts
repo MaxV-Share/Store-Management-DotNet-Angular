@@ -50,8 +50,8 @@ const routes: Routes = [
                 loadChildren: () => import('@app/components/category/category.module').then(m => m.CategoryModule)
             },
             {
-                path: 'orders',
-                loadChildren: () => import('@app/components/orders/orders.module').then(m => m.OrdersModule)
+                path: 'orders-manager',
+                loadChildren: () => import('@app/components/orders-manager/orders-manager.module').then(m => m.OrdersManagerModule)
             },
         ]
     }

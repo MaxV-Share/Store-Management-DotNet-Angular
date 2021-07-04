@@ -5,7 +5,7 @@
 import { HttpHeaders } from "@angular/common/http";
 import { Lang } from "./lang";
 
-export const environment = {
+export const ENVIRONMENT = {
     production: false,
     apiUrl: `http://localhost:5000`,
     fileUrl: `http://localhost:5000/Files`,

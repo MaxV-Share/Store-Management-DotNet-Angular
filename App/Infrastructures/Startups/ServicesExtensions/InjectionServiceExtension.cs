@@ -44,7 +44,8 @@ namespace App.Infrastructures.Startup.ServicesExtensions
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IBillRepository, BillRepository>();
             services.AddTransient<IBillService, BillService>();
-
+            services.AddTransient<IBillDetailRepository, BillDetailRepository>();
+            services.AddTransient<IBillDetailService, BillDetailService>();
             services.AddTransient<IStorageService, FileStorageService>();
         }
     }

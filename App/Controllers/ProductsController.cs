@@ -45,10 +45,9 @@ namespace App.Controllers
         }
 
         [HttpGet("")]
-        public async Task<ActionResult> GetAll(string langId = "vi")
+        public async Task<ActionResult> GetAll(string langId = "vi", string searchText = "")
         {
-            var result = await _productService.GetAllDTOAsync(langId);
-            return Ok(result);
+            return Ok(await _productService.GetAllDTOAsync(langId, searchText));
         }
     }
 }

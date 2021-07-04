@@ -13,6 +13,7 @@ namespace App.Models.Entities
         public string PhoneNumber { get; set; }
         [MaxLength(256)]
         public string FullName { get; set; }
+        public string Address { get; set; }
         public DateTime? Birthday { get; set; }
     }
 }

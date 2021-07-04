@@ -10,7 +10,7 @@ namespace App.Models.DTOs
 {
     public class CategoryViewModel : BaseDTO<int>
     {
-        public int ParentId { get; set; }
+        public int? ParentId { get; set; }
         [JsonProperty("details")]
         public List<CategoryDetailViewModel> categoryDetails { get; set; } 
     }

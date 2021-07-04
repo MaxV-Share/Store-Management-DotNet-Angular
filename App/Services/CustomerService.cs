@@ -8,16 +8,15 @@ using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace App.Services
 {
     public class CustomerService : BaseService<Customer, CustomerCreateRequest, CustomerViewModel, int>, ICustomerService
     {
-        public readonly ICustomerRepository _CustomerRepository;
         public CustomerService(ICustomerRepository customerRepository, IMapper mapper) : base(customerRepository, mapper)
         {
-            _CustomerRepository = customerRepository;
         }
         public async Task<CustomerViewModel> PostAsync(CustomerCreateRequest request)
         {
@@ -29,7 +28,7 @@ namespace App.Services
                 FullName = request.FullName,
                 Birthday = request.Birthday,
             };
-            var response = await _CustomerRepository.CreateAsync(obj);
+            var response = await _repository.CreateAsync(obj);
             var result = _mapper.Map<CustomerViewModel>(response);
             return result;
         }
@@ -38,7 +37,8 @@ namespace App.Services
             if (uuid != request.Uuid)
                 return 0;
 
-            var entity = await _CustomerRepository.GetByUuidAsync(request.Uuid);
+            var entity = await _repository.GetByUuidAsync(request.Uuid.Value);
+            
             if (entity == null)
                 return 0;
             var dateTimeNow = DateTime.UtcNow;

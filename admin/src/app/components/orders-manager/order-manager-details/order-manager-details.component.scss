@@ -1,0 +1,50 @@
+table {
+    width: 100%;
+    th {
+        vertical-align: middle;
+        width: unset ;
+        padding: 1rem 0.5rem !important;
+    }
+    td {
+        vertical-align: middle;
+        width: unset ;
+        padding: 1rem;
+        padding: 0.5rem !important;
+    }
+    .mat-column-edit {
+        width: 70px !important;
+        text-align: center;
+        padding-right: unset !important;
+    }
+    .mat-column-product-name {
+        min-width: 150px !important;
+        padding-right: unset !important;
+    }
+    .mat-column-product-code {
+        min-width: 150px !important;
+        padding-right: unset !important;
+    }
+    .mat-column-total-price {
+        min-width: 100px !important;
+        padding-right: unset !important;
+    }
+    .mat-column-image-url {
+        width: 130px !important;
+        text-align: center;
+        padding-right: unset !important;
+    }
+    .mat-column-no {
+        text-align: center ;
+        width: 50px !important;
+    }
+}
+
+.mat-form-field {
+    font-size: 14px;
+    width: 100%;
+}
+
+td,
+th {
+    width: 25%;
+}

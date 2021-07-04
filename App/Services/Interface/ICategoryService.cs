@@ -13,8 +13,8 @@ namespace App.Services.Interface
     public interface ICategoryService : IBaseService<Category, CategoryCreateRequest, CategoryViewModel, int>
     {
         Task<CategoryViewModel> CreateAsync(CategoryCreateRequest request);
-        Task<int> PutAsync(int id, CategoryViewModel request);
-        Task<CategoryDetailPaging> GetPaging(string langId, int pageIndex, int pageSize, string searchText);
-        Task<IEnumerable<CategoryDetailViewModel>> GetAllDTOAsync(string langId);
+        Task<int> UpdateAsync(int id, CategoryViewModel request);
+        Task<CategoryDetailPaging> GetPagingAsync(string langId, int pageIndex, int pageSize, string searchText);
+        Task<IEnumerable<CategoryDetailViewModel>> GetAllDTOAsync(string langId, string searchText);
     }
 }

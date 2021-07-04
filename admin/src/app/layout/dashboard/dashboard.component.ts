@@ -49,10 +49,10 @@ export class DashboardComponent implements OnInit {
                 voluptatum veritatis quod aliquam! Rerum placeat necessitatibus, vitae dolorum`
             }
         );
-        usersServices.Gets().toPromise()
-            .then(e => console.log(e)
-            ).catch(ex => console.log(ex)
-            )
+        // usersServices.Gets().toPromise()
+        //     .then(e => console.log(e)
+        //     ).catch(ex => console.log(ex)
+        //     )
 
     }
 

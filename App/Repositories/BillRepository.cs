@@ -1,10 +1,12 @@
 ﻿using App.Infrastructures.Dbcontexts;
 using App.Models.DTOs;
+using App.Models.DTOs.CreateRequest;
 using App.Models.Entities;
 using App.Repositories.BaseRepository;
 using App.Repositories.Interface;
 using App.Services.Interface;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +17,11 @@ namespace App.Repositories
     public class BillRepository : BaseRepository<Bill, int>, IBillRepository
     {
         private readonly ICustomerRepository _customerRepository;
-        private readonly IUserRepository _userRepository;
-        public BillRepository(ApplicationDbContext context, ICustomerRepository customerRepository, IUserRepository userRepository) : base(context)
+        private readonly UserManager<User> _userManager;
+        public BillRepository(ApplicationDbContext context, ICustomerRepository customerRepository, UserManager<User> userManager) : base(context)
         {
             _customerRepository = customerRepository;
-            _userRepository = userRepository;
+            _userManager = userManager;
         }
 
         public async Task<Bill> PostAsync(BillCreateRequest request)
@@ -27,7 +29,7 @@ namespace App.Repositories
             if (request == null)
                 return null;
             var customer = _customerRepository.GetByPhoneNumberAsync(request.CustomerPhoneNumber);
-            var userPayment = _userRepository.GetByIdAsync(request.UserPaymentId);
+            var userPayment = _userManager.FindByIdAsync(request.UserPaymentId);
             var objModel = new Bill()
             {
                 Customer = await customer,

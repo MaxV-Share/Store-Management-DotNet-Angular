@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -38,6 +39,8 @@ namespace App.Infrastructures.Dbcontexts
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // Method intentionally left empty.
+            //optionsBuilder.UseLazyLoadingProxies();
+            //optionsBuilder.ConfigureWarnings(w => w.Ignore(CoreEventId.LazyLoadOnDisposedContextWarning));
         }
     }
 }

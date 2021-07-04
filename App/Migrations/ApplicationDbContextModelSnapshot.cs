@@ -32,7 +32,7 @@ namespace App.Migrations
                         .HasColumnType("text")
                         .HasColumnName("create_by");
 
-                    b.Property<int?>("CustomerId")
+                    b.Property<int>("CustomerId")
                         .HasColumnType("int")
                         .HasColumnName("customer_id");
 
@@ -87,7 +87,7 @@ namespace App.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
-                    b.Property<int?>("BillId")
+                    b.Property<int>("BillId")
                         .HasColumnType("int")
                         .HasColumnName("bill_id");
 
@@ -107,21 +107,17 @@ namespace App.Migrations
                         .HasColumnType("double")
                         .HasColumnName("discount_price");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("text")
-                        .HasColumnName("name");
-
                     b.Property<double?>("Price")
                         .HasColumnType("double")
                         .HasColumnName("price");
 
-                    b.Property<string>("ProductCode")
-                        .HasColumnType("text")
-                        .HasColumnName("product_code");
-
-                    b.Property<int?>("ProductId")
+                    b.Property<int>("ProductId")
                         .HasColumnType("int")
                         .HasColumnName("product_id");
+
+                    b.Property<int?>("Quantity")
+                        .HasColumnType("int")
+                        .HasColumnName("quantity");
 
                     b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("datetime")
@@ -206,7 +202,7 @@ namespace App.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
-                    b.Property<int?>("CategoryId")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int")
                         .HasColumnName("category_id");
 
@@ -268,6 +264,10 @@ namespace App.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("id");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("text")
+                        .HasColumnName("address");
 
                     b.Property<DateTime?>("Birthday")
                         .HasColumnType("datetime")
@@ -432,7 +432,7 @@ namespace App.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
-                    b.Property<int?>("CategoryId")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int")
                         .HasColumnName("category_id");
 
@@ -526,7 +526,7 @@ namespace App.Migrations
                         .HasColumnType("varchar(256)")
                         .HasColumnName("name");
 
-                    b.Property<int?>("ProductId")
+                    b.Property<int>("ProductId")
                         .HasColumnType("int")
                         .HasColumnName("product_id");
 
@@ -807,7 +807,9 @@ namespace App.Migrations
                     b.HasOne("App.Models.Entities.Customer", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerId")
-                        .HasConstraintName("fk_bills_customers_customer_id");
+                        .HasConstraintName("fk_bills_customers_customer_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("App.Models.Entities.User", "UserPayment")
                         .WithMany()
@@ -822,14 +824,18 @@ namespace App.Migrations
             modelBuilder.Entity("App.Models.Entities.BillDetail", b =>
                 {
                     b.HasOne("App.Models.Entities.Bill", "Bill")
-                        .WithMany()
+                        .WithMany("BillDetails")
                         .HasForeignKey("BillId")
-                        .HasConstraintName("fk_bill_details_bills_bill_id");
+                        .HasConstraintName("fk_bill_details_bills_bill_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("App.Models.Entities.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
-                        .HasConstraintName("fk_bill_details_products_product_id");
+                        .HasConstraintName("fk_bill_details_products_product_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Bill");
 
@@ -851,7 +857,9 @@ namespace App.Migrations
                     b.HasOne("App.Models.Entities.Category", "Category")
                         .WithMany("CategoryDetails")
                         .HasForeignKey("CategoryId")
-                        .HasConstraintName("fk_category_details_categories_category_id");
+                        .HasConstraintName("fk_category_details_categories_category_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("App.Models.Entities.Lang", "Lang")
                         .WithMany()
@@ -868,7 +876,9 @@ namespace App.Migrations
                     b.HasOne("App.Models.Entities.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
-                        .HasConstraintName("fk_products_categories_category_id");
+                        .HasConstraintName("fk_products_categories_category_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Category");
                 });
@@ -883,7 +893,9 @@ namespace App.Migrations
                     b.HasOne("App.Models.Entities.Product", "Product")
                         .WithMany("ProductDetails")
                         .HasForeignKey("ProductId")
-                        .HasConstraintName("fk_product_details_products_product_id");
+                        .HasConstraintName("fk_product_details_products_product_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Lang");
 
@@ -945,6 +957,11 @@ namespace App.Migrations
                         .HasConstraintName("fk_user_tokens_asp_net_users_user_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("App.Models.Entities.Bill", b =>
+                {
+                    b.Navigation("BillDetails");
                 });
 
             modelBuilder.Entity("App.Models.Entities.Category", b =>

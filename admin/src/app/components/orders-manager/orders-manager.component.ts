@@ -1,21 +1,24 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Bill } from '@app/models';
+import { Bill, BillCreateRequest } from '@app/models';
+import { BillService } from '@app/shared/services';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
+import { OrderManagerDetailsComponent } from './order-manager-details/order-manager-details.component';
 
 @Component({
-    selector: 'app-orders',
-    templateUrl: './orders.component.html',
-    styleUrls: ['./orders.component.scss']
+    selector: 'app-orders-manager',
+    templateUrl: './orders-manager.component.html',
+    styleUrls: ['./orders-manager.component.scss']
 })
-export class OrdersComponent implements OnInit {
+export class OrdersManagerComponent implements OnInit {
 
     constructor(private modalService: BsModalService,
         private toastr: ToastrService,
+        private billService: BillService,
         private translate: TranslateService) {
 
     }
@@ -23,13 +26,14 @@ export class OrdersComponent implements OnInit {
     pageEvent: PageEvent;
     test: string;
     isLoadingResults: boolean;
-    displayedColumns: string[] = ['no', 'name', 'weight', 'edit'];
-    dataSource = new MatTableDataSource<Bill>();
+    displayedColumns: string[] = ['no', 'customer-phone-number', 'total-price', 'discount-price', 'user-payment','edit'];
+    dataSourceBillTable = new MatTableDataSource<Bill>();
     totalRow: number;
     pageIndex: number;
     pageSize: number;
     environment: any;
     txtSearch: string;
+    itemModal: Bill | BillCreateRequest
     public bsModalRef: BsModalRef;
     @ViewChild(MatPaginator) paginator: MatPaginator;
     eventsSubject: Subject<void> = new Subject<void>();
@@ -48,8 +52,12 @@ export class OrdersComponent implements OnInit {
 
     ngAfterViewInit() {
     }
-    public getDataPaging(event: PageEvent) {
 
+    public getDataPaging(event: PageEvent) {
+        this.billService.getAll().subscribe((res : Bill[]) => {
+            console.log(res);
+            this.dataSourceBillTable = new MatTableDataSource<Bill>(res)
+        })
     }
 
     public pageEventHandle(event?: PageEvent) {
@@ -59,22 +67,21 @@ export class OrdersComponent implements OnInit {
         return event;
     }
 
-    public edit(entity: Bill) {
-        // this.itemModal = entity;
-        // const initialState = {
-        //     entity: this.itemModal,
-        // };
+    public createOrUpdate(entity: Bill = null) {
+        this.itemModal = entity;
+        const initialState = {
+            entity: entity,
+        };
 
-        // this.bsModalRef = this.modalService.show(DiscountDetailComponent, {
-        //     initialState: initialState,
-        //     class: 'modal-lg',
-        //     backdrop: 'static'
-        // });
+        this.bsModalRef = this.modalService.show(OrderManagerDetailsComponent, {
+            initialState: initialState,
+            class: 'modal-full',
+            backdrop: 'static'
+        });
 
-        // this.bsModalRef.content.saved.subscribe((e) => {
-        //     console.log(e);
-        //     this.bsModalRef.hide();
-        // });
+        this.bsModalRef.content.saved.subscribe((e) => {
+            this.bsModalRef.hide();
+        });
     }
     public onSearch() {
         console.log(this.txtSearch);

@@ -14,6 +14,6 @@ namespace App.Services.Interface
         Task<ProductViewModel> CreateAsync(ProductCreateRequest request);
         Task<int> UpdateAsync(int id, ProductViewModel request);
         Task<ProductDetailPaging> GetPagingAsync(string langId, int pageIndex, int pageSize, string searchText);
-        Task<IEnumerable<ProductDetailViewModel>> GetAllDTOAsync(string langId);
+        Task<IEnumerable<ProductDetailViewModel>> GetAllDTOAsync(string langId, string searchText);
     }
 }

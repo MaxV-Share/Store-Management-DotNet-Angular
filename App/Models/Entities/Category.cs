@@ -9,7 +9,8 @@ namespace App.Models.Entities
 {
     public class Category : BaseEntity<int>
     {
-        public Category Parent { get; set; }
+        public virtual Category Parent { get; set; }
+        public int? ParentId { get; set; }
         public virtual List<CategoryDetail> CategoryDetails { get; set; }
     }
 }
