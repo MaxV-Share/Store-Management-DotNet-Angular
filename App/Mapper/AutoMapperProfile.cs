@@ -8,6 +8,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using App.DTOs;
 using App.Models.DTOs;
+using App.Models.DTOs.CreateRequest;
+using App.Models.DTOs.Bills;
 
 namespace App.Mapper
 {
@@ -25,6 +27,14 @@ namespace App.Mapper
             CreateMap<Category, CategoryViewModel>();
             CreateMap<CategoryDetail, CategoryDetailCreateRequest>();
             CreateMap<CategoryDetail, CategoryDetailViewModel>();
+            CreateMap<Product, ProductCreateRequest>();
+            CreateMap<Product, ProductViewModel>();
+            CreateMap<ProductDetail, ProductDetailCreateRequest>();
+            CreateMap<ProductDetail, ProductDetailViewModel>();
+            CreateMap<Bill, BillCreateRequest>();
+            CreateMap<Bill, BillViewModel>();
+            CreateMap<BillDetail, BillDetailCreateRequest>();
+            CreateMap<BillDetail, BillDetailViewModel>();
         }
 
     }

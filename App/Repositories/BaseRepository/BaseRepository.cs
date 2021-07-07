@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace App.Repositories.BaseRepository
 {
-    public class BaseRepository<T, TKey> : IBaseRepository<T, TKey> where T : BaseEntity<TKey>
+    public class BaseRepository<T, TKey> : IBaseRepository<T, TKey> where T : BaseEntity<TKey> 
     {
         #region props
 
-        protected DbContext _context;
+        private readonly DbContext _context;
         private bool _disposed = false;
         private IDbContextTransaction _tx { get; set; }
         private DbSet<T> _entitiesDbSet { get; set; }
@@ -40,7 +40,7 @@ namespace App.Repositories.BaseRepository
 
         public IQueryable<T> GetQueryableTable()
         {
-            return GetNoTrackingEntities();
+            return Entities;
         }
 
         public virtual async Task<IEnumerable<T>> GetAllAsync()
@@ -51,7 +51,7 @@ namespace App.Repositories.BaseRepository
 
         public virtual async Task<T> GetByIdAsync(TKey id)
         {
-            var entity = await Entities.SingleOrDefaultAsync(x => x.Id.Equals(id) && x.Deleted == null);
+            var entity = await Entities.SingleOrDefaultAsync(x => id.Equals(x.Id) && x.Deleted == null);
             return entity;
         }
 
@@ -155,7 +155,7 @@ namespace App.Repositories.BaseRepository
             BaseEntity<TKey>.SetDefaultValue(ref entity);
         }
 
-        public DbSet<T> Entities
+        protected DbSet<T> Entities
         {
             get
             {
@@ -167,8 +167,11 @@ namespace App.Repositories.BaseRepository
 
         public IQueryable<T> GetNoTrackingEntities()
         {
-            var table = Entities.AsNoTracking();
-            return table;
+            return Entities.AsNoTracking();
+        }
+        public IQueryable<T> GetNoTrackingEntitiesIdentityResolution()
+        {
+            return Entities.AsNoTrackingWithIdentityResolution();
         }
 
         public async Task BeginTransactionAsync()
@@ -209,7 +212,6 @@ namespace App.Repositories.BaseRepository
 
             _disposed = true;
         }
-
 
         #endregion private
 

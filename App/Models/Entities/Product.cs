@@ -9,14 +9,15 @@ namespace App.Models.Entities
 {
     public class Product : BaseEntity<int>
     {
-        public Category Category { get; set; }
-        [MaxLength(256)]
-        public string Name { get; set; }
+        public virtual Category Category { get; set; }
+        public int CategoryId { get; set; }
         [MaxLength(256)]
         public string Code { get; set; }
         public double? Price { get; set; }
         [Range(0, 100)]
         public int? PercentDiscount { get; set; }
         public double? MaxDiscountPrice { get; set; }
+        public string ImageUrl { get; set; }
+        public virtual List<ProductDetail> ProductDetails { get; set; }
     }
 }

@@ -9,9 +9,12 @@ namespace App.Models.Entities
 {
     public class Bill : BaseEntity<int>
     {
-        public Customer Customer { get; set; }
-        public User UserPayment { get; set; }
+        public virtual Customer Customer { get; set; }
+        public int CustomerId { get; set; }
+        public virtual User UserPayment { get; set; }
+        public string UserPaymentId { get; set; }
         public double? TotalPrice { get; set; }
         public double? DiscountPrice { get; set; }
+        public virtual IEnumerable<BillDetail> BillDetails { get; set; }
     }
 }

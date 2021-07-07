@@ -41,7 +41,7 @@ namespace App.Services
             if (id != request.Id)
                 return 0;
 
-            var entity = await _saleRepository.GetByIdAsync(request.Id);
+            var entity = await _saleRepository.GetByIdAsync(request.Id.Value);
             if (entity == null)
                 return 0;
             var dateTimeNow = DateTime.UtcNow;

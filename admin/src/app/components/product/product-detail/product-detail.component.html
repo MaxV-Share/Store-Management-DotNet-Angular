@@ -1,6 +1,6 @@
 <div class="modal-header max-bg-light-gray">
-    <div class="modal-title" style="padding-top:2px">
-        {{(productId == null ? 'Create product' : 'Update product') | translate | uppercase }}
+    <div class="modal-title" style="padding-top: 2px;">
+        {{ (productId == null ? 'Create product' : 'Update product') | translate | uppercase }}
     </div>
     <button (click)="bsModalRef.hide()" aria-label="Close" class="close" type="button">
         <span aria-hidden="true">&times;</span>
@@ -9,28 +9,49 @@
 <div class="modal-body">
     <div class="row">
         <mat-form-field class="col-6">
-            <mat-label>{{'Price' | translate}}</mat-label>
+            <mat-label>{{ 'Price' | translate }}</mat-label>
             <input class="w-100" matInput localizedNumericInput [(ngModel)]="entity.price" />
             <mat-hint align="start"></mat-hint>
             <mat-hint align="end"></mat-hint>
         </mat-form-field>
-        <form class="col-6" (mouseenter)="showAddCategory = true" (mouseleave)="showAddCategory = false">
+        <form
+            class="col-6"
+            (mouseenter)="showAddCategory = true"
+            (mouseleave)="showAddCategory = false"
+            (ngSubmit)="submitForm()"
+        >
             <mat-form-field class="w-100">
-                <mat-label>{{'Category' | translate}}</mat-label>
-                <input type="text" matInput [formControl]="myControl" [matAutocomplete]="auto">
+                <mat-label>{{ 'Category' | translate }}</mat-label>
+                <input type="text" matInput [formControl]="ctrCategory" [matAutocomplete]="auto" />
                 <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                        {{option.name}}
-                        <button class="btn btn-sm btn-primary position-absolute"
-                            style="right: 15px; top: 5px; " (click)="editCategory(option.categoryId)">
-                            edit
-                            <!-- <i class="fa fa-plus" aria-hidden="true"></i> -->
-                        </button>
+                    <mat-option class="is-loading" *ngIf="isLoadingAutocompleteCategory">
+                        <div class="w-100" style="
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;">
+                            <div class="spinner-border text-secondary" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
                     </mat-option>
+                    <ng-container  *ngIf="!isLoadingAutocompleteCategory">
+                        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                            {{option.name}}
+                            <button class="btn btn-sm btn-primary position-absolute"
+                                style="right: 15px; top: 5px; " (click)="editCategory(option.categoryId)">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                        </mat-option>
+                    </ng-container>
                 </mat-autocomplete>
             </mat-form-field>
-            <button [hidden]="!showAddCategory" class="btn btn-sm btn-primary position-absolute"
-                style="right: 15px; top: 5px; " (click)="createCategory()">
+            <button
+                type="button"
+                [hidden]="!showAddCategory"
+                class="btn btn-sm btn-primary position-absolute"
+                style="right: 15px; top: 5px;"
+                (click)="createCategory()"
+            >
                 <i class="fa fa-plus" aria-hidden="true"></i>
             </button>
         </form>
@@ -39,24 +60,31 @@
     <!-- multiple -->
     <!-- <p-fileUpload name="demo[]" (onUpload)="onUpload($event)"  accept="image/*" maxFileSize="1000000" multiple="multiple">-->
     <!-- single -->
-    <p-fileUpload name="demo[]" [showUploadButton]="false" (onSelect)="dealWithFiles($event)" accept="image/*" maxFileSize="1000000" multiple="multiple">
+    <p-fileUpload
+        name="demo[]"
+        [showUploadButton]="false"
+        (onSelect)="dealWithFiles($event)"
+        accept="image/*"
+        maxFileSize="1000000"
+        multiple="multiple"
+    >
     </p-fileUpload>
     <fieldset>
-        <legend>{{'Details' | translate}}</legend>
+        <legend>{{ 'Details' | translate }}</legend>
         <mat-tab-group (selectedIndexChange)="changeTab($event)">
-            <mat-tab *ngFor="let tab of langs; let i= index " [label]="tab.name">
+            <mat-tab *ngFor="let tab of langs; let i = index" [label]="tab.name">
                 <div class="mt-2 mb2">
                     <mat-form-field class="w-100">
-                        <mat-label>{{'Product name' | translate}}</mat-label>
+                        <mat-label>{{ 'Product name' | translate }}</mat-label>
                         <input class="w-100" matInput maxlength="256" [(ngModel)]="entity.details[i].name" />
                         <mat-hint align="start"></mat-hint>
-                        <mat-hint align="end">{{entity.details[i].name.length}} / 256</mat-hint>
+                        <mat-hint align="end">{{ entity.details[i].name.length }} / 256</mat-hint>
                     </mat-form-field>
                     <mat-form-field class="w-100">
-                        <mat-label>{{'Descriptions' | translate}}</mat-label>
+                        <mat-label>{{ 'Descriptions' | translate }}</mat-label>
                         <input class="w-100" matInput maxlength="256" [(ngModel)]="entity.details[i].description" />
                         <mat-hint align="start"></mat-hint>
-                        <mat-hint align="end">{{entity.details[i].description.length}} / 256</mat-hint>
+                        <mat-hint align="end">{{ entity.details[i].description.length }} / 256</mat-hint>
                     </mat-form-field>
                 </div>
             </mat-tab>

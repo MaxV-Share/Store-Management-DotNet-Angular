@@ -17,7 +17,7 @@ export class MyCurrencyPipe implements PipeTransform {
 
   transform(value: number | string): string {
 
-    let integer = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, this.DECIMAL_SEPARATOR);
+    let integer =  value.toString().replace(/\./g, "").replace(/\B(?=(\d{3})+(?!\d))/g, this.DECIMAL_SEPARATOR);
 
     return integer ;
   }

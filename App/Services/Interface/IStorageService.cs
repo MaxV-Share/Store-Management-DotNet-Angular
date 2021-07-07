@@ -10,7 +10,7 @@ namespace App.Services.Interface
     {
         string GetFileUrl(string fileName);
 
-        Task SaveFileAsync(Stream mediaBinaryStream, string fileName);
+        Task SaveFileAsync(Stream mediaBinaryStream, string fileName, string folder = "");
 
         Task DeleteFileAsync(string fileName);
     }

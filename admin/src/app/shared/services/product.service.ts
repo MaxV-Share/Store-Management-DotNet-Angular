@@ -1,21 +1,32 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '@app/models';
+import { ENVIRONMENT } from '@app/models';
+import { TranslateService } from '@ngx-translate/core';
+import { BaseService } from './base/base.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProductService {
+export class ProductService extends BaseService{
 
-    private _sharedHeaders = new HttpHeaders();
-    constructor(private http: HttpClient) {
-        this._sharedHeaders = environment._sharedHeaders;
+    constructor(http: HttpClient,
+        public translate: TranslateService) {
+        super(http);
     }
     add(formData: FormData){
-        return this.http.post(`${environment.apiUrl}/api/products`, formData, {
+        return this.http.post(`${ENVIRONMENT.apiUrl}/api/products`, formData, {
             reportProgress: true,
             observe: 'events'
         })
         .pipe();
+    }
+    getPaging(pageIndex:number, pageSize: number, langId:string, searchText: string) {
+        return this.http.get(`${ENVIRONMENT.apiUrl}/api/products/filter?pageIndex=${pageIndex}&pageSize=${pageSize}&searchText=${searchText}&langId=${this.translate.currentLang}`, { headers: this._sharedHeaders })
+            // .pipe(catchError(this.handleError));
+    }
+
+    getAll(searchText: string) {
+        return this.http.get(`${ENVIRONMENT.apiUrl}/api/products?searchText=${searchText}&langId=${this.translate.currentLang}`, { headers: this._sharedHeaders })
+            // .pipe(catchError(this.handleError));
     }
 }

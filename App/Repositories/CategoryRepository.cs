@@ -4,6 +4,7 @@ using App.Models.Entities;
 using App.Repositories.BaseRepository;
 using App.Repositories.Interface;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,17 +17,14 @@ namespace App.Repositories
         public CategoryRepository(ApplicationDbContext context) : base(context)
         {
         }
-        public async Task<Category> PostAsync(CategoryCreateRequest request)
+
+        public override Task<Category> GetByIdNoTrackingAsync(int id)
         {
-            if (request == null)
-                return null;
-            var parent = await GetByIdAsync(request.ParentId.Value);
-            Category obj = new Category()
-            {
-                Parent = parent
-            };
-            var result = await CreateAsync(obj);
-            return result;
+            return GetNoTrackingEntities().Include(e => e.CategoryDetails).SingleOrDefaultAsync(e => e.Deleted == null && e.Id == id);
+        }
+        public override Task<Category> GetByIdAsync(int id)
+        {
+            return Entities.Include(e => e.CategoryDetails.OrderBy(e => e.Lang.Order)).SingleOrDefaultAsync(e => e.Id == id);
         }
     }
 }

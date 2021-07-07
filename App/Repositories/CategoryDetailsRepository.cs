@@ -18,10 +18,5 @@ namespace App.Repositories
         {
 
         }
-        public async Task<IQueryable<CategoryDetail>> GetByCategoryId(int categoryId)
-        {
-            var result = GetQueryableTable().Include(e => e.Lang).Where(e => e.Category.Id == categoryId && e.Deleted == null);
-            return result;
-        }
     }
 }

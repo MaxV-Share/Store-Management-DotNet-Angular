@@ -1,7 +1,9 @@
 ﻿using App.DTO;
+using App.Models.Entities;
 using App.Repositories.Interface;
 using App.Services.Interface;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +15,12 @@ namespace App.Services
     {
         public readonly IUserRepository _userRepository;
         public readonly IMapper _mapper;
-        public UserService(IUserRepository userRepository, IMapper mapper)
+        public readonly UserManager<User> _userManager;
+        public UserService(IUserRepository userRepository, IMapper mapper, UserManager<User> userManager)
         {
             _userRepository = userRepository;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
         public async Task<IEnumerable<UserViewModel>> GetAllAsync(string filter)
@@ -28,7 +32,7 @@ namespace App.Services
 
         public async Task<UserViewModel> GetUserById(string id)
         {
-            var entity = await _userRepository.GetUserById(id);
+            var entity = await _userManager.FindByIdAsync(id);
             var result = _mapper.Map<UserViewModel>(entity);
             return result;
         }

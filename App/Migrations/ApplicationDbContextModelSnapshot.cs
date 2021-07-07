@@ -15,7 +15,7 @@ namespace App.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
-                .HasAnnotation("ProductVersion", "5.0.5");
+                .HasAnnotation("ProductVersion", "5.0.7");
 
             modelBuilder.Entity("App.Models.Entities.Bill", b =>
                 {
@@ -32,7 +32,7 @@ namespace App.Migrations
                         .HasColumnType("text")
                         .HasColumnName("create_by");
 
-                    b.Property<int?>("CustomerId")
+                    b.Property<int>("CustomerId")
                         .HasColumnType("int")
                         .HasColumnName("customer_id");
 
@@ -87,7 +87,7 @@ namespace App.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
-                    b.Property<int?>("BillId")
+                    b.Property<int>("BillId")
                         .HasColumnType("int")
                         .HasColumnName("bill_id");
 
@@ -107,21 +107,17 @@ namespace App.Migrations
                         .HasColumnType("double")
                         .HasColumnName("discount_price");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("text")
-                        .HasColumnName("name");
-
                     b.Property<double?>("Price")
                         .HasColumnType("double")
                         .HasColumnName("price");
 
-                    b.Property<string>("ProductCode")
-                        .HasColumnType("text")
-                        .HasColumnName("product_code");
-
-                    b.Property<int?>("ProductId")
+                    b.Property<int>("ProductId")
                         .HasColumnType("int")
                         .HasColumnName("product_id");
+
+                    b.Property<int?>("Quantity")
+                        .HasColumnType("int")
+                        .HasColumnName("quantity");
 
                     b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("datetime")
@@ -206,7 +202,7 @@ namespace App.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
-                    b.Property<int?>("CategoryId")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int")
                         .HasColumnName("category_id");
 
@@ -269,6 +265,10 @@ namespace App.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
+                    b.Property<string>("Address")
+                        .HasColumnType("text")
+                        .HasColumnName("address");
+
                     b.Property<DateTime?>("Birthday")
                         .HasColumnType("datetime")
                         .HasColumnName("birthday");
@@ -317,12 +317,82 @@ namespace App.Migrations
                     b.ToTable("customers");
                 });
 
+            modelBuilder.Entity("App.Models.Entities.Discount", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime?>("CreateAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("create_at");
+
+                    b.Property<string>("CreateBy")
+                        .HasColumnType("text")
+                        .HasColumnName("create_by");
+
+                    b.Property<string>("Deleted")
+                        .HasColumnType("text")
+                        .HasColumnName("deleted");
+
+                    b.Property<DateTime?>("FromDate")
+                        .HasColumnType("datetime")
+                        .HasColumnName("from_date");
+
+                    b.Property<double?>("MaxDiscountPrice")
+                        .HasColumnType("double")
+                        .HasColumnName("max_discount_price");
+
+                    b.Property<int?>("PercentDiscount")
+                        .HasColumnType("int")
+                        .HasColumnName("percent_discount");
+
+                    b.Property<DateTime?>("ToDate")
+                        .HasColumnType("datetime")
+                        .HasColumnName("to_date");
+
+                    b.Property<DateTime?>("UpdateAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("update_at");
+
+                    b.Property<string>("UpdateBy")
+                        .HasColumnType("text")
+                        .HasColumnName("update_by");
+
+                    b.Property<byte[]>("Uuid")
+                        .IsRequired()
+                        .HasColumnType("varbinary(16)")
+                        .HasColumnName("uuid");
+
+                    b.HasKey("Id")
+                        .HasName("pk_discounts");
+
+                    b.HasIndex("Id")
+                        .HasDatabaseName("ix_discounts_id");
+
+                    b.ToTable("discounts");
+                });
+
             modelBuilder.Entity("App.Models.Entities.Lang", b =>
                 {
                     b.Property<string>("Id")
-                        .HasMaxLength(10)
-                        .HasColumnType("varchar(10)")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)")
                         .HasColumnName("id");
+
+                    b.Property<DateTime?>("CreateAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("create_at");
+
+                    b.Property<string>("CreateBy")
+                        .HasColumnType("text")
+                        .HasColumnName("create_by");
+
+                    b.Property<string>("Deleted")
+                        .HasColumnType("text")
+                        .HasColumnName("deleted");
 
                     b.Property<string>("Name")
                         .HasMaxLength(20)
@@ -333,8 +403,24 @@ namespace App.Migrations
                         .HasColumnType("int")
                         .HasColumnName("order");
 
+                    b.Property<DateTime?>("UpdateAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("update_at");
+
+                    b.Property<string>("UpdateBy")
+                        .HasColumnType("text")
+                        .HasColumnName("update_by");
+
+                    b.Property<byte[]>("Uuid")
+                        .IsRequired()
+                        .HasColumnType("varbinary(16)")
+                        .HasColumnName("uuid");
+
                     b.HasKey("Id")
                         .HasName("pk_langs");
+
+                    b.HasIndex("Id")
+                        .HasDatabaseName("ix_langs_id");
 
                     b.ToTable("langs");
                 });
@@ -346,7 +432,7 @@ namespace App.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
-                    b.Property<int?>("CategoryId")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int")
                         .HasColumnName("category_id");
 
@@ -367,14 +453,13 @@ namespace App.Migrations
                         .HasColumnType("text")
                         .HasColumnName("deleted");
 
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("text")
+                        .HasColumnName("image_url");
+
                     b.Property<double?>("MaxDiscountPrice")
                         .HasColumnType("double")
                         .HasColumnName("max_discount_price");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256)")
-                        .HasColumnName("name");
 
                     b.Property<int?>("PercentDiscount")
                         .HasColumnType("int")
@@ -441,7 +526,7 @@ namespace App.Migrations
                         .HasColumnType("varchar(256)")
                         .HasColumnName("name");
 
-                    b.Property<int?>("ProductId")
+                    b.Property<int>("ProductId")
                         .HasColumnType("int")
                         .HasColumnName("product_id");
 
@@ -471,63 +556,6 @@ namespace App.Migrations
                         .HasDatabaseName("ix_product_details_product_id");
 
                     b.ToTable("product_details");
-                });
-
-            modelBuilder.Entity("App.Models.Entities.Sale", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    b.Property<DateTime?>("CreateAt")
-                        .HasColumnType("datetime")
-                        .HasColumnName("create_at");
-
-                    b.Property<string>("CreateBy")
-                        .HasColumnType("text")
-                        .HasColumnName("create_by");
-
-                    b.Property<string>("Deleted")
-                        .HasColumnType("text")
-                        .HasColumnName("deleted");
-
-                    b.Property<DateTime?>("FromDate")
-                        .HasColumnType("datetime")
-                        .HasColumnName("from_date");
-
-                    b.Property<double?>("MaxDiscountPrice")
-                        .HasColumnType("double")
-                        .HasColumnName("max_discount_price");
-
-                    b.Property<int?>("PercentDiscount")
-                        .HasColumnType("int")
-                        .HasColumnName("percent_discount");
-
-                    b.Property<DateTime?>("ToDate")
-                        .HasColumnType("datetime")
-                        .HasColumnName("to_date");
-
-                    b.Property<DateTime?>("UpdateAt")
-                        .HasColumnType("datetime")
-                        .HasColumnName("update_at");
-
-                    b.Property<string>("UpdateBy")
-                        .HasColumnType("text")
-                        .HasColumnName("update_by");
-
-                    b.Property<byte[]>("Uuid")
-                        .IsRequired()
-                        .HasColumnType("varbinary(16)")
-                        .HasColumnName("uuid");
-
-                    b.HasKey("Id")
-                        .HasName("pk_sale");
-
-                    b.HasIndex("Id")
-                        .HasDatabaseName("ix_sale_id");
-
-                    b.ToTable("sale");
                 });
 
             modelBuilder.Entity("App.Models.Entities.User", b =>
@@ -779,7 +807,9 @@ namespace App.Migrations
                     b.HasOne("App.Models.Entities.Customer", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerId")
-                        .HasConstraintName("fk_bills_customers_customer_id");
+                        .HasConstraintName("fk_bills_customers_customer_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("App.Models.Entities.User", "UserPayment")
                         .WithMany()
@@ -794,14 +824,18 @@ namespace App.Migrations
             modelBuilder.Entity("App.Models.Entities.BillDetail", b =>
                 {
                     b.HasOne("App.Models.Entities.Bill", "Bill")
-                        .WithMany()
+                        .WithMany("BillDetails")
                         .HasForeignKey("BillId")
-                        .HasConstraintName("fk_bill_details_bills_bill_id");
+                        .HasConstraintName("fk_bill_details_bills_bill_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("App.Models.Entities.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
-                        .HasConstraintName("fk_bill_details_products_product_id");
+                        .HasConstraintName("fk_bill_details_products_product_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Bill");
 
@@ -821,9 +855,11 @@ namespace App.Migrations
             modelBuilder.Entity("App.Models.Entities.CategoryDetail", b =>
                 {
                     b.HasOne("App.Models.Entities.Category", "Category")
-                        .WithMany()
+                        .WithMany("CategoryDetails")
                         .HasForeignKey("CategoryId")
-                        .HasConstraintName("fk_category_details_categories_category_id");
+                        .HasConstraintName("fk_category_details_categories_category_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("App.Models.Entities.Lang", "Lang")
                         .WithMany()
@@ -840,7 +876,9 @@ namespace App.Migrations
                     b.HasOne("App.Models.Entities.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
-                        .HasConstraintName("fk_products_categories_category_id");
+                        .HasConstraintName("fk_products_categories_category_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Category");
                 });
@@ -853,9 +891,11 @@ namespace App.Migrations
                         .HasConstraintName("fk_product_details_langs_lang_id");
 
                     b.HasOne("App.Models.Entities.Product", "Product")
-                        .WithMany()
+                        .WithMany("ProductDetails")
                         .HasForeignKey("ProductId")
-                        .HasConstraintName("fk_product_details_products_product_id");
+                        .HasConstraintName("fk_product_details_products_product_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Lang");
 
@@ -917,6 +957,21 @@ namespace App.Migrations
                         .HasConstraintName("fk_user_tokens_asp_net_users_user_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("App.Models.Entities.Bill", b =>
+                {
+                    b.Navigation("BillDetails");
+                });
+
+            modelBuilder.Entity("App.Models.Entities.Category", b =>
+                {
+                    b.Navigation("CategoryDetails");
+                });
+
+            modelBuilder.Entity("App.Models.Entities.Product", b =>
+                {
+                    b.Navigation("ProductDetails");
                 });
 #pragma warning restore 612, 618
         }

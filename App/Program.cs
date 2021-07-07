@@ -65,6 +65,7 @@ namespace App
                         .ReadFrom.Configuration(hostingContext.Configuration))
                         .ConfigureWebHostDefaults(webBuilder =>
                         {
+                            webBuilder.UseWebRoot("wwwroot");
                             webBuilder.UseContentRoot(Directory.GetCurrentDirectory());
                             webBuilder.UseStartup<Startup>();
                             webBuilder.UseIISIntegration();

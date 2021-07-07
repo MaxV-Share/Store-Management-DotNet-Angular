@@ -28,7 +28,6 @@ namespace App.Infrastructures.Startup.ServicesExtensions
             services.AddTransient<DBInitializer>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<UserManager<User>, UserManager<User>>();
-            //services.AddTransient<IEntityDatabaseTransaction, EntityDatabaseTransaction>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IDiscountService, DiscountService>();
@@ -37,13 +36,16 @@ namespace App.Infrastructures.Startup.ServicesExtensions
             services.AddTransient<ICustomerRepository, CustomerRepository>();
             services.AddTransient<ILangRepository, LangRepository>();
             services.AddTransient<ILangService, LangService>();
-            services.AddTransient<ICategoriesService, CategoriesService>();
+            services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<ICategoryDetailsRepository, CategoryDetailsRepository>();
-            services.AddTransient<IProductDetailRepository,ProductDetailRepository>();
+            services.AddTransient<IProductDetailRepository, ProductDetailRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<IProductService, ProductService>();
-
+            services.AddTransient<IBillRepository, BillRepository>();
+            services.AddTransient<IBillService, BillService>();
+            services.AddTransient<IBillDetailRepository, BillDetailRepository>();
+            services.AddTransient<IBillDetailService, BillDetailService>();
             services.AddTransient<IStorageService, FileStorageService>();
         }
     }

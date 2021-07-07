@@ -1,4 +1,6 @@
 ﻿using App.Models.DTOs;
+using App.Models.DTOs.Bills;
+using App.Models.DTOs.CreateRequest;
 using App.Models.Entities;
 using App.Services.Base;
 using System;
@@ -10,6 +12,8 @@ namespace App.Services.Interface
 {
     public interface  IBillService : IBaseService<Bill, BillCreateRequest, BillViewModel, int>
     { 
-        public Task<DiscountViewModel> PostAsync(BillCreateRequest request);
+        Task<BillViewModel> CreateAsync(BillCreateRequest request);
+        Task<int> UpdateAsync(int id, BillViewModel request);
+        Task<IEnumerable<BillViewModel>> GetPaging(int pageIndex, int pageSize);
     }
 }
