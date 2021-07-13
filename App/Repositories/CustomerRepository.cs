@@ -27,9 +27,8 @@ namespace App.Repositories
                 FullName = request.FullName,
                 Birthday = request.Birthday,
             };
-            //var result = await CreateAsync(obj);
-            //return result;
-            return null;
+            var result = await CreateAsync(obj);
+            return result;
         }
 
         public Task<Customer> GetByPhoneNumberAsync(string phoneNumber)

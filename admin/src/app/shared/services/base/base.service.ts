@@ -1,8 +1,13 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { ENVIRONMENT } from '@app/models';
 import { throwError } from 'rxjs';
 
 export abstract class BaseService {
 
-    constructor() { }
+    public _sharedHeaders = new HttpHeaders();
+    constructor(public http: HttpClient) {
+        this._sharedHeaders = ENVIRONMENT._sharedHeaders;
+    }
 
     protected handleError(error: any) {
 

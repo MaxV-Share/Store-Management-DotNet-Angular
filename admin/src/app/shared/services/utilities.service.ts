@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BaseService } from './base.service';
+import { BaseService } from './base/base.service';
 import { catchError } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class UtilitiesService extends BaseService {
-    constructor(private http: HttpClient) {
-        super();
+    constructor(http: HttpClient) {
+        super(http);
     }
     UnflatteringForLeftMenu = (arr: any[]): any[] => {
         const map = {};
@@ -101,7 +101,7 @@ export class UtilitiesService extends BaseService {
 
     //     return formData;
     // }
-    
+
     ToFormData(object: Object, form?: FormData, namespace?: string): FormData {
         const formData = form || new FormData();
         for (let property in object) {

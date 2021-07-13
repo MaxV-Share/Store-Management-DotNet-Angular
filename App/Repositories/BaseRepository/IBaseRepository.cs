@@ -7,20 +7,8 @@ using System.Threading.Tasks;
 
 namespace App.Repositories.BaseRepository
 {
-    public interface IBaseRepository<T, TKey> : IDisposable
+    public interface IBaseRepository<T, TKey> : IDisposable 
     {
-        //public IQueryable<T> GetQueryableTable();
-        //public Task<IEnumerable<T>> GetAllAsync();
-        //public Task<T> GetByUuidAsync(Guid uuid);
-        //public Task<T> GetByUuidNoTrackingAsync(Guid uuid);
-        //public Task<T> GetByIdAsync(TKey id);
-        //public Task<T> GetByIdNoTrackingAsync(TKey id);
-        //public Task<T> CreateAsync(T entity);
-        //public Task<IEnumerable<T>> CreateAsync(List<T> entities);
-        //public Task<int> UpdateAsync(T entity);
-        //public Task<int> DeleteHardAsync(TKey id);
-        //public Task<int> DeleteSoftAsync(TKey id);
-        //Task ReleaseTransactionAsync();
         Task BeginTransactionAsync();
         Task CommitTransactionAsync();
         Task<IEnumerable<T>> CreateAsync(List<T> entities);
@@ -33,6 +21,8 @@ namespace App.Repositories.BaseRepository
         Task<T> GetByUuidAsync(Guid uuid);
         Task<T> GetByUuidNoTrackingAsync(Guid uuid);
         IQueryable<T> GetQueryableTable();
+        IQueryable<T> GetNoTrackingEntities();
+        IQueryable<T> GetNoTrackingEntitiesIdentityResolution();
         Task ReleaseTransactionAsync();
         Task RollbackTransactionAsync();
         Task<int> UpdateAsync(T entity);

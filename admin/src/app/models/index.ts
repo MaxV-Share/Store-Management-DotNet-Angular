@@ -11,5 +11,7 @@ export * from "./create-request/category-create-request";
 export * from "./category-detail";
 export * from "./create-request/category-detail-create-request";
 export * from "./paging/category-detail-paging";
-export * from "./bill";
+export * from "./bills/bill";
+export * from "./bills/product-in-bill";
 export * from "./create-request/bill-create-request";
+export * from "./create-request/bill-detail-create-request";

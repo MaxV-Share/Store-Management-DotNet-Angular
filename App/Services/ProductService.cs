@@ -35,17 +35,17 @@ namespace App.Services
             if (request == null)
                 return null;
             var product = new Product();
-
             var productDetails = new List<ProductDetail>();
             var oldFileName = request.File.FileName;
-            var newFileName = Guid.NewGuid().ToString()+Path.GetExtension(oldFileName);
+            var newFileName = Guid.NewGuid().ToString() + Path.GetExtension(oldFileName);
             try
             {
                 await _repository.BeginTransactionAsync();
 
-                await _storageService.SaveFileAsync(request.File.OpenReadStream(), newFileName, FOLDER);
+                var saveFile =  _storageService.SaveFileAsync(request.File.OpenReadStream(), newFileName, FOLDER);
 
-                product.Category = await _categoryRepository.GetByIdAsync(request.CategoryId);
+                product.CategoryId = request.CategoryId;
+                product.Price = request.Price;
                 product.ImageUrl = Path.Combine(FOLDER, newFileName);
                 product = await _repository.CreateAsync(product);
 
@@ -55,15 +55,18 @@ namespace App.Services
                     {
                         Product = product,
                         Name = detail.Name,
-                        Lang = await _langRepository.GetByIdAsync(detail.LangId),
+                        LangId = detail.LangId,
                         Description = detail.Description,
-                        
+
                     });
                 }
                 await _productDetailsRepository.CreateAsync(productDetails);
 
                 await _repository.CommitTransactionAsync();
                 var result = await GetByIdAsync(product.Id);
+
+                await saveFile;
+
                 return result;
             }
             catch (Exception ex)
@@ -78,12 +81,6 @@ namespace App.Services
             var product = await _repository.GetQueryableTable().Include(e => e.Category).SingleOrDefaultAsync(e => e.Id == id);
             if (product == null)
                 return null;
-            product.ProductDetails = await _productDetailsRepository.GetQueryableTable()
-                                                                    .Where(e => e.Product.Id == id)
-                                                                    .Include(e => e.Lang)
-                                                                    .Include(e => e.Product)
-                                                                    .OrderBy(e => e.Lang.Order)
-                                                                    .ToListAsync();
             var result = _mapper.Map<ProductViewModel>(product);
             return result;
         }
@@ -93,14 +90,14 @@ namespace App.Services
             var taskData = _productDetailsRepository.GetQueryableTable()
                                                     .Include(e => e.Lang)
                                                     .Include(e => e.Product)
-                                                    .Where(e => e.Lang.Id == langId && e.Name.Contains(searchText + ""))
+                                                    .Where(e => e.LangId == langId && (string.IsNullOrEmpty(searchText) || e.Name.Contains(searchText) || e.Product.Code.Contains(searchText)))
                                                     .OrderBy(e => e.Name)
                                                     .Skip((pageIndex - 1) * pageSize)
                                                     .Take(pageSize)
                                                     .ToListAsync();
 
             var taskTotalRow = _productDetailsRepository.GetQueryableTable()
-                                                        .CountAsync(e => e.Lang.Id == langId && e.Name.Contains(searchText + ""));
+                                                        .CountAsync(e => e.Lang.Id == langId && (string.IsNullOrEmpty(searchText) || e.Name.Contains(searchText)));
 
             var result = new ProductDetailPaging()
             {
@@ -110,15 +107,17 @@ namespace App.Services
 
             return result;
         }
-        public async Task<IEnumerable<ProductDetailViewModel>> GetAllDTOAsync(string langId)
+        public async Task<IEnumerable<ProductDetailViewModel>> GetAllDTOAsync(string langId, string searchText)
         {
             var res = await _productDetailsRepository.GetQueryableTable()
                                                     .Include(e => e.Lang)
                                                     .Include(e => e.Product)
-                                                    .Where(e => e.Lang.Id.Equals(langId))
+                                                    .Where(e =>
+                                                        e.Lang.Id.Equals(langId) &&
+                                                        (string.IsNullOrEmpty(searchText) || e.Name.Contains(searchText) || e.Product.Code.Contains(searchText)))
                                                     .ToListAsync();
 
-            var result = _mapper.Map<List<ProductDetailViewModel>>(res);
+            var result = _mapper.Map<IEnumerable<ProductDetailViewModel>>(res);
             return result;
         }
 

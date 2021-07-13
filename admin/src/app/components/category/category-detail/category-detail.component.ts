@@ -24,7 +24,7 @@ export default class CategoryDetailComponent implements OnInit {
     langs: Lang[];
     public id: number;
     saved: EventEmitter<any> = new EventEmitter();
-    entity: any;
+    public entity: any;
     private subscription = new Subscription();
 
     ngOnInit() {
@@ -45,7 +45,7 @@ export default class CategoryDetailComponent implements OnInit {
         }
         this.entity = objCreate;
         if (this.id != null) {
-            this.subscription.add(this.categoryService.getById(this.id, this.translate.currentLang).subscribe(res => {
+            this.subscription.add(this.categoryService.getById(this.id).subscribe(res => {
                 console.log(res);
 
                 this.entity = res;
@@ -63,7 +63,6 @@ export default class CategoryDetailComponent implements OnInit {
     }
 
     add() {
-        
         this.subscription.add(this.categoryService.add(this.entity)
             .subscribe(() => {
                 this.toastr.success('Success');
@@ -79,18 +78,18 @@ export default class CategoryDetailComponent implements OnInit {
     }
 
     update(id: number) {
-        // this.subscription.add(this.categoryService.update(id, this.entity)
-        //     .subscribe(() => {
-        //         this.toastr.success('Success');
-        //         this.saved.emit("success");
-        //         console.log("success")
-        //         // setTimeout(() => { this.blockedPanel = false; this.btnDisabled = false; }, 1000);
-        //     }, err => {
-        //         // this.notificationService.showError(MessageConstants.DEFAULT_ERROR_MSG);
-        //         // console.log(error);
-        //         // setTimeout(() => { this.blockedPanel = false; this.btnDisabled = false; }, 1000);
-        //         console.error(err)
-        //     }));
+        this.subscription.add(this.categoryService.update(id, this.entity)
+            .subscribe(() => {
+                this.toastr.success('Success');
+                this.saved.emit("success");
+                console.log("success")
+                // setTimeout(() => { this.blockedPanel = false; this.btnDisabled = false; }, 1000);
+            }, err => {
+                // this.notificationService.showError(MessageConstants.DEFAULT_ERROR_MSG);
+                // console.log(error);
+                // setTimeout(() => { this.blockedPanel = false; this.btnDisabled = false; }, 1000);
+                console.error(err)
+            }));
     }
 
     changeTab(index: number) {

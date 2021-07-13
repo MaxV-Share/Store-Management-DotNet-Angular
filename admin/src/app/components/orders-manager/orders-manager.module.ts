@@ -4,14 +4,15 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { OrdersComponent } from './orders.component';
-import { OrdersRoutingModule } from './orders-routing.module';
+import { OrdersManagerComponent } from './orders-manager.component';
+import { OrdersManagerRoutingModule } from './orders-manager-routing.module';
 import { LayoutModule } from '@app/layout/layout.module';
+import { OrderManagerDetailsComponent } from './order-manager-details/order-manager-details.component';
 
 
 @NgModule({
     imports: [
-        OrdersRoutingModule,
+        OrdersManagerRoutingModule,
         CommonModule,
         NgbModule,
         ModalModule.forRoot(),
@@ -20,7 +21,7 @@ import { LayoutModule } from '@app/layout/layout.module';
         ReactiveFormsModule,
         LayoutModule,
     ],
-    declarations: [OrdersComponent],
+    declarations: [OrdersManagerComponent,OrderManagerDetailsComponent],
     exports: [ReactiveFormsModule, TranslateModule]
 })
-export class OrdersModule { }
+export class OrdersManagerModule { }

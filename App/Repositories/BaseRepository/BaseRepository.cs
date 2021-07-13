@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace App.Repositories.BaseRepository
 {
-    public class BaseRepository<T, TKey> : IBaseRepository<T, TKey> where T : BaseEntity<TKey>
+    public class BaseRepository<T, TKey> : IBaseRepository<T, TKey> where T : BaseEntity<TKey> 
     {
         #region props
 
@@ -40,7 +40,7 @@ namespace App.Repositories.BaseRepository
 
         public IQueryable<T> GetQueryableTable()
         {
-            return GetNoTrackingEntities();
+            return Entities;
         }
 
         public virtual async Task<IEnumerable<T>> GetAllAsync()
@@ -165,10 +165,13 @@ namespace App.Repositories.BaseRepository
             }
         }
 
-        protected IQueryable<T> GetNoTrackingEntities()
+        public IQueryable<T> GetNoTrackingEntities()
         {
-            var table = Entities.AsNoTracking();
-            return table;
+            return Entities.AsNoTracking();
+        }
+        public IQueryable<T> GetNoTrackingEntitiesIdentityResolution()
+        {
+            return Entities.AsNoTrackingWithIdentityResolution();
         }
 
         public async Task BeginTransactionAsync()

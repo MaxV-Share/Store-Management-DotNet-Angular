@@ -73,7 +73,7 @@ namespace App.Controllers
             var result = _authenticationService.CheckToken(authorization);
             if (string.IsNullOrEmpty(result))
                 return Unauthorized();
-            return Ok();
+            return Ok(result);
         }
     }
 }

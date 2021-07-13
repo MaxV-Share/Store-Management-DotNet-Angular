@@ -10,6 +10,5 @@ namespace App.Repositories.Interface
     public interface IUserRepository
     {
         Task<IEnumerable<User>> GetAllAsync(string filter);
-        Task<User> GetByIdAsync(string id);
     }
 }

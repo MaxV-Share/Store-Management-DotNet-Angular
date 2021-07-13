@@ -31,31 +31,30 @@ namespace App.Services
         {
             if (request == null)
                 return null;
-            var category = new Category();
 
+            var category = new Category();
             var categoryDetails = new List<CategoryDetail>();
+
             try
             {
                 await _categoryRepository.BeginTransactionAsync();
 
                 category = await _categoryRepository.CreateAsync(category);
-
                 foreach (var detail in request.CategoryDetails)
                 {
-                    var lang = await _langRepository.GetByIdAsync(detail.LangId);
                     categoryDetails.Add(new CategoryDetail()
                     {
                         Category = category,
                         Name = detail.Name,
-                        Lang = lang,
+                        LangId = detail.LangId,
                         Description = detail.Description
                     });
                 }
                 await _categoryDetailsRepository.CreateAsync(categoryDetails);
 
                 await _categoryRepository.CommitTransactionAsync();
-                 
-                var result = await GetByIdAsync(category.Id);
+
+                var result = _mapper.Map<CategoryViewModel>(category);
                 return result;
             }
             catch (Exception ex)
@@ -66,46 +65,45 @@ namespace App.Services
             }
 
         }
-        public async Task<int> PutAsync(int id, CategoryViewModel request)
+        public async Task<int> UpdateAsync(int id, CategoryViewModel request)
         {
             if (id != request.Id)
                 return 0;
 
-            var entity = await _categoryRepository.GetByIdAsync(request.Id);
+            var entity = await _categoryRepository.GetByIdAsync(id);
             if (entity == null)
                 return 0;
-            var dateTimeNow = DateTime.UtcNow;
 
-            entity.UpdateAt = dateTimeNow;
+            //entity.ParentId = entity.ParentId;
+
+            for (int i = 0; i < request.categoryDetails.Count; i++)
+            {
+                entity.CategoryDetails[i].Name = request.categoryDetails[i].Name;
+                entity.CategoryDetails[i].Description = request.categoryDetails[i].Description;
+            }
 
             var result = await _repository.UpdateAsync(entity);
             return result;
         }
         public override async Task<CategoryViewModel> GetByIdAsync(int id)
         {
-            var category = await _categoryRepository.GetByIdNoTrackingAsync(id);
-            category.CategoryDetails = await _categoryDetailsRepository.GetQueryableTable()
-                                                                        .Where(e => e.Category.Id == id)
-                                                                        .Include(e => e.Lang)
-                                                                        .Include(e => e.Category)
-                                                                        .OrderBy(e => e.Lang.Order)
-                                                                        .ToListAsync();
+            var category = await _categoryRepository.GetNoTrackingEntities().Include(e => e.CategoryDetails).ThenInclude(e => e.Lang).SingleOrDefaultAsync(e => e.Id == id);
             var result = _mapper.Map<CategoryViewModel>(category);
             return result;
         }
 
-        public async Task<CategoryDetailPaging> GetPaging(string langId, int pageIndex, int pageSize, string searchText)
+        public async Task<CategoryDetailPaging> GetPagingAsync(string langId, int pageIndex, int pageSize, string searchText)
         {
-            var taskData = _categoryDetailsRepository.GetQueryableTable()
+            var taskData = _categoryDetailsRepository.GetNoTrackingEntities()
                                                     .Include(e => e.Lang)
                                                     .Include(e => e.Category)
-                                                    .Where(e => e.Lang.Id == langId && e.Name.Contains(searchText + ""))
+                                                    .Where(e => e.LangId == langId && (string.IsNullOrEmpty(searchText) || e.Name.Contains(searchText + "")))
                                                     .OrderBy(e => e.Name)
                                                     .Skip((pageIndex - 1) * pageSize)
                                                     .Take(pageSize)
                                                     .ToListAsync();
             var taskTotalRow = _categoryDetailsRepository.GetQueryableTable()
-                                                        .CountAsync(e => e.Lang.Id == langId && e.Name.Contains(searchText + ""));
+                                                        .CountAsync(e => e.LangId == langId && (string.IsNullOrEmpty(searchText) || e.Name.Contains(searchText + "")));
             var result = new CategoryDetailPaging()
             {
                 TotalRow = await taskTotalRow,
@@ -113,12 +111,11 @@ namespace App.Services
             };
             return result;
         }
-        public async Task<IEnumerable<CategoryDetailViewModel>> GetAllDTOAsync(string langId)
+        public async Task<IEnumerable<CategoryDetailViewModel>> GetAllDTOAsync(string langId, string searchText)
         {
-            var res = await _categoryDetailsRepository.GetQueryableTable()
-                                                    .Include(e => e.Lang)
+            var res = await _categoryDetailsRepository.GetNoTrackingEntities()
                                                     .Include(e => e.Category)
-                                                    .Where(e => e.Lang.Id.Equals(langId) )
+                                                    .Where(e => e.Lang.Id.Equals(langId) && (string.IsNullOrEmpty(searchText) || e.Name.Contains(searchText + "")))
                                                     .ToListAsync();
             var result = _mapper.Map<List<CategoryDetailViewModel>>(res);
             return result;

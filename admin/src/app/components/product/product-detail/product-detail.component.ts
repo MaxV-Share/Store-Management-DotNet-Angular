@@ -3,11 +3,12 @@ import { FormControl } from '@angular/forms';
 import CategoryDetailComponent from '@app/components/category/category-detail/category-detail.component';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { Observable, Subscription } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
-import { Lang, Category, Product, ProductDetail, environment, langs, CategoryDetail } from '@app/models';
+import { Observable, of, Subscription } from 'rxjs';
+import { debounceTime, delay, finalize, map, startWith, switchMap, tap } from 'rxjs/operators';
+import { Lang, Category, Product, ProductDetail, ENVIRONMENT, langs, CategoryDetail } from '@app/models';
 import { CategoryService, UtilitiesService } from '@app/shared/services';
 import { ProductService } from '@app/shared/services/product.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-product-detail',
@@ -22,6 +23,7 @@ export class ProductDetailComponent implements OnInit {
         private utilitiesService: UtilitiesService,
         public bsModalRef: BsModalRef,
         public bsCategoryModalRef: BsModalRef,
+        private toastr: ToastrService,
         public translate: TranslateService) {
 
     }
@@ -36,8 +38,9 @@ export class ProductDetailComponent implements OnInit {
     filteredOptions: Observable<CategoryDetail[]>;
     categories: CategoryDetail[];
     uploadedFiles: any[] = [];
+    isLoadingAutocompleteCategory: boolean;
     private subscription = new Subscription();
-    test:any;
+    test: any;
     getEntity() {
         this.entity = {
             id: null,
@@ -60,13 +63,34 @@ export class ProductDetailComponent implements OnInit {
         //     { categoryId: 2, name: "Danh mục 2", description: "22", category: { id: 2, parentId: null }, langId: "vi" },
         // ];
 
-
     }
+
     ngOnInit(): void {
-        console.log(this.productId);
         this.langs = langs;
         this.getEntity();
         this.getCategory();
+
+        this.ctrCategory.valueChanges
+            .pipe(
+                debounceTime(500),
+                tap(() => {
+                    //   this.errorMsg = "";
+                    //   this.filteredMovies = [];
+                    this.isLoadingAutocompleteCategory = true;
+                }), switchMap(searchValue => {
+                    this.isLoadingAutocompleteCategory = true;
+                    return this.categoryService.getAll(searchValue).pipe(
+                        delay(100),
+                        finalize(() => {
+                            this.isLoadingAutocompleteCategory = false
+                        }))
+                })
+            )
+            .subscribe((data: CategoryDetail[]) => {
+                this.isLoadingAutocompleteCategory = true;
+                this.categories = data;
+                this.filteredOptions = of(data);
+            });
     }
 
     onSave() {
@@ -75,27 +99,35 @@ export class ProductDetailComponent implements OnInit {
         //console.log(this.ctrCategory.value);
 
         const formData = this.utilitiesService.ToFormData(this.entity);
-
-        formData.append('file', this.uploadedFiles[0], this.uploadedFiles[0].name);
+        if (this.uploadedFiles.length > 0) {
+            formData.append('file', this.uploadedFiles[0], this.uploadedFiles[0].name);
+        }
         this.productService.add(formData).subscribe(() => {
-            //this.log
+            this.toastr.success('Success');
+            this.saved.emit("success");
+            console.log("success");
+            // setTimeout(() => { this.blockedPanel = false; this.btnDisabled = false; }, 1000);
+        }, err => {
+            // this.notificationService.showError(MessageConstants.DEFAULT_ERROR_MSG);
+            // console.log(error);
+            // setTimeout(() => { this.blockedPanel = false; this.btnDisabled = false; }, 1000);
+            console.error(err)
         });
     }
+
     changeTab(index: number) {
         // console.log(this.langs[index].id);
         // this.translate.use(this.langs[index].id);
     }
+
     displayFn(user: CategoryDetail): string {
         return user && user.name ? user.name : '';
     }
 
-    private _filter(name: string): CategoryDetail[] {
-        const filterValue = name.toLowerCase();
-        return this.categories.filter(option => option.name.toLowerCase().indexOf(filterValue) >= 0);
-    }
     dealWithFiles(event) {
         this.uploadedFiles = event.currentFiles;
     }
+
     createCategory() {
         const initialState = {
             id: null,
@@ -111,6 +143,9 @@ export class ProductDetailComponent implements OnInit {
             this.bsCategoryModalRef.hide();
             this.getCategory();
         });
+    }
+    submitForm() {
+
     }
 
     editCategory(categoryId) {
@@ -131,14 +166,14 @@ export class ProductDetailComponent implements OnInit {
         });
     }
     getCategory() {
-        this.subscription.add(this.categoryService.getAll(this.translate.currentLang).subscribe((res: CategoryDetail[]) => {
+        this.categoryService.getAll().subscribe((res: CategoryDetail[]) => {
             this.categories = res;
             this.filteredOptions = this.ctrCategory.valueChanges
                 .pipe(
                     startWith(''),
                     map(value => typeof value === 'string' ? value : value.name),
-                    map(name => name ? this._filter(name) : this.categories.slice())
+                    map(name => this.categories.slice())
                 );
-        }))
+        })
     }
 }

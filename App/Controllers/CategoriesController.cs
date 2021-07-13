@@ -33,7 +33,7 @@ namespace App.Controllers
         {
             if (id != request.Id)
                 return BadRequest();
-            var result = await _categoryService.PutAsync(id, request);
+            var result = await _categoryService.UpdateAsync(id, request);
             if (result > 0)
                 return Ok();
             return NotFound();
@@ -50,13 +50,13 @@ namespace App.Controllers
         [HttpGet("filter")]
         public async Task<ActionResult> GetPaging(int pageIndex, int pageSize, string langId, string searchText = "")
         {
-            var result = await _categoryService.GetPaging(langId, pageIndex, pageSize, searchText);
+            var result = await _categoryService.GetPagingAsync(langId, pageIndex, pageSize, searchText);
             return Ok(result);
         }
         [HttpGet("")]
-        public async Task<ActionResult> GetAll(string langId = "vi")
+        public async Task<ActionResult> GetAll(string langId = "vi", string searchText = "")
         {
-            var result = await _categoryService.GetAllDTOAsync(langId);
+            var result = await _categoryService.GetAllDTOAsync(langId, searchText);
             return Ok(result);
         }
     }
