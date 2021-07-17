@@ -1,21 +1,52 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, OnInit, Sanitizer, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import CategoryDetailComponent from '@app/components/category/category-detail/category-detail.component';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Observable, of, Subscription } from 'rxjs';
 import { debounceTime, delay, finalize, map, startWith, switchMap, tap } from 'rxjs/operators';
-import { Lang, Category, Product, ProductDetail, ENVIRONMENT, langs, CategoryDetail } from '@app/models';
+import { Lang, Category, Product, ProductDetail, ENVIRONMENT, LANGS, CategoryDetail } from '@app/models';
 import { CategoryService, UtilitiesService } from '@app/shared/services';
 import { ProductService } from '@app/shared/services/product.service';
 import { ToastrService } from 'ngx-toastr';
-
+import { FileUpload } from 'primeng-lts';
+import { DomSanitizer } from '@angular/platform-browser';
+import { HttpHeaders, HttpResponse } from '@angular/common/http';
+import { BaseComponent } from '@app/models/bases';
 @Component({
     selector: 'app-product-detail',
     templateUrl: './product-detail.component.html',
     styleUrls: ['./product-detail.component.scss']
 })
-export class ProductDetailComponent implements OnInit {
+export class ProductDetailComponent extends BaseComponent implements OnInit {
+
+    previewImage: string | undefined = '';
+    previewVisible = false;
+    showAddCategory = false;
+    showEditCategory = false;
+    langs: Lang[];
+    public productId?: number;
+    saved: EventEmitter<any> = new EventEmitter();
+    entity: Product = new Product();
+    ctrCategory = new FormControl();
+    options: string[] = ['One', 'Two', 'Three'];
+    filteredOptions: Observable<CategoryDetail[]>;
+    categories: CategoryDetail[];
+    multipleFile: boolean = false;
+    isLoadingAutocompleteCategory: boolean;
+    private subscription = new Subscription();
+    @ViewChild(FileUpload)
+    externalFiles: FileUpload;
+    productImage: {
+        content?: any,
+        file?: File
+    };
+
+    get productImageUrl() {
+        return this.productImage?.content || (this.entity.imageUrl?.length > 0 ? (ENVIRONMENT.fileUrl + this.entity.imageUrl) : null);
+    }
+
+    ENVIRONMENT = ENVIRONMENT;
 
     constructor(private modalService: BsModalService,
         private categoryService: CategoryService,
@@ -23,31 +54,20 @@ export class ProductDetailComponent implements OnInit {
         private utilitiesService: UtilitiesService,
         public bsModalRef: BsModalRef,
         public bsCategoryModalRef: BsModalRef,
-        private toastr: ToastrService,
-        public translate: TranslateService) {
-
+        protected toastr: ToastrService,
+        public translate: TranslateService,
+        private sanitizer: DomSanitizer) {
+        super(translate, toastr);
     }
-    showAddCategory = false;
-    showEditCategory = false;
-    langs: Lang[];
-    public productId: number;
-    saved: EventEmitter<any> = new EventEmitter();
-    entity: Product = new Product();
-    ctrCategory = new FormControl();
-    options: string[] = ['One', 'Two', 'Three'];
-    filteredOptions: Observable<CategoryDetail[]>;
-    categories: CategoryDetail[];
-    uploadedFiles: any[] = [];
-    isLoadingAutocompleteCategory: boolean;
-    private subscription = new Subscription();
-    test: any;
+
     getEntity() {
         this.entity = {
             id: null,
-            urlImage: "",
+            imageUrl: "",
             details: [
             ]
         };
+
         this.langs.forEach(e => {
             this.entity.details.push({
                 langId: e.id,
@@ -57,25 +77,28 @@ export class ProductDetailComponent implements OnInit {
                 productId: null
             })
         })
-
-        // this.categories = [
-        //     { categoryId: 1, name: "Danh mục 1", description: "11", category: { id: 1, parentId: null }, langId: "vi" },
-        //     { categoryId: 2, name: "Danh mục 2", description: "22", category: { id: 2, parentId: null }, langId: "vi" },
-        // ];
-
+        if (this.productId != null) {
+            this.productService.getById(this.productId).subscribe((res: HttpResponse<Product>) => {
+                if (res.status == 200) {
+                    res.body.imageUrl = res.body.imageUrl?.replace("\\", "/");
+                    this.entity = res.body;
+                    this.getCategory();
+                }
+            })
+        } else {
+            this.getCategory()
+        }
     }
 
     ngOnInit(): void {
-        this.langs = langs;
+        this.productImage = {};
+        this.langs = LANGS;
         this.getEntity();
-        this.getCategory();
 
         this.ctrCategory.valueChanges
             .pipe(
                 debounceTime(500),
                 tap(() => {
-                    //   this.errorMsg = "";
-                    //   this.filteredMovies = [];
                     this.isLoadingAutocompleteCategory = true;
                 }), switchMap(searchValue => {
                     this.isLoadingAutocompleteCategory = true;
@@ -86,33 +109,67 @@ export class ProductDetailComponent implements OnInit {
                         }))
                 })
             )
-            .subscribe((data: CategoryDetail[]) => {
+            .subscribe((res: HttpResponse<CategoryDetail[]>) => {
                 this.isLoadingAutocompleteCategory = true;
-                this.categories = data;
-                this.filteredOptions = of(data);
+                this.categories = res.body;
+                this.filteredOptions = of(res.body);
             });
     }
 
-    onSave() {
-        // this.saved.emit("Saved");
-        this.entity.categoryId = this.ctrCategory.value.categoryId;
-        //console.log(this.ctrCategory.value);
+    addFile(event, multipleFile: boolean) {
+        let files = event.target.files;
+        this.productImage.file = files[0];
+        if (files) {
+            const reader = new FileReader();
 
-        const formData = this.utilitiesService.ToFormData(this.entity);
-        if (this.uploadedFiles.length > 0) {
-            formData.append('file', this.uploadedFiles[0], this.uploadedFiles[0].name);
+            reader.onload = () => {
+                this.productImage.content = reader.result
+                console.log(reader.result.toString().split(",")[1]);
+            }
+            reader.readAsDataURL(files[0]);
+
         }
-        this.productService.add(formData).subscribe(() => {
-            this.toastr.success('Success');
-            this.saved.emit("success");
-            console.log("success");
-            // setTimeout(() => { this.blockedPanel = false; this.btnDisabled = false; }, 1000);
-        }, err => {
-            // this.notificationService.showError(MessageConstants.DEFAULT_ERROR_MSG);
-            // console.log(error);
-            // setTimeout(() => { this.blockedPanel = false; this.btnDisabled = false; }, 1000);
-            console.error(err)
+    }
+    modalRefImageShow: BsModalRef;
+    imageShow: any;
+    openModal(modelTemplate, img) {
+        this.imageShow = img;
+
+        this.modalRefImageShow = this.modalService.show(modelTemplate, {
+            animated: true,
+            backdrop: 'static',
         });
+    }
+
+    onSave() {
+        this.entity.categoryId = this.ctrCategory.value.categoryId;
+        let formData = this.utilitiesService.ToFormData(this.entity);
+        if (this.productImage.file) {
+            formData.append('file', this.productImage.file, this.productImage.file.name);
+        }
+        if (this.entity.id == null) {
+            this.productService.add(formData).subscribe((res: HttpResponse<any>) => {
+                if (res.status == 200) {
+                    this.translate.get('Success').subscribe(e => {
+                        this.toastr.success(e)
+                    });
+                    this.saved.emit("success");
+                }
+            }, err => {
+                this.toastr.error("error");
+                console.error(err);
+            });
+        } else {
+            console.log(this.entity);
+            this.productService.update(this.entity.id, formData).subscribe((res: HttpResponse<any>) => {
+                if (res.status == 200) {
+                    this.translate.get('Success').subscribe(e => {
+                        this.toastr.success(e)
+                    });
+                    this.saved.emit("success");
+                }
+            })
+        }
     }
 
     changeTab(index: number) {
@@ -122,10 +179,6 @@ export class ProductDetailComponent implements OnInit {
 
     displayFn(user: CategoryDetail): string {
         return user && user.name ? user.name : '';
-    }
-
-    dealWithFiles(event) {
-        this.uploadedFiles = event.currentFiles;
     }
 
     createCategory() {
@@ -166,14 +219,17 @@ export class ProductDetailComponent implements OnInit {
         });
     }
     getCategory() {
-        this.categoryService.getAll().subscribe((res: CategoryDetail[]) => {
-            this.categories = res;
-            this.filteredOptions = this.ctrCategory.valueChanges
-                .pipe(
-                    startWith(''),
-                    map(value => typeof value === 'string' ? value : value.name),
-                    map(name => this.categories.slice())
-                );
+        this.categoryService.getAll().subscribe((res: HttpResponse<CategoryDetail[]>) => {
+            if (res.status == 200) {
+                this.categories = res.body;
+                this.ctrCategory.setValue(this.categories.find(e => e.categoryId == this.entity.categoryId));
+                this.filteredOptions = this.ctrCategory.valueChanges
+                    .pipe(
+                        startWith(''),
+                        map(value => typeof value === 'string' ? value : value.name),
+                        map(name => this.categories.slice())
+                    );
+            }
         })
     }
 }

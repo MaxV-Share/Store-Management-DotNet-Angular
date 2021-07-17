@@ -16,7 +16,9 @@ namespace App.Models.DTOs.Bills
         public string UserPaymentId { get; set; }
         public string UserPaymentUserName { get; set; }
         public double? TotalPrice { get; set; }
-        public double DiscountPrice { get; set; }
+        public double? DiscountPrice { get; set; }
+        public double? PaymentAmount { get; set; }
+        public DateTime? CreateAt { get; set; } 
         public List<BillDetailViewModel> billDetails { get; set; } 
     }
 }

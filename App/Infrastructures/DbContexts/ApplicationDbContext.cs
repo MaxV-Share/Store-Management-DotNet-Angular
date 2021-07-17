@@ -1,4 +1,5 @@
 ﻿using App.Models.Entities;
+using MaxV.Base;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace App.Infrastructures.Dbcontexts
@@ -33,8 +35,20 @@ namespace App.Infrastructures.Dbcontexts
         {
             base.OnModelCreating(builder);
 
+            builder.Entity<Bill>().HasQueryFilter(p => p.Deleted == null);
+            builder.Entity<BillDetail>().HasQueryFilter(p => p.Deleted == null);
+            builder.Entity<Category>().HasQueryFilter(p => p.Deleted == null);
+            builder.Entity<Customer>().HasQueryFilter(p => p.Deleted == null);
+            builder.Entity<Product>().HasQueryFilter(p => p.Deleted == null);
+            builder.Entity<Discount>().HasQueryFilter(p => p.Deleted == null);
+            builder.Entity<Lang>().HasQueryFilter(p => p.Deleted == null);
+            builder.Entity<CategoryDetail>().HasQueryFilter(p => p.Deleted == null);
+            builder.Entity<ProductDetail>().HasQueryFilter(p => p.Deleted == null);
+
             builder.Entity<Discount>().Property(e => e.Id).ValueGeneratedOnAdd();
             builder.Entity<Lang>().Property(e => e.Id).HasMaxLength(256);
+
+
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

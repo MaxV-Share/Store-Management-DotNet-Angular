@@ -6,44 +6,50 @@
 </div>
 <div class="modal-body">
     <div class="row">
-        <div class="col-4 col-sm-3">
-            <fieldset>
-                <legend>{{ 'Bill information' | translate }}</legend>
-                <mat-form-field class="w-100">
-                    <mat-label>{{ 'User payment' | translate }}</mat-label>
+        <div class="col-md-4 col-sm-12">
+            <div class="row">
+                <div class="col-md-12 col-sm-6">
+                    <fieldset>
+                        <legend>{{ 'Bill information' | translate }}</legend>
+                        <mat-form-field class="w-100">
+                            <mat-label>{{ 'User payment' | translate }}</mat-label>
 
-                    <input type="text" [(ngModel)]="globalService.currentUserName" matInput disabled />
-                </mat-form-field>
-                <mat-form-field class="w-100">
-                    <mat-label>{{ 'Total price' | translate }}</mat-label>
-                    <input type="text" [(ngModel)]="totalPrice" matInput disabled />
-                </mat-form-field>
-                <mat-form-field class="w-100">
-                    <mat-label>{{ 'Discount' | translate }}</mat-label>
-                    <input type="number" min="0" [(ngModel)]="bill.discountPrice" matInput />
-                </mat-form-field>
-                <mat-form-field class="w-100">
-                    <mat-label>{{ 'Payment amount' | translate }}</mat-label>
-                    <input type="number" [(ngModel)]="paymentAmount" matInput disabled />
-                </mat-form-field>
-            </fieldset>
-            <fieldset>
-                <legend>{{ 'Customer information' | translate }}</legend>
-                <mat-form-field class="w-100">
-                    <mat-label>{{ 'Phone number' | translate }}</mat-label>
-                    <input type="text" matInput [(ngModel)]="bill.customerPhoneNumber"/>
-                </mat-form-field>
-                <mat-form-field class="w-100">
-                    <mat-label>{{ 'Full name' | translate }}</mat-label>
-                    <input type="text" matInput [(ngModel)]="bill.customerFullName"/>
-                </mat-form-field>
-                <mat-form-field class="w-100">
-                    <mat-label>{{ 'Address' | translate }}</mat-label>
-                    <input type="text" matInput/>
-                </mat-form-field>
-            </fieldset>
+                            <input type="text" [(ngModel)]="globalService.currentUserName" matInput disabled />
+                        </mat-form-field>
+                        <mat-form-field class="w-100">
+                            <mat-label>{{ 'Total price' | translate }}</mat-label>
+                            <input type="text" [(ngModel)]="totalPrice" matInput disabled />
+                        </mat-form-field>
+                        <mat-form-field class="w-100">
+                            <mat-label>{{ 'Discount' | translate }}</mat-label>
+                            <input  currency-mask type="number" [(ngModel)]="bill.discountPrice" matInput />
+                        </mat-form-field>
+                        <mat-form-field class="w-100">
+                            <mat-label>{{ 'Payment amount' | translate }}</mat-label>
+                            <input type="number" [(ngModel)]="paymentAmount" matInput disabled />
+                        </mat-form-field>
+                    </fieldset>
+                </div>
+                <div class="col-md-12 col-sm-6">
+                    <fieldset>
+                        <legend>{{ 'Customer information' | translate }}</legend>
+                        <mat-form-field class="w-100">
+                            <mat-label>{{ 'Phone number' | translate }}</mat-label>
+                            <input type="text" matInput [(ngModel)]="bill.customerPhoneNumber" />
+                        </mat-form-field>
+                        <mat-form-field class="w-100">
+                            <mat-label>{{ 'Full name' | translate }}</mat-label>
+                            <input type="text" matInput [(ngModel)]="bill.customerFullName" />
+                        </mat-form-field>
+                        <mat-form-field class="w-100">
+                            <mat-label>{{ 'Address' | translate }}</mat-label>
+                            <input type="text" matInput [(ngModel)]="bill.customerAddress" />
+                        </mat-form-field>
+                    </fieldset>
+                </div>
+            </div>
         </div>
-        <div class="col-8 col-sm-9">
+        <div class="col-md-8 col-sm-12 mt-3">
             <div class="col-12 col-sm-12 col-lg-8 col-xl-6">
                 <mat-form-field>
                     <mat-label>{{ 'Product' | translate }}</mat-label>
@@ -72,7 +78,7 @@
                     <i class="fa fa-angle-double-down" aria-hidden="true"></i>
                 </button>
             </div>
-            <div style=" overflow-x: scroll;">
+            <div style="overflow-x: scroll;">
                 <table mat-table [dataSource]="dataSourceBillDetail" class="table table-hover p">
                     <ng-container matColumnDef="no">
                         <th mat-header-cell *matHeaderCellDef style="text-align: center;">{{ 'No' | translate }}</th>
@@ -147,41 +153,6 @@
                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
             </div>
-            <!-- <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th class="text-center">{{ 'No' | translate }}</th>
-                        <th>{{ 'Product code' | translate }}</th>
-                        <th>{{ 'Product name' | translate }}</th>
-                        <th>{{ 'Price' | translate }}</th>
-                        <th>{{ 'Quantity' | translate }}</th>
-                        <th>{{ 'Total price' | translate }}</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let element of billDetailCreateRequests; let i = index">
-                        <td class="text-center">{{ i + 1 }}</td>
-                        <td>{{ element.product.code }}</td>
-                        <td>{{ element.product.name }}</td>
-                        <td>
-                            <input type="number" class="form-control" [(ngModel)]="element.product.price" />
-                        </td>
-                        <td>
-                            <input type="number" class="form-control" [(ngModel)]="element.quantity" />
-
-                        </td>
-                        <td>
-                            {{ element.product.price * element.quantity | currency: '':'':'1.0-0' }}
-                        </td>
-                        <td>
-                            <button class="btn btn-sm btn-danger" type="button" (click)="deleteProduct(element)">
-                                <i class="fa fa-trash-o" aria-hidden="true"></i>
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table> -->
             <mat-paginator
                 #paginator
                 [pageSize]="pageSize"
@@ -196,7 +167,10 @@
 </div>
 <div class="modal-footer">
     <button button class="btn btn-primary" (click)="onSave()">
-        {{ 'Save' | translate }}
+        {{ 'Print bill' | translate }}
+    </button>
+    <button button class="btn btn-primary" (click)="onSave()">
+        {{ 'Save and print bill' | translate }}
     </button>
     <button (click)="bsModalRef.hide()" class="btn btn-secondary" type="button">{{ 'Close' | translate }}</button>
 </div>

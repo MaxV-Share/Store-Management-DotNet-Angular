@@ -1,6 +1,7 @@
 ﻿using App.Models.DTOs;
 using App.Models.DTOs.Bills;
 using App.Models.DTOs.CreateRequest;
+using App.Models.DTOs.Paging;
 using App.Models.Entities;
 using App.Services.Base;
 using System;
@@ -14,6 +15,6 @@ namespace App.Services.Interface
     { 
         Task<BillViewModel> CreateAsync(BillCreateRequest request);
         Task<int> UpdateAsync(int id, BillViewModel request);
-        Task<IEnumerable<BillViewModel>> GetPaging(int pageIndex, int pageSize);
+        Task<BillPaging> GetPagingAsync(int pageIndex, int pageSize, string txtSearch);
     }
 }

@@ -27,6 +27,16 @@ namespace App.Controllers
             return Ok();
         }
 
+        [Route("")]
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Put(int id, [FromForm] ProductViewModel request)
+         {
+            if(id != request.Id)
+                return BadRequest();
+            await _productService.UpdateAsync(id, request);
+            return Ok();
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult> GetById(int id)
         {

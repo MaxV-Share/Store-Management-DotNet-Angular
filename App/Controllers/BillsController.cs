@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using App.Controllers.Base;
 using App.Models.DTOs;
@@ -9,6 +10,7 @@ using App.Models.DTOs.CreateRequest;
 using App.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace App.Controllers
 {
@@ -16,10 +18,12 @@ namespace App.Controllers
     {
         public readonly IBillService _billService;
         public readonly IBillDetailService _billDetailService;
-        public BillsController(IBillService billService, IBillDetailService billDetailService)
+        private readonly ILogger<BillsController> _logger;
+        public BillsController(IBillService billService, IBillDetailService billDetailService, ILogger<BillsController> logger)
         {
             _billService = billService;
             _billDetailService = billDetailService;
+            _logger = logger;
         }
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] BillCreateRequest request)
@@ -33,8 +37,21 @@ namespace App.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(int id, [FromBody] BillViewModel request)
         {
-            var result = await _billService.UpdateAsync(id, request);
-            return Ok();
+            try
+            {
+                var result = await _billService.UpdateAsync(id, request);
+                if (result <= 0)
+                    return BadRequest();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("object error", request);
+                _logger.LogError(ex.Message);
+                _logger.LogError(ex.StackTrace);
+
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
         [HttpGet("{id}")]
         public async Task<ActionResult> GetById(int id)
@@ -64,9 +81,9 @@ namespace App.Controllers
             return NotFound();
         }
         [HttpGet("filter")]
-        public async Task<ActionResult> GetAllPaging(int pageIndex, int pageSize)
+        public async Task<ActionResult> GetAllPaging(int pageIndex, int pageSize, string txtSearch)
         {
-            var result = await _billService.GetPaging(pageIndex, pageSize);
+            var result = await _billService.GetPagingAsync(pageIndex, pageSize, txtSearch);
 
             if (result != null)
                 return Ok(result);

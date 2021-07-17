@@ -2,17 +2,16 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-import { HttpHeaders } from "@angular/common/http";
+import { HttpHeaders, HttpParams } from "@angular/common/http";
 import { Lang } from "./lang";
 
 export const ENVIRONMENT = {
     production: false,
     apiUrl: `http://localhost:5000`,
-    fileUrl: `http://localhost:5000/Files`,
-    _sharedHeaders: new HttpHeaders({ 'Content-Type': 'application/json' })
+    fileUrl: `http://localhost:5000/Files/`,
 
 };
-export const langs: Lang[] = [
+export const LANGS: Lang[] = [
     {
         id: "vi",
         name: "Tiếng Việt"
@@ -22,6 +21,53 @@ export const langs: Lang[] = [
         name: "English"
     },
 ]
+export const OPTIONS_DEFAULT: {
+    headers?: HttpHeaders | {
+        [header: string]: string | string[];
+    };
+    observe: 'events';
+    params?: HttpParams | {
+        [param: string]: string | string[];
+    };
+    reportProgress?: boolean;
+    responseType?: 'json';
+    withCredentials?: boolean;
+} = {
+    observe: 'events'
+}
+export const OPTIONS_JSON : {
+    headers?: HttpHeaders | {
+        [header: string]: string | string[];
+    };
+    observe: 'events';
+    params?: HttpParams | {
+        [param: string]: string | string[];
+    };
+    reportProgress?: boolean;
+    responseType?: 'json';
+    withCredentials?: boolean;
+} = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+    observe: 'events',
+    responseType: 'json',
+}
+
+export const OPTIONS_TEXT: {
+    headers?: HttpHeaders | {
+        [header: string]: string | string[];
+    };
+    observe: 'events';
+    params?: HttpParams | {
+        [param: string]: string | string[];
+    };
+    reportProgress?: boolean;
+    responseType: 'text';
+    withCredentials?: boolean;
+} = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+    observe: 'events',
+    responseType: 'text',
+}
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
