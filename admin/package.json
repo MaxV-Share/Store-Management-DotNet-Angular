@@ -36,6 +36,7 @@
     "jquery": "^3.6.0",
     "ng2-charts": "2.4.2",
     "ngx-bootstrap": "^6.2.0",
+    "ngx-print": "^1.2.1",
     "ngx-toastr": "^13.2.1",
     "primeicons": "^4.1.0",
     "primeng-lts": "^9.2.8",

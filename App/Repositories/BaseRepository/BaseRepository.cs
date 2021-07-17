@@ -40,7 +40,7 @@ namespace App.Repositories.BaseRepository
 
         public IQueryable<T> GetQueryableTable()
         {
-            return Entities;
+            return Entities.AsQueryable<T>();
         }
 
         public virtual async Task<IEnumerable<T>> GetAllAsync()
@@ -51,18 +51,18 @@ namespace App.Repositories.BaseRepository
 
         public virtual async Task<T> GetByIdAsync(TKey id)
         {
-            var entity = await Entities.SingleOrDefaultAsync(x => id.Equals(x.Id) && x.Deleted == null);
+            var entity = await Entities.SingleOrDefaultAsync(x => id.Equals(x.Id));
             return entity;
         }
 
         public virtual async Task<T> GetByIdNoTrackingAsync(TKey id)
         {
-            var entity = await GetNoTrackingEntities().SingleOrDefaultAsync(x => x.Id.Equals(id) && x.Deleted == null);
+            var entity = await GetNoTrackingEntities().SingleOrDefaultAsync(x => x.Id.Equals(id));
             return entity;
         }
         public virtual async Task<T> GetByUuidNoTrackingAsync(Guid uuid)
         {
-            var entity = await GetNoTrackingEntities().SingleOrDefaultAsync(x => x.Uuid == uuid && x.Deleted == null);
+            var entity = await GetNoTrackingEntities().SingleOrDefaultAsync(x => x.Uuid == uuid);
             return entity;
         }
         public async Task<T> CreateAsync(T entity)
@@ -135,7 +135,7 @@ namespace App.Repositories.BaseRepository
         }
         public virtual async Task<T> GetByUuidAsync(Guid uuid)
         {
-            var entity = await Entities.SingleOrDefaultAsync(x => x.Uuid == uuid && x.Deleted == null);
+            var entity = await Entities.SingleOrDefaultAsync(x => x.Uuid == uuid);
             return entity;
         }
         #endregion public

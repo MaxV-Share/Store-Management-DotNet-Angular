@@ -1,7 +1,8 @@
+import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Bill, BillCreateRequest } from '@app/models';
+import { Bill, BillCreateRequest, BillPaging } from '@app/models';
 import { BillService } from '@app/shared/services';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -26,23 +27,21 @@ export class OrdersManagerComponent implements OnInit {
     pageEvent: PageEvent;
     test: string;
     isLoadingResults: boolean;
-    displayedColumns: string[] = ['no', 'customer-phone-number', 'total-price', 'discount-price', 'user-payment','edit'];
+    displayedColumns: string[] = ['no', 'customer-phone-number', 'total-price', 'discount-price', 'payment-amount', 'date', 'user-payment', 'edit'];
     dataSourceBillTable = new MatTableDataSource<Bill>();
     totalRow: number;
     pageIndex: number;
     pageSize: number;
     environment: any;
     txtSearch: string;
-    itemModal: Bill | BillCreateRequest
     public bsModalRef: BsModalRef;
     @ViewChild(MatPaginator) paginator: MatPaginator;
     eventsSubject: Subject<void> = new Subject<void>();
 
     ngOnInit(): void {
-        this.twoFractionDigitNumberFormat = new Intl.NumberFormat('vi-VN')
         this.pageEvent = {
             length: 0,
-            pageIndex: 0,
+            pageIndex: 1,
             pageSize: 5,
             previousPageIndex: 0,
         }
@@ -54,23 +53,25 @@ export class OrdersManagerComponent implements OnInit {
     }
 
     public getDataPaging(event: PageEvent) {
-        this.billService.getAll().subscribe((res : Bill[]) => {
-            console.log(res);
-            this.dataSourceBillTable = new MatTableDataSource<Bill>(res)
+        this.billService.getPaging(event.pageIndex, event.pageSize, this.txtSearch).subscribe((res: HttpResponse<BillPaging>) => {
+            if(res && res.status == 200){
+                this.pageEvent.length = res.body.totalRow;
+                this.dataSourceBillTable = new MatTableDataSource<Bill>(res.body.data)
+            }
         })
     }
 
     public pageEventHandle(event?: PageEvent) {
-        console.log(event);
-        this.getDataPaging(event);
+        this.pageEvent = event;
+        this.getDataPaging(this.pageEvent);
 
         return event;
     }
 
-    public createOrUpdate(entity: Bill = null) {
-        this.itemModal = entity;
+    public createdOrUpdated(entity: Bill = null) {
+
         const initialState = {
-            entity: entity,
+            entity: Object.assign({}, entity),
         };
 
         this.bsModalRef = this.modalService.show(OrderManagerDetailsComponent, {
@@ -81,11 +82,16 @@ export class OrdersManagerComponent implements OnInit {
 
         this.bsModalRef.content.saved.subscribe((e) => {
             this.bsModalRef.hide();
+            this.getDataPaging(this.pageEvent);
         });
     }
+
+    deleted(element: Bill){
+        console.log(element);
+    }
+
     public onSearch() {
         console.log(this.txtSearch);
-
     }
 
 }

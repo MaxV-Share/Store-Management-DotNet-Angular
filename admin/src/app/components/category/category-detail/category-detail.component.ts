@@ -2,24 +2,26 @@ import { Component, EventEmitter, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
-import { Lang, Category, langs, CategoryDetail, CategoryCreateRequest } from '@app/models';
+import { Lang, Category, LANGS, CategoryDetail, CategoryCreateRequest } from '@app/models';
 import { CategoryService } from '@app/shared/services';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { HttpResponse } from '@angular/common/http';
+import { BaseComponent } from '@app/models/bases';
 
 @Component({
     selector: 'app-category-detail',
     templateUrl: './category-detail.component.html',
     styleUrls: ['./category-detail.component.scss']
 })
-export default class CategoryDetailComponent implements OnInit {
+export default class CategoryDetailComponent extends BaseComponent implements OnInit {
 
     constructor(private modalService: NgbModal,
         public bsModalRef: BsModalRef,
         private categoryService: CategoryService,
-        private toastr: ToastrService,
+        public toastr: ToastrService,
         public translate: TranslateService) {
-
+        super(translate,toastr);
     }
     langs: Lang[];
     public id: number;
@@ -28,7 +30,7 @@ export default class CategoryDetailComponent implements OnInit {
     private subscription = new Subscription();
 
     ngOnInit() {
-        this.langs = langs;
+        this.langs = LANGS;
         let objCreate: CategoryCreateRequest = {
             details: [
                 {
@@ -45,10 +47,13 @@ export default class CategoryDetailComponent implements OnInit {
         }
         this.entity = objCreate;
         if (this.id != null) {
-            this.subscription.add(this.categoryService.getById(this.id).subscribe(res => {
-                console.log(res);
-
-                this.entity = res;
+            this.subscription.add(this.categoryService.getById(this.id).subscribe((res: HttpResponse<any> ) => {
+                if(res.status == 200){
+                    this.entity = res.body;
+                }
+            },err => {
+                console.error(err);
+                this.notifyError("Error");
             }))
         }
 

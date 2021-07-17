@@ -15,7 +15,7 @@ namespace App.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
-                .HasAnnotation("ProductVersion", "5.0.7");
+                .HasAnnotation("ProductVersion", "5.0.8");
 
             modelBuilder.Entity("App.Models.Entities.Bill", b =>
                 {
@@ -43,6 +43,10 @@ namespace App.Migrations
                     b.Property<double?>("DiscountPrice")
                         .HasColumnType("double")
                         .HasColumnName("discount_price");
+
+                    b.Property<double?>("PaymentAmount")
+                        .HasColumnType("double")
+                        .HasColumnName("payment_amount");
 
                     b.Property<double?>("TotalPrice")
                         .HasColumnType("double")

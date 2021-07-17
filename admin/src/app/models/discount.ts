@@ -1,4 +1,4 @@
-import { Base } from "./base"
+import { Base } from "./bases/base"
 
 export class Discount extends Base {
     percentDiscount: number

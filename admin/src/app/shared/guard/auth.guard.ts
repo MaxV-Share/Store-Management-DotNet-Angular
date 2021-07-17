@@ -4,6 +4,7 @@ import { CanActivate, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthenticationService, CookieConsentService } from '@app/shared/services';
 import { GlobalService } from '../services/global.service';
+import { HttpResponse } from '@angular/common/http';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -17,8 +18,8 @@ export class AuthGuard implements CanActivate {
         let token = this.cookieConsentService.getCookie('token');
         let result = false;
         if (token || token != '') {
-            await this.authenticationService.ValidateToken().toPromise().then((res) => {
-                this.globalService.currentUserName = res;
+            await this.authenticationService.ValidateToken().toPromise().then((res : HttpResponse<string>) => {
+                this.globalService.currentUserName = res.body;
                 result = true;
             }).catch((err) => {
                 console.error(err);

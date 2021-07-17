@@ -15,6 +15,7 @@ namespace App.Models.Entities
         public string UserPaymentId { get; set; }
         public double? TotalPrice { get; set; }
         public double? DiscountPrice { get; set; }
-        public virtual IEnumerable<BillDetail> BillDetails { get; set; }
+        public double? PaymentAmount { get; set; }
+        public virtual ICollection<BillDetail> BillDetails { get; set; }
     }
 }

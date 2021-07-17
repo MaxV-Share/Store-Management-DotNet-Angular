@@ -20,7 +20,7 @@ namespace App.Repositories
 
         public override Task<Category> GetByIdNoTrackingAsync(int id)
         {
-            return GetNoTrackingEntities().Include(e => e.CategoryDetails).SingleOrDefaultAsync(e => e.Deleted == null && e.Id == id);
+            return GetNoTrackingEntities().Include(e => e.CategoryDetails).SingleOrDefaultAsync(e => e.Id == id);
         }
         public override Task<Category> GetByIdAsync(int id)
         {

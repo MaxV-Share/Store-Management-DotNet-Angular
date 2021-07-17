@@ -46,7 +46,12 @@ namespace App.Controllers
 
             if (result != null)
                 return Ok(result);
+            var a = await Task.Run(() =>
+            {
+                return 0;
+            });
             return NotFound();
+
         }
 
     }

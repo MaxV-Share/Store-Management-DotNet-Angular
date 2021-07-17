@@ -30,7 +30,7 @@ namespace App.Services
         public async Task<IEnumerable<BillDetailViewModel>> GetByBillIdAsync(int billId, string langId)
         {
             var entities = await _repository.GetNoTrackingEntitiesIdentityResolution()
-                                        .Where(e => e.Deleted == null && e.Bill.Deleted == null && e.BillId == billId)
+                                        .Where(e => e.BillId == billId)
                                         .Select(e => new BillDetailViewModel()
                                         {
                                             BillId = billId,
@@ -40,8 +40,8 @@ namespace App.Services
                                             Product = new ProductInBillViewModel()
                                             {
                                                 ProductId = e.Product.Id,
-                                                Name = e.Product.ProductDetails.SingleOrDefault(e => e.LangId == langId && e.Deleted == null).Name,
-                                                CategoryName = e.Product.Category.CategoryDetails.SingleOrDefault(e => e.LangId == langId && e.Deleted == null).Name,
+                                                Name = e.Product.ProductDetails.SingleOrDefault(e => e.LangId == langId).Name,
+                                                CategoryName = e.Product.Category.CategoryDetails.SingleOrDefault(e => e.LangId == langId).Name,
                                                 CategoryId = e.Product.CategoryId,
                                                 ProductCode = e.Product.Code,
                                                 ProductImageUrl = e.Product.ImageUrl,

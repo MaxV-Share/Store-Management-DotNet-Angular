@@ -12,12 +12,12 @@ export class AuthenticationService {
 
     }
     Login(entity: LoginModel) {
-        return this.http.post(`${ENVIRONMENT.apiUrl}/api/Authentication/Login`, JSON.stringify(entity), { headers: ENVIRONMENT._sharedHeaders }).pipe(map((e: any) :string =>{
+        return this.http.post(`${ENVIRONMENT.apiUrl}/api/Authentication/Login`, JSON.stringify(entity), { headers: new HttpHeaders({ 'Content-Type': 'application/json' ,observe: 'events'}) }).pipe(map((e: any) :string =>{
             return e.token;
         }));
     }
     ValidateToken() {
-        return this.http.get(`${ENVIRONMENT.apiUrl}/api/Authentication/validate-token`, { headers: ENVIRONMENT._sharedHeaders, responseType: 'text' }).pipe(map((e)  =>{
+        return this.http.get(`${ENVIRONMENT.apiUrl}/api/Authentication/validate-token`, { headers: new HttpHeaders({ 'Content-Type': 'application/json' }), responseType: 'text' ,observe: 'events'}).pipe(map((e)  =>{
             return e;
         }));
     }

@@ -29,6 +29,7 @@ namespace App.Mapper
             CreateMap<CategoryDetail, CategoryDetailViewModel>();
             CreateMap<Product, ProductCreateRequest>();
             CreateMap<Product, ProductViewModel>();
+            CreateMap<Product, ProductInBillViewModel>();
             CreateMap<ProductDetail, ProductDetailCreateRequest>();
             CreateMap<ProductDetail, ProductDetailViewModel>();
             CreateMap<Bill, BillCreateRequest>();

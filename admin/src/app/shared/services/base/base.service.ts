@@ -1,12 +1,17 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 import { ENVIRONMENT } from '@app/models';
 import { throwError } from 'rxjs';
+@Component({
+    template: ''
+  })
+export abstract class BaseService implements OnInit {
 
-export abstract class BaseService {
-
-    public _sharedHeaders = new HttpHeaders();
     constructor(public http: HttpClient) {
-        this._sharedHeaders = ENVIRONMENT._sharedHeaders;
+
+
+    }
+    ngOnInit(): void {
     }
 
     protected handleError(error: any) {
