@@ -71,8 +71,8 @@ namespace App.Repositories.BaseRepository
         public virtual async Task<TEntity> CreateAsync(TEntity entity)
         {
             ValidateAndThrow(entity);
-            entity.CreateBy = (await _userService.GetCurrentUser())?.UserName;
-            entity.SetDefaultValue();
+            var currentUser = await _userService.GetCurrentUser();
+            entity.SetDefaultValue(currentUser?.UserName);
             Entities.Add(entity);
             return entity;
         }
@@ -83,8 +83,7 @@ namespace App.Repositories.BaseRepository
             var currentUser = await _userService.GetCurrentUser();
             entities.ForEach(e =>
             {
-                e.CreateBy = currentUser?.UserName;
-                e.SetDefaultValue();
+                e.SetDefaultValue(currentUser?.UserName);
             });
 
             Entities.AddRange(entities);
@@ -94,24 +93,23 @@ namespace App.Repositories.BaseRepository
         public virtual async Task<TEntity> UpdateAsync(TEntity entity)
         {
             ValidateAndThrow(entity);
-            entity.UpdateBy = (await _userService.GetCurrentUser())?.UserName;
+            var currentUser = await _userService.GetCurrentUser();
+            entity.SetValueUpdate(currentUser?.UserName);
             var entry = _context.Entry(entity);
             if (entry.State < EntityState.Added)
             {
                 entry.State = EntityState.Modified;
             }
-
-            entity.UpdateAt = DateTime.Now;
             return entity;
         }
 
         public virtual async Task<IEnumerable<TEntity>> UpdateAsync(IEnumerable<TEntity> entities)
         {
-            var userUpdated = (await _userService.GetCurrentUser())?.UserName;
+            var currentUser = await _userService.GetCurrentUser();
             entities.ToList().ForEach(e =>
             {
                 ValidateAndThrow(e);
-                e.UpdateBy = userUpdated;
+                e.SetValueUpdate(currentUser?.UserName);
             });
 
             var entry = _context.Entry(entities);

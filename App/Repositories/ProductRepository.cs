@@ -19,8 +19,7 @@ namespace App.Repositories
         public override async Task<Product> CreateAsync(Product entity)
         {
             var currentUser = await _userService.GetCurrentUser();
-            entity.CreateBy = currentUser?.UserName;
-            entity.SetDefaultValue();
+            entity.SetDefaultValue(currentUser?.UserName);
             Entities.Add(entity);
             return entity;
         }

@@ -9,22 +9,20 @@ namespace App.Models.Entities
 {
     public class Product : BaseEntity<int>
     {
-        public override void SetDefaultValue()
+        public override void SetDefaultValue(string createAt)
         {
-            base.SetDefaultValue();
+            base.SetDefaultValue(createAt);
             ProductDetails.ForEach(e =>
             {
-                e.CreateBy = CreateBy;
-                e.SetDefaultValue();
+                e.SetDefaultValue(createAt);
             });
         }
-        public override void SetValueUpdate()
+        public override void SetValueUpdate(string updateAt)
         {
-            base.SetDefaultValue();
+            base.SetDefaultValue(updateAt);
             ProductDetails.ForEach(e =>
             {
-                e.UpdateBy = UpdateBy;
-                e.SetValueUpdate();
+                e.SetValueUpdate(updateAt);
             });
         }
         public virtual Category Category { get; set; }

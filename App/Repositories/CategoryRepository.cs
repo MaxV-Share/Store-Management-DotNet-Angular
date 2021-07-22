@@ -31,8 +31,9 @@ namespace App.Repositories
         {
             ValidateAndThrow(entity);
 
+            var currentUser = await _userService.GetCurrentUser();
             var entry = _context.Entry(entity);
-            entity.SetValueUpdate();
+            entity.SetValueUpdate(currentUser?.UserName);
             _context.Update(entity);
             if (entry.State < EntityState.Added)
             {
