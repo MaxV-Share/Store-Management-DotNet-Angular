@@ -1,7 +1,9 @@
 ﻿using App.Infrastructures.Dbcontexts;
+using App.Infrastructures.UnitOffWorks;
 using App.Models.DTOs;
-using App.Models.DTOs.CreateRequest;
+using App.Models.DTOs.CreateRequests;
 using App.Models.Entities;
+using App.Models.Entities.Identities;
 using App.Repositories.BaseRepository;
 using App.Repositories.Interface;
 using App.Services.Interface;
@@ -18,7 +20,7 @@ namespace App.Repositories
     {
         private readonly ICustomerRepository _customerRepository;
         private readonly UserManager<User> _userManager;
-        public BillRepository(ApplicationDbContext context, ICustomerRepository customerRepository, UserManager<User> userManager) : base(context)
+        public BillRepository(ApplicationDbContext context, ICustomerRepository customerRepository, UserManager<User> userManager, IUserService userService) : base(context, userService)
         {
             _customerRepository = customerRepository;
             _userManager = userManager;

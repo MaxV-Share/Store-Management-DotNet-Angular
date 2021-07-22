@@ -3,6 +3,7 @@ using App.Models.DTOs;
 using App.Models.Entities;
 using App.Repositories.BaseRepository;
 using App.Repositories.Interface;
+using App.Services.Interface;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -14,7 +15,7 @@ namespace App.Repositories
 {
     public class CategoryRepository : BaseRepository<Category, int>, ICategoryRepository
     {
-        public CategoryRepository(ApplicationDbContext context) : base(context)
+        public CategoryRepository(ApplicationDbContext context, IUserService userService) : base(context, userService)
         {
         }
 
@@ -25,6 +26,23 @@ namespace App.Repositories
         public override Task<Category> GetByIdAsync(int id)
         {
             return Entities.Include(e => e.CategoryDetails.OrderBy(e => e.Lang.Order)).SingleOrDefaultAsync(e => e.Id == id);
+        }
+        public override async Task<Category> UpdateAsync(Category entity)
+        {
+            ValidateAndThrow(entity);
+
+            var entry = _context.Entry(entity);
+            entity.SetValueUpdate();
+            _context.Update(entity);
+            if (entry.State < EntityState.Added)
+            {
+                entry.State = EntityState.Modified;
+            }
+            return entity;
+        }
+        public override Task<Category> CreateAsync(Category entity)
+        {
+            return base.CreateAsync(entity);
         }
     }
 }

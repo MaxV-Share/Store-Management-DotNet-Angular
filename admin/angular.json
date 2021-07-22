@@ -17,7 +17,7 @@
                         "tsConfig": "src/tsconfig.app.json",
                         "polyfills": "src/polyfills.ts",
                         "assets": [
-                            "src/assets", 
+                            "src/assets",
                             "src/favicon.ico",
                             "src/assets/*"
                         ],
@@ -30,9 +30,12 @@
                             "node_modules/primeng-lts/resources/themes/nova-light/theme.css",
                             "node_modules/primeng-lts/resources/primeng.min.css",
                             "node_modules/primeicons/primeicons.css",
-                            "./styles.css"
+                            "./styles.css",
+                            "./max.css"
                         ],
-                        "scripts": ["node_modules/chart.js/dist/Chart.js"],
+                        "scripts": [
+                            "node_modules/chart.js/dist/Chart.js"
+                        ],
                         "allowedCommonJsDependencies": ["chart.js"]
                     },
                     "configurations": {

@@ -1,4 +1,5 @@
-﻿using MaxV.Base;
+﻿using App.Models.Entities.Identities;
+using MaxV.Base;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,6 +10,11 @@ namespace App.Models.Entities
 {
     public class Bill : BaseEntity<int>
     {
+        public override void SetValueUpdate()
+        {
+            BillDetails.ToList().ForEach(e => e.SetValueUpdate());
+            base.SetValueUpdate();
+        }
         public virtual Customer Customer { get; set; }
         public int CustomerId { get; set; }
         public virtual User UserPayment { get; set; }

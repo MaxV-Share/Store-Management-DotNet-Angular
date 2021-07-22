@@ -1,5 +1,7 @@
 ﻿using App.DTOs;
+using App.Infrastructures.UnitOffWorks;
 using App.Models.DTOs;
+using App.Models.DTOs.UpdateRquests;
 using App.Models.Entities;
 using App.Repositories;
 using App.Repositories.Interface;
@@ -13,47 +15,10 @@ using System.Threading.Tasks;
 
 namespace App.Services
 {
-    public class DiscountService : BaseService<Discount, DiscountCreateRequest, DiscountViewModel, int>, IDiscountService
+    public class DiscountService : BaseService<Discount, DiscountCreateRequest, DiscountUpdateRequest, DiscountViewModel, int>, IDiscountService
     {
-        public readonly IDiscountRepository _saleRepository;
-        public DiscountService(IDiscountRepository saleRepository, IMapper mapper) : base(saleRepository, mapper)
+        public DiscountService(IDiscountRepository discountRepository, IMapper mapper, IUnitOffWork unitOffWork) : base(discountRepository, mapper, unitOffWork)
         {
-            _saleRepository = saleRepository;
-        }
-        public async Task<DiscountViewModel> PostAsync(DiscountCreateRequest request)
-        {
-            if (request == null)
-                return null;
-            Discount obj = new Discount()
-            {
-                PercentDiscount = request.PercentDiscount,
-                MaxDiscountPrice = request.MaxDiscountPrice,
-                FromDate = request.FromDate,
-                ToDate = request.ToDate
-
-            };
-            var response = await _saleRepository.CreateAsync(obj);
-            var result = _mapper.Map<DiscountViewModel>(response);
-            return result;
-        }
-        public async Task<int> PutAsync(int id, DiscountViewModel request)
-        {
-            if (id != request.Id)
-                return 0;
-
-            var entity = await _saleRepository.GetByIdAsync(request.Id.Value);
-            if (entity == null)
-                return 0;
-            var dateTimeNow = DateTime.UtcNow;
-
-            entity.PercentDiscount = request.PercentDiscount;
-            entity.MaxDiscountPrice = request.MaxDiscountPrice;
-            entity.FromDate = request.FromDate;
-            entity.ToDate = request.ToDate;
-            entity.UpdateAt = dateTimeNow;
-
-            var result = await _repository.UpdateAsync(entity);
-            return result;
         }
     }
 }

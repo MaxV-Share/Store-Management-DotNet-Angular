@@ -52,6 +52,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserModule } from '@angular/platform-browser';
+import { NgxPrintModule } from 'ngx-print';
 
 @NgModule({
     imports: [CommonModule,
@@ -63,6 +64,8 @@ import { BrowserModule } from '@angular/platform-browser';
         FileUploadModule,
         //BrowserAnimationsModule,
         ToastrModule.forRoot(),
+
+        NgxPrintModule,
 
         MatButtonModule,
         MatTableModule,
@@ -105,6 +108,7 @@ import { BrowserModule } from '@angular/platform-browser';
     declarations: [LayoutComponent, SidebarComponent, HeaderComponent, LocalizedNumericInputDirective, MyCurrencyPipe, CategoryDetailComponent],
     exports: [LocalizedNumericInputDirective, MyCurrencyPipe,ReactiveFormsModule,FileUploadModule, CategoryDetailComponent, FormsModule, TranslateModule,
         //BrowserModule,
+        NgxPrintModule,
 
         MatTableModule,
         MatAutocompleteModule,

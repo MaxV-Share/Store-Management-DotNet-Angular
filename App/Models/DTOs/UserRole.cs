@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace App.DTO
 {
-    public static class UserRole
+    public static class USER_ROLE
     {
-        public const string Admin = "Admin";
-        public const string Employee = "Employee";
+        public const string ADMIN = "Admin";
+        public const string EMPLOYEE = "Employee";
     }
 }

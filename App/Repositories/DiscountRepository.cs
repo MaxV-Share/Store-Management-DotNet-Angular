@@ -3,6 +3,7 @@ using App.Infrastructures.Dbcontexts;
 using App.Models.Entities;
 using App.Repositories.BaseRepository;
 using App.Repositories.Interface;
+using App.Services.Interface;
 using AutoMapper;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace App.Repositories
 {
     public class DiscountRepository :  BaseRepository<Discount, int>,IDiscountRepository
     {
-        public DiscountRepository(ApplicationDbContext context) : base(context)
+        public DiscountRepository(ApplicationDbContext context, IUserService userService) : base(context, userService)
         {
         }
         public async Task<Discount> PostAsync(DiscountCreateRequest request)

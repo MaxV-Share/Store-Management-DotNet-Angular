@@ -3,6 +3,7 @@ using App.Models.DTOs;
 using App.Models.Entities;
 using App.Repositories.BaseRepository;
 using App.Repositories.Interface;
+using App.Services.Interface;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace App.Repositories
 {
     public class ProductDetailRepository : BaseRepository<ProductDetail, int>, IProductDetailRepository
     {
-        public ProductDetailRepository(ApplicationDbContext context) : base(context)
+        public ProductDetailRepository(ApplicationDbContext context, IUserService userService) : base(context, userService)
         {
         }
     }

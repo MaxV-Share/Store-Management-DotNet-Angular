@@ -3,7 +3,6 @@
 // The list of file replacements can be found in `angular.json`.
 
 import { HttpHeaders, HttpParams } from "@angular/common/http";
-import { Lang } from "./lang";
 
 export const ENVIRONMENT = {
     production: false,
@@ -14,7 +13,8 @@ export const ENVIRONMENT = {
 export const LANGS: Lang[] = [
     {
         id: "vi",
-        name: "Tiếng Việt"
+        name: "Tiếng Việt",
+
     },
     {
         id: "en",
@@ -76,3 +76,4 @@ export const OPTIONS_TEXT: {
  * on performance if an error is thrown.
  */
 // import 'zone.js/dist/zone-error';  // Included with Angular CLI.
+import { Lang } from '@app/models';

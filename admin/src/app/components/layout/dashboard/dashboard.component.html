@@ -1,6 +1,7 @@
 <div [@routerTransition]>
     <h2 class="text-muted">Tổng quan <small>Hoạt động hôm nay</small></h2>
     <hr />
+    <div></div>
     <div class="row">
         <div class="col-xl-3 col-lg-6">
             <app-stat [bgClass]="'primary'" [count]="26" [icon]="'fa-comments'" [label]="'New Comments!'"></app-stat>
@@ -21,33 +22,40 @@
         </div>
     </div>
     <hr />
-    <ngb-alert (close)="closeAlert(alert)" *ngFor="let alert of alerts" [type]="alert.type">{{
+    <p-accordion [multiple]="true">
+        <p-accordionTab header="Doanh thu theo ngày" [selected]="true">
+            <div class="max-group-position">
+                <div class="max-position-center" [hidden]="!loadingRevenueDaily">
+                    <app-loading>
+                    </app-loading>
+                </div>
+                <div (click)="testLoading()" class="btn">Tháng 7 năm 2021</div>
+                <div [ngClass]="{'max-blur-1 max-disabled-events' : loadingRevenueDaily}">
+                    <p-chart type="bar" [data]="data" [options]="chartOptions"></p-chart>
+                </div>
+            </div>
+        </p-accordionTab>
+        <p-accordionTab header="Header II">
+            <p>
+                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam
+                rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt
+                explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia
+                consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed
+                quia non numquam eius modi.
+            </p>
+        </p-accordionTab>
+        <p-accordionTab header="Header III">
+            <p>
+                At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum
+                deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non
+                provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
+                Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est
+                eligendi optio cumque nihil impedit quo minus.
+            </p>
+        </p-accordionTab>
+    </p-accordion>
+    <!-- <ngb-alert (close)="closeAlert(alert)" *ngFor="let alert of alerts" [type]="alert.type">{{
         alert.message
-    }}</ngb-alert>
+    }}</ngb-alert> -->
     <hr />
-    <div class="row">
-        <div class="col-lg-8">
-            <div class="card card-default">
-                <div class="card-header"><i class="fa fa-clock-o fa-fw"></i> Responsive Timeline</div>
-                <!-- /.card-header -->
-                <app-timeline></app-timeline>
-                <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-        </div>
-        <!-- /.col-lg-8 -->
-        <div class="col-lg-4">
-            <div class="card card-default mb-3">
-                <div class="card-header"><i class="fa fa-bell fa-fw"></i> Notifications card</div>
-                <!-- /.card-header -->
-                <app-notification></app-notification>
-                <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-
-            <app-chat></app-chat>
-            <!-- /.card .chat-card -->
-        </div>
-        <!-- /.col-lg-4 -->
-    </div>
 </div>

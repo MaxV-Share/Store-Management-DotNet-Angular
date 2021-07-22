@@ -1,5 +1,6 @@
 ﻿using App.Models.DTOs;
-using App.Models.DTOs.Paging;
+using App.Models.DTOs.PagingViewModels;
+using App.Models.DTOs.UpdateRquests;
 using App.Models.Entities;
 using App.Services.Base;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace App.Services.Interface
 {
-    public interface IProductService : IBaseService<Product, ProductCreateRequest, ProductViewModel, int>
+    public interface IProductService : IBaseService<Product, ProductCreateRequest, ProductUpdateRequest, ProductViewModel, int>
     {
         Task<ProductViewModel> CreateAsync(ProductCreateRequest request);
         Task<int> UpdateAsync(int id, ProductViewModel request);

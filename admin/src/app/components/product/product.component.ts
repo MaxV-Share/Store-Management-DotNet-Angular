@@ -7,9 +7,9 @@ import { ToastrService } from 'ngx-toastr';
 import { ENVIRONMENT, ProductDetail } from '@app/models';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { ProductService } from '@app/shared/services/product.service';
-import { ProductDetailPaging } from '@app/models/products/product-detail-paging';
-import { BaseComponent } from '@app/models/bases';
+import { ProductDetailPaging } from '@app/models/view-models/paging/product-detail-paging';
 import { HttpResponse } from '@angular/common/http';
+import { BaseComponent } from '@app/components/base';
 
 @Component({
     selector: 'app-product',
@@ -40,6 +40,8 @@ export class ProductComponent extends BaseComponent implements OnInit {
         this.pageSize = 5;
         this.txtSearch = "";
         this.getPaging(this.pageIndex, this.pageSize, "");
+
+
     }
     onSearch() {
 

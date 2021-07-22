@@ -1,0 +1,32 @@
+.max-flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.max-group-position {
+    position: relative;
+}
+.max-position-center {
+    position: absolute;
+    top: 50%;
+    right: 50%;
+}
+.max-text-color-white {
+    color: white;
+}
+.max-bg-light-gray {
+    background-color: lightgray;
+}
+.max-blur-1 {
+    filter: blur(4px);
+    -o-filter: blur(4px);
+    -ms-filter: blur(4px);
+    -moz-filter: blur(4px);
+    -webkit-filter: blur(4px);
+}
+.max-disabled-events {
+    pointer-events: none;
+    cursor: default;
+    text-decoration: none;
+    color: black;
+}

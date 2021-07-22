@@ -19,18 +19,18 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Linq;
 using System.Security.Claims;
+using Microsoft.Extensions.Logging;
 
 namespace App.Controllers
 {
     public class AuthenticationController : ApiController
     {
         private readonly IAuthenticationService _authenticationService;
-        public AuthenticationController(IAuthenticationService authentication)
+        public AuthenticationController(IAuthenticationService authentication, ILogger<AuthenticationController> logger) : base(logger)
         {
             _authenticationService = authentication;
         }
-        [HttpPost]
-        [Route("Register")]
+        [HttpPost("Register")]
         public async Task<IActionResult> Register([FromForm] RegisterDTO request)
         {
             try
@@ -47,8 +47,7 @@ namespace App.Controllers
 
         }
 
-        [HttpPost]
-        [Route("Login")]
+        [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO request)
         {
             var result = await _authenticationService.LoginAsync(request);
@@ -57,8 +56,7 @@ namespace App.Controllers
             return Ok(new { token = result.Body });
         }
 
-        [HttpPost]
-        [Route("Logout")]
+        [HttpPost("Logout")]
         public async Task<IActionResult> Logout(string request)
         {
             await _authenticationService.LogoutAsync(request);
@@ -66,10 +64,9 @@ namespace App.Controllers
         }
 
         [HttpGet("validate-token")]
-        [Authorize]
+        //[Authorize]
         public IActionResult ValidateToken([FromHeader] string authorization)
         {
-            //var token = Request.Headers[HeaderNames.Authorization];
             var result = _authenticationService.CheckToken(authorization);
             if (string.IsNullOrEmpty(result))
                 return Unauthorized();

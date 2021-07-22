@@ -12,7 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { FileUpload } from 'primeng-lts';
 import { DomSanitizer } from '@angular/platform-browser';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
-import { BaseComponent } from '@app/models/bases';
+import { BaseComponent } from '@app/components/base';
 @Component({
     selector: 'app-product-detail',
     templateUrl: './product-detail.component.html',
@@ -25,7 +25,7 @@ export class ProductDetailComponent extends BaseComponent implements OnInit {
     showAddCategory = false;
     showEditCategory = false;
     langs: Lang[];
-    public productId?: number;
+    public productId: number;
     saved: EventEmitter<any> = new EventEmitter();
     entity: Product = new Product();
     ctrCategory = new FormControl();

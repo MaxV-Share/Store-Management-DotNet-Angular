@@ -2,13 +2,13 @@ import { Component, EventEmitter, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
-import { Lang, Category, LANGS, CategoryDetail, CategoryCreateRequest } from '@app/models';
+import { Lang, Category, LANGS, CategoryDetail, CategoryCreateRequest, CategoryUpdateRequest } from '@app/models';
 import { CategoryService } from '@app/shared/services';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { HttpResponse } from '@angular/common/http';
-import { BaseComponent } from '@app/models/bases';
-
+import { BaseComponent } from '@app/components/base';
+import { CategoryDetailUpdateRequest } from '../../../models/update-requests/category-detail-update-request';
 @Component({
     selector: 'app-category-detail',
     templateUrl: './category-detail.component.html',
@@ -21,15 +21,17 @@ export default class CategoryDetailComponent extends BaseComponent implements On
         private categoryService: CategoryService,
         public toastr: ToastrService,
         public translate: TranslateService) {
-        super(translate,toastr);
+        super(translate, toastr);
     }
     langs: Lang[];
     public id: number;
     saved: EventEmitter<any> = new EventEmitter();
     public entity: any;
     private subscription = new Subscription();
-
+    a2: CategoryUpdateRequest;
     ngOnInit() {
+        // automapper
+        // .createMap(Category, CategoryCreateRequest);
         this.langs = LANGS;
         let objCreate: CategoryCreateRequest = {
             details: [
@@ -47,15 +49,23 @@ export default class CategoryDetailComponent extends BaseComponent implements On
         }
         this.entity = objCreate;
         if (this.id != null) {
-            this.subscription.add(this.categoryService.getById(this.id).subscribe((res: HttpResponse<any> ) => {
-                if(res.status == 200){
+            this.subscription.add(this.categoryService.getById(this.id).subscribe((res: HttpResponse<Category>) => {
+                if (res.status == 200) {
                     this.entity = res.body;
+                    console.log(res.body);
+                    console.log("---------------------");
+                    // this.a2 = automapper.map(Category, CategoryUpdateRequest, res.body);
+                    // var a1: CategoryUpdateRequest = automapper.map(Category, CategoryUpdateRequest, res.body);
+                    // console.log(this.a2);
+                    // console.log(a1)
+                    // console.log(JSON.stringify(a1.details))
                 }
-            },err => {
+            }, err => {
                 console.error(err);
                 this.notifyError("Error");
-            }))
+            }));
         }
+
 
     }
 

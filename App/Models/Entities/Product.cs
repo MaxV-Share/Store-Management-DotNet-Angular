@@ -9,6 +9,24 @@ namespace App.Models.Entities
 {
     public class Product : BaseEntity<int>
     {
+        public override void SetDefaultValue()
+        {
+            base.SetDefaultValue();
+            ProductDetails.ForEach(e =>
+            {
+                e.CreateBy = CreateBy;
+                e.SetDefaultValue();
+            });
+        }
+        public override void SetValueUpdate()
+        {
+            base.SetDefaultValue();
+            ProductDetails.ForEach(e =>
+            {
+                e.UpdateBy = UpdateBy;
+                e.SetValueUpdate();
+            });
+        }
         public virtual Category Category { get; set; }
         public int CategoryId { get; set; }
         [MaxLength(256)]

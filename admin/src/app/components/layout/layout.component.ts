@@ -25,7 +25,7 @@ export class LayoutComponent implements OnInit {
     };
 
     getListPosts() {
-        
+
     }
     receiveCollapsed($event) {
         this.collapedSideBar = $event;

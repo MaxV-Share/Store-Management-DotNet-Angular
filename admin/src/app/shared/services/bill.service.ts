@@ -23,6 +23,10 @@ export class BillService extends BaseService implements IBaseService<BillCreateR
         return this.http.put(`${ENVIRONMENT.apiUrl}/api/bills/${id}`, JSON.stringify(entity), OPTIONS_JSON).pipe();
         // .pipe(catchError(this.handleError));
     }
+    delete(id: number): Observable<any> {
+        return this.http.delete(`${ENVIRONMENT.apiUrl}/api/bills/${id}`, OPTIONS_JSON).pipe();
+        // .pipe(catchError(this.handleError));
+    }
     getPaging(pageIndex: number, pageSize: number, searchText: string): Observable<Object> {
         let url = `${ENVIRONMENT.apiUrl}/api/bills/filter?pageIndex=${pageIndex}&pageSize=${pageSize}&searchText=${searchText}&langId=${this.translate.currentLang}`;
         return this.http.get(url,OPTIONS_JSON)

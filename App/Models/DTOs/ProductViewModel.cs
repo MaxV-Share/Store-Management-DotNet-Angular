@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace App.Models.DTOs
 {
-    public class ProductViewModel : BaseDTO<int>
+    public class ProductViewModel : BaseDTOViewModel<int>
     {
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }

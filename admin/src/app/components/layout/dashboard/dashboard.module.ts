@@ -6,9 +6,11 @@ import { ChatComponent, NotificationComponent, TimelineComponent } from './compo
 
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
+import { AccordionModule } from 'primeng-lts';
+import { LoadingComponent } from '@app/components/loading/loading.component';
 
 @NgModule({
-    imports: [CommonModule, NgbCarouselModule, NgbAlertModule, DashboardRoutingModule, StatModule],
-    declarations: [DashboardComponent, TimelineComponent, NotificationComponent, ChatComponent]
+    imports: [CommonModule, NgbCarouselModule, NgbAlertModule, DashboardRoutingModule, StatModule,AccordionModule],
+    declarations: [DashboardComponent, TimelineComponent, NotificationComponent, ChatComponent,LoadingComponent]
 })
 export class DashboardModule {}

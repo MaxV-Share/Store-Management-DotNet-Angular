@@ -1,4 +1,4 @@
 export class BasePaging<T> {
-    totalRow: number;
-    data: T[];
+    totalRow: number = null;
+    data: T[] = [];
 }

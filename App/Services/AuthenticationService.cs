@@ -18,6 +18,8 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
+using Microsoft.Net.Http.Headers;
+using App.Models.Entities.Identities;
 
 namespace App.Services
 {
@@ -26,10 +28,17 @@ namespace App.Services
         private readonly IDistributedCache _cache;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<Role> _roleManager;
         private readonly IConfiguration _configuration;
+        private readonly IUserService _userService;
         private readonly IOptions<JwtOptions> _jwtOptions;
-        public AuthenticationService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, SignInManager<User> signInManager, IConfiguration configuration, IDistributedCache cache, IOptions<JwtOptions> jwtOptions)
+        public AuthenticationService(UserManager<User> userManager, 
+            RoleManager<Role> roleManager, 
+            SignInManager<User> signInManager, 
+            IConfiguration configuration,
+            IUserService userService,
+            IDistributedCache cache, 
+            IOptions<JwtOptions> jwtOptions)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -37,6 +46,7 @@ namespace App.Services
             _signInManager = signInManager;
             _cache = cache;
             _jwtOptions = jwtOptions;
+            _userService = userService;
         }
         public async Task<Response<string>> LoginAsync(LoginDTO request)
         {
@@ -107,8 +117,11 @@ namespace App.Services
 
                     var result = await _userManager.CreateAsync(user, request.Password);
 
-                    if (!await _roleManager.RoleExistsAsync(UserRole.Admin))
-                        await _roleManager.CreateAsync(new IdentityRole(UserRole.Admin));
+                    if (!await _roleManager.RoleExistsAsync(USER_ROLE.ADMIN))
+                    {
+                        Role role = (Role)new IdentityRole(roleName: USER_ROLE.ADMIN);
+                        await _roleManager.CreateAsync(role);
+                    }
 
                     await _userManager.AddToRolesAsync(user, request.Roles);
 
@@ -134,6 +147,7 @@ namespace App.Services
         }
         public string CheckToken(string authorization)
         {
+            _userService.GetCurrentUser();
             if (AuthenticationHeaderValue.TryParse(authorization, out var headerValue))
             {
                 // we have a valid AuthenticationHeaderValue that has the following details:

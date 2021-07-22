@@ -2,6 +2,7 @@
 using App.Models.Entities;
 using App.Repositories.BaseRepository;
 using App.Repositories.Interface;
+using App.Services.Interface;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,7 +14,7 @@ namespace App.Repositories
 {
     public class LangRepository : BaseRepository<Lang, string>, ILangRepository
     {
-        public LangRepository(ApplicationDbContext context) : base(context)
+        public LangRepository(ApplicationDbContext context, IUserService userService) : base(context, userService)
         {
         }
     }

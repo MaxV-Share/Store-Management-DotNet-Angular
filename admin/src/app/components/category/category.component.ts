@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { CategoryDetail, CategoryDetailPaging } from '@app/models';
-import { BaseComponent } from '@app/models/bases';
 import { CategoryService } from '@app/shared/services';
 import { GlobalService } from '@app/shared/services/global.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -11,6 +10,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import CategoryDetailComponent from './category-detail/category-detail.component';
+import { BaseComponent } from '@app/components/base';
 
 @Component({
     selector: 'app-category',

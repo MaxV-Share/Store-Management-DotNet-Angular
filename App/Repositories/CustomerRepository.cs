@@ -3,6 +3,7 @@ using App.Infrastructures.Dbcontexts;
 using App.Models.Entities;
 using App.Repositories.BaseRepository;
 using App.Repositories.Interface;
+using App.Services.Interface;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -14,7 +15,7 @@ namespace App.Repositories
 {
     public class CustomerRepository : BaseRepository<Customer, int>, ICustomerRepository
     {
-        public CustomerRepository(ApplicationDbContext context) : base(context)
+        public CustomerRepository(ApplicationDbContext context, IUserService userService) : base(context, userService)
         {
         }
         public async Task<Customer> PostAsync(CustomerCreateRequest request)

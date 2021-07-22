@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace App.DTO
 {
-    public class UserViewModel
+    public class UserUpdateRequest
     {
         public string Id { get; set; }
         public string UserName { get; set; }

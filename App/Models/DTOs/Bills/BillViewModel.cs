@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace App.Models.DTOs.Bills
 {
-    public class BillViewModel : BaseDTO<int>
+    public class BillViewModel : BaseDTOViewModel<int>
     {
         public string CustomerPhoneNumber { get; set; }
         public string CustomerFullName { get; set; }

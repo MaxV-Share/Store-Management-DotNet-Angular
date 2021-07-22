@@ -3,6 +3,7 @@ using App.Models.DTOs;
 using App.Models.Entities;
 using App.Repositories.BaseRepository;
 using App.Repositories.Interface;
+using App.Services.Interface;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -14,7 +15,7 @@ namespace App.Repositories
 {
     public class CategoryDetailsRepository : BaseRepository<CategoryDetail, int>, ICategoryDetailsRepository
     {
-        public CategoryDetailsRepository(ApplicationDbContext context) : base(context)
+        public CategoryDetailsRepository(ApplicationDbContext context, IUserService userService) : base(context, userService)
         {
 
         }
