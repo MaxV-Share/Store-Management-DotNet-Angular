@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace App.Models.DTOs.Bills
 {
-    public class BillDetailViewModel : BaseDTOViewModel<int>
+    public class BillDetailViewModel : BaseViewModel<int>
     {
         public int BillId { get; set; }
         public int? Quantity { get; set; }

@@ -3,6 +3,7 @@ using App.Models.DTOs;
 using App.Models.DTOs.PagingViewModels;
 using App.Models.DTOs.UpdateRquests;
 using App.Models.Entities;
+using App.Repositories;
 using App.Repositories.BaseRepository;
 using App.Repositories.Interface;
 using App.Services.Base;
@@ -31,9 +32,8 @@ namespace App.Services
             IMapper mapper, 
             IProductDetailRepository productDetailsRepository,
             IStorageService storageService, 
-            ILangRepository langRepository, 
-            ILogger<ProductService> logger,
-            ICategoryRepository categoryRepository, IUnitOffWork unitOffWork) : base(productRepository, mapper, unitOffWork)
+            ILangRepository langRepository,
+            ICategoryRepository categoryRepository, IUnitOffWork unitOffWork, ILogger<ProductService> logger) : base(productRepository, mapper, unitOffWork, logger)
         {
             _productDetailsRepository = productDetailsRepository;
             _storageService = storageService;
@@ -49,7 +49,7 @@ namespace App.Services
             var productDetails = new List<ProductDetail>();
             var oldFileName = request.File?.FileName;
             var newFileName = Guid.NewGuid().ToString() + Path.GetExtension(oldFileName);
-            _mapper.Map(product, request);
+            _mapper.Map(request, product);
             try
             {
                 Task saveFile = null;
@@ -130,7 +130,6 @@ namespace App.Services
                 await _unitOffWork.RollbackTransactionAsync();
                 throw;
             }
-            return 0;
         }
 
         public override async Task<ProductViewModel> GetByIdAsync(int id)

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace App.Models.DTOs
 {
-    public class ProductDetailViewModel : BaseDTOViewModel<int>
+    public class ProductDetailViewModel : BaseViewModel<int>
     {
         public int ProductId { get; set; }
         [JsonProperty("code")]

@@ -11,12 +11,9 @@ using System.Threading.Tasks;
 
 namespace App.Models.DTOs
 {
-    public class ProductCreateRequest : BaseDTOCreateRequest
+    public class ProductCreateRequest : BaseCreateRequest
     {
-        [JsonProperty("categoryId")]
         public int CategoryId{ get; set; }
-        [JsonProperty("name")]
-        public string Name{ get; set; }
         public string Description { get; set; }
         [MaxLength(256)]
         public string Code { get; set; }
@@ -25,6 +22,7 @@ namespace App.Models.DTOs
         public IFormFile File { get; set; }
         [JsonProperty("details")]
         [FromForm(Name = "details")]
+        [Required]
         public List<ProductDetailCreateRequest> ProductDetails { get; set; }
     }
 }

@@ -1,4 +1,7 @@
-import { BaseViewModel } from "@app/models";
+import { AutoMap } from "@automapper/classes";
+import { BaseViewModel } from "../bases";
 
-export class ProductInBill extends BaseViewModel<number>  {
+export class ProductInBill extends BaseViewModel {
+    @AutoMap()
+    id?: number;
 }

@@ -7,14 +7,14 @@ import { BaseService } from './base/base.service';
 @Injectable({
     providedIn: 'root'
 })
-export class UsersService extends BaseService {
+export class UsersService extends BaseService{
 
     constructor(public http: HttpClient) {
-        super(http);
+        super(http, 'users');
     }
 
     Gets() {
-        return this.http.get(`${ENVIRONMENT.apiUrl}/api/Users` , OPTIONS_JSON).pipe(map((e: any) => {
+        return this.http.get(`${this.apiUrl}` , OPTIONS_JSON).pipe(map((e: any) => {
             return e;
         }));
     }

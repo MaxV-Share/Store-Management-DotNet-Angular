@@ -31,18 +31,21 @@
                 </div>
                 <div (click)="testLoading()" class="btn">Tháng 7 năm 2021</div>
                 <div [ngClass]="{'max-blur-1 max-disabled-events' : loadingRevenueDaily}">
-                    <p-chart type="bar" [data]="data" [options]="chartOptions"></p-chart>
+                    <p-chart type="bar" [data]="dataDaily" [options]="chartOptions" height="80vh"></p-chart>
                 </div>
             </div>
         </p-accordionTab>
-        <p-accordionTab header="Header II">
-            <p>
-                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam
-                rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt
-                explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia
-                consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed
-                quia non numquam eius modi.
-            </p>
+        <p-accordionTab header="Doanh thu hằng tháng" header="Header II">
+            <div class="max-group-position">
+                <div class="max-position-center" [hidden]="!loadingRevenueDaily">
+                    <app-loading>
+                    </app-loading>
+                </div>
+                <div (click)="testLoading()" class="btn">Năm 2021</div>
+                <div [ngClass]="{'max-blur-1 max-disabled-events' : loadingRevenueDaily}">
+                    <p-chart type="bar" [data]="dataMonthly" [options]="chartOptions" height="80vh"></p-chart>
+                </div>
+            </div>
         </p-accordionTab>
         <p-accordionTab header="Header III">
             <p>

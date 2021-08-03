@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace App.DTOs
 {
-    public class CustomerCreateRequest : BaseDTOCreateRequest
+    public class CustomerCreateRequest : BaseCreateRequest
     {
         [JsonProperty(PropertyName = "phoneNumber", Required = Required.Always)]
         public string PhoneNumber { get; set; }

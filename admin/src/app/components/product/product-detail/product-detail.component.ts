@@ -5,7 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Observable, of, Subscription } from 'rxjs';
 import { debounceTime, delay, finalize, map, startWith, switchMap, tap } from 'rxjs/operators';
-import { Lang, Category, Product, ProductDetail, ENVIRONMENT, LANGS, CategoryDetail } from '@app/models';
+import { Lang, Category, Product, ProductDetail, ENVIRONMENT, LANGS, CategoryDetail, ProductCreateRequest } from '@app/models';
 import { CategoryService, UtilitiesService } from '@app/shared/services';
 import { ProductService } from '@app/shared/services/product.service';
 import { ToastrService } from 'ngx-toastr';
@@ -13,6 +13,8 @@ import { FileUpload } from 'primeng-lts';
 import { DomSanitizer } from '@angular/platform-browser';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { BaseComponent } from '@app/components/base';
+import { mapper } from '../../../models/index';
+import { ProductUpdateRequest } from '../../../models/update-requests/product-update-request';
 @Component({
     selector: 'app-product-detail',
     templateUrl: './product-detail.component.html',
@@ -143,24 +145,32 @@ export class ProductDetailComponent extends BaseComponent implements OnInit {
 
     onSave() {
         this.entity.categoryId = this.ctrCategory.value.categoryId;
-        let formData = this.utilitiesService.ToFormData(this.entity);
+        let formData = new FormData();
         if (this.productImage.file) {
             formData.append('file', this.productImage.file, this.productImage.file.name);
         }
         if (this.entity.id == null) {
-            this.productService.add(formData).subscribe((res: HttpResponse<any>) => {
-                if (res.status == 200) {
-                    this.translate.get('Success').subscribe(e => {
-                        this.toastr.success(e)
-                    });
-                    this.saved.emit("success");
-                }
-            }, err => {
-                this.toastr.error("error");
-                console.error(err);
-            });
+
+            let productCreate = mapper.map(this.entity,ProductCreateRequest,Product);
+            console.log(productCreate);
+            // formData = this.utilitiesService.ToFormData(productCreate,formData);
+            // console.log(productCreate);
+
+            // this.productService.add(formData).subscribe((res: HttpResponse<any>) => {
+            //     if (res.status == 200) {
+            //         this.translate.get('Success').subscribe(e => {
+            //             this.toastr.success(e)
+            //         });
+            //         this.saved.emit("success");
+            //     }
+            // }, err => {
+            //     this.toastr.error("error");
+            //     console.error(err);
+            // });
         } else {
-            console.log(this.entity);
+            let productUpdate = mapper.map(this.entity,ProductUpdateRequest,Product);
+            console.log(productUpdate);
+            this.utilitiesService.ToFormData(productUpdate,formData);
             this.productService.update(this.entity.id, formData).subscribe((res: HttpResponse<any>) => {
                 if (res.status == 200) {
                     this.translate.get('Success').subscribe(e => {

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace App.Models.DTOs
 {
-    public class CategoryViewModel : BaseDTOViewModel<int>
+    public class CategoryViewModel : BaseViewModel<int>
     {
         public int? ParentId { get; set; }
         [JsonProperty("details")]

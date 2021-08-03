@@ -4,11 +4,13 @@ using App.Models.DTOs;
 using App.Models.DTOs.CreateRequests;
 using App.Models.DTOs.UpdateRquests;
 using App.Models.Entities;
+using App.Repositories;
 using App.Repositories.Interface;
 using App.Services.Base;
 using App.Services.Interface;
 using AutoMapper;
 using MaxV.Helper.Entities;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +21,7 @@ namespace App.Services
     public class LangService : BaseService<Lang, LangCreateRequest, LangUpdateRequest, LangViewModel, string>, ILangService
     {
         public readonly ILangRepository _categoryRepository;
-        public LangService(ILangRepository saleRepository, IMapper mapper, IUnitOffWork unitOffWork) : base(saleRepository, mapper, unitOffWork)
+        public LangService(ILangRepository saleRepository, IMapper mapper, IUnitOffWork unitOffWork, ILogger<LangService> logger) : base(saleRepository, mapper, unitOffWork, logger)
         {
             _categoryRepository = saleRepository;
         }

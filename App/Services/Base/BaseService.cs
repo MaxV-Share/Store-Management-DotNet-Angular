@@ -7,23 +7,26 @@ using System.Linq;
 using System.Threading.Tasks;
 using App.Infrastructures.UnitOffWorks;
 using MaxV.Base.DTOs;
+using Microsoft.Extensions.Logging;
 
 namespace App.Services.Base
 {
     public class BaseService<TEntity, TCreateRequest, TUpdateRequest, TViewModel, TKey> : IBaseService<TEntity, TCreateRequest, TUpdateRequest, TViewModel, TKey>
         where TEntity : BaseEntity<TKey>, new()
-        where TCreateRequest : BaseDTOCreateRequest, new()
-        where TUpdateRequest : BaseDTOUpdateRequest<TKey>, new()
-        where TViewModel : BaseDTOViewModel<TKey>, new()
+        where TCreateRequest : BaseCreateRequest, new()
+        where TUpdateRequest : BaseUpdateRequest<TKey>, new()
+        where TViewModel : BaseViewModel<TKey>, new()
     {
         public IBaseRepository<TEntity, TKey> _repository;
         public readonly IMapper _mapper;
         public readonly IUnitOffWork _unitOffWork;
-        public BaseService(IBaseRepository<TEntity, TKey> baseRepository, IMapper mapper, IUnitOffWork unitOffWork)
+        public readonly ILogger _logger;
+        public BaseService(IBaseRepository<TEntity, TKey> repository, IMapper mapper, IUnitOffWork unitOffWork, ILogger logger)
         {
-            _repository = baseRepository;
+            _repository = repository;
             _mapper = mapper;
             _unitOffWork = unitOffWork;
+            _logger = logger;
         }
 
         public async Task<int> DeleteHardAsync(TKey id)

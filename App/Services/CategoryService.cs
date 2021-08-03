@@ -10,6 +10,7 @@ using App.Services.Interface;
 using AutoMapper;
 using MaxV.Helper.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -23,7 +24,7 @@ namespace App.Services
         public readonly ICategoryRepository _categoryRepository;
         private readonly ILangRepository _langRepository;
         private readonly ICategoryDetailsRepository _categoryDetailsRepository;
-        public CategoryService(ICategoryRepository categoryRepository, IMapper mapper, ILangRepository langRepository, ICategoryDetailsRepository categoryDetailsRepository, IUnitOffWork unitOffWork) : base(categoryRepository, mapper, unitOffWork)
+        public CategoryService(ICategoryRepository categoryRepository, IMapper mapper, ILangRepository langRepository, ICategoryDetailsRepository categoryDetailsRepository, IUnitOffWork unitOffWork, ILogger<CategoryService> logger) : base(categoryRepository, mapper, unitOffWork, logger)
         {
             _categoryRepository = categoryRepository;
             _langRepository = langRepository;

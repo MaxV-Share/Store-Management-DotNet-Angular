@@ -1,15 +1,26 @@
 import { BaseCreateRequest } from '@app/models';
 import { BillDetailCreateRequest } from '@app/models/create-requests';
+import { AutoMap } from '@automapper/classes';
 
 
 export class BillCreateRequest extends BaseCreateRequest {
-    customerPhoneNumber: string = '';
-    customerFullName: string = '';
-    customerAddress: string = '';
-    userPaymentId?: string = null;
-    userPaymentUserName: string = null;
-    totalPrice: number = 0;
-    discountPrice: number = 0;
-    paymentAmount: number = 0;
-    billDetails: BillDetailCreateRequest[] = []
+
+    @AutoMap()
+    customerPhoneNumber: string;
+    @AutoMap()
+    customerFullName: string;
+    @AutoMap()
+    customerAddress: string;
+    @AutoMap()
+    userPaymentId?: string;
+    @AutoMap()
+    userPaymentUserName: string;
+    @AutoMap()
+    totalPrice: number;
+    @AutoMap()
+    discountPrice: number;
+    @AutoMap()
+    paymentAmount: number;
+    @AutoMap({ typeFn: () => BillDetailCreateRequest })
+    billDetails: BillDetailCreateRequest[];
 }

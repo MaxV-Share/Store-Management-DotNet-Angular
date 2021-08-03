@@ -30,13 +30,12 @@ namespace App.Services
         private readonly UserManager<User> _userManager;
         private readonly ILogger<BillService> _logger;
         public BillService(IBillRepository repository,
-            ILogger<BillService> logger,
             IMapper mapper,
             ICustomerRepository customerRepository,
             IUserRepository userRepository,
             UserManager<User> userManager,
             IProductRepository productRepository,
-            IBillDetailRepository billDetailRepository, IUnitOffWork unitOffWork) : base(repository, mapper, unitOffWork)
+            IBillDetailRepository billDetailRepository, IUnitOffWork unitOffWork, ILogger<BillService> logger) : base(repository, mapper, unitOffWork, logger)
         {
             _logger = logger;
             _customerRepository = customerRepository;
@@ -165,7 +164,7 @@ namespace App.Services
 
                     var billDetail = new BillDetail();
 
-                    if (e.Id == null) //new BillDetail
+                    if (e.Id == 0) //new BillDetail
                     {
                         billDetail = new BillDetail()
                         {

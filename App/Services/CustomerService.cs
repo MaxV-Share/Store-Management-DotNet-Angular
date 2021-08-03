@@ -7,6 +7,7 @@ using App.Repositories.Interface;
 using App.Services.Base;
 using App.Services.Interface;
 using AutoMapper;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace App.Services
     public class CustomerService : BaseService<Customer, CustomerCreateRequest, CustomerUpdateRequest, CustomerViewModel, int>, ICustomerService
     {
 
-        public CustomerService(ICustomerRepository customerRepository, IMapper mapper, IUnitOffWork unitOffWork) : base(customerRepository, mapper, unitOffWork)
+        public CustomerService(ICustomerRepository customerRepository, IMapper mapper, IUnitOffWork unitOffWork, ILogger<CustomerService> logger) : base(customerRepository, mapper, unitOffWork, logger)
         {
         }
     }

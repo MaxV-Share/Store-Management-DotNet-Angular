@@ -3,6 +3,7 @@ export * from './bill-detail.service';
 export * from './bill.service';
 export * from './category.service';
 export * from './cookie-consent.service';
+export * from './function.service';
 export * from './global.service';
 export * from './product.service';
 export * from './revenue.service';

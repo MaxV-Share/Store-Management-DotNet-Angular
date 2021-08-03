@@ -1,13 +1,25 @@
 import { BaseViewModel ,BillDetail} from "@app/models";
+import { AutoMap } from "@automapper/classes";
 
-export class Bill  extends BaseViewModel<number> {
-    customerPhoneNumber?: string = null;
-    customerFullName?: string = null;
-    customerAddress?: string = null;
-    userPaymentId?: string = null;
-    userPaymentUserName?: string = null;
-    totalPrice: number = null;
-    discountPrice: number = null;
-    paymentAmount?: number = null;
-    billDetails: BillDetail[] = [];
+export class Bill  extends BaseViewModel {
+    @AutoMap()
+    id?: number;
+    @AutoMap()
+    customerPhoneNumber?: string;
+    @AutoMap()
+    customerFullName?: string;
+    @AutoMap()
+    customerAddress?: string;
+    @AutoMap()
+    userPaymentId?: string;
+    @AutoMap()
+    userPaymentUserName?: string;
+    @AutoMap()
+    totalPrice: number;
+    @AutoMap()
+    discountPrice: number;
+    @AutoMap()
+    paymentAmount?: number;
+    @AutoMap({ typeFn: () => BillDetail })
+    billDetails: BillDetail[];
 }

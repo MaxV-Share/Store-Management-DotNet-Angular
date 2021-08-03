@@ -77,5 +77,4 @@ export class ProductComponent extends BaseComponent implements OnInit {
         this.pageIndex = event.pageIndex + 1;
         this.getPaging(this.pageIndex, this.pageSize, this.txtSearch);
     }
-
 }

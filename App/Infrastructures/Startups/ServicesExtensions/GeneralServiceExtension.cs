@@ -3,7 +3,6 @@ using App.Infrastructures.Dbcontexts;
 using App.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using AutoMapper;
-using App.Mapper;
 using App.Services.Interface;
 using App.Services;
 using App.Repositories.Interface;
@@ -26,9 +25,9 @@ namespace App.Infrastructures.Startup.ServicesExtensions
         public static void AddGeneralConfigurations(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<ConnectionString>(configuration.GetSection("ConnectionStrings"));
+            var connectionStrings = configuration.GetSection("ConnectionStrings").Get<ConnectionString>();
             services.Configure<JwtOptions>(configuration.GetSection("JWT"));
             var appSettings = configuration.GetSection("JWT").Get<JwtOptions>();
-            var connectionStrings = configuration.GetSection("ConnectionStrings").Get<ConnectionString>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
             {

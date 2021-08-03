@@ -5,6 +5,7 @@ using AutoMapper;
 using MaxV.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,14 +21,16 @@ namespace App.Repositories.BaseRepository
         protected readonly DbContext _context;
         private DbSet<TEntity> _entitiesDbSet { get; set; }
         public readonly IUserService _userService;
+        private readonly ILogger _logger;
         #endregion props
 
         #region ctor
 
-        public BaseRepository(DbContext context, IUserService userService)
+        public BaseRepository(DbContext context, IUserService userService, ILogger logger)
         {
             _context = context;
             _userService = userService;
+            _logger = logger;
         }
 
         ~BaseRepository()
@@ -59,12 +62,6 @@ namespace App.Repositories.BaseRepository
         public virtual async Task<TEntity> GetByIdNoTrackingAsync(TKey id)
         {
             var entity = await GetNoTrackingEntities().SingleOrDefaultAsync(x => x.Id.Equals(id));
-            return entity;
-        }
-
-        public virtual async Task<TEntity> GetByUuidNoTrackingAsync(Guid uuid)
-        {
-            var entity = await GetNoTrackingEntities().SingleOrDefaultAsync(x => x.Uuid == uuid);
             return entity;
         }
 
@@ -132,11 +129,6 @@ namespace App.Repositories.BaseRepository
             ValidateAndThrow(entity);
             entity.Deleted = DateTime.Now.ToString("yyyyMMddHHmmss");
             await UpdateAsync(entity);
-        }
-        public virtual async Task<TEntity> GetByUuidAsync(Guid uuid)
-        {
-            var entity = await Entities.SingleOrDefaultAsync(x => x.Uuid == uuid);
-            return entity;
         }
         #endregion public
 

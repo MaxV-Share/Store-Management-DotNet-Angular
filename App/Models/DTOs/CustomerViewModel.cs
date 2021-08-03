@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace App.Models.DTOs
 {
-    public class CustomerViewModel : BaseDTOViewModel<int>
+    public class CustomerViewModel : BaseViewModel<int>
     {
         public string PhoneNumber { get; set; }
         public string FullName { get; set; }

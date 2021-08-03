@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace App.Models.DTOs
 {
-    public class LangViewModel : BaseDTOViewModel<string>
+    public class LangViewModel : BaseViewModel<string>
     {
         [MaxLength(20)]
         public string Name { get; set; }

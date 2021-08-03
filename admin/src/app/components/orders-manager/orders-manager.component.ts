@@ -70,8 +70,9 @@ export class OrdersManagerComponent implements OnInit {
 
     public createdOrUpdated(entity: Bill = null) {
 
+        console.log(entity);
         const initialState = {
-            entity: Object.assign({}, entity),
+            bill: entity == null ? null : Object.assign({}, entity),
         };
 
         this.bsModalRef = this.modalService.show(OrderManagerDetailsComponent, {

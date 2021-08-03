@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace App.Models.DTOs.UpdateRquests
 {
-    public class ProductUpdateRequest : BaseDTOUpdateRequest<int>
+    public class ProductUpdateRequest : BaseUpdateRequest<int>
     {
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }

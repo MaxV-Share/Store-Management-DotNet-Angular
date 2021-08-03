@@ -1,6 +1,5 @@
 ﻿using App.Models.Entities;
 using App.Infrastructures.Dbcontexts;
-using App.Mapper;
 using App.Repositories.BaseRepository;
 using App.Repositories.Interface;
 using App.Services;
@@ -11,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using App.Repositories;
 using App.Infrastructures.UnitOffWorks;
 using App.Models.Entities.Identities;
+using App.Infrastructures.Mapper;
 
 namespace App.Infrastructures.Startup.ServicesExtensions
 {
@@ -29,28 +29,35 @@ namespace App.Infrastructures.Startup.ServicesExtensions
             services.AddSingleton(mapper);
             services.AddScoped<DBInitializer>();
             services.AddScoped<IUnitOffWork, UnitOffWork>();
-            services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<UserManager<User>, UserManager<User>>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IDiscountService, DiscountService>();
-            services.AddScoped<IDiscountRepository, DiscountRepository>();
-            services.AddScoped<ICustomerService, CustomerService>();
-            services.AddScoped<ICustomerRepository, CustomerRepository>();
-            services.AddScoped<ILangRepository, LangRepository>();
-            services.AddScoped<ILangService, LangService>();
-            services.AddScoped<ICategoryService, CategoryService>();
-            services.AddScoped<ICategoryRepository, CategoryRepository>();
-            services.AddScoped<ICategoryDetailsRepository, CategoryDetailsRepository>();
-            services.AddScoped<IProductDetailRepository, ProductDetailRepository>();
-            services.AddScoped<IProductRepository, ProductRepository>();
-            services.AddScoped<IProductService, ProductService>();
-            services.AddScoped<IBillRepository, BillRepository>();
-            services.AddScoped<IBillService, BillService>();
+
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IBillDetailRepository, BillDetailRepository>();
             services.AddScoped<IBillDetailService, BillDetailService>();
+            services.AddScoped<IBillRepository, BillRepository>();
+            services.AddScoped<IBillService, BillService>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ICategoryDetailsRepository, CategoryDetailsRepository>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ICommandRepository, CommandRepository>();
+            services.AddScoped<ICommandService, CommandService>();
+            services.AddScoped<ICommandInFunctionRepository, CommandInFunctionRepository>();
+            services.AddScoped<ICommandInFunctionService, CommandInFunctionService>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IDiscountRepository, DiscountRepository>();
+            services.AddScoped<IDiscountService, DiscountService>();
             services.AddScoped<IStorageService, FileStorageService>();
+            services.AddScoped<IFunctionRepository, FunctionRepository>();
+            services.AddScoped<IFunctionService, FunctionService>();
+            services.AddScoped<ILangRepository, LangRepository>();
+            services.AddScoped<ILangService, LangService>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IProductDetailRepository, ProductDetailRepository>();
+            services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IRevenueService, RevenueService>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserService, UserService>();
         }
     }
 }

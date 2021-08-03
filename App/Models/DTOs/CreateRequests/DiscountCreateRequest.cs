@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace App.DTOs
 {
-    public class DiscountCreateRequest : BaseDTOCreateRequest
+    public class DiscountCreateRequest : BaseCreateRequest
     {
         public int? PercentDiscount { get; set; }
         public double? MaxDiscountPrice { get; set; }

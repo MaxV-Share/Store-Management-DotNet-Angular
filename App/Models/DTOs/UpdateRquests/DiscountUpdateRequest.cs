@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace App.Models.DTOs.UpdateRquests
 {
-    public class DiscountUpdateRequest : BaseDTOUpdateRequest<int>
+    public class DiscountUpdateRequest : BaseUpdateRequest<int>
     {
         public int? PercentDiscount { get; set; }
         public double? MaxDiscountPrice { get; set; }

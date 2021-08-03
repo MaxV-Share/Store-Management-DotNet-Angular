@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace App.Models.DTOs
 {
-    public class CategoryDetailCreateRequest : BaseDTOCreateRequest
+    public class CategoryDetailCreateRequest : BaseCreateRequest
     {
         [JsonProperty(PropertyName = "langId", Required = Required.Always)]
         public string LangId { get; set; }

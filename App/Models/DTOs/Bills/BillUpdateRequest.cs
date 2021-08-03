@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace App.Models.DTOs.Bills
 {
-    public class BillUpdateRequest : BaseDTOUpdateRequest<int>
+    public class BillUpdateRequest : BaseUpdateRequest<int>
     {
     }
 }

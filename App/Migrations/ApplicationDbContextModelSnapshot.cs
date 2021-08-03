@@ -64,11 +64,6 @@ namespace App.Migrations
                         .HasColumnType("varchar(767)")
                         .HasColumnName("user_payment_id");
 
-                    b.Property<byte[]>("Uuid")
-                        .IsRequired()
-                        .HasColumnType("varbinary(16)")
-                        .HasColumnName("uuid");
-
                     b.HasKey("Id")
                         .HasName("pk_bills");
 
@@ -131,11 +126,6 @@ namespace App.Migrations
                         .HasColumnType("text")
                         .HasColumnName("update_by");
 
-                    b.Property<byte[]>("Uuid")
-                        .IsRequired()
-                        .HasColumnType("varbinary(16)")
-                        .HasColumnName("uuid");
-
                     b.HasKey("Id")
                         .HasName("pk_bill_details");
 
@@ -181,11 +171,6 @@ namespace App.Migrations
                     b.Property<string>("UpdateBy")
                         .HasColumnType("text")
                         .HasColumnName("update_by");
-
-                    b.Property<byte[]>("Uuid")
-                        .IsRequired()
-                        .HasColumnType("varbinary(16)")
-                        .HasColumnName("uuid");
 
                     b.HasKey("Id")
                         .HasName("pk_categories");
@@ -242,11 +227,6 @@ namespace App.Migrations
                         .HasColumnType("text")
                         .HasColumnName("update_by");
 
-                    b.Property<byte[]>("Uuid")
-                        .IsRequired()
-                        .HasColumnType("varbinary(16)")
-                        .HasColumnName("uuid");
-
                     b.HasKey("Id")
                         .HasName("pk_category_details");
 
@@ -260,6 +240,103 @@ namespace App.Migrations
                         .HasDatabaseName("ix_category_details_lang_id");
 
                     b.ToTable("category_details");
+                });
+
+            modelBuilder.Entity("App.Models.Entities.Command", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime?>("CreateAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("create_at");
+
+                    b.Property<string>("CreateBy")
+                        .HasColumnType("text")
+                        .HasColumnName("create_by");
+
+                    b.Property<string>("Deleted")
+                        .HasColumnType("text")
+                        .HasColumnName("deleted");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("name");
+
+                    b.Property<DateTime?>("UpdateAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("update_at");
+
+                    b.Property<string>("UpdateBy")
+                        .HasColumnType("text")
+                        .HasColumnName("update_by");
+
+                    b.HasKey("Id")
+                        .HasName("pk_commands");
+
+                    b.HasIndex("Id")
+                        .HasDatabaseName("ix_commands_id");
+
+                    b.ToTable("commands");
+                });
+
+            modelBuilder.Entity("App.Models.Entities.CommandInFunction", b =>
+                {
+                    b.Property<byte[]>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varbinary(16)")
+                        .HasColumnName("id");
+
+                    b.Property<string>("CommandId")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("command_id");
+
+                    b.Property<DateTime?>("CreateAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("create_at");
+
+                    b.Property<string>("CreateBy")
+                        .HasColumnType("text")
+                        .HasColumnName("create_by");
+
+                    b.Property<string>("Deleted")
+                        .HasColumnType("text")
+                        .HasColumnName("deleted");
+
+                    b.Property<string>("FunctionId")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("function_id");
+
+                    b.Property<DateTime?>("UpdateAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("update_at");
+
+                    b.Property<string>("UpdateBy")
+                        .HasColumnType("text")
+                        .HasColumnName("update_by");
+
+                    b.HasKey("Id")
+                        .HasName("pk_command_in_function");
+
+                    b.HasIndex("CommandId")
+                        .HasDatabaseName("ix_command_in_function_command_id");
+
+                    b.HasIndex("FunctionId")
+                        .HasDatabaseName("ix_command_in_function_function_id");
+
+                    b.HasIndex("Id")
+                        .HasDatabaseName("ix_command_in_function_id");
+
+                    b.ToTable("command_in_function");
                 });
 
             modelBuilder.Entity("App.Models.Entities.Customer", b =>
@@ -306,11 +383,6 @@ namespace App.Migrations
                     b.Property<string>("UpdateBy")
                         .HasColumnType("text")
                         .HasColumnName("update_by");
-
-                    b.Property<byte[]>("Uuid")
-                        .IsRequired()
-                        .HasColumnType("varbinary(16)")
-                        .HasColumnName("uuid");
 
                     b.HasKey("Id")
                         .HasName("pk_customers");
@@ -364,11 +436,6 @@ namespace App.Migrations
                         .HasColumnType("text")
                         .HasColumnName("update_by");
 
-                    b.Property<byte[]>("Uuid")
-                        .IsRequired()
-                        .HasColumnType("varbinary(16)")
-                        .HasColumnName("uuid");
-
                     b.HasKey("Id")
                         .HasName("pk_discounts");
 
@@ -376,6 +443,69 @@ namespace App.Migrations
                         .HasDatabaseName("ix_discounts_id");
 
                     b.ToTable("discounts");
+                });
+
+            modelBuilder.Entity("App.Models.Entities.Function", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime?>("CreateAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("create_at");
+
+                    b.Property<string>("CreateBy")
+                        .HasColumnType("text")
+                        .HasColumnName("create_by");
+
+                    b.Property<string>("Deleted")
+                        .HasColumnType("text")
+                        .HasColumnName("deleted");
+
+                    b.Property<string>("Icon")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("icon");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)")
+                        .HasColumnName("name");
+
+                    b.Property<string>("ParentId")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("parent_id");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int")
+                        .HasColumnName("sort_order");
+
+                    b.Property<DateTime?>("UpdateAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("update_at");
+
+                    b.Property<string>("UpdateBy")
+                        .HasColumnType("text")
+                        .HasColumnName("update_by");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)")
+                        .HasColumnName("url");
+
+                    b.HasKey("Id")
+                        .HasName("pk_functions");
+
+                    b.HasIndex("Id")
+                        .HasDatabaseName("ix_functions_id");
+
+                    b.ToTable("functions");
                 });
 
             modelBuilder.Entity("App.Models.Entities.Identities.Role", b =>
@@ -659,11 +789,6 @@ namespace App.Migrations
                         .HasColumnType("text")
                         .HasColumnName("update_by");
 
-                    b.Property<byte[]>("Uuid")
-                        .IsRequired()
-                        .HasColumnType("varbinary(16)")
-                        .HasColumnName("uuid");
-
                     b.HasKey("Id")
                         .HasName("pk_langs");
 
@@ -671,6 +796,66 @@ namespace App.Migrations
                         .HasDatabaseName("ix_langs_id");
 
                     b.ToTable("langs");
+                });
+
+            modelBuilder.Entity("App.Models.Entities.Permission", b =>
+                {
+                    b.Property<byte[]>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varbinary(16)")
+                        .HasColumnName("id");
+
+                    b.Property<string>("CommandId")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("command_id");
+
+                    b.Property<DateTime?>("CreateAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("create_at");
+
+                    b.Property<string>("CreateBy")
+                        .HasColumnType("text")
+                        .HasColumnName("create_by");
+
+                    b.Property<string>("Deleted")
+                        .HasColumnType("text")
+                        .HasColumnName("deleted");
+
+                    b.Property<string>("FunctionId")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("function_id");
+
+                    b.Property<string>("RoleId")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("role_id");
+
+                    b.Property<DateTime?>("UpdateAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("update_at");
+
+                    b.Property<string>("UpdateBy")
+                        .HasColumnType("text")
+                        .HasColumnName("update_by");
+
+                    b.HasKey("Id")
+                        .HasName("pk_permissions");
+
+                    b.HasIndex("CommandId")
+                        .HasDatabaseName("ix_permissions_command_id");
+
+                    b.HasIndex("FunctionId")
+                        .HasDatabaseName("ix_permissions_function_id");
+
+                    b.HasIndex("Id")
+                        .HasDatabaseName("ix_permissions_id");
+
+                    b.HasIndex("RoleId")
+                        .HasDatabaseName("ix_permissions_role_id");
+
+                    b.ToTable("permissions");
                 });
 
             modelBuilder.Entity("App.Models.Entities.Product", b =>
@@ -724,11 +909,6 @@ namespace App.Migrations
                     b.Property<string>("UpdateBy")
                         .HasColumnType("text")
                         .HasColumnName("update_by");
-
-                    b.Property<byte[]>("Uuid")
-                        .IsRequired()
-                        .HasColumnType("varbinary(16)")
-                        .HasColumnName("uuid");
 
                     b.HasKey("Id")
                         .HasName("pk_products");
@@ -785,11 +965,6 @@ namespace App.Migrations
                     b.Property<string>("UpdateBy")
                         .HasColumnType("text")
                         .HasColumnName("update_by");
-
-                    b.Property<byte[]>("Uuid")
-                        .IsRequired()
-                        .HasColumnType("varbinary(16)")
-                        .HasColumnName("uuid");
 
                     b.HasKey("Id")
                         .HasName("pk_product_details");
@@ -875,6 +1050,27 @@ namespace App.Migrations
                     b.Navigation("Lang");
                 });
 
+            modelBuilder.Entity("App.Models.Entities.CommandInFunction", b =>
+                {
+                    b.HasOne("App.Models.Entities.Command", "Command")
+                        .WithMany("CommandInFunctions")
+                        .HasForeignKey("CommandId")
+                        .HasConstraintName("fk_command_in_function_commands_command_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("App.Models.Entities.Function", "Function")
+                        .WithMany("CommandInFunctions")
+                        .HasForeignKey("FunctionId")
+                        .HasConstraintName("fk_command_in_function_functions_function_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Command");
+
+                    b.Navigation("Function");
+                });
+
             modelBuilder.Entity("App.Models.Entities.Identities.RoleClaim", b =>
                 {
                     b.HasOne("App.Models.Entities.Identities.Role", "Role")
@@ -940,6 +1136,30 @@ namespace App.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("App.Models.Entities.Permission", b =>
+                {
+                    b.HasOne("App.Models.Entities.Command", "Command")
+                        .WithMany()
+                        .HasForeignKey("CommandId")
+                        .HasConstraintName("fk_permissions_commands_command_id");
+
+                    b.HasOne("App.Models.Entities.Function", "Function")
+                        .WithMany()
+                        .HasForeignKey("FunctionId")
+                        .HasConstraintName("fk_permissions_functions_function_id");
+
+                    b.HasOne("App.Models.Entities.Identities.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .HasConstraintName("fk_permissions_roles_role_id");
+
+                    b.Navigation("Command");
+
+                    b.Navigation("Function");
+
+                    b.Navigation("Role");
+                });
+
             modelBuilder.Entity("App.Models.Entities.Product", b =>
                 {
                     b.HasOne("App.Models.Entities.Category", "Category")
@@ -979,6 +1199,16 @@ namespace App.Migrations
             modelBuilder.Entity("App.Models.Entities.Category", b =>
                 {
                     b.Navigation("CategoryDetails");
+                });
+
+            modelBuilder.Entity("App.Models.Entities.Command", b =>
+                {
+                    b.Navigation("CommandInFunctions");
+                });
+
+            modelBuilder.Entity("App.Models.Entities.Function", b =>
+                {
+                    b.Navigation("CommandInFunctions");
                 });
 
             modelBuilder.Entity("App.Models.Entities.Identities.Role", b =>

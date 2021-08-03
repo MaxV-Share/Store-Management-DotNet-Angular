@@ -5,6 +5,7 @@ using App.Repositories.BaseRepository;
 using App.Repositories.Interface;
 using App.Services.Interface;
 using AutoMapper;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace App.Repositories
 {
     public class DiscountRepository :  BaseRepository<Discount, int>,IDiscountRepository
     {
-        public DiscountRepository(ApplicationDbContext context, IUserService userService) : base(context, userService)
+        public DiscountRepository(ApplicationDbContext context, IUserService userService, ILogger<DiscountRepository> logger) : base(context, userService, logger)
         {
         }
         public async Task<Discount> PostAsync(DiscountCreateRequest request)

@@ -9,10 +9,15 @@ import { BaseService } from './base/base.service';
 export class RevenueService extends BaseService {
 
     constructor(http: HttpClient) {
-        super(http);
+        super(http, 'revenues');
     }
     getRevenueDailyOfMonth(year: number,month: number){
-        let url = `${ENVIRONMENT.apiUrl}/api/revenues/daily-of-month?year=${year}&month=${month}`;
+        let url = `${this.apiUrl}/daily-of-month?year=${year}&month=${month}`;
+
+        return this.http.get(url, OPTIONS_JSON);
+    }
+    getRevenueMonthlyOfYear(year: number){
+        let url = `${this.apiUrl}/monthly-of-year?year=${year}`;
 
         return this.http.get(url, OPTIONS_JSON);
     }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace App.Models.DTOs.CreateRequests
 {
-    public class BillCreateRequest : BaseDTOCreateRequest
+    public class BillCreateRequest : BaseCreateRequest
     {
         public int? CustomerId { get; set; }
         [MaxLength(10)]

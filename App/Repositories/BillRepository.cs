@@ -9,6 +9,7 @@ using App.Repositories.Interface;
 using App.Services.Interface;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace App.Repositories
     {
         private readonly ICustomerRepository _customerRepository;
         private readonly UserManager<User> _userManager;
-        public BillRepository(ApplicationDbContext context, ICustomerRepository customerRepository, UserManager<User> userManager, IUserService userService) : base(context, userService)
+        public BillRepository(ApplicationDbContext context, ICustomerRepository customerRepository, UserManager<User> userManager, IUserService userService, ILogger<BillRepository> logger) : base(context, userService, logger)
         {
             _customerRepository = customerRepository;
             _userManager = userManager;

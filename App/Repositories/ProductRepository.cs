@@ -4,6 +4,7 @@ using App.Repositories.BaseRepository;
 using App.Repositories.Interface;
 using App.Services.Interface;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace App.Repositories
 {
     public class ProductRepository : BaseRepository<Product, int>, IProductRepository
     {
-        public ProductRepository(ApplicationDbContext context, IUserService userService) : base(context, userService)
+        public ProductRepository(ApplicationDbContext context, IUserService userService, ILogger<ProductRepository> logger) : base(context, userService, logger)
         {
         }
         public override async Task<Product> CreateAsync(Product entity)

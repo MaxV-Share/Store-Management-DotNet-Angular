@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace App.Models.DTOs.CreateRequests
 {
-    public class BillDetailCreateRequest : BaseDTOCreateRequest
+    public class BillDetailCreateRequest : BaseCreateRequest
     {
         public int ProductId { get; set; }
         public int? Quantity { get; set; }

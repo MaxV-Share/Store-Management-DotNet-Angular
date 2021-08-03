@@ -2,8 +2,8 @@ import { Component, EventEmitter, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
-import { Lang, Category, LANGS, CategoryDetail, CategoryCreateRequest, CategoryUpdateRequest } from '@app/models';
-import { CategoryService } from '@app/shared/services';
+import { Lang, Category, LANGS, CategoryDetail, CategoryCreateRequest, CategoryUpdateRequest, mapper, BaseUpdateRequest } from '@app/models';
+import { CategoryService, UtilitiesService } from '@app/shared/services';
 import { Subscription } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { HttpResponse } from '@angular/common/http';
@@ -20,25 +20,27 @@ export default class CategoryDetailComponent extends BaseComponent implements On
         public bsModalRef: BsModalRef,
         private categoryService: CategoryService,
         public toastr: ToastrService,
+        private utilitiesService: UtilitiesService,
         public translate: TranslateService) {
         super(translate, toastr);
     }
     langs: Lang[];
     public id: number;
     saved: EventEmitter<any> = new EventEmitter();
-    public entity: any;
+    public entity: Category;
     private subscription = new Subscription();
     a2: CategoryUpdateRequest;
     ngOnInit() {
         // automapper
-        // .createMap(Category, CategoryCreateRequest);
         this.langs = LANGS;
-        let objCreate: CategoryCreateRequest = {
+
+        this.entity = {
             details: [
                 {
                     langId: 'vi',
                     name: '',
                     description: '',
+
                 },
                 {
                     langId: 'en',
@@ -47,26 +49,16 @@ export default class CategoryDetailComponent extends BaseComponent implements On
                 }
             ]
         }
-        this.entity = objCreate;
         if (this.id != null) {
             this.subscription.add(this.categoryService.getById(this.id).subscribe((res: HttpResponse<Category>) => {
                 if (res.status == 200) {
                     this.entity = res.body;
-                    console.log(res.body);
-                    console.log("---------------------");
-                    // this.a2 = automapper.map(Category, CategoryUpdateRequest, res.body);
-                    // var a1: CategoryUpdateRequest = automapper.map(Category, CategoryUpdateRequest, res.body);
-                    // console.log(this.a2);
-                    // console.log(a1)
-                    // console.log(JSON.stringify(a1.details))
                 }
             }, err => {
                 console.error(err);
                 this.notifyError("Error");
             }));
         }
-
-
     }
 
     onSave() {
@@ -78,31 +70,27 @@ export default class CategoryDetailComponent extends BaseComponent implements On
     }
 
     add() {
-        this.subscription.add(this.categoryService.add(this.entity)
+        let objCreate = mapper.map(this.entity, CategoryCreateRequest, Category);
+        this.subscription.add(this.categoryService.add(objCreate)
             .subscribe(() => {
-                this.toastr.success('Success');
+                this.notifySuccess('Success');
                 this.saved.emit("success");
-                console.log("success");
-                // setTimeout(() => { this.blockedPanel = false; this.btnDisabled = false; }, 1000);
             }, err => {
-                // this.notificationService.showError(MessageConstants.DEFAULT_ERROR_MSG);
-                // console.log(error);
-                // setTimeout(() => { this.blockedPanel = false; this.btnDisabled = false; }, 1000);
                 console.error(err)
             }));
     }
 
     update(id: number) {
-        this.subscription.add(this.categoryService.update(id, this.entity)
+        let objUpdate : any = mapper.map(this.entity, CategoryUpdateRequest, Category);
+        let formData : any = this.utilitiesService.ToFormData(objUpdate);
+        console.log(objUpdate instanceof BaseUpdateRequest);
+        console.log(formData instanceof FormData);
+
+        this.subscription.add(this.categoryService.update(id, objUpdate)
             .subscribe(() => {
-                this.toastr.success('Success');
+                this.notifySuccess('Success');
                 this.saved.emit("success");
-                console.log("success")
-                // setTimeout(() => { this.blockedPanel = false; this.btnDisabled = false; }, 1000);
             }, err => {
-                // this.notificationService.showError(MessageConstants.DEFAULT_ERROR_MSG);
-                // console.log(error);
-                // setTimeout(() => { this.blockedPanel = false; this.btnDisabled = false; }, 1000);
                 console.error(err)
             }));
     }

@@ -33,6 +33,9 @@ namespace App.Infrastructures.Dbcontexts
         public virtual DbSet<Customer> Customers { set; get; }
         public virtual DbSet<Discount> Discounts { set; get; }
         public virtual DbSet<Lang> Langs { set; get; }
+        public virtual DbSet<Permission> Permissions { set; get; }
+        public virtual DbSet<Command> Commands { set; get; }
+        public virtual DbSet<Function> Functions { set; get; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -55,6 +58,12 @@ namespace App.Infrastructures.Dbcontexts
 
             builder.Entity<Lang>().HasQueryFilter(p => p.Deleted == null);
             builder.Entity<Lang>().Property(e => e.Id).HasMaxLength(256);
+
+            builder.Entity<Permission>().HasQueryFilter(p => p.Deleted == null);
+
+            builder.Entity<Command>().HasQueryFilter(p => p.Deleted == null);
+
+            builder.Entity<Function>().HasQueryFilter(p => p.Deleted == null);
 
             builder.Entity<User>()
                 .HasMany(e => e.UserRoles)

@@ -6,7 +6,7 @@ import { HttpHeaders, HttpParams } from "@angular/common/http";
 
 export const ENVIRONMENT = {
     production: false,
-    apiUrl: `http://localhost:5000`,
+    apiUrl: `http://localhost:5000/api`,
     fileUrl: `http://localhost:5000/Files/`,
 
 };
@@ -33,7 +33,8 @@ export const OPTIONS_DEFAULT: {
     responseType?: 'json';
     withCredentials?: boolean;
 } = {
-    observe: 'events'
+    observe: 'events',
+    reportProgress: true,
 }
 export const OPTIONS_JSON : {
     headers?: HttpHeaders | {

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace App.Models.DTOs.UpdateRquests
 {
-    public class ProductDetailUpdateRequest : BaseDTOUpdateRequest<int>
+    public class ProductDetailUpdateRequest : BaseUpdateRequest<int>
     {
         public int ProductId { get; set; }
         [JsonProperty("code")]

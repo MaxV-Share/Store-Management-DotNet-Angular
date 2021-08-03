@@ -53,6 +53,10 @@ const routes: Routes = [
                 path: 'orders-manager',
                 loadChildren: () => import('@app/components/orders-manager/orders-manager.module').then(m => m.OrdersManagerModule)
             },
+            {
+                path: 'systems',
+                loadChildren: () => import('@app/components/systems/systems.module').then(m => m.SystemsModule)
+            },
         ]
     }
 ];

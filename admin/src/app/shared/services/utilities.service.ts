@@ -4,9 +4,8 @@ import { BaseService } from './base/base.service';
 import { catchError } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
-export class UtilitiesService extends BaseService {
+export class UtilitiesService {
     constructor(http: HttpClient) {
-        super(http);
     }
     UnflatteringForLeftMenu = (arr: any[]): any[] => {
         const map = {};

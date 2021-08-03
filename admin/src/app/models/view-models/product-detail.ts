@@ -1,10 +1,19 @@
 import { BaseViewModel,Product } from "@app/models";
+import { AutoMap } from "@automapper/classes";
 
-export class ProductDetail extends BaseViewModel<number>  {
-    productId: number = null;
-    product: Product = null;
-    price?: number = null;
-    langId: string = null;
-    name: string = null;
-    description: string = null;
+export class ProductDetail extends BaseViewModel {
+    @AutoMap()
+    id?: number;
+    @AutoMap()
+    productId: number;
+    @AutoMap()
+    product: Product;
+    @AutoMap()
+    price?: number;
+    @AutoMap()
+    langId: string;
+    @AutoMap()
+    name: string;
+    @AutoMap()
+    description: string;
 }

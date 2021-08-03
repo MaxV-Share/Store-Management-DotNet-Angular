@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace App.Models.DTOs.UpdateRquests
 {
-    public class CategoryDetailUpdateRequest : BaseDTOUpdateRequest<int>
+    public class CategoryDetailUpdateRequest : BaseUpdateRequest<int>
     {
         public int CategoryId { get; set; }
         public string LangId { get; set; }

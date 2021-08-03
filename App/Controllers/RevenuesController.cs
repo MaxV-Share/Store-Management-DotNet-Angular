@@ -20,8 +20,8 @@ namespace App.Controllers
         [HttpGet("monthly-of-year")]
         public async Task<ActionResult> GetRevenueMonthlyOfYear(int year)
         {
-            await _revenueService.RevenueMonthlyOfYear(year);
-            return Ok();
+            var result = await _revenueService.RevenueMonthlyOfYear(year);
+            return Ok(result);
         }
         [HttpGet("daily-of-month")]
         public async Task<ActionResult> GetRevenueDailyOfMonth(int year, int month)

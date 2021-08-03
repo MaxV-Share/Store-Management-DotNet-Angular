@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace App.DTO
 {
-    public class UserCreateRequest : BaseDTOCreateRequest
+    public class UserCreateRequest : BaseCreateRequest
     {
         public string UserName { get; set; }
         public string Password { get; set; }

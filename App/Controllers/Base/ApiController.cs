@@ -13,8 +13,8 @@ namespace App.Controllers.Base
     [ApiController]
     public class ApiController : ControllerBase
     {
-        protected readonly ILogger<ApiController> _logger;
-        public ApiController(ILogger<ApiController> logger)
+        protected readonly ILogger _logger;
+        public ApiController(ILogger logger)
         {
             _logger = logger;
         }

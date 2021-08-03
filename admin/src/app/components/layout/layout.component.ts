@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { mapper } from '@app/models';
+import { autoMapperProfile } from '@app/shared/infrastructures/auto-mapper';
 import { TranslateService } from '@ngx-translate/core';
 @Component({
     selector: 'app-layout',
@@ -12,16 +14,11 @@ export class LayoutComponent implements OnInit {
     constructor(private translate: TranslateService, private http: HttpClient) { }
 
     ngOnInit() {
+        mapper.addProfile(autoMapperProfile)
         if(localStorage.getItem('lang') == null){
             localStorage.setItem('lang', navigator.language.substring(0, 2));
         }
         this.translate.use(localStorage.getItem('lang'));
-        // console.log(navigator);
-        // this.http.get('http://api.ipify.org/',{responseType: 'text'}).toPromise().then(res => {
-        //     console.log(res);
-        // }).catch(e => {
-        //     console.error(e);
-        // })
     };
 
     getListPosts() {

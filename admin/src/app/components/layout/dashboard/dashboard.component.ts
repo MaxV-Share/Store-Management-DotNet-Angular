@@ -19,62 +19,29 @@ export class DashboardComponent extends BaseComponent implements OnInit {
     public alerts: Array<any> = [];
     public sliders: Array<any> = [];
 
-    data: any;
-
+    dataDaily: any;
+    dataMonthly: any;
     chartOptions: any;
     loadingRevenueDaily: boolean = false;
+    loadingRevenueMonth: boolean = false;
     subscription: Subscription;
 
-    constructor(private usersServices: UsersService, private revenueService: RevenueService, protected translate: TranslateService,
+    constructor(private usersServices: UsersService,
+        private revenueService: RevenueService,
+        protected translate: TranslateService,
         protected toastr: ToastrService) {
         super(translate,toastr);
-        this.sliders.push(
-            {
-                imagePath: 'assets/images/slider1.jpg',
-                label: 'First slide label',
-                text: 'Nulla vitae elit libero, a pharetra augue mollis interdum.'
-            },
-            {
-                imagePath: 'assets/images/slider2.jpg',
-                label: 'Second slide label',
-                text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-            },
-            {
-                imagePath: 'assets/images/slider3.jpg',
-                label: 'Third slide label',
-                text: 'Praesent commodo cursus magna, vel scelerisque nisl consectetur.'
-            }
-        );
-
-        this.alerts.push(
-            {
-                id: 1,
-                type: 'success',
-                message: `Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Voluptates est animi quibusdam praesentium quam, et perspiciatis,
-                consectetur velit culpa molestias dignissimos
-                voluptatum veritatis quod aliquam! Rerum placeat necessitatibus, vitae dolorum`
-            },
-            {
-                id: 2,
-                type: 'warning',
-                message: `Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Voluptates est animi quibusdam praesentium quam, et perspiciatis,
-                consectetur velit culpa molestias dignissimos
-                voluptatum veritatis quod aliquam! Rerum placeat necessitatibus, vitae dolorum`
-            }
-        );
         // usersServices.Gets().toPromise()
         //     .then(e => console.log(e)
         //     ).catch(ex => console.log(ex)
         //     )
         this.getRevenueDailyOfMonth();
-
+        this.getRevenueMonthlyOfYear();
         this.chartOptions = {
             responsive: true,
             title: {
                 display: false,
-                text: 'Combo Bar Line Chart'
+                text: 'Combo Bar Chart'
             },
             tooltips: {
                 mode: 'index',
@@ -82,6 +49,8 @@ export class DashboardComponent extends BaseComponent implements OnInit {
             }
         };
     }
+
+    ngOnInit() { }
 
     async testLoading(){
         this.loadingRevenueDaily = true;
@@ -94,17 +63,18 @@ export class DashboardComponent extends BaseComponent implements OnInit {
         this.revenueService.getRevenueDailyOfMonth(2021, 7).subscribe((res: HttpResponse<Revenue[]>) => {
             if(res.status == 200){
                 console.log(res);
-                let labels = res.body.map(e => e.id);
-                let data = res.body.map(e => e.totalPrice);
+                let labels = [" "].concat(res.body.map(e => e.id));
+                let datas = [0].concat(res.body.map(e => e.totalPrice));
+                console.log
                 this.translate.get('Revenue').subscribe((text) => {
-                    this.data = {
+                    this.dataDaily = {
                         labels: labels,
                         datasets: [
                             {
                                 type: 'bar',
                                 label: text,
                                 backgroundColor: '#66BB66',
-                                data: data,
+                                data: datas,
                                 borderColor: '#007bff',
                                 borderWidth: 2
                             },
@@ -117,61 +87,36 @@ export class DashboardComponent extends BaseComponent implements OnInit {
         })
     }
 
-    applyLightTheme() {
-        this.chartOptions = {
-            legend: {
-                labels: {
-                    fontColor: '#495057'
-                }
-            },
-            scales: {
-                xAxes: [{
-                    ticks: {
-                        fontColor: '#495057'
-                    }
-                }],
-                yAxes: [{
-                    ticks: {
-                        fontColor: '#495057'
-                    }
-                }]
+    getRevenueMonthlyOfYear() {
+        this.loadingRevenueMonth = true;
+        this.revenueService.getRevenueMonthlyOfYear(2021).subscribe((res: HttpResponse<Revenue[]>) => {
+            if(res.status == 200){
+                let labels = [" "].concat(res.body.map(e => e.id));
+                let datas = [0].concat(res.body.map(e => e.totalPrice));
+                this.translate.get('Revenue').subscribe((text) => {
+                    this.dataMonthly = {
+                        labels: labels,
+                        datasets: [
+                            {
+                                type: 'bar',
+                                label: text,
+                                backgroundColor: '#66BB66',
+                                data: datas,
+                                borderColor: '#007bff',
+                                borderWidth: 2
+                            },
+                        ]
+                    };
+                });
             }
-        }
+
+            this.loadingRevenueMonth = false;
+        })
     }
 
-    applyDarkTheme() {
-        this.chartOptions = {
-            legend: {
-                labels: {
-                    fontColor: '#ebedef'
-                }
-            },
-            scales: {
-                xAxes: [{
-                    ticks: {
-                        fontColor: '#ebedef'
-                    },
-                    gridLines: {
-                        color: 'rgba(255,255,255,0.2)'
-                    }
-                }],
-                yAxes: [{
-                    ticks: {
-                        fontColor: '#ebedef'
-                    },
-                    gridLines: {
-                        color: 'rgba(255,255,255,0.2)'
-                    }
-                }]
-            }
-        };
-    }
-
-    ngOnInit() { }
 
     public closeAlert(alert: any) {
         const index: number = this.alerts.indexOf(alert);
         this.alerts.splice(index, 1);
-
     }
 }

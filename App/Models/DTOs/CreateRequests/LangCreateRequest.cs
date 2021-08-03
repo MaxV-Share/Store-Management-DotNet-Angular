@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace App.Models.DTOs.CreateRequests
 {
-    public class LangCreateRequest : BaseDTOCreateRequest
+    public class LangCreateRequest : BaseCreateRequest
     {
         [MaxLength(10)]
         public string Id { get; set; }

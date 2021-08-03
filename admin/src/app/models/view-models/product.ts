@@ -1,10 +1,18 @@
+import { BaseViewModel } from "../bases";
+import { ProductDetail } from "./product-detail";
+import { AutoMap } from "@automapper/classes";
 
-import { BaseViewModel ,ProductDetail} from "@app/models";
-
-export class Product  extends BaseViewModel<number> {
-    categoryId?: number = null;
-    price?: number = null;
-    code?: string = null;
-    imageUrl?: string = null;
-    details: ProductDetail[] = []
+export class Product  extends BaseViewModel {
+    @AutoMap()
+    id?: number;
+    @AutoMap()
+    categoryId?: number;
+    @AutoMap()
+    price?: number;
+    @AutoMap()
+    code?: string;
+    @AutoMap()
+    imageUrl?: string;
+    @AutoMap({ typeFn: () => ProductDetail })
+    details: ProductDetail[]
 }

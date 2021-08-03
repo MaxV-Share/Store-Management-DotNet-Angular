@@ -75,7 +75,7 @@ namespace App.Services
                 issuer: _configuration["JWT:ValidIssuer"],
                 audience: _configuration["JWT:ValidAudience"],
                 claims: authClaims,
-                expires: DateTime.Now.AddHours(5),
+                expires: DateTime.Now.AddMinutes(100000),
                 signingCredentials: new SigningCredentials(authSigninKey, SecurityAlgorithms.HmacSha256)
                 );
             return new Response<string>(StatusCodes.Status200OK,"Success", new JwtSecurityTokenHandler().WriteToken(token));
@@ -147,7 +147,6 @@ namespace App.Services
         }
         public string CheckToken(string authorization)
         {
-            _userService.GetCurrentUser();
             if (AuthenticationHeaderValue.TryParse(authorization, out var headerValue))
             {
                 // we have a valid AuthenticationHeaderValue that has the following details:

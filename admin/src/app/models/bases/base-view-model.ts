@@ -1,8 +1,12 @@
-export class BaseViewModel<T> {
-    id?: T = null;
-    uuid?: string = null;
-    createAt?: Date = null;
-    updateAt?: Date = null;
-    createBy?: Date = null;
-    updateBy?: Date = null;
+import { AutoMap } from "@automapper/classes";
+
+export class BaseViewModel {
+    @AutoMap()
+    createAt?: Date ;
+    @AutoMap()
+    updateAt?: Date ;
+    @AutoMap()
+    createBy?: Date;
+    @AutoMap()
+    updateBy?: Date ;
 }

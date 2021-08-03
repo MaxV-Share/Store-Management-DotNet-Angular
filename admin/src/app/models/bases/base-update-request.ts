@@ -1,4 +1,5 @@
-export class BaseUpdateRequest<T> {
-    id?: T = null;
-    uuid?: string = null;
+import { AutoMap } from "@automapper/classes";
+
+export class BaseUpdateRequest{
 }
+

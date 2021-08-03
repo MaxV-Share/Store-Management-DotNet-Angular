@@ -1,4 +1,8 @@
-import { BaseViewModel } from '@app/models';
-export class Lang  extends BaseViewModel<string>{
+import { AutoMap } from "@automapper/classes";
+
+export class Lang {
+    @AutoMap()
+    id?: string;
+    @AutoMap()
     name: string
 }

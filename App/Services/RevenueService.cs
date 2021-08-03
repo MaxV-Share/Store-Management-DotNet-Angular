@@ -17,7 +17,6 @@ namespace App.Services
     public class RevenueService : IRevenueService
     {
         private readonly IBillRepository _billRepository;
-        private readonly IConfiguration _configuration;
         private readonly ConnectionString _connectionString;
         public RevenueService(IBillRepository billRepository, IOptions<ConnectionString> connectionString)
         {

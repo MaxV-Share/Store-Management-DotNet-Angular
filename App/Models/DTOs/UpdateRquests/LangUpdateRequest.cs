@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace App.Models.DTOs.UpdateRquests
 {
-    public class LangUpdateRequest : BaseDTOUpdateRequest<string>
+    public class LangUpdateRequest : BaseUpdateRequest<string>
     {
         [MaxLength(10)]
         public override string Id { get; set; }

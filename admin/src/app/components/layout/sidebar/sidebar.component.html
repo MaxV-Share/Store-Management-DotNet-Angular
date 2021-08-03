@@ -4,8 +4,25 @@
             <i class="fa fa-fw fa-dashboard"></i>&nbsp;
             <span>{{ 'Dashboard' | translate }}</span>
         </a>
+
+        <div class="nested-menu">
+            <a (click)="addExpandClass('Systems')" class="list-group-item">
+                <i class="fa fa-plus"></i>&nbsp;
+                <span>{{ 'Systems' | translate }}</span>
+            </a>
+            <li [class.expand]="showMenu === 'Systems'" class="nested">
+                <ul class="submenu">
+                    <li>
+                        <a [routerLinkActive]="['router-link-active']" [routerLink]="['/systems/functions']" class="list-group-item">
+                            <i class="fa fa-fw fa-percent"></i>&nbsp;
+                            <span>{{ 'Functions' | translate }}</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </div>
         <a [routerLinkActive]="['router-link-active']" [routerLink]="['/orders-manager']" class="list-group-item">
-            <i class="fa fa-fw fa-percent" ></i>&nbsp;
+            <i class="fa fa-fw fa-percent"></i>&nbsp;
             <span>{{ 'Orders manager' | translate }}</span>
         </a>
         <a [routerLinkActive]="['router-link-active']" [routerLink]="['/categories']" class="list-group-item">
@@ -17,7 +34,7 @@
             <span>{{ 'Products' | translate }}</span>
         </a>
         <a [routerLinkActive]="['router-link-active']" [routerLink]="['/discounts']" class="list-group-item">
-            <i class="fa fa-fw fa-percent" ></i>&nbsp;
+            <i class="fa fa-fw fa-percent"></i>&nbsp;
             <span>{{ 'Discounts' | translate }}</span>
         </a>
         <a [routerLinkActive]="['router-link-active']" [routerLink]="['/charts']" class="list-group-item">

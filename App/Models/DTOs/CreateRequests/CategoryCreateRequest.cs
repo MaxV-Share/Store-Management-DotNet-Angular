@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace App.Models.DTOs
 {
-    public class CategoryCreateRequest : BaseDTOCreateRequest
+    public class CategoryCreateRequest : BaseCreateRequest
     {
         [JsonProperty(PropertyName = "details")]
         public List<CategoryDetailCreateRequest> CategoryDetails { get; set; }

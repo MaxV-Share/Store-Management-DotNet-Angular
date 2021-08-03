@@ -5,6 +5,7 @@ using App.Repositories.Interface;
 using App.Services.Interface;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace App.Repositories
 {
     public class LangRepository : BaseRepository<Lang, string>, ILangRepository
     {
-        public LangRepository(ApplicationDbContext context, IUserService userService) : base(context, userService)
+        public LangRepository(ApplicationDbContext context, IUserService userService, ILogger<LangRepository> logger) : base(context, userService, logger)
         {
         }
     }

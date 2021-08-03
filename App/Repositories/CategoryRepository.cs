@@ -6,6 +6,8 @@ using App.Repositories.Interface;
 using App.Services.Interface;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +17,7 @@ namespace App.Repositories
 {
     public class CategoryRepository : BaseRepository<Category, int>, ICategoryRepository
     {
-        public CategoryRepository(ApplicationDbContext context, IUserService userService) : base(context, userService)
+        public CategoryRepository(ApplicationDbContext context, IUserService userService, ILogger<CategoryRepository> logger) : base(context, userService, logger)
         {
         }
 

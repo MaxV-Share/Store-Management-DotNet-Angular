@@ -9,23 +9,23 @@ export abstract class BaseComponent {
 
     }
 
-    notifySuccess(message: string)
+    notifySuccess(message: string = 'Success')
     {
-        this.translate.get('Success').subscribe(e => {
+        this.translate.get(message).subscribe(e => {
             this.toastr.success(e)
         });
     }
 
-    notifyError(message: string)
+    notifyError(message: string = 'Error')
     {
-        this.translate.get('Success').subscribe(e => {
+        this.translate.get(message).subscribe(e => {
             this.toastr.error(e)
         });
     }
 
-    notifyWarning(message: string)
+    notifyWarning(message: string = 'Warning')
     {
-        this.translate.get('Success').subscribe(e => {
+        this.translate.get(message).subscribe(e => {
             this.toastr.warning(e)
         });
     }
