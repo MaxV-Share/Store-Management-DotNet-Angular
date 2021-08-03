@@ -1,0 +1,33 @@
+<div>
+    <p-treeTable [value]="treeFunctions" [columns]="cols">
+        <ng-template pTemplate="caption">
+            Functions
+        </ng-template>
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of columns">
+                    {{col.header}}
+                </th>
+                <th style="width: 8rem">
+                    <p-button icon="pi pi-cog"></p-button>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
+            <tr>
+                <td *ngFor="let col of columns; let i = index">
+                    <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
+                    {{rowData[col.field]}}
+                </td>
+                <td>
+                    <button pButton icon="pi pi-pencil" styleClass="p-button-warning" (click)="createOrUpdate(rowData)"></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div style="text-align:left">
+                <p-button icon="pi pi-refresh" (click)="loadFunction()"></p-button>
+            </div>
+        </ng-template>
+    </p-treeTable>
+</div>

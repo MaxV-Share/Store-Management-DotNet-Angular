@@ -1,8 +1,10 @@
-﻿using App.Models.DTOs;
+﻿using App.Infrastructures.UnitOffWorks;
+using App.Models.DTOs;
 using App.Models.DTOs.Bills;
-using App.Models.DTOs.CreateRequest;
-using App.Models.DTOs.Paging;
+using App.Models.DTOs.CreateRequests;
+using App.Models.DTOs.PagingViewModels;
 using App.Models.Entities;
+using App.Models.Entities.Identities;
 using App.Repositories.BaseRepository;
 using App.Repositories.Interface;
 using App.Services.Base;
@@ -19,7 +21,7 @@ using System.Threading.Tasks;
 
 namespace App.Services
 {
-    public class BillService : BaseService<Bill, BillCreateRequest, BillViewModel, int>, IBillService
+    public class BillService : BaseService<Bill, BillCreateRequest,  BillUpdateRequest, BillViewModel, int>, IBillService
     {
         private readonly ICustomerRepository _customerRepository;
         private readonly IProductRepository _productRepository;
@@ -28,13 +30,12 @@ namespace App.Services
         private readonly UserManager<User> _userManager;
         private readonly ILogger<BillService> _logger;
         public BillService(IBillRepository repository,
-            ILogger<BillService> logger,
             IMapper mapper,
             ICustomerRepository customerRepository,
             IUserRepository userRepository,
             UserManager<User> userManager,
             IProductRepository productRepository,
-            IBillDetailRepository billDetailRepository) : base(repository, mapper)
+            IBillDetailRepository billDetailRepository, IUnitOffWork unitOffWork, ILogger<BillService> logger) : base(repository, mapper, unitOffWork, logger)
         {
             _logger = logger;
             _customerRepository = customerRepository;
@@ -46,9 +47,10 @@ namespace App.Services
 
         public async Task<BillViewModel> CreateAsync(BillCreateRequest request)
         {
+            var dateTimeNow = DateTime.Now;
             try
             {
-                await _repository.BeginTransactionAsync();
+                await _unitOffWork.BeginTransactionAsync();
 
                 var tUserPayment = _userManager.FindByNameAsync(request.UserPaymentUserName);
                 var customer = await _customerRepository.GetByPhoneNumberAsync(request.CustomerPhoneNumber);
@@ -62,6 +64,7 @@ namespace App.Services
                         Birthday = request.CustomerBirthday,
                     };
                     await _customerRepository.CreateAsync(customer);
+                    await _unitOffWork.SaveChangesAsync();
                 }
 
                 var billDetails = new List<BillDetail>();
@@ -74,6 +77,7 @@ namespace App.Services
                         Price = detail.Price,
                         Quantity = detail.Quantity,
                         DiscountPrice = detail.DiscountPrice,
+                        CreateAt = dateTimeNow,
                     });
                 }
 
@@ -90,16 +94,23 @@ namespace App.Services
 
                 await _repository.CreateAsync(bill);
 
+                var effectedCount = await _unitOffWork.SaveChangesAsync();
+                if (effectedCount == 0)
+                {   
+                    //ToDo: Định nghĩa lại exceptionm
+                    throw new Exception();
+                }
+
                 var result = _mapper.Map<BillViewModel>(bill);
 
-                await _repository.CommitTransactionAsync();
+                await _unitOffWork.CommitTransactionAsync();
 
                 return result;
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.StackTrace);
-                await _repository.RollbackTransactionAsync();
+                await _unitOffWork.RollbackTransactionAsync();
                 return null;
             }
         }
@@ -107,7 +118,7 @@ namespace App.Services
         {
             try
             {
-                await _repository.BeginTransactionAsync();
+                await _unitOffWork.BeginTransactionAsync();
 
                 var tUserPayment = _userManager.FindByNameAsync(request.UserPaymentUserName);
                 var customer = await _customerRepository.GetByPhoneNumberAsync(request.CustomerPhoneNumber);
@@ -122,6 +133,7 @@ namespace App.Services
                         Birthday = request.CustomerBirthday,
                     };
                     await _customerRepository.CreateAsync(customer);
+                    await _unitOffWork.SaveChangesAsync();
                 }
 
                 var bill = await _repository.GetQueryableTable()
@@ -144,7 +156,7 @@ namespace App.Services
                     {
                         tDeleteDetails.Add(_billDetailRepository.DeleteSoftAsync(detail.Id));
                     }
-                }    
+                }
 
                 var billDetailsNew = new List<BillDetail>();
                 request.billDetails.ForEach(async e =>
@@ -152,25 +164,25 @@ namespace App.Services
 
                     var billDetail = new BillDetail();
 
-                    if(e.Id == null) //new BillDetail
+                    if (e.Id == 0) //new BillDetail
                     {
-                        billDetail = new BillDetail()  
+                        billDetail = new BillDetail()
                         {
                             Price = e.Price,
                             ProductId = e.ProductId,
                             Quantity = e.Quantity,
                             DiscountPrice = e.DiscountPrice,
-                            BillId = request.Id.Value,
+                            BillId = request.Id,
                         };
                     }
                     else // update BillDetail
                     {
-                        billDetail = await _billDetailRepository.GetByIdAsync(e.Id.Value);
+                        billDetail = await _billDetailRepository.GetByIdAsync(e.Id);
                         billDetail.Price = e.Price;
                         billDetail.ProductId = e.ProductId;
                         billDetail.Quantity = e.Quantity;
                         billDetail.DiscountPrice = e.DiscountPrice;
-                        billDetail.BillId = request.Id.Value;
+                        billDetail.BillId = request.Id;
                     }
 
                     billDetailsNew.Add(billDetail);
@@ -178,14 +190,15 @@ namespace App.Services
                 bill.BillDetails = billDetailsNew;
 
                 await Task.WhenAll(tDeleteDetails);
-                var result = await _repository.UpdateAsync(bill);
-                await _repository.CommitTransactionAsync();
+                await _repository.UpdateAsync(bill);
+                var result = await _unitOffWork.SaveChangesAsync();
+                await _unitOffWork.CommitTransactionAsync();
 
                 return result;
             }
             catch (Exception)
             {
-                await _repository.RollbackTransactionAsync();
+                await _unitOffWork.RollbackTransactionAsync();
                 throw;
             }
         }

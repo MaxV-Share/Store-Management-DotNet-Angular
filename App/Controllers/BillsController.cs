@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using App.Controllers.Base;
 using App.Models.DTOs;
 using App.Models.DTOs.Bills;
-using App.Models.DTOs.CreateRequest;
+using App.Models.DTOs.CreateRequests;
 using App.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,13 +18,12 @@ namespace App.Controllers
     {
         public readonly IBillService _billService;
         public readonly IBillDetailService _billDetailService;
-        private readonly ILogger<BillsController> _logger;
-        public BillsController(IBillService billService, IBillDetailService billDetailService, ILogger<BillsController> logger)
+        public BillsController(IBillService billService, IBillDetailService billDetailService, ILogger<BillsController> logger) : base(logger)
         {
             _billService = billService;
             _billDetailService = billDetailService;
-            _logger = logger;
         }
+
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] BillCreateRequest request)
         {
@@ -53,6 +52,25 @@ namespace App.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var result = await _billService.DeleteSoftAsync(id);
+            if (result >= 0)
+                return Ok(result);
+            return NotFound();
+        }
+        [HttpGet("")]
+        public async Task<ActionResult> GetAll()
+        {
+            var result = await _billService.GetAllDTOAsync();
+
+            if (result != null)
+                return Ok(result);
+            return NotFound();
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult> GetById(int id)
         {
@@ -62,19 +80,10 @@ namespace App.Controllers
                 return Ok(result);
             return NotFound();
         }
-        [HttpGet("{billId}/details")]
-        public async Task<ActionResult> GetBillDetailByBillId(int billId, string langId)
+        [HttpGet("{id}/details")]
+        public async Task<ActionResult> GetBillDetailByBillId(int id, string langId)
         {
-            var result = await _billDetailService.GetByBillIdAsync(billId, langId);
-
-            if (result != null)
-                return Ok(result);
-            return NotFound();
-        }
-        [HttpGet("")]
-        public async Task<ActionResult> GetAll()
-        {
-            var result = await _billService.GetAllDTOAsync();
+            var result = await _billDetailService.GetByBillIdAsync(id, langId);
 
             if (result != null)
                 return Ok(result);
@@ -89,6 +98,5 @@ namespace App.Controllers
                 return Ok(result);
             return NotFound();
         }
-
     }
 }

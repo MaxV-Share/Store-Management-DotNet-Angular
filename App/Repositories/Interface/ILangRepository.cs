@@ -1,4 +1,4 @@
-﻿using App.Models.DTOs.CreateRequest;
+﻿using App.Models.DTOs.CreateRequests;
 using App.Models.Entities;
 using App.Repositories.BaseRepository;
 using System;

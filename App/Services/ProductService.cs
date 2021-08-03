@@ -1,6 +1,9 @@
-﻿using App.Models.DTOs;
-using App.Models.DTOs.Paging;
+﻿using App.Infrastructures.UnitOffWorks;
+using App.Models.DTOs;
+using App.Models.DTOs.PagingViewModels;
+using App.Models.DTOs.UpdateRquests;
 using App.Models.Entities;
+using App.Repositories;
 using App.Repositories.BaseRepository;
 using App.Repositories.Interface;
 using App.Services.Base;
@@ -17,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace App.Services
 {
-    public class ProductService : BaseService<Product, ProductCreateRequest, ProductViewModel, int>, IProductService
+    public class ProductService : BaseService<Product, ProductCreateRequest, ProductUpdateRequest, ProductViewModel, int>, IProductService
     {
         private const string FOLDER = "Products";
         private readonly ILangRepository _langRepository;
@@ -29,9 +32,8 @@ namespace App.Services
             IMapper mapper, 
             IProductDetailRepository productDetailsRepository,
             IStorageService storageService, 
-            ILangRepository langRepository, 
-            ILogger<ProductService> logger,
-            ICategoryRepository categoryRepository) : base(productRepository, mapper)
+            ILangRepository langRepository,
+            ICategoryRepository categoryRepository, IUnitOffWork unitOffWork, ILogger<ProductService> logger) : base(productRepository, mapper, unitOffWork, logger)
         {
             _productDetailsRepository = productDetailsRepository;
             _storageService = storageService;
@@ -39,7 +41,7 @@ namespace App.Services
             _categoryRepository = categoryRepository;
             _logger = logger;
         }
-        public async Task<ProductViewModel> CreateAsync(ProductCreateRequest request)
+        public override async Task<ProductViewModel> CreateAsync(ProductCreateRequest request)
         {
             if (request == null)
                 return null;
@@ -47,45 +49,38 @@ namespace App.Services
             var productDetails = new List<ProductDetail>();
             var oldFileName = request.File?.FileName;
             var newFileName = Guid.NewGuid().ToString() + Path.GetExtension(oldFileName);
+            _mapper.Map(request, product);
             try
             {
                 Task saveFile = null;
-                await _repository.BeginTransactionAsync();
-                if(oldFileName != null)
+                await _unitOffWork.BeginTransactionAsync();
+
+
+                if (oldFileName != null)
                 {
                     saveFile = _storageService.SaveFileAsync(request.File.OpenReadStream(), newFileName, FOLDER);
                     product.ImageUrl = Path.Combine(FOLDER, newFileName);
                 }
 
-                product.CategoryId = request.CategoryId;
-                product.Price = request.Price;
-                product.Code = request.Code;
-                product = await _repository.CreateAsync(product);
+                await _repository.CreateAsync(product);
 
-                foreach (var detail in request.ProductDetails)
+                var effectedCount = await _unitOffWork.SaveChangesAsync();
+                if (effectedCount == 0)
                 {
-                    productDetails.Add(new ProductDetail()
-                    {
-                        Product = product,
-                        Name = detail.Name,
-                        LangId = detail.LangId,
-                        Description = detail.Description,
-
-                    });
+                    // TODO: định nghĩa lại exception
+                    throw new Exception();
                 }
-                await _productDetailsRepository.CreateAsync(productDetails);
-
-                await _repository.CommitTransactionAsync();
-                var result = await GetByIdAsync(product.Id);
+                var result = _mapper.Map<ProductViewModel>(product);
                 if(saveFile != null)
                     await saveFile;
 
+                await _unitOffWork.CommitTransactionAsync();
                 return result;
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex.StackTrace);
-                await _repository.RollbackTransactionAsync();
+                _logger.LogError(ex.StackTrace);
+                await _unitOffWork.RollbackTransactionAsync();
                 return null;
             }
         }
@@ -93,7 +88,7 @@ namespace App.Services
         public async Task<int> UpdateAsync(int id, ProductViewModel request)
         {
             var dateTimeNow = DateTime.Now;
-            var product = await _repository.GetQueryableTable().Include(e => e.ProductDetails).SingleOrDefaultAsync(e => e.Id == request.Id.Value);
+            var product = await _repository.GetQueryableTable().Include(e => e.ProductDetails).SingleOrDefaultAsync(e => e.Id == id);
             if (product == null)
                 return 0;
             var oldFileName = request.File?.FileName;
@@ -101,7 +96,7 @@ namespace App.Services
             try
             {
                 Task saveFile = null;
-                await _repository.BeginTransactionAsync();
+                await _unitOffWork.BeginTransactionAsync();
 
                 if (oldFileName != null)
                 {
@@ -120,19 +115,21 @@ namespace App.Services
                 }
 
                 await _repository.UpdateAsync(product);
+
+                var result = await _unitOffWork.SaveChangesAsync();
+
                 if (saveFile != null)
                     await saveFile;
 
-                await _repository.CommitTransactionAsync();
-
+                await _unitOffWork.CommitTransactionAsync();
+                return result;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                await _repository.RollbackTransactionAsync();
+                await _unitOffWork.RollbackTransactionAsync();
                 throw;
             }
-            return 0;
         }
 
         public override async Task<ProductViewModel> GetByIdAsync(int id)
@@ -147,7 +144,7 @@ namespace App.Services
                 var result = _mapper.Map<ProductViewModel>(product);
                 return result;
             }
-            catch (Exception ex)
+            catch
             {
                 throw;
             }

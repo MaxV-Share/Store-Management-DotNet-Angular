@@ -22,7 +22,7 @@
                         </mat-form-field>
                         <mat-form-field class="w-100">
                             <mat-label>{{ 'Discount' | translate }}</mat-label>
-                            <input  currency-mask type="number" [(ngModel)]="bill.discountPrice" matInput />
+                            <input currency-mask type="number" [(ngModel)]="bill.discountPrice" matInput />
                         </mat-form-field>
                         <mat-form-field class="w-100">
                             <mat-label>{{ 'Payment amount' | translate }}</mat-label>
@@ -164,9 +164,17 @@
             ></mat-paginator>
         </div>
     </div>
+    <template>
+        <div id="print-section" style="width: 100%;">
+            <div *ngFor="let i of createRange(100)" style="width: 100%; display:float">
+                <label >abc</label>
+                <label style="float:right">abc</label>
+            </div>
+        </div>
+    </template>
 </div>
 <div class="modal-footer">
-    <button button class="btn btn-primary" (click)="onSave()">
+    <button button class="btn btn-primary" printSectionId="print-section" ngxPrint>
         {{ 'Print bill' | translate }}
     </button>
     <button button class="btn btn-primary" (click)="onSave()">

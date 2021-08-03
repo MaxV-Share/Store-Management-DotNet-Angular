@@ -3,9 +3,9 @@ import { Component, EventEmitter, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Bill, BillCreateRequest, BillDetailCreateRequest, ProductDetail } from '@app/models';
-import { BaseComponent } from '@app/models/bases';
-import { BillDetail } from '@app/models/bills/bill-detail';
+import { BaseComponent } from '@app/components/base';
+import { Bill, BillCreateRequest, BillDetailCreateRequest, BillUpdateRequest, mapper, ProductDetail } from '@app/models';
+import { BillDetail } from '@app/models/view-models/bill-detail';
 import { BillService } from '@app/shared/services';
 import { GlobalService } from '@app/shared/services/global.service';
 import { ProductService } from '@app/shared/services/product.service';
@@ -25,7 +25,6 @@ export class OrderManagerDetailsComponent extends BaseComponent implements OnIni
     isLoadingAutocompleteProduct: boolean;
     saved: EventEmitter<any> = new EventEmitter();
     displayedColumns: string[] = ['no', 'product-code', 'product-name', 'quantity', 'price', 'total-price', 'edit'];
-    public entity: Bill;
     dataSourceBillDetail = new MatTableDataSource<BillDetail>();
     ctrProduct = new FormControl();
     products: ProductDetail[];
@@ -33,10 +32,10 @@ export class OrderManagerDetailsComponent extends BaseComponent implements OnIni
     totalRow: number;
     pageIndex: number;
     pageSize: number;
-    bill: Bill;
+    public bill: Bill;
     billDetail: any = [];
     get paymentAmount(): number {
-        let value = (this.totalPrice > 0 ? this.totalPrice : this.bill.totalPrice ||0 ) - (this.bill.discountPrice + 0)
+        let value = (this.totalPrice > 0 ? this.totalPrice : this.bill.totalPrice || 0) - (this.bill.discountPrice + 0)
         if (value < 0) {
             value = 0;
             this.bill.discountPrice = this.totalPrice;
@@ -48,6 +47,8 @@ export class OrderManagerDetailsComponent extends BaseComponent implements OnIni
     }
 
     get totalPrice() {
+        console.log(this.billDetail);
+
         return this.billDetail.reduce((value, cur) => value + cur.quantity * cur.price, 0)
     }
     set totalPrice(value) {
@@ -66,11 +67,18 @@ export class OrderManagerDetailsComponent extends BaseComponent implements OnIni
 
 
     ngOnInit() {
-        this.bill = new Bill();
-        if (this.entity != null) {
-            this.bill = this.entity;
-            this.billService.getDetails(this.entity.id).subscribe((res: HttpResponse<BillDetail[]>) => {
-                if(res.status == 200) {
+        console.log(this.bill);
+
+        if(this.bill == null)
+            this.bill = {
+                discountPrice: 0,
+                totalPrice: 0 ,
+                userPaymentUserName: this.globalService.currentUserName,
+                billDetails: []
+            };
+        if (this.bill.id != null) {
+            this.billService.getDetails(this.bill.id).subscribe((res: HttpResponse<BillDetail[]>) => {
+                if (res.status == 200) {
                     this.billDetail = res.body;
                     this.dataSourceBillDetail = new MatTableDataSource<BillDetail>(this.billDetail);
                 }
@@ -99,7 +107,7 @@ export class OrderManagerDetailsComponent extends BaseComponent implements OnIni
                 })
             )
             .subscribe((res: HttpResponse<ProductDetail[]>) => {
-                if(res.status == 200){
+                if (res.status == 200) {
                     this.isLoadingAutocompleteProduct = true;
                     this.products = res.body;
                     this.filteredOptions = of(res.body);
@@ -108,14 +116,13 @@ export class OrderManagerDetailsComponent extends BaseComponent implements OnIni
     }
 
     onSave() {
-        if (this.entity == null) {
-
+        if (this.bill.id == null) {
             let billCreateRequest: BillCreateRequest = {
                 billDetails: this.billDetail,
-                totalPrice: this.totalPrice || 0,
-                discountPrice: this.bill.discountPrice || 0,
-                paymentAmount: this.totalPrice || 0 - this.bill.discountPrice || 0,
-                userPaymentUserName: this.globalService.currentUserName,
+                totalPrice: this.totalPrice,
+                discountPrice: this.bill.discountPrice,
+                paymentAmount: this.paymentAmount,
+                userPaymentUserName: this.bill.userPaymentUserName,
                 customerPhoneNumber: this.bill.customerPhoneNumber,
                 customerFullName: this.bill.customerFullName,
                 customerAddress: this.bill.customerAddress,
@@ -127,18 +134,22 @@ export class OrderManagerDetailsComponent extends BaseComponent implements OnIni
                 }
             });
         } else {
-            let billUpdateRequest: Bill = {
-                id: this.entity.id,
-                billDetails: this.billDetail,
-                totalPrice: this.totalPrice || 0,
-                discountPrice: this.bill.discountPrice || 0,
-                paymentAmount: this.paymentAmount,
-                userPaymentUserName: this.globalService.currentUserName,
-                customerPhoneNumber: this.entity.customerPhoneNumber,
-                customerFullName: this.bill.customerFullName,
-                customerAddress: this.bill.customerAddress,
-            }
-            this.billService.update(this.entity.id, billUpdateRequest).subscribe((res: HttpResponse<any>) => {
+            // let billUpdateRequest: Bill = {
+            //     id: this.bill.id,
+            //     billDetails: this.billDetail,
+            //     totalPrice: this.totalPrice || 0,
+            //     discountPrice: this.bill.discountPrice || 0,
+            //     paymentAmount: this.paymentAmount,
+            //     userPaymentUserName: this.globalService.currentUserName,
+            //     customerPhoneNumber: this.bill.customerPhoneNumber,
+            //     customerFullName: this.bill.customerFullName,
+            //     customerAddress: this.bill.customerAddress,
+            // }
+            let billUpdateRequest = mapper.map(this.bill,BillUpdateRequest,Bill);
+            billUpdateRequest.billDetails = this.billDetail;
+            billUpdateRequest.totalPrice = this.totalPrice;
+            billUpdateRequest.paymentAmount = this.paymentAmount;
+            this.billService.update(this.bill.id, billUpdateRequest).subscribe((res: HttpResponse<any>) => {
                 if (res.status == 200) {
                     this.notifySuccess('Success');
                     this.saved.emit("success");
@@ -178,7 +189,7 @@ export class OrderManagerDetailsComponent extends BaseComponent implements OnIni
         this.dataSourceBillDetail = new MatTableDataSource<BillDetailCreateRequest>(this.billDetail);
     }
 
-    print(){
+    print() {
 
     }
 
@@ -190,5 +201,13 @@ export class OrderManagerDetailsComponent extends BaseComponent implements OnIni
     pageEventHandle(event: PageEvent) {
         this.pageSize = event.pageSize;
         this.pageIndex = event.pageIndex + 1;
+    }
+
+    createRange(number) {
+        var items: number[] = [];
+        for (var i = 1; i <= number; i++) {
+            items.push(i);
+        }
+        return items;
     }
 }

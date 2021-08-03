@@ -1,4 +1,5 @@
 ﻿using App.Models.Entities;
+using App.Models.Entities.Identities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -13,13 +14,13 @@ namespace App.Infrastructures.Dbcontexts
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<Role> _roleManager;
         private readonly string AdminRoleName;
         public IConfiguration _configuration { get; }
 
         public DBInitializer(ApplicationDbContext context,
           UserManager<User> userManager,
-          RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+          RoleManager<Role> roleManager, IConfiguration configuration)
         {
             _context = context;
             _userManager = userManager;
@@ -33,10 +34,11 @@ namespace App.Infrastructures.Dbcontexts
 
             using (var transaction = new CommittableTransaction(new TransactionOptions { IsolationLevel = IsolationLevel.RepeatableRead, Timeout = TimeSpan.FromMinutes(1) }))
             {
+                var dateTimeNow = DateTime.Now;
                 #region Role
                 if (!_roleManager.Roles.Any())
                 {
-                    await _roleManager.CreateAsync(new IdentityRole
+                    await _roleManager.CreateAsync(new Role
                     {
                         Id = AdminRoleName,
                         Name = AdminRoleName,
@@ -75,8 +77,6 @@ namespace App.Infrastructures.Dbcontexts
                         Id = "vi",
                         Name = "Tiếng việt",
                         Order = 1,
-                        Uuid = Guid.NewGuid(),
-                        CreateAt = DateTime.UtcNow,
                         CreateBy = "Seed"
                     });
                     await _context.Langs.AddAsync(new Lang
@@ -84,18 +84,13 @@ namespace App.Infrastructures.Dbcontexts
                         Id = "en",
                         Name = "English",
                         Order = 2,
-                        Uuid = Guid.NewGuid(),
-                        CreateAt = DateTime.UtcNow,
                         CreateBy = "Seed"
                     });
-                    await _context.SaveChangesAsync();
                 }
                 #endregion
                 await _context.SaveChangesAsync();
                 transaction.Commit();
             }
-
-
         }
     }
 }

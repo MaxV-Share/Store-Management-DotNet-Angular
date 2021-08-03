@@ -1,9 +1,17 @@
-export * from "./bills"
-export * from "./categories";
-export * from "./products"
-export * from "./discount";
+export * from "./bases";
+export * from "./constants";
+export * from "./create-requests";
+export * from "./update-requests";
+export * from "./view-models";
 export * from "./environment";
-export * from "./lang";
 export * from "./login";
 export * from "./register";
-export * from "./user";
+
+import { createMapper } from '@automapper/core';
+import { classes } from '@automapper/classes';
+
+export const mapper = createMapper({
+    name: 'someName',
+    pluginInitializer: classes,
+  });
+

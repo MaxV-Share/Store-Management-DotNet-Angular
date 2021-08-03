@@ -3,7 +3,6 @@ using App.Infrastructures.Dbcontexts;
 using App.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using AutoMapper;
-using App.Mapper;
 using App.Services.Interface;
 using App.Services;
 using App.Repositories.Interface;
@@ -16,6 +15,8 @@ using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
+using App.Models.DTOs;
+using App.Models.Entities.Identities;
 
 namespace App.Infrastructures.Startup.ServicesExtensions
 {
@@ -23,23 +24,24 @@ namespace App.Infrastructures.Startup.ServicesExtensions
     {
         public static void AddGeneralConfigurations(this IServiceCollection services, IConfiguration configuration)
         {
+            services.Configure<ConnectionString>(configuration.GetSection("ConnectionStrings"));
+            var connectionStrings = configuration.GetSection("ConnectionStrings").Get<ConnectionString>();
+            services.Configure<JwtOptions>(configuration.GetSection("JWT"));
+            var appSettings = configuration.GetSection("JWT").Get<JwtOptions>();
+
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.EnableDetailedErrors(true);
 
-                options.UseMySQL(configuration.GetValue<string>("ConnectionStrings:DefaultConnection"),
+                options.UseMySQL(connectionStrings.DefaultConnection,
                     x => {
                         x.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.GetName().Name);
                         });
                 options.UseSnakeCaseNamingConvention();
             }); 
-            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
-
-
+            services.AddIdentity<User, Role>().AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddDistributedMemoryCache();
-            services.Configure<JwtOptions>(configuration.GetSection("JWT"));
-            var appSettings = configuration.GetSection("JWT").Get<JwtOptions>();
 
             services.AddAuthentication(o =>
             {

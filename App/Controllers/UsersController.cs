@@ -4,6 +4,8 @@ using App.Repositories.Interface;
 using App.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,8 +15,8 @@ namespace App.Controllers
     public class UsersController : ApiController
     {
         public readonly IUserService _userService;
-        public readonly Microsoft.Extensions.Configuration.IConfiguration _configuration;
-        public UsersController(IUserService userService, Microsoft.Extensions.Configuration.IConfiguration configuration)
+        public readonly IConfiguration _configuration;
+        public UsersController(IUserService userService, IConfiguration configuration, ILogger<UsersController> logger) : base(logger)
         {
             _userService = userService;
             _configuration = configuration;

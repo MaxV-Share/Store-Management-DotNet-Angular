@@ -1,20 +1,15 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { ENVIRONMENT } from '@app/models';
 import { throwError } from 'rxjs';
-@Component({
-    template: ''
-  })
-export abstract class BaseService implements OnInit {
+export abstract class BaseService {
 
-    constructor(public http: HttpClient) {
+    public apiUrl: string;
 
-
+    constructor(public http: HttpClient, public controllerName: string) {
+        this.apiUrl = `${ENVIRONMENT.apiUrl}/${controllerName}`;
     }
-    ngOnInit(): void {
-    }
-
-    protected handleError(error: any) {
+    public handleError(error: any) {
 
         const applicationError = error.headers.get('Application-Error');
 
@@ -34,3 +29,4 @@ export abstract class BaseService implements OnInit {
         return throwError(modelStateErrors || 'Server error');
     }
 }
+

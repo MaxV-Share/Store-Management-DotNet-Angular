@@ -3,18 +3,18 @@
 // The list of file replacements can be found in `angular.json`.
 
 import { HttpHeaders, HttpParams } from "@angular/common/http";
-import { Lang } from "./lang";
 
 export const ENVIRONMENT = {
     production: false,
-    apiUrl: `http://localhost:5000`,
+    apiUrl: `http://localhost:5000/api`,
     fileUrl: `http://localhost:5000/Files/`,
 
 };
 export const LANGS: Lang[] = [
     {
         id: "vi",
-        name: "Tiếng Việt"
+        name: "Tiếng Việt",
+
     },
     {
         id: "en",
@@ -33,7 +33,8 @@ export const OPTIONS_DEFAULT: {
     responseType?: 'json';
     withCredentials?: boolean;
 } = {
-    observe: 'events'
+    observe: 'events',
+    reportProgress: true,
 }
 export const OPTIONS_JSON : {
     headers?: HttpHeaders | {
@@ -76,3 +77,4 @@ export const OPTIONS_TEXT: {
  * on performance if an error is thrown.
  */
 // import 'zone.js/dist/zone-error';  // Included with Angular CLI.
+import { Lang } from '@app/models';

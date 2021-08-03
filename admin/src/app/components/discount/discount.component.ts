@@ -62,7 +62,7 @@ export class DiscountComponent implements OnInit, AfterViewInit {
         this.dataSource = new MatTableDataSource<Discount>(data);
     }
 
-    public pageEventHandle(event?: PageEvent) {
+    public pageEventHandle(event: PageEvent) {
         console.log(event);
         this.getDataPaging(event);
 
@@ -88,7 +88,7 @@ export class DiscountComponent implements OnInit, AfterViewInit {
     }
     public onSearch(){
         console.log(this.txtSearch);
-        
+
     }
 }
 

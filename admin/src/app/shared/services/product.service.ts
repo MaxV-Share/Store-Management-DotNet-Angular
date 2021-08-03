@@ -1,40 +1,31 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ENVIRONMENT, OPTIONS_DEFAULT, OPTIONS_JSON } from '@app/models';
+import { ENVIRONMENT, OPTIONS_DEFAULT, OPTIONS_JSON, Product, ProductCreateRequest, ProductUpdateRequest } from '@app/models';
 import { TranslateService } from '@ngx-translate/core';
 import { BaseService } from './base/base.service';
+import { CrudService } from './base/crud.service';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
-export class ProductService extends BaseService{
+export class ProductService extends CrudService<ProductCreateRequest, ProductUpdateRequest, Product, number> {
 
     constructor(http: HttpClient,
         public translate: TranslateService) {
-        super(http);
+        super(http, 'products');
     }
 
-    add(formData: FormData){
-        return this.http.post(`${ENVIRONMENT.apiUrl}/api/products`, formData, OPTIONS_DEFAULT)
-        .pipe();
-    }
-
-    update(id?: number, formData?: FormData){
-        return this.http.put(`${ENVIRONMENT.apiUrl}/api/products/${id}`, formData, OPTIONS_DEFAULT)
-        .pipe();
-    }
-
-    getPaging(pageIndex:number, pageSize: number, searchText: string) {
-        return this.http.get(`${ENVIRONMENT.apiUrl}/api/products/filter?pageIndex=${pageIndex}&pageSize=${pageSize}&searchText=${searchText}&langId=${localStorage.getItem('lang')}`, OPTIONS_JSON)
-            // .pipe(catchError(this.handleError));
+    getPaging(pageIndex: any, pageSize: number, searchText: string) {
+        return this.http.get(`${this.apiUrl}/filter?pageIndex=${pageIndex}&pageSize=${pageSize}&searchText=${searchText}&langId=${localStorage.getItem('lang')}`, OPTIONS_JSON)
+        // .pipe(catchError(this.handleError));
     }
 
     getAll(searchText: string) {
-        return this.http.get(`${ENVIRONMENT.apiUrl}/api/products?searchText=${searchText}&langId=${localStorage.getItem('lang')}`, OPTIONS_JSON)
-            // .pipe(catchError(this.handleError));
+        return this.http.get(`${ENVIRONMENT.apiUrl}/products?searchText=${searchText}&langId=${localStorage.getItem('lang')}`, OPTIONS_JSON)
+        // .pipe(catchError(this.handleError));
     }
 
-    getById(id: number){
-        return this.http.get(`${ENVIRONMENT.apiUrl}/api/products/${id}`, OPTIONS_JSON)
+    getById(id: any) {
+        return this.http.get(`${ENVIRONMENT.apiUrl}/products/${id}`, OPTIONS_JSON)
     }
 }

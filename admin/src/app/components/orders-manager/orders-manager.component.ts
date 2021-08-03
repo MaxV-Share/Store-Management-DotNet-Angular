@@ -2,7 +2,7 @@ import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Bill, BillCreateRequest, BillPaging } from '@app/models';
+import { Bill, BillPaging } from '@app/models';
 import { BillService } from '@app/shared/services';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -61,7 +61,7 @@ export class OrdersManagerComponent implements OnInit {
         })
     }
 
-    public pageEventHandle(event?: PageEvent) {
+    public pageEventHandle(event: PageEvent) {
         this.pageEvent = event;
         this.getDataPaging(this.pageEvent);
 
@@ -70,8 +70,9 @@ export class OrdersManagerComponent implements OnInit {
 
     public createdOrUpdated(entity: Bill = null) {
 
+        console.log(entity);
         const initialState = {
-            entity: Object.assign({}, entity),
+            bill: entity == null ? null : Object.assign({}, entity),
         };
 
         this.bsModalRef = this.modalService.show(OrderManagerDetailsComponent, {
@@ -88,6 +89,10 @@ export class OrdersManagerComponent implements OnInit {
 
     deleted(element: Bill){
         console.log(element);
+        this.billService.delete(element.id).subscribe((res: HttpResponse<any> )=>{
+            console.log(res);
+            this.getDataPaging(this.pageEvent);
+        });
     }
 
     public onSearch() {

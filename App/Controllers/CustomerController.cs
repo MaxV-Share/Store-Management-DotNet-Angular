@@ -5,23 +5,25 @@ using System.Threading.Tasks;
 using App.Controllers.Base;
 using App.DTOs;
 using App.Models.DTOs;
+using App.Models.DTOs.UpdateRquests;
 using App.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace App.Controllers
 {
     public class CustomerController : ApiController
     {
         public readonly ICustomerService _customerService;
-        public CustomerController(ICustomerService customerService)
+        public CustomerController(ICustomerService customerService, ILogger<CustomerController> logger) : base(logger)
         {
             _customerService = customerService;
         }
         [HttpPost]
         public async Task<ActionResult> Post(CustomerCreateRequest request)
         {
-            var result = await _customerService.PostAsync(request);
+            var result = await _customerService.CreateAsync(request);
 
             if (result != null)
                 return Ok(result);
@@ -36,12 +38,12 @@ namespace App.Controllers
                 return Ok(result);
             return NotFound();
         }
-        [HttpPatch]
-        public async Task<ActionResult> Put(Guid uuid, CustomerViewModel request)
+        [HttpPut]
+        public async Task<ActionResult> Put(int id, CustomerUpdateRequest request)
         {
-            if (uuid != request.Uuid)
+            if (id != request.Id)
                 return BadRequest();
-            var result = await _customerService.PutAsync(uuid, request);
+            var result = await _customerService.UpdateAsync(id, request);
             if (result > 0)
                 return Ok();
             return NotFound();
