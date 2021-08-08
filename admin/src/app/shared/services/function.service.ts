@@ -18,4 +18,8 @@ export class FunctionService extends CrudService<FunctionCreateRequest, Function
         let url = `${this.apiUrl}/tree`;
         return this.http.get(url, OPTIONS_JSON).pipe(catchError(this.handleError));
     }
+    getFunctionsWithoutChildren(textSearch: string = "") {
+        let url = `${this.apiUrl}/without-children?textSearch=${textSearch}`;
+        return this.http.get(url, OPTIONS_JSON).pipe(catchError(this.handleError));
+    }
 }

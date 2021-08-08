@@ -9,7 +9,6 @@ namespace App.Models.DTOs.CreateRequests
 {
     public class FunctionCreateRequest : BaseCreateRequest
     {
-        [Required]
         public string Id { get; set; }
         [Required]
         public string Name { get; set; }

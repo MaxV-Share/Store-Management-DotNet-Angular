@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 
 namespace App.Services.Base
 {
-    public class BaseService<TEntity, TCreateRequest, TUpdateRequest, TViewModel, TKey> : IBaseService<TEntity, TCreateRequest, TUpdateRequest, TViewModel, TKey>
+    public abstract class BaseService<TEntity, TCreateRequest, TUpdateRequest, TViewModel, TKey> : IBaseService<TEntity, TCreateRequest, TUpdateRequest, TViewModel, TKey>
         where TEntity : BaseEntity<TKey>, new()
         where TCreateRequest : BaseCreateRequest, new()
         where TUpdateRequest : BaseUpdateRequest<TKey>, new()

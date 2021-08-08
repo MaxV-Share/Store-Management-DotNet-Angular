@@ -9,18 +9,31 @@
                     {{col.header}}
                 </th>
                 <th style="width: 8rem">
-                    <p-button icon="pi pi-cog"></p-button>
+                    <button class="btn btn-sm btn-primary" (click)="createOrUpdate(null)">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </button>
                 </th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
             <tr>
-                <td *ngFor="let col of columns; let i = index">
-                    <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
-                    {{rowData[col.field]}}
+                <td>
+                    <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                    {{rowData.sortOrder}}.{{rowData.name}}
+                </td>
+                <td >
+                    {{rowData.icon}}
+                </td>
+                <td >
+                    {{rowData.url}}
                 </td>
                 <td>
-                    <button pButton icon="pi pi-pencil" styleClass="p-button-warning" (click)="createOrUpdate(rowData)"></button>
+                    <button class="btn btn-sm btn-warning" (click)="createOrUpdate(rowData)">
+                        <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </button>
+                    <button class="btn btn-sm btn-danger" (click)="delete(rowData.id)">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                    </button>
                 </td>
             </tr>
         </ng-template>

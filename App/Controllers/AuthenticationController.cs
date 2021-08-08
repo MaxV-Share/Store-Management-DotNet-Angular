@@ -65,9 +65,9 @@ namespace App.Controllers
 
         [HttpGet("validate-token")]
         //[Authorize]
-        public IActionResult ValidateToken([FromHeader] string authorization)
+        public async Task<IActionResult> ValidateToken([FromHeader] string authorization)
         {
-            var result = _authenticationService.CheckToken(authorization);
+            var result = await  _authenticationService.CheckToken(authorization);
             if (string.IsNullOrEmpty(result))
                 return Unauthorized();
             return Ok(result);
