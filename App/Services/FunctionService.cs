@@ -31,9 +31,6 @@ namespace App.Services
         {
             var entities = await _repository.GetNoTrackingEntities().OrderBy(e => e.ParentId).ThenBy(e => e.SortOrder).ToListAsync();
             var functions = _mapper.Map<List<FunctionViewModel>>(entities);
-            await GetTreeAsync();
-            //var result = functions.Where(e => e.ParentId == null).ToList();
-            //result.AsParallel().ForAll(e => getChild(e, functions.ToList()));
             return functions;
         }
         public async Task<IEnumerable<TreeFunctionViewModel>> GetTreeAsync()
@@ -43,11 +40,11 @@ namespace App.Services
             var result = getChildTree(functions);
             return result;
         }
-        private void getChild(FunctionViewModel parent, List<FunctionViewModel> functions)
-        {
-            parent.Childs = functions.Where(e => e.ParentId == parent.Id).ToList();
-            parent.Childs.ForEach(e => getChild(e, functions));
-        }
+        //private void getChild(FunctionViewModel parent, List<FunctionViewModel> functions)
+        //{
+        //    parent.Childs = functions.Where(e => e.ParentId == parent.Id).ToList();
+        //    parent.Childs.ForEach(e => getChild(e, functions));
+        //}
         private List<TreeFunctionViewModel> getChildTree(List<FunctionViewModel> sources, string parentId = null)
         {
             var results = new List<TreeFunctionViewModel>();
@@ -59,9 +56,16 @@ namespace App.Services
                     Data = parent,
                     Children = getChildTree(sources, parent.Id)
                 };
+                result.Expanded = result.Children.Count > 0;
                 results.Add(result);
             }
             return results;
+        }
+        public async Task<IEnumerable<FunctionViewModel>> GetFunctionsWithoutChildren(string textSearch)
+        {
+            var entities = await _repository.GetNoTrackingEntities().Where(e => e.ParentId == null && EF.Functions.Like(e.Name,$"%{textSearch}%")).OrderBy(e => e.SortOrder).ThenBy(e => e.Name).ToListAsync();
+            var result = _mapper.Map<List<FunctionViewModel>>(entities);
+            return result;
         }
     }
 }

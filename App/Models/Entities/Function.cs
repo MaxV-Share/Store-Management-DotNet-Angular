@@ -27,7 +27,7 @@ namespace App.Models.Entities
         [Column(TypeName = "varchar(50)")]
         public string ParentId { get; set; }
         public virtual Function Parent { get; set; }
-        public virtual List<Function> Childrens { get; set; }
+        public virtual ICollection<Function> Childrens { get; set; }
         [MaxLength(50)]
         [Column(TypeName = "varchar(50)")]
         public string Icon { get; set; }

@@ -9,6 +9,7 @@ import { FunctionsDetailComponent } from './functions-detail/functions-detail.co
 import { TreeNode } from 'primeng/api';
 import { FunctionService } from '@app/shared/services/function.service';
 import { HttpResponse } from '@angular/common/http';
+import { FunctionViewModel, HTTP_STATUS } from '@app/models';
 
 @Component({
     selector: 'app-function',
@@ -32,7 +33,9 @@ export class FunctionsComponent extends BaseComponent implements OnInit {
     dataSource = new MatTableDataSource<Models.FunctionViewModel>();
     txtSearch: string = "";
     public bsModalRef: BsModalRef;
-    cols : any[];
+    cols: any[];
+    showMenu: any = '';
+
     ngOnInit() {
         this.cols = [
             { field: 'name', header: 'Name' },
@@ -41,39 +44,51 @@ export class FunctionsComponent extends BaseComponent implements OnInit {
         ];
         this.loadFunction();
     }
+
     onSearch() {
 
     }
-    showMenu : any = '';
-    addExpandClass(a){
+
+    addExpandClass(a) {
         this.showMenu = this.showMenu == a ? '' : a;
         console.log(this.showMenu);
     }
-    createOrUpdate(entity) {
 
-        // const initialState = {
-        //     productId: productId,
-        // };
+    createOrUpdate(entity: FunctionViewModel) {
+
+        const initialState = {
+            functionId: entity?.id,
+        };
 
         this.bsModalRef = this.modalService.show(FunctionsDetailComponent, {
-            //initialState: initialState,
+            initialState: initialState,
             class: 'modal-lg',
             backdrop: 'static'
         });
 
         this.bsModalRef.content.saved.subscribe((e) => {
             this.bsModalRef.hide();
-            //this.getPaging(this.pageIndex, this.pageSize, "");
+            this.loadFunction();
         });
     }
-    edit(any){
+    edit(any) {
         console.log(any);
 
     }
-    loadFunction(){
-        this.functionService.getTree().subscribe((e : HttpResponse<any>) => {
-            this.treeFunctions = <TreeNode[]>e.body;
+    loadFunction() {
+        this.functionService.getTree().subscribe((res: HttpResponse<any>) => {
+            this.treeFunctions = <TreeNode[]>res.body;
             console.log(this.treeFunctions);
         })
+    }
+    delete(functionId) {
+        this.functionService.delete(functionId).subscribe((res: HttpResponse<any>) => {
+            if (HTTP_STATUS.Ok == res.status || HTTP_STATUS.NoContent == res.status) {
+                this.translate.get('Success').subscribe(e => {
+                    this.toastr.success(e)
+                });
+            }
+            this.loadFunction();
+        });
     }
 }

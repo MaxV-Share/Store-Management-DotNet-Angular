@@ -10,5 +10,6 @@ namespace App.Models.DTOs
     {
         public FunctionViewModel Data { get; set; }
         public List<TreeFunctionViewModel> Children { get; set; }
+        public bool? Expanded { get; set; }
     }
 }

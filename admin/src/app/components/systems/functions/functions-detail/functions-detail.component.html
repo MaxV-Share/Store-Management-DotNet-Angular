@@ -32,6 +32,31 @@
                 <input class="w-100" matInput maxlength="256" [(ngModel)]="function.icon" />
                 <mat-hint align="start"></mat-hint>
             </mat-form-field>
+            <mat-form-field class="w-100">
+                <mat-label>{{ 'Function' | translate }}</mat-label>
+                <input type="text" matInput [formControl]="ctrFunction" [matAutocomplete]="auto" />
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                    <mat-option class="is-loading" *ngIf="isLoadingAutocompleteFunction">
+                        <div class="w-100" style="display: flex; align-items: center; justify-content: center;">
+                            <div class="spinner-border text-secondary" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
+                    </mat-option>
+                    <ng-container *ngIf="!isLoadingAutocompleteFunction">
+                        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                            {{ option.sortOrder }}.{{ option.name }}
+                            <button
+                                class="btn btn-sm btn-primary position-absolute"
+                                style="right: 15px; top: 5px;"
+                                (click)="editFunction(option.categoryId)"
+                            >
+                                <i class="fa fa-edit"></i>
+                            </button>
+                        </mat-option>
+                    </ng-container>
+                </mat-autocomplete>
+            </mat-form-field>
         </div>
         <div class="col-md-6">
 

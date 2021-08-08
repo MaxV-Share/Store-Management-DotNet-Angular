@@ -37,7 +37,7 @@ namespace App.Controllers
                 return BadRequest();
             var result = await _functionService.UpdateAsync(id, request);
             if (result > 0)
-                return Ok();
+                return NoContent();
             return NotFound();
         }
         [HttpDelete("{id}")]
@@ -77,6 +77,26 @@ namespace App.Controllers
                 throw new NotImplementedException();
                 //var result = await _functionService.GetDetailsPagingAsync(pageIndex, pageSize, searchText);
                 //return Ok(result);
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.StackTrace);
+                _logger.LogError(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+        [HttpGet("without-children")]
+        public async Task<ActionResult> GetFunctionsWithoutChildren(string textSearch = "")
+        {
+            try
+            {
+                var result = await _functionService.GetFunctionsWithoutChildren(textSearch);
+                return Ok(result);
             }
             catch (ArgumentOutOfRangeException ex)
             {

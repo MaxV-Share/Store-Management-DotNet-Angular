@@ -20,6 +20,8 @@ using System.Threading.Tasks;
 using System.Transactions;
 using Microsoft.Net.Http.Headers;
 using App.Models.Entities.Identities;
+using System.Net.Http;
+using System.Text.RegularExpressions;
 
 namespace App.Services
 {
@@ -145,28 +147,31 @@ namespace App.Services
                 }
             }
         }
-        public string CheckToken(string authorization)
+        public async Task<string> CheckToken(string authorization)
         {
             if (AuthenticationHeaderValue.TryParse(authorization, out var headerValue))
             {
                 // we have a valid AuthenticationHeaderValue that has the following details:
 
-                var scheme = headerValue.Scheme;
-                var tokenHeader = headerValue.Parameter;
+                var result =  await Task.Run(() => {
+                    var scheme = headerValue.Scheme;
+                    var tokenHeader = headerValue.Parameter;
 
-                var validationParameters = new TokenValidationParameters()
-                {
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtOptions.Value.Secret)),
-                    ValidateIssuerSigningKey = true,
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                };
+                    var validationParameters = new TokenValidationParameters()
+                    {
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtOptions.Value.Secret)),
+                        ValidateIssuerSigningKey = true,
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                    };
 
-                var tokenHandler = new JwtSecurityTokenHandler();
-                tokenHandler.ValidateToken(tokenHeader, validationParameters, out var securityToken);
-                var jwtSecurityToken = (JwtSecurityToken)securityToken;
-                var userName = jwtSecurityToken.Claims.SingleOrDefault(x => x.Type == ClaimTypes.Name).Value;
-                return userName;
+                    var tokenHandler = new JwtSecurityTokenHandler();
+                    tokenHandler.ValidateToken(tokenHeader, validationParameters, out var securityToken);
+                    var jwtSecurityToken = (JwtSecurityToken)securityToken;
+                    var userName = jwtSecurityToken.Claims.SingleOrDefault(x => x.Type == ClaimTypes.Name).Value;
+                    return userName;
+                });
+                return result;
                 // scheme will be "Bearer"
                 // parameter will be the token itself.
             }

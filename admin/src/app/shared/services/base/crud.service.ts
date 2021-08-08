@@ -45,7 +45,8 @@ export abstract class CrudService<TCreateRequest extends BaseCreateRequest, TUpd
     }
 
     getById(id: TKey) {
-        let url = `${this.apiUrl}/${id}&langId=${localStorage.getItem('lang')}`;
+        let url = `${this.apiUrl}/${id}?langId=${localStorage.getItem('lang')}`;
+       // let url = `${this.apiUrl}/${id}`;
 
         return this.http.get(url, OPTIONS_JSON).pipe(catchError(this.handleError));
     }
