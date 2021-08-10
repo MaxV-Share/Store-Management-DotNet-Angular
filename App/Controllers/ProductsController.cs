@@ -1,15 +1,22 @@
 ﻿using App.Controllers.Base;
 using App.Infrastructures.Dbcontexts;
 using App.Models.DTOs;
+using App.Models.DTOs.Imports;
 using App.Models.Entities;
 using App.Services.Interface;
+using ExcelDataReader;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+
 
 namespace App.Controllers
 {
@@ -17,18 +24,75 @@ namespace App.Controllers
     public class ProductsController : ApiController
     {
         private readonly IProductService _productService;
-        private readonly ApplicationDbContext _context;
-        public ProductsController(IProductService productService, ILogger<ProductsController> logger,ApplicationDbContext context) : base(logger)
+        private readonly string _pathRootFolder;
+        //public ProductsController(IProductService productService)
+        //{
+        //    _productService = productService;
+        //}
+        public ProductsController(IWebHostEnvironment webHostEnvironment)
         {
+            _pathRootFolder = Path.Combine(webHostEnvironment.WebRootPath, "Files");
             _productService = productService;
             _context = context;
         }
 
+        [Route("")]
         [HttpPost]
         public async Task<ActionResult> Post([FromForm] ProductCreateRequest request)
         {
             await _productService.CreateAsync(request);
             return Ok();
+        }
+        [Route("import")]
+        [HttpPost]
+        public async Task<ActionResult> ImportProduct([FromForm] ProductImport productImport)
+        {
+            var files = HttpContext.Request.Form.Files;
+            List<ProductImport> Product = new List<ProductImport>();
+            //var fileName = "./Users.xlsx";
+            foreach (var item in files)
+            {
+                if (item.Length > 0 && item != null)
+                {
+                    string file_name = Guid.NewGuid().ToString().Replace("-", "") + "_" + item.FileName;
+                    string uploads = Path.Combine(_pathRootFolder, "files");
+                    string urlPart = uploads + "/" + file_name;
+                    string extension = Path.GetExtension(urlPart);
+                    if (extension == ".xls" || extension == ".xlsx")
+                    {
+                        using (var fileStream = new FileStream(Path.Combine(uploads, file_name), FileMode.Create))
+                        {
+                            await item.CopyToAsync(fileStream);
+                        }
+                        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+                        using (var stream = System.IO.File.Open(urlPart, FileMode.Open, FileAccess.Read))
+                        {
+                            using (var reader = ExcelReaderFactory.CreateReader(stream))
+                            {
+                                do
+                                {
+                                    if (reader.Name == "Sheet1" || reader.Name == "page2")
+                                    {
+                                        while (reader.Read())
+                                        {
+                                            Product.Add(new ProductImport
+                                            {
+                                                Category = int.Parse(reader.GetValue(0).ToString()),
+                                                Name = reader.GetValue(1).ToString(),
+                                                Code = reader.GetValue(2).ToString(),
+                                                Price = int.Parse(reader.GetValue(3).ToString()),
+                                                PercentDiscount = double.Parse(reader.GetValue(4).ToString()),
+                                                MaxDiscountPrice = double.Parse(reader.GetValue(5).ToString()),
+                                            });
+                                        }
+                                    }
+                                } while (reader.NextResult());
+                            }
+                        }
+                    }
+                }
+            }
+            return Ok(files);
         }
 
         [HttpPut("{id}")]
