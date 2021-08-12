@@ -505,6 +505,9 @@ namespace App.Migrations
                     b.HasIndex("Id")
                         .HasDatabaseName("ix_functions_id");
 
+                    b.HasIndex("ParentId")
+                        .HasDatabaseName("ix_functions_parent_id");
+
                     b.ToTable("functions");
                 });
 
@@ -865,7 +868,7 @@ namespace App.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id");
 
-                    b.Property<int>("CategoryId")
+                    b.Property<int?>("CategoryId")
                         .HasColumnType("int")
                         .HasColumnName("category_id");
 
@@ -1071,6 +1074,16 @@ namespace App.Migrations
                     b.Navigation("Function");
                 });
 
+            modelBuilder.Entity("App.Models.Entities.Function", b =>
+                {
+                    b.HasOne("App.Models.Entities.Function", "Parent")
+                        .WithMany("Childrens")
+                        .HasForeignKey("ParentId")
+                        .HasConstraintName("fk_functions_functions_parent_id");
+
+                    b.Navigation("Parent");
+                });
+
             modelBuilder.Entity("App.Models.Entities.Identities.RoleClaim", b =>
                 {
                     b.HasOne("App.Models.Entities.Identities.Role", "Role")
@@ -1165,9 +1178,7 @@ namespace App.Migrations
                     b.HasOne("App.Models.Entities.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
-                        .HasConstraintName("fk_products_categories_category_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasConstraintName("fk_products_categories_category_id");
 
                     b.Navigation("Category");
                 });
@@ -1209,6 +1220,8 @@ namespace App.Migrations
             modelBuilder.Entity("App.Models.Entities.Function", b =>
                 {
                     b.Navigation("CommandInFunctions");
+
+                    b.Navigation("Childrens");
                 });
 
             modelBuilder.Entity("App.Models.Entities.Identities.Role", b =>

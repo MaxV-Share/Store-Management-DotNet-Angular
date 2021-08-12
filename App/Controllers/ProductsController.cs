@@ -25,15 +25,10 @@ namespace App.Controllers
     {
         private readonly IProductService _productService;
         private readonly string _pathRootFolder;
-        //public ProductsController(IProductService productService)
-        //{
-        //    _productService = productService;
-        //}
-        public ProductsController(IWebHostEnvironment webHostEnvironment)
+        public ProductsController(IWebHostEnvironment webHostEnvironment, IProductService productService, ILogger<ProductsController> logger) : base(logger)
         {
             _pathRootFolder = Path.Combine(webHostEnvironment.WebRootPath, "Files");
             _productService = productService;
-            _context = context;
         }
 
         [Route("")]
@@ -43,55 +38,10 @@ namespace App.Controllers
             await _productService.CreateAsync(request);
             return Ok();
         }
-        [Route("import")]
-        [HttpPost]
-        public async Task<ActionResult> ImportProduct([FromForm] ProductImport productImport)
+        [HttpPut("import")]
+        public async Task<ActionResult> ImportProduct([FromForm] ProductImport files)
         {
-            var files = HttpContext.Request.Form.Files;
-            List<ProductImport> Product = new List<ProductImport>();
-            //var fileName = "./Users.xlsx";
-            foreach (var item in files)
-            {
-                if (item.Length > 0 && item != null)
-                {
-                    string file_name = Guid.NewGuid().ToString().Replace("-", "") + "_" + item.FileName;
-                    string uploads = Path.Combine(_pathRootFolder, "files");
-                    string urlPart = uploads + "/" + file_name;
-                    string extension = Path.GetExtension(urlPart);
-                    if (extension == ".xls" || extension == ".xlsx")
-                    {
-                        using (var fileStream = new FileStream(Path.Combine(uploads, file_name), FileMode.Create))
-                        {
-                            await item.CopyToAsync(fileStream);
-                        }
-                        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-                        using (var stream = System.IO.File.Open(urlPart, FileMode.Open, FileAccess.Read))
-                        {
-                            using (var reader = ExcelReaderFactory.CreateReader(stream))
-                            {
-                                do
-                                {
-                                    if (reader.Name == "Sheet1" || reader.Name == "page2")
-                                    {
-                                        while (reader.Read())
-                                        {
-                                            Product.Add(new ProductImport
-                                            {
-                                                Category = int.Parse(reader.GetValue(0).ToString()),
-                                                Name = reader.GetValue(1).ToString(),
-                                                Code = reader.GetValue(2).ToString(),
-                                                Price = int.Parse(reader.GetValue(3).ToString()),
-                                                PercentDiscount = double.Parse(reader.GetValue(4).ToString()),
-                                                MaxDiscountPrice = double.Parse(reader.GetValue(5).ToString()),
-                                            });
-                                        }
-                                    }
-                                } while (reader.NextResult());
-                            }
-                        }
-                    }
-                }
-            }
+            await _productService.ImportProducts(files.File);
             return Ok(files);
         }
 
