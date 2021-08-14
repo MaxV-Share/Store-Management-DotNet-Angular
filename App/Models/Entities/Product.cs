@@ -26,7 +26,7 @@ namespace App.Models.Entities
             });
         }
         public virtual Category Category { get; set; }
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
         [MaxLength(256)]
         public string Code { get; set; }
         public double? Price { get; set; }

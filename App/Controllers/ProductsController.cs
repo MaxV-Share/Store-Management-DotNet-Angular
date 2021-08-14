@@ -1,15 +1,22 @@
 ﻿using App.Controllers.Base;
 using App.Infrastructures.Dbcontexts;
 using App.Models.DTOs;
+using App.Models.DTOs.Imports;
 using App.Models.Entities;
 using App.Services.Interface;
+using ExcelDataReader;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+
 
 namespace App.Controllers
 {
@@ -17,18 +24,25 @@ namespace App.Controllers
     public class ProductsController : ApiController
     {
         private readonly IProductService _productService;
-        private readonly ApplicationDbContext _context;
-        public ProductsController(IProductService productService, ILogger<ProductsController> logger,ApplicationDbContext context) : base(logger)
+        private readonly string _pathRootFolder;
+        public ProductsController(IWebHostEnvironment webHostEnvironment, IProductService productService, ILogger<ProductsController> logger) : base(logger)
         {
+            _pathRootFolder = Path.Combine(webHostEnvironment.WebRootPath, "Files");
             _productService = productService;
-            _context = context;
         }
 
+        [Route("")]
         [HttpPost]
         public async Task<ActionResult> Post([FromForm] ProductCreateRequest request)
         {
             await _productService.CreateAsync(request);
             return Ok();
+        }
+        [HttpPut("import")]
+        public async Task<ActionResult> ImportProduct([FromForm] ProductImport files)
+        {
+            await _productService.ImportProducts(files.File);
+            return Ok(files);
         }
 
         [HttpPut("{id}")]
