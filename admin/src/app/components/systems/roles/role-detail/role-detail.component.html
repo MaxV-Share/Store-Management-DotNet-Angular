@@ -1,0 +1,29 @@
+
+<div class="modal-header max-bg-light-gray">
+    <div class="modal-title" style="padding-top: 2px;">
+        {{ 'Role function' | translate | uppercase }}
+    </div>
+    <button (click)="bsModalRef.hide()" aria-label="Close" class="close" type="button">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <mat-form-field class="w-100">
+        <mat-label>{{ 'Role id' | translate }}</mat-label>
+        <input class="w-100" matInput maxlength="256" [(ngModel)]="role.id" />
+        <mat-hint align="start"></mat-hint>
+        <mat-hint align="end">{{ role?.id?.length }} / 256</mat-hint>
+    </mat-form-field>
+    <mat-form-field class="w-100">
+        <mat-label>{{ 'Role name' | translate }}</mat-label>
+        <input class="w-100" matInput maxlength="256" [(ngModel)]="role.name" />
+        <mat-hint align="start"></mat-hint>
+        <mat-hint align="end">{{ role?.name?.length }} / 256</mat-hint>
+    </mat-form-field>
+</div>
+<div class="modal-footer max-bg-light-gray">
+    <button pbutton class="btn btn-primary" (click)="onSave()">
+        {{ 'Save' | translate }}
+    </button>
+    <button (click)="bsModalRef.hide()" class="btn btn-secondary" type="button">{{ 'Close' | translate }}</button>
+</div>

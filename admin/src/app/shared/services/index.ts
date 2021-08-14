@@ -7,5 +7,6 @@ export * from './function.service';
 export * from './global.service';
 export * from './product.service';
 export * from './revenue.service';
+export * from './role.service';
 export * from './users.service';
 export * from './utilities.service';

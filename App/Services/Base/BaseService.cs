@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 namespace App.Services.Base
 {
     public abstract class BaseService<TEntity, TCreateRequest, TUpdateRequest, TViewModel, TKey> : IBaseService<TEntity, TCreateRequest, TUpdateRequest, TViewModel, TKey>
-        where TEntity : BaseEntity<TKey>, new()
+        where TEntity : class, new()
         where TCreateRequest : BaseCreateRequest, new()
         where TUpdateRequest : BaseUpdateRequest<TKey>, new()
         where TViewModel : BaseViewModel<TKey>, new()
@@ -54,7 +54,12 @@ namespace App.Services.Base
             var result = _mapper.Map<TViewModel>(entity);
             return result;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
         public virtual async Task<int> UpdateAsync(TKey id, TUpdateRequest request)
         {
             if (!id.Equals(request.Id))
@@ -75,7 +80,6 @@ namespace App.Services.Base
             }
             catch (Exception)
             {
-                await _unitOffWork.RollbackTransactionAsync();
                 throw;
             }
         }
@@ -85,23 +89,24 @@ namespace App.Services.Base
             _mapper.Map(request, entityNew);
             try
             {
-                var response = await _repository.CreateAsync(entityNew);
-                var effectedCount = await _unitOffWork.SaveChangesAsync();
-                if (effectedCount <= 0)
+                await _unitOffWork.DoWorkWithTransaction(async () =>
                 {
-                    throw new NullReferenceException();
-                }
-                var result = _mapper.Map<TViewModel>(response);
+                    await _repository.CreateAsync(entityNew);
+                    var effectedCount = await _unitOffWork.SaveChangesAsync();
+                    if (effectedCount <= 0)
+                    {
+                        throw new NullReferenceException();
+                    }
+                });
+                var result = _mapper.Map<TViewModel>(entityNew);
                 return result;
             }
             catch (NullReferenceException)
             {
-                await _unitOffWork.RollbackTransactionAsync();
                 throw;
             }
             catch (Exception)
             {
-                await _unitOffWork.RollbackTransactionAsync();
                 throw;
             }
         }
@@ -109,29 +114,18 @@ namespace App.Services.Base
         {
             var entitiesNew = new List<TEntity>();
             _mapper.Map(request, entitiesNew);
-            try
+            IEnumerable<TEntity> response = new List<TEntity>();
+            await _unitOffWork.DoWorkWithTransaction(async () =>
             {
-                await _unitOffWork.BeginTransactionAsync();
-                var response = await _repository.CreateAsync(entitiesNew);
+                response = await _repository.CreateAsync(entitiesNew);
                 var effectedCount = await _unitOffWork.SaveChangesAsync();
                 if (effectedCount <= 0)
                 {
                     throw new NullReferenceException();
                 }
-                var result = _mapper.Map<IEnumerable<TViewModel>>(response);
-                await _unitOffWork.CommitTransactionAsync();
-                return result;
-            }
-            catch (NullReferenceException)
-            {
-                await _unitOffWork.RollbackTransactionAsync();
-                throw;
-            }
-            catch (Exception)
-            {
-                await _unitOffWork.RollbackTransactionAsync();
-                throw;
-            }
+            });
+            var result = _mapper.Map<IEnumerable<TViewModel>>(response);
+            return result;
         }
     }
 }

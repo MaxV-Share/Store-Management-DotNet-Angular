@@ -20,7 +20,7 @@ export class ProductService extends CrudService<ProductCreateRequest, ProductUpd
         // .pipe(catchError(this.handleError));
     }
 
-    getAll(searchText: string) {
+    getFilter(searchText: string) {
         return this.http.get(`${ENVIRONMENT.apiUrl}/products?searchText=${searchText}&langId=${localStorage.getItem('lang')}`, OPTIONS_JSON)
         // .pipe(catchError(this.handleError));
     }

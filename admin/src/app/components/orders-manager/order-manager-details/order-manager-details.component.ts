@@ -99,7 +99,7 @@ export class OrderManagerDetailsComponent extends BaseComponent implements OnIni
                     this.isLoadingAutocompleteProduct = true;
                 }), switchMap(searchValue => {
                     this.isLoadingAutocompleteProduct = true;
-                    return this.productService.getAll(searchValue).pipe(
+                    return this.productService.getFilter(searchValue).pipe(
                         delay(100),
                         finalize(() => {
                             this.isLoadingAutocompleteProduct = false
@@ -163,7 +163,7 @@ export class OrderManagerDetailsComponent extends BaseComponent implements OnIni
     }
 
     getProduct() {
-        this.productService.getAll('').subscribe((res: HttpResponse<ProductDetail[]>) => {
+        this.productService.getFilter('').subscribe((res: HttpResponse<ProductDetail[]>) => {
             if (res.status == 200) {
                 this.products = res.body;
                 this.filteredOptions = this.ctrProduct.valueChanges

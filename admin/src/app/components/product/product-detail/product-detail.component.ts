@@ -33,7 +33,7 @@ export class ProductDetailComponent extends BaseComponent implements OnInit {
     ctrCategory = new FormControl();
     options: string[] = ['One', 'Two', 'Three'];
     filteredOptions: Observable<CategoryDetail[]>;
-    categories: CategoryDetail[];
+    categories: Observable<CategoryDetail[]>;
     multipleFile: boolean = false;
     isLoadingAutocompleteCategory: boolean;
     private subscription = new Subscription();
@@ -113,7 +113,7 @@ export class ProductDetailComponent extends BaseComponent implements OnInit {
             )
             .subscribe((res: HttpResponse<CategoryDetail[]>) => {
                 this.isLoadingAutocompleteCategory = true;
-                this.categories = res.body;
+                this.categories = of(res.body);
                 this.filteredOptions = of(res.body);
             });
     }
@@ -231,13 +231,13 @@ export class ProductDetailComponent extends BaseComponent implements OnInit {
     getCategory() {
         this.categoryService.getAll().subscribe((res: HttpResponse<CategoryDetail[]>) => {
             if (res.status == 200) {
-                this.categories = res.body;
-                this.ctrCategory.setValue(this.categories.find(e => e.categoryId == this.entity.categoryId));
+                this.categories = of(res.body);
+                this.ctrCategory.setValue(res.body.find(e => e.categoryId == this.entity.categoryId));
                 this.filteredOptions = this.ctrCategory.valueChanges
                     .pipe(
                         startWith(''),
                         map(value => typeof value === 'string' ? value : value.name),
-                        map(name => this.categories.slice())
+                        map(name => res.body.slice())
                     );
             }
         })

@@ -23,24 +23,24 @@ namespace App.Infrastructures.UnitOffWorks
             Dispose(false);
         }
 
-        public async Task BeginTransactionAsync()
+        private async Task BeginTransactionAsync()
         {
             _tx = await _context.Database.BeginTransactionAsync();
         }
 
-        public async Task CommitTransactionAsync()
+        private async Task CommitTransactionAsync()
         {
             await _tx.CommitAsync();
             await ReleaseTransactionAsync();
         }
 
-        public async Task RollbackTransactionAsync()
+        private async Task RollbackTransactionAsync()
         {
             await _tx.RollbackAsync();
             await ReleaseTransactionAsync();
         }
 
-        public async Task ReleaseTransactionAsync()
+        private async Task ReleaseTransactionAsync()
         {
             await _tx.DisposeAsync();
             _tx = null;
@@ -74,6 +74,14 @@ namespace App.Infrastructures.UnitOffWorks
         public int SaveChanges()
         {
             return _context.SaveChanges();
+        }
+        public async Task DoWorkWithTransaction(Action action)
+        {
+            using (var trans = await _context.Database.BeginTransactionAsync())
+            {
+                action.Invoke();
+                await trans.CommitAsync();
+            }
         }
     }
 }

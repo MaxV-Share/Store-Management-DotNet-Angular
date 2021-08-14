@@ -21,11 +21,9 @@ namespace App.Services
     public class BillDetailService : BaseService<BillDetail, BillDetailCreateRequest, BillDetailUpdateRequest, BillDetailViewModel, int>, IBillDetailService
     {
         private readonly IBillRepository _billRepository;
-        private readonly ILogger<BillDetailService> _logger;
         public BillDetailService(IBillDetailRepository repository, IMapper mapper, IBillRepository billRepository, IUnitOffWork unitOffWork, ILogger<BillDetailService> logger) : base(repository, mapper, unitOffWork, logger)
         {
             _billRepository = billRepository;
-            _logger = logger;
         }
 
         public async Task<IEnumerable<BillDetailViewModel>> GetByBillIdAsync(int billId, string langId)

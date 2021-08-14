@@ -10,4 +10,5 @@ export * from "./product-detail";
 export * from "./product-in-bill";
 export * from "./product";
 export * from "./revenue";
+export * from "./role";
 export * from "./user";

@@ -89,7 +89,7 @@ namespace App.Controllers
                 return Ok(result);
             return NotFound();
         }
-        [HttpGet("filter")]
+        [HttpGet("filter-paging")]
         public async Task<ActionResult> GetAllPaging(int pageIndex, int pageSize, string txtSearch)
         {
             var result = await _billService.GetPagingAsync(pageIndex, pageSize, txtSearch);

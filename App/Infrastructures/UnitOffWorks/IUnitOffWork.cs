@@ -7,11 +7,8 @@ namespace App.Infrastructures.UnitOffWorks
 {
     public interface IUnitOffWork : IDisposable
     {
-        Task BeginTransactionAsync();
-        Task CommitTransactionAsync();
-        Task ReleaseTransactionAsync();
-        Task RollbackTransactionAsync();
         Task<int> SaveChangesAsync();
         int SaveChanges();
+        Task DoWorkWithTransaction(Action action);
     }
 }

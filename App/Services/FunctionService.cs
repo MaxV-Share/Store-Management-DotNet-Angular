@@ -33,33 +33,18 @@ namespace App.Services
             var functions = _mapper.Map<List<FunctionViewModel>>(entities);
             return functions;
         }
-        public async Task<IEnumerable<TreeFunctionViewModel>> GetTreeAsync()
+        public async Task<IEnumerable<FunctionViewModel>> GetTreeAsync()
+        {
+            var entities = await _repository.GetNoTrackingEntities().Include(e => e.Childrens).Where(e => e.ParentId == null).OrderBy(e => e.ParentId).ThenBy(e => e.SortOrder).ToListAsync();
+            var result = _mapper.Map<List<FunctionViewModel>>(entities);
+            return result;
+        }
+        public async Task<IEnumerable<TreeFunctionViewModel>> GetTreeNodeAsync()
         {
             var entities = await _repository.GetNoTrackingEntities().OrderBy(e => e.ParentId).ThenBy(e => e.SortOrder).ToListAsync();
             var functions = _mapper.Map<List<FunctionViewModel>>(entities);
-            var result = getChildTree(functions);
+            var result = functions.ToNodeChildTree(null);
             return result;
-        }
-        //private void getChild(FunctionViewModel parent, List<FunctionViewModel> functions)
-        //{
-        //    parent.Childs = functions.Where(e => e.ParentId == parent.Id).ToList();
-        //    parent.Childs.ForEach(e => getChild(e, functions));
-        //}
-        private List<TreeFunctionViewModel> getChildTree(List<FunctionViewModel> sources, string parentId = null)
-        {
-            var results = new List<TreeFunctionViewModel>();
-            var parents = sources.Where(e => e.ParentId == parentId).OrderBy(e => e.SortOrder);
-            foreach (var parent in parents)
-            {
-                var result = new TreeFunctionViewModel()
-                {
-                    Data = parent,
-                    Children = getChildTree(sources, parent.Id)
-                };
-                result.Expanded = result.Children.Count > 0;
-                results.Add(result);
-            }
-            return results;
         }
         public async Task<IEnumerable<FunctionViewModel>> GetFunctionsWithoutChildren(string textSearch)
         {

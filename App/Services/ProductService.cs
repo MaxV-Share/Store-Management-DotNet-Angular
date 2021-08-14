@@ -27,7 +27,6 @@ namespace App.Services
         private readonly IProductDetailRepository _productDetailsRepository;
         private readonly IStorageService _storageService;
         private readonly ICategoryRepository _categoryRepository;
-        private readonly ILogger<ProductService> _logger;
         public ProductService(IProductRepository productRepository, 
             IMapper mapper, 
             IProductDetailRepository productDetailsRepository,
@@ -39,7 +38,6 @@ namespace App.Services
             _storageService = storageService;
             _langRepository = langRepository;
             _categoryRepository = categoryRepository;
-            _logger = logger;
         }
         public override async Task<ProductViewModel> CreateAsync(ProductCreateRequest request)
         {
@@ -53,34 +51,34 @@ namespace App.Services
             try
             {
                 Task saveFile = null;
-                await _unitOffWork.BeginTransactionAsync();
+                ProductViewModel result = null;
+                await _unitOffWork.DoWorkWithTransaction(async () => {
 
 
-                if (oldFileName != null)
-                {
-                    saveFile = _storageService.SaveFileAsync(request.File.OpenReadStream(), newFileName, FOLDER);
-                    product.ImageUrl = Path.Combine(FOLDER, newFileName);
-                }
+                    if (oldFileName != null)
+                    {
+                        saveFile = _storageService.SaveFileAsync(request.File.OpenReadStream(), newFileName, FOLDER);
+                        product.ImageUrl = Path.Combine(FOLDER, newFileName);
+                    }
 
-                await _repository.CreateAsync(product);
+                    await _repository.CreateAsync(product);
 
-                var effectedCount = await _unitOffWork.SaveChangesAsync();
-                if (effectedCount == 0)
-                {
-                    // TODO: định nghĩa lại exception
-                    throw new Exception();
-                }
-                var result = _mapper.Map<ProductViewModel>(product);
-                if(saveFile != null)
-                    await saveFile;
+                    var effectedCount = await _unitOffWork.SaveChangesAsync();
+                    if (effectedCount == 0)
+                    {
+                        // TODO: định nghĩa lại exception
+                        throw new Exception();
+                    }
+                    result = _mapper.Map<ProductViewModel>(product);
+                    if (saveFile != null)
+                        await saveFile;
+                });
 
-                await _unitOffWork.CommitTransactionAsync();
                 return result;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.StackTrace);
-                await _unitOffWork.RollbackTransactionAsync();
                 return null;
             }
         }
@@ -96,38 +94,37 @@ namespace App.Services
             try
             {
                 Task saveFile = null;
-                await _unitOffWork.BeginTransactionAsync();
+                var result = 0;
+                await _unitOffWork.DoWorkWithTransaction(async () => {
+                    if (oldFileName != null)
+                    {
+                        saveFile = _storageService.SaveFileAsync(request.File.OpenReadStream(), newFileName, FOLDER);
+                        product.ImageUrl = Path.Combine(FOLDER, newFileName);
+                    }
 
-                if (oldFileName != null)
-                {
-                    saveFile = _storageService.SaveFileAsync(request.File.OpenReadStream(), newFileName, FOLDER);
-                    product.ImageUrl = Path.Combine(FOLDER, newFileName);
-                }
+                    product.CategoryId = request.CategoryId;
+                    product.Price = request.Price;
+                    product.Code = request.Code;
+                    for (int i = 0; i < product.ProductDetails.Count; i++)
+                    {
+                        product.ProductDetails[i].Name = request.ProductDetails[i].Name;
+                        product.ProductDetails[i].Description = request.ProductDetails[i].Description;
+                        product.ProductDetails[i].UpdateAt = dateTimeNow;
+                    }
 
-                product.CategoryId = request.CategoryId;
-                product.Price = request.Price;
-                product.Code = request.Code;
-                for(int i =0; i < product.ProductDetails.Count; i++)
-                {
-                    product.ProductDetails[i].Name = request.ProductDetails[i].Name;
-                    product.ProductDetails[i].Description = request.ProductDetails[i].Description;
-                    product.ProductDetails[i].UpdateAt = dateTimeNow;
-                }
+                    await _repository.UpdateAsync(product);
 
-                await _repository.UpdateAsync(product);
+                    result = await _unitOffWork.SaveChangesAsync();
 
-                var result = await _unitOffWork.SaveChangesAsync();
+                    if (saveFile != null)
+                        await saveFile;
+                });
 
-                if (saveFile != null)
-                    await saveFile;
-
-                await _unitOffWork.CommitTransactionAsync();
                 return result;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                await _unitOffWork.RollbackTransactionAsync();
                 throw;
             }
         }

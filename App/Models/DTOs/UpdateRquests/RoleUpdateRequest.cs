@@ -1,13 +1,15 @@
 ﻿using MaxV.Base.DTOs;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace App.Models.DTOs.UpdateRquests
 {
-    public class RevenueUpdateRequest : BaseUpdateRequest<string>
+    public class RoleUpdateRequest : BaseUpdateRequest<string>
     {
-        public double TotalPrice { get; set; }
+        [Required]
+        public string Name { get; set; }
     }
 }

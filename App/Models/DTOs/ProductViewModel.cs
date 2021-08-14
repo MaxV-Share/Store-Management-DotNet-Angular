@@ -22,7 +22,7 @@ namespace App.Models.DTOs
         public double? MaxDiscountPrice { get; set; }
         public string ImageUrl { get; set; }
         [JsonProperty("file")]
-        public IFormFile? File { get; set; }
+        public IFormFile File { get; set; }
         [JsonProperty("details")]
         [FromForm(Name = "details")]
         public virtual List<ProductDetailViewModel> ProductDetails { get; set; }

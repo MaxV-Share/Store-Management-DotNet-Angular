@@ -5,7 +5,10 @@ using System.Threading.Tasks;
 using App.Controllers.Base;
 using App.DTOs;
 using App.Models.DTOs;
+using App.Models.DTOs.CreateRequests;
 using App.Models.DTOs.UpdateRquests;
+using App.Models.Entities;
+using App.Models.Entities.Identities;
 using App.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,15 +16,15 @@ using Microsoft.Extensions.Logging;
 
 namespace App.Controllers
 {
-    public class DiscountController : ApiController
+    public class DiscountController : CRUDContoller<Discount, DiscountCreateRequest, DiscountUpdateRequest, DiscountViewModel, int>
     {
         public readonly IDiscountService _discountService;
-        public DiscountController(IDiscountService discountService, ILogger<DiscountController> logger) : base(logger)
+        public DiscountController(IDiscountService discountService, ILogger<DiscountController> logger) : base(logger, discountService)
         {
             _discountService = discountService;
         }
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] DiscountCreateRequest request)
+        public override async Task<ActionResult> Post([FromBody] DiscountCreateRequest request)
         {
             if (request.FromDate <= request.ToDate)
                 return BadRequest("Từ ngày không được lớn hơn đến ngày.");
@@ -30,30 +33,6 @@ namespace App.Controllers
             if (result != null)
                 return Ok(result);
             return NotFound();
-        }
-        [HttpPut]
-        public async Task<ActionResult> Put(int id, DiscountUpdateRequest request)
-        {
-            if (id != request.Id)
-                return BadRequest();
-            var result = await _discountService.UpdateAsync(id, request);
-            if (result > 0)
-                return Ok();
-            return Accepted();
-        }
-        [HttpGet("{id}")]
-        public async Task<ActionResult> GetById(int id)
-        {
-            var result = await _discountService.GetByIdAsync(id);
-
-            if (result != null)
-                return Ok(result);
-            var a = await Task.Run(() =>
-            {
-                return 0;
-            });
-            return NotFound();
-
         }
 
     }

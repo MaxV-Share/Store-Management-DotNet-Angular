@@ -37,9 +37,14 @@ export abstract class CrudService<TCreateRequest extends BaseCreateRequest, TUpd
 
         return this.http.put(url, data, options).pipe();
     }
+    getAll(){
+        let url = `${this.apiUrl}`;
+
+        return this.http.get(url, OPTIONS_JSON).pipe(catchError(this.handleError));
+    }
 
     getPaging(pageIndex: number, pageSize: number, searchText: string) {
-        let url = `${this.apiUrl}/filter?pageIndex=${pageIndex}&pageSize=${pageSize}&searchText=${searchText}&langId=${localStorage.getItem('lang')}`;
+        let url = `${this.apiUrl}/filter-paging?pageIndex=${pageIndex}&pageSize=${pageSize}&searchText=${searchText}&langId=${localStorage.getItem('lang')}`;
 
         return this.http.get(url, OPTIONS_JSON).pipe(catchError(this.handleError));
     }

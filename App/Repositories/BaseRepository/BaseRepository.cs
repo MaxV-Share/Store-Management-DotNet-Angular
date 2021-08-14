@@ -8,13 +8,14 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace App.Repositories.BaseRepository
 {
-    public class BaseRepository<TEntity, TKey> : IBaseRepository<TEntity, TKey> where TEntity : BaseEntity<TKey> 
+    public class BaseRepository<TEntity, TKey> : IBaseRepository<TEntity, TKey> where TEntity : BaseEntity<TKey>
     {
         #region props
 
@@ -117,15 +118,15 @@ namespace App.Repositories.BaseRepository
             return entities;
         }
 
-        public virtual async Task DeleteHardAsync(TKey id)
+        public virtual async Task DeleteHardAsync(params object[] keyValues)
         {
-            var entity = await _context.Set<TEntity>().FindAsync(id);
+            var entity = await _context.Set<TEntity>().FindAsync(keyValues);
             ValidateAndThrow(entity);
             Entities.Remove(entity);
         }
-        public virtual async Task DeleteSoftAsync(TKey id)
+        public virtual async Task DeleteSoftAsync(params object[] keyValues)
         {
-            var entity = await _context.Set<TEntity>().SingleOrDefaultAsync(e => e.Id.Equals(id));
+            var entity = await _context.Set<TEntity>().FindAsync(keyValues);
             ValidateAndThrow(entity);
             entity.Deleted = DateTime.Now.ToString("yyyyMMddHHmmss");
             await UpdateAsync(entity);

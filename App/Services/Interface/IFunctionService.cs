@@ -12,7 +12,8 @@ namespace App.Services.Interface
 {
     public interface IFunctionService : IBaseService<Function, FunctionCreateRequest, FunctionUpdateRequest, FunctionViewModel, string>
     {
-        Task<IEnumerable<TreeFunctionViewModel>> GetTreeAsync();
+        Task<IEnumerable<TreeFunctionViewModel>> GetTreeNodeAsync();
+        Task<IEnumerable<FunctionViewModel>> GetTreeAsync();
         Task<IEnumerable<FunctionViewModel>> GetFunctionsWithoutChildren(string textSearch);
     }
 }
