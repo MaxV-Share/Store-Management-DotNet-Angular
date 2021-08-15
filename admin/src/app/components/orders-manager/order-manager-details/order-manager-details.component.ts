@@ -47,8 +47,6 @@ export class OrderManagerDetailsComponent extends BaseComponent implements OnIni
     }
 
     get totalPrice() {
-        console.log(this.billDetail);
-
         return this.billDetail.reduce((value, cur) => value + cur.quantity * cur.price, 0)
     }
     set totalPrice(value) {
@@ -86,8 +84,6 @@ export class OrderManagerDetailsComponent extends BaseComponent implements OnIni
         } else {
             this.dataSourceBillDetail = new MatTableDataSource<BillDetail>(this.billDetail);
         }
-        //if(this.bill.discountPrice == null) this.bill.discountPrice = 0;
-        console.log(this.bill);
 
         this.getProduct();
         this.ctrProduct.valueChanges
@@ -112,6 +108,8 @@ export class OrderManagerDetailsComponent extends BaseComponent implements OnIni
                     this.products = res.body;
                     this.filteredOptions = of(res.body);
                 }
+                console.log(res);
+
             });
     }
 
@@ -173,6 +171,8 @@ export class OrderManagerDetailsComponent extends BaseComponent implements OnIni
                         map(name => this.products.slice())
                     );
             }
+            console.log(res);
+
         })
     }
 

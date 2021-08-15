@@ -18,7 +18,9 @@ namespace App.Models.DTOs
         [MaxLength(256)]
         public string Code { get; set; }
         public double? Price { get; set; }
+        public string ImageUrl { get; set; }
         [JsonProperty("file")]
+        [FromForm(Name = "file")]
         public IFormFile File { get; set; }
         [JsonProperty("details")]
         [FromForm(Name = "details")]

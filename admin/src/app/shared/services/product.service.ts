@@ -16,12 +16,12 @@ export class ProductService extends CrudService<ProductCreateRequest, ProductUpd
     }
 
     getPaging(pageIndex: any, pageSize: number, searchText: string) {
-        return this.http.get(`${this.apiUrl}/filter?pageIndex=${pageIndex}&pageSize=${pageSize}&searchText=${searchText}&langId=${localStorage.getItem('lang')}`, OPTIONS_JSON)
+        return this.http.get(`${this.apiUrl}/filter-paging?pageIndex=${pageIndex}&pageSize=${pageSize}&searchText=${searchText}&langId=${localStorage.getItem('lang')}`, OPTIONS_JSON)
         // .pipe(catchError(this.handleError));
     }
 
     getFilter(searchText: string) {
-        return this.http.get(`${ENVIRONMENT.apiUrl}/products?searchText=${searchText}&langId=${localStorage.getItem('lang')}`, OPTIONS_JSON)
+        return this.http.get(`${ENVIRONMENT.apiUrl}/products/filter?searchText=${searchText}&langId=${localStorage.getItem('lang')}`, OPTIONS_JSON)
         // .pipe(catchError(this.handleError));
     }
 

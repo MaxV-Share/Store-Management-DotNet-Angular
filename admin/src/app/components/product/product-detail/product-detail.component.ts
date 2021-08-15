@@ -112,9 +112,13 @@ export class ProductDetailComponent extends BaseComponent implements OnInit {
                 })
             )
             .subscribe((res: HttpResponse<CategoryDetail[]>) => {
-                this.isLoadingAutocompleteCategory = true;
-                this.categories = of(res.body);
-                this.filteredOptions = of(res.body);
+                if (res.status == 200) {
+                    this.isLoadingAutocompleteCategory = true;
+                    this.categories = of(res.body);
+                    this.filteredOptions = of(res.body);
+                    console.log(res)
+                }
+
             });
     }
 
@@ -152,21 +156,20 @@ export class ProductDetailComponent extends BaseComponent implements OnInit {
         if (this.entity.id == null) {
 
             let productCreate = mapper.map(this.entity,ProductCreateRequest,Product);
+            formData = this.utilitiesService.ToFormData(productCreate,formData);
             console.log(productCreate);
-            // formData = this.utilitiesService.ToFormData(productCreate,formData);
-            // console.log(productCreate);
 
-            // this.productService.add(formData).subscribe((res: HttpResponse<any>) => {
-            //     if (res.status == 200) {
-            //         this.translate.get('Success').subscribe(e => {
-            //             this.toastr.success(e)
-            //         });
-            //         this.saved.emit("success");
-            //     }
-            // }, err => {
-            //     this.toastr.error("error");
-            //     console.error(err);
-            // });
+            this.productService.add(formData).subscribe((res: HttpResponse<any>) => {
+                if (res.status == 200) {
+                    this.translate.get('Success').subscribe(e => {
+                        this.toastr.success(e)
+                    });
+                    this.saved.emit("success");
+                }
+            }, err => {
+                this.toastr.error("error");
+                console.error(err);
+            });
         } else {
             let productUpdate = mapper.map(this.entity,ProductUpdateRequest,Product);
             console.log(productUpdate);

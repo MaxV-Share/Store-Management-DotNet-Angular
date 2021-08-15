@@ -40,7 +40,7 @@ namespace App.Controllers.Base
             _baseService = baseService;
         }
         [HttpPost]
-        public virtual async Task<ActionResult> Post([FromBody] TCreateRequest request)
+        public virtual async Task<ActionResult> Post([FromForm] TCreateRequest request)
         {
             if (null == request)
                 return BadRequest();
@@ -51,7 +51,7 @@ namespace App.Controllers.Base
             return Ok(result);
         }
         [HttpPut("{id}")]
-        public virtual async Task<ActionResult> Put(TKey id, TUpdateRequest request)
+        public virtual async Task<ActionResult> Put(TKey id,[FromForm] TUpdateRequest request)
         {
             if (!id.Equals(request.Id))
                 return BadRequest();

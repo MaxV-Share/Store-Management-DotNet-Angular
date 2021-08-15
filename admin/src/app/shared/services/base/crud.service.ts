@@ -17,8 +17,6 @@ export abstract class CrudService<TCreateRequest extends BaseCreateRequest, TUpd
         let data : FormData | TCreateRequest | string = entity;
         let options = OPTIONS_DEFAULT;
         if (!(entity instanceof FormData)){
-            console.log();
-
             data = JSON.stringify(entity);
             options = OPTIONS_JSON;
         }
