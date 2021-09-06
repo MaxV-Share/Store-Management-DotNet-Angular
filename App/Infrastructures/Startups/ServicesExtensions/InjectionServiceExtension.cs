@@ -38,7 +38,7 @@ namespace App.Infrastructures.Startup.ServicesExtensions
             services.AddScoped<IBillRepository, BillRepository>();
             services.AddScoped<IBillService, BillService>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
-            services.AddScoped<ICategoryDetailsRepository, CategoryDetailsRepository>();
+            services.AddScoped<ICategoryDetailRepository, CategoryDetailRepository>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ICommandRepository, CommandRepository>();
             services.AddScoped<ICommandService, CommandService>();

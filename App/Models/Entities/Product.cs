@@ -7,23 +7,26 @@ using System.Threading.Tasks;
 
 namespace App.Models.Entities
 {
+
     public class Product : BaseEntity<int>
     {
-        public override void SetDefaultValue(string createAt)
+        public override Product SetDefaultValue(string createAt)
         {
             base.SetDefaultValue(createAt);
             ProductDetails.ForEach(e =>
             {
                 e.SetDefaultValue(createAt);
             });
+            return this;
         }
-        public override void SetValueUpdate(string updateAt)
+        public override Product SetValueUpdate(string updateAt)
         {
             base.SetDefaultValue(updateAt);
             ProductDetails.ForEach(e =>
             {
                 e.SetValueUpdate(updateAt);
             });
+            return this;
         }
         public virtual Category Category { get; set; }
         public int? CategoryId { get; set; }

@@ -19,7 +19,7 @@ namespace App.Services
 {
     public class DiscountService : BaseService<Discount, DiscountCreateRequest, DiscountUpdateRequest, DiscountViewModel, int>, IDiscountService
 {
-        public DiscountService(IDiscountRepository discountRepository, IMapper mapper, IUnitOffWork unitOffWork, ILogger<DiscountService> logger) : base(discountRepository, mapper, unitOffWork, logger)
+        public DiscountService(IMapper mapper, IUnitOffWork unitOffWork, ILogger<DiscountService> logger) : base( mapper, unitOffWork, logger)
         {
         }
     }

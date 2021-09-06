@@ -24,31 +24,31 @@ namespace App.Services
 {
     public class FunctionService : BaseService<Function, FunctionCreateRequest, FunctionUpdateRequest, FunctionViewModel, string>, IFunctionService
     {
-        public FunctionService(IFunctionRepository repository, IMapper mapper, IUnitOffWork unitOffWork, ILogger<FunctionService> logger) : base(repository, mapper, unitOffWork, logger)
+        public FunctionService( IMapper mapper, IUnitOffWork unitOffWork, ILogger<FunctionService> logger) : base(mapper, unitOffWork, logger)
         {
         }
         public override async Task<IEnumerable<FunctionViewModel>> GetAllDTOAsync()
         {
-            var entities = await _repository.GetNoTrackingEntities().OrderBy(e => e.ParentId).ThenBy(e => e.SortOrder).ToListAsync();
+            var entities = await _unitOffWork.FunctionRepository.GetNoTrackingEntities().OrderBy(e => e.ParentId).ThenBy(e => e.SortOrder).ToListAsync();
             var functions = _mapper.Map<List<FunctionViewModel>>(entities);
             return functions;
         }
         public async Task<IEnumerable<FunctionViewModel>> GetTreeAsync()
         {
-            var entities = await _repository.GetNoTrackingEntities().Include(e => e.Childrens).Where(e => e.ParentId == null).OrderBy(e => e.ParentId).ThenBy(e => e.SortOrder).ToListAsync();
+            var entities = await _unitOffWork.FunctionRepository.GetNoTrackingEntities().Include(e => e.Childrens).Where(e => e.ParentId == null).OrderBy(e => e.ParentId).ThenBy(e => e.SortOrder).ToListAsync();
             var result = _mapper.Map<List<FunctionViewModel>>(entities);
             return result;
         }
         public async Task<IEnumerable<TreeFunctionViewModel>> GetTreeNodeAsync()
         {
-            var entities = await _repository.GetNoTrackingEntities().OrderBy(e => e.ParentId).ThenBy(e => e.SortOrder).ToListAsync();
+            var entities = await _unitOffWork.FunctionRepository.GetNoTrackingEntities().OrderBy(e => e.ParentId).ThenBy(e => e.SortOrder).ToListAsync();
             var functions = _mapper.Map<List<FunctionViewModel>>(entities);
             var result = functions.ToNodeChildTree(null);
             return result;
         }
         public async Task<IEnumerable<FunctionViewModel>> GetFunctionsWithoutChildren(string textSearch)
         {
-            var entities = await _repository.GetNoTrackingEntities().Where(e => e.ParentId == null && EF.Functions.Like(e.Name,$"%{textSearch}%")).OrderBy(e => e.SortOrder).ThenBy(e => e.Name).ToListAsync();
+            var entities = await _unitOffWork.FunctionRepository.GetNoTrackingEntities().Where(e => e.ParentId == null && EF.Functions.Like(e.Name,$"%{textSearch}%")).OrderBy(e => e.SortOrder).ThenBy(e => e.Name).ToListAsync();
             var result = _mapper.Map<List<FunctionViewModel>>(entities);
             return result;
         }

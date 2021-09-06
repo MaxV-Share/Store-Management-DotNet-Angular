@@ -3,6 +3,7 @@ using App.Models.Entities;
 using App.Repositories.BaseRepository;
 using App.Repositories.Interface;
 using App.Services.Interface;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -14,7 +15,7 @@ namespace App.Repositories
 {
     public class PermissionRepository : BaseRepository<Permission, Guid>, IPermissionRepository
     {
-        public PermissionRepository(ApplicationDbContext context, IUserService userService, ILogger<PermissionRepository> logger) : base(context, userService, logger)
+        public PermissionRepository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor) :  base(context, httpContextAccessor)
         {
         }
     }

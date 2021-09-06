@@ -11,10 +11,11 @@ namespace App.Models.Entities
 {
     public class Command : BaseEntity<string>
     {
-        public override void SetDefaultValue(string createBy)
+        public override Command SetDefaultValue(string createBy)
         {
             CreateAt = DateTime.Now;
             UpdateAt = CreateAt;
+            return this;
         }
         [MaxLength(50)]
         [Column(TypeName = "varchar(50)")]

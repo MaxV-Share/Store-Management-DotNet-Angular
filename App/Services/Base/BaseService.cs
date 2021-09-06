@@ -12,18 +12,16 @@ using Microsoft.Extensions.Logging;
 namespace App.Services.Base
 {
     public abstract class BaseService<TEntity, TCreateRequest, TUpdateRequest, TViewModel, TKey> : IBaseService<TEntity, TCreateRequest, TUpdateRequest, TViewModel, TKey>
-        where TEntity : class, new()
+        where TEntity : BaseEntity<TKey>, new()
         where TCreateRequest : BaseCreateRequest, new()
         where TUpdateRequest : BaseUpdateRequest<TKey>, new()
         where TViewModel : BaseViewModel<TKey>, new()
     {
-        public IBaseRepository<TEntity, TKey> _repository;
-        public readonly IMapper _mapper;
-        public readonly IUnitOffWork _unitOffWork;
-        public readonly ILogger _logger;
-        public BaseService(IBaseRepository<TEntity, TKey> repository, IMapper mapper, IUnitOffWork unitOffWork, ILogger logger)
+        protected readonly IMapper _mapper;
+        protected readonly IUnitOffWork _unitOffWork;
+        protected readonly ILogger _logger;
+        protected BaseService(IMapper mapper, IUnitOffWork unitOffWork, ILogger logger)
         {
-            _repository = repository;
             _mapper = mapper;
             _unitOffWork = unitOffWork;
             _logger = logger;
@@ -31,26 +29,26 @@ namespace App.Services.Base
 
         public async Task<int> DeleteHardAsync(TKey id)
         {
-            await _repository.DeleteHardAsync(id);
+            await _unitOffWork.BaseRepository<TEntity, TKey>().DeleteHardAsync(id);
             return await _unitOffWork.SaveChangesAsync();
         }
 
         public async Task<int> DeleteSoftAsync(TKey id)
         {
-            await _repository.DeleteSoftAsync(id);
+            await _unitOffWork.BaseRepository<TEntity, TKey>().DeleteSoftAsync(id);
             return await _unitOffWork.SaveChangesAsync();
         }
 
         public virtual async Task<IEnumerable<TViewModel>> GetAllDTOAsync()
         {
-            var entities = await _repository.GetAllAsync();
+            var entities = await _unitOffWork.BaseRepository<TEntity, TKey>().GetAllAsync();
             var result = _mapper.Map<IEnumerable<TViewModel>>(entities);
             return result;
         }
 
         public virtual async Task<TViewModel> GetByIdAsync(TKey id)
         {
-            var entity = await _repository.GetByIdAsync(id);
+            var entity = await _unitOffWork.BaseRepository<TEntity, TKey>().GetByIdAsync(id);
             var result = _mapper.Map<TViewModel>(entity);
             return result;
         }
@@ -64,51 +62,32 @@ namespace App.Services.Base
         {
             if (!id.Equals(request.Id))
                 throw new KeyNotFoundException();
-            var entity = await _repository.GetByIdAsync(id);
+            var entity = await _unitOffWork.BaseRepository<TEntity, TKey>().GetByIdAsync(id);
 
             if (entity == null)
             {
                 throw new NullReferenceException();
             }
             entity = _mapper.Map(request, entity);
-
-            try
-            {
-                await _repository.UpdateAsync(entity);
-                var result = await _unitOffWork.SaveChangesAsync();
-                return result;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            await _unitOffWork.BaseRepository<TEntity, TKey>().UpdateAsync(entity);
+            var result = await _unitOffWork.SaveChangesAsync();
+            return result;
         }
         public virtual async Task<TViewModel> CreateAsync(TCreateRequest request)
         {
             var entityNew = new TEntity();
             _mapper.Map(request, entityNew);
-            try
+            await _unitOffWork.DoWorkWithTransaction(async () =>
             {
-                await _unitOffWork.DoWorkWithTransaction(async () =>
+                await _unitOffWork.BaseRepository<TEntity, TKey>().CreateAsync(entityNew);
+                var effectedCount = await _unitOffWork.SaveChangesAsync();
+                if (effectedCount <= 0)
                 {
-                    await _repository.CreateAsync(entityNew);
-                    var effectedCount = await _unitOffWork.SaveChangesAsync();
-                    if (effectedCount <= 0)
-                    {
-                        throw new NullReferenceException();
-                    }
-                });
-                var result = _mapper.Map<TViewModel>(entityNew);
-                return result;
-            }
-            catch (NullReferenceException)
-            {
-                throw;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+                    throw new NullReferenceException();
+                }
+            });
+            var result = _mapper.Map<TViewModel>(entityNew);
+            return result;
         }
         public virtual async Task<IEnumerable<TViewModel>> CreateAsync(IEnumerable<TCreateRequest> request)
         {
@@ -117,7 +96,7 @@ namespace App.Services.Base
             IEnumerable<TEntity> response = new List<TEntity>();
             await _unitOffWork.DoWorkWithTransaction(async () =>
             {
-                response = await _repository.CreateAsync(entitiesNew);
+                response = await _unitOffWork.BaseRepository<TEntity, TKey>().CreateAsync(entitiesNew);
                 var effectedCount = await _unitOffWork.SaveChangesAsync();
                 if (effectedCount <= 0)
                 {

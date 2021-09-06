@@ -20,10 +20,8 @@ namespace App.Services
 {
     public class LangService : BaseService<Lang, LangCreateRequest, LangUpdateRequest, LangViewModel, string>, ILangService
     {
-        public readonly ILangRepository _categoryRepository;
-        public LangService(ILangRepository saleRepository, IMapper mapper, IUnitOffWork unitOffWork, ILogger<LangService> logger) : base(saleRepository, mapper, unitOffWork, logger)
+        public LangService( IMapper mapper, IUnitOffWork unitOffWork, ILogger<LangService> logger) : base(mapper, unitOffWork, logger)
         {
-            _categoryRepository = saleRepository;
         }
     }
 }

@@ -3,6 +3,7 @@ using App.Models.Entities;
 using App.Repositories.BaseRepository;
 using App.Repositories.Interface;
 using App.Services.Interface;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace App.Repositories
 {
     public class BillDetailRepository : BaseRepository<BillDetail, int>, IBillDetailRepository
     {
-        public BillDetailRepository(ApplicationDbContext context, IUserService userService, ILogger<BillDetailRepository> logger) : base(context, userService, logger)
+        public BillDetailRepository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor) : base(context, httpContextAccessor)
         {
 
         }

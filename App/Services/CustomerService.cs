@@ -19,8 +19,9 @@ namespace App.Services
     public class CustomerService : BaseService<Customer, CustomerCreateRequest, CustomerUpdateRequest, CustomerViewModel, int>, ICustomerService
     {
 
-        public CustomerService(ICustomerRepository customerRepository, IMapper mapper, IUnitOffWork unitOffWork, ILogger<CustomerService> logger) : base(customerRepository, mapper, unitOffWork, logger)
+        public CustomerService(IMapper mapper, IUnitOffWork unitOffWork, ILogger<CustomerService> logger) : base(mapper, unitOffWork, logger)
         {
         }
+
     }
 }

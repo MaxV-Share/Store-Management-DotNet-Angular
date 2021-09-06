@@ -1,4 +1,5 @@
 ﻿using App.DTO;
+using App.Infrastructures.UnitOffWorks;
 using App.Models.Entities;
 using App.Models.Entities.Identities;
 using App.Repositories.Interface;
@@ -17,28 +18,26 @@ namespace App.Services
 {
     public class UserService : IUserService
     {
-        public readonly IUserRepository _userRepository;
+        public readonly IUnitOffWork _unitOffWork;
         public readonly IMapper _mapper;
-        public readonly UserManager<User> _userManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public UserService(IUserRepository userRepository, IMapper mapper, UserManager<User> userManager, IHttpContextAccessor httpContextAccessor)
+        public UserService(IUnitOffWork unitOffWork, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
-            _userRepository = userRepository;
+            _unitOffWork = unitOffWork;
             _mapper = mapper;
-            _userManager = userManager;
             _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IEnumerable<UserUpdateRequest>> GetAllAsync(string filter)
         {
-            var entities = await _userRepository.GetAllAsync(filter);
+            var entities = await _unitOffWork.UserRepository.GetAllAsync(filter);
             var result = _mapper.Map<IEnumerable<UserUpdateRequest>>(entities);
             return result;
         }
 
         public async Task<UserUpdateRequest> GetUserById(string id)
         {
-            var entity = await _userManager.FindByIdAsync(id);
+            var entity = await _unitOffWork.UserManager.FindByIdAsync(id);
             var result = _mapper.Map<UserUpdateRequest>(entity);
             return result;
         }
@@ -49,7 +48,7 @@ namespace App.Services
             {
                 return null;
             }
-            var user = await _userManager.FindByNameAsync(userName);
+            var user = await _unitOffWork.UserManager.FindByNameAsync(userName);
             var result = _mapper.Map<UserUpdateRequest>(user);
 
             return result;

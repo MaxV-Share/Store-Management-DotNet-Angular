@@ -18,7 +18,7 @@ namespace App.Services
 {
     public class PermissionService : BaseService<Permission, PermissionCreateRequest, PermissionUpdateRequest, PermissionViewModel, Guid>, IPermissionService
     {
-        public PermissionService(IPermissionRepository repository, IMapper mapper, IUnitOffWork unitOffWork, ILogger<PermissionService> logger) : base(repository, mapper, unitOffWork, logger)
+        public PermissionService(IMapper mapper, IUnitOffWork unitOffWork, ILogger<PermissionService> logger) : base( mapper, unitOffWork, logger)
         {
         }
     }

@@ -10,6 +10,5 @@ namespace App.Repositories.Interface
 {
     public interface IDiscountRepository : IBaseRepository<Discount, int>
     {
-        public Task<Discount> PostAsync(DiscountCreateRequest request);
     }
 }

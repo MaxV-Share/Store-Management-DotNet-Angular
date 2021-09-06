@@ -16,18 +16,18 @@ using System.Threading.Tasks;
 
 namespace App.Controllers.Base
 {
-    public interface ICRUDContoller<TEntity, TCreateRequest, TUpdateRequest, TViewModel, TKey>
-        where TCreateRequest : BaseCreateRequest, new()
-        where TUpdateRequest : BaseUpdateRequest<TKey>, new()
-    {
-        Task<ActionResult> Post([FromBody] TCreateRequest request);
-        Task<ActionResult> Put(TKey id, TUpdateRequest request);
-        Task<ActionResult> Delete(TKey id); 
-        Task<ActionResult> GetById(TKey id);
-        Task<ActionResult> GetAll();
-    }
+    //public interface ICRUDContoller<TEntity, TCreateRequest, TUpdateRequest, TViewModel, TKey>
+    //    where TCreateRequest : BaseCreateRequest, new()
+    //    where TUpdateRequest : BaseUpdateRequest<TKey>, new()
+    //{
+    //    Task<ActionResult> Post([FromBody] TCreateRequest request);
+    //    Task<ActionResult> Put(TKey id, TUpdateRequest request);
+    //    Task<ActionResult> Delete(TKey id); 
+    //    Task<ActionResult> GetById(TKey id);
+    //    Task<ActionResult> GetAll();
+    //}
 
-    public abstract class CRUDContoller<TEntity, TCreateRequest, TUpdateRequest, TViewModel, TKey> : ApiController, ICRUDContoller<TEntity, TCreateRequest, TUpdateRequest, TViewModel, TKey>
+    public abstract class CRUDContoller<TEntity, TCreateRequest, TUpdateRequest, TViewModel, TKey> : ApiController//, ICRUDContoller<TEntity, TCreateRequest, TUpdateRequest, TViewModel, TKey>
         where TEntity : class, new()
         where TCreateRequest : BaseCreateRequest, new()
         where TUpdateRequest : BaseUpdateRequest<TKey>, new()
@@ -35,7 +35,7 @@ namespace App.Controllers.Base
     {
 
         private readonly IBaseService<TEntity, TCreateRequest, TUpdateRequest, TViewModel, TKey> _baseService;
-        public CRUDContoller(ILogger logger, IBaseService<TEntity, TCreateRequest, TUpdateRequest, TViewModel, TKey> baseService) : base(logger)
+        protected CRUDContoller(ILogger logger, IBaseService<TEntity, TCreateRequest, TUpdateRequest, TViewModel, TKey> baseService) : base(logger)
         {
             _baseService = baseService;
         }

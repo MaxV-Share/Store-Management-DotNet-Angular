@@ -24,24 +24,11 @@ namespace App.Services
 {
     public class BillService : BaseService<Bill, BillCreateRequest, BillUpdateRequest, BillViewModel, int>, IBillService
     {
-        private readonly ICustomerRepository _customerRepository;
-        private readonly IProductRepository _productRepository;
-        private readonly IBillDetailRepository _billDetailRepository;
-        private readonly IUserRepository _userRepository;
         private readonly UserManager<User> _userManager;
-        public BillService(IBillRepository repository,
-            IMapper mapper,
-            ICustomerRepository customerRepository,
-            IUserRepository userRepository,
-            UserManager<User> userManager,
-            IProductRepository productRepository,
-            IBillDetailRepository billDetailRepository, IUnitOffWork unitOffWork, ILogger<BillService> logger) : base(repository, mapper, unitOffWork, logger)
+        public BillService(IMapper mapper, UserManager<User> userManager, IUnitOffWork unitOffWork, ILogger<BillService> logger) :
+            base(mapper, unitOffWork, logger)
         {
-            _customerRepository = customerRepository;
-            _userRepository = userRepository;
             _userManager = userManager;
-            _productRepository = productRepository;
-            _billDetailRepository = billDetailRepository;
         }
 
         public override async Task<BillViewModel> CreateAsync(BillCreateRequest request)
@@ -53,7 +40,7 @@ namespace App.Services
                 await _unitOffWork.DoWorkWithTransaction(async () =>
                 {
                     var tUserPayment = _userManager.FindByNameAsync(request.UserPaymentUserName);
-                    var customer = await _customerRepository.GetByPhoneNumberAsync(request.CustomerPhoneNumber);
+                    var customer = await _unitOffWork.CustomerRepository.GetByPhoneNumberAsync(request.CustomerPhoneNumber);
                     if (customer == null && !string.IsNullOrEmpty(request.CustomerPhoneNumber))
                     {
                         customer = new Customer()
@@ -63,14 +50,14 @@ namespace App.Services
                             Address = request.CustomerAddress,
                             Birthday = request.CustomerBirthday,
                         };
-                        await _customerRepository.CreateAsync(customer);
+                        await _unitOffWork.CustomerRepository.CreateAsync(customer);
                         await _unitOffWork.SaveChangesAsync();
                     }
 
                     var billDetails = new List<BillDetail>();
                     foreach (var detail in request.BillDetails)
                     {
-                        var product = _productRepository.GetByIdAsync(detail.ProductId);
+                        var product = _unitOffWork.ProductRepository.GetByIdAsync(detail.ProductId);
                         billDetails.Add(new BillDetail()
                         {
                             ProductId = detail.ProductId,
@@ -92,7 +79,7 @@ namespace App.Services
                         BillDetails = billDetails
                     };
 
-                    await _repository.CreateAsync(bill);
+                    await _unitOffWork.BillRepository.CreateAsync(bill);
 
                     var effectedCount = await _unitOffWork.SaveChangesAsync();
                     if (effectedCount == 0)
@@ -117,7 +104,7 @@ namespace App.Services
             await _unitOffWork.DoWorkWithTransaction(async () =>
             {
                 var tUserPayment = _userManager.FindByNameAsync(request.UserPaymentUserName);
-                var customer = await _customerRepository.GetByPhoneNumberAsync(request.CustomerPhoneNumber);
+                var customer = await _unitOffWork.CustomerRepository.GetByPhoneNumberAsync(request.CustomerPhoneNumber);
 
                 if (customer == null && !string.IsNullOrEmpty(request.CustomerPhoneNumber))
                 {
@@ -128,11 +115,11 @@ namespace App.Services
                         Address = request.CustomerAddress,
                         Birthday = request.CustomerBirthday,
                     };
-                    await _customerRepository.CreateAsync(customer);
+                    await _unitOffWork.CustomerRepository.CreateAsync(customer);
                     await _unitOffWork.SaveChangesAsync();
                 }
 
-                var bill = await _repository.GetQueryableTable()
+                var bill = await _unitOffWork.BillRepository.GetQueryableTable()
                                             .Include(e => e.BillDetails)
                                             .SingleOrDefaultAsync(e => e.Id.Equals(id));
 
@@ -150,7 +137,7 @@ namespace App.Services
                 {
                     if (!request.billDetails.Any(e => e.Id == detail.Id))
                     {
-                        tDeleteDetails.Add(_billDetailRepository.DeleteSoftAsync(detail.Id));
+                        tDeleteDetails.Add(_unitOffWork.BillDetailRepository.DeleteSoftAsync(detail.Id));
                     }
                 }
 
@@ -161,7 +148,7 @@ namespace App.Services
                     var billDetail = new BillDetail();
 
                     if (e.Id == 0) //new BillDetail
-                        {
+                    {
                         billDetail = new BillDetail()
                         {
                             Price = e.Price,
@@ -172,8 +159,8 @@ namespace App.Services
                         };
                     }
                     else // update BillDetail
-                        {
-                        billDetail = await _billDetailRepository.GetByIdAsync(e.Id);
+                    {
+                        billDetail = await _unitOffWork.BillDetailRepository.GetByIdAsync(e.Id);
                         billDetail.Price = e.Price;
                         billDetail.ProductId = e.ProductId;
                         billDetail.Quantity = e.Quantity;
@@ -186,7 +173,7 @@ namespace App.Services
                 bill.BillDetails = billDetailsNew;
 
                 await Task.WhenAll(tDeleteDetails);
-                await _repository.UpdateAsync(bill);
+                await _unitOffWork.BillRepository.UpdateAsync(bill);
                 result = await _unitOffWork.SaveChangesAsync();
             });
 
@@ -195,7 +182,7 @@ namespace App.Services
 
         public override async Task<BillViewModel> GetByIdAsync(int id)
         {
-            var entity = await _repository.GetNoTrackingEntities()
+            var entity = await _unitOffWork.BillRepository.GetNoTrackingEntities()
                                         .Include(e => e.Customer)
                                         .Include(e => e.UserPayment)
                                         .Include(e => e.BillDetails.OrderBy(e => e.Id))
@@ -206,7 +193,7 @@ namespace App.Services
 
         public override async Task<IEnumerable<BillViewModel>> GetAllDTOAsync()
         {
-            var entities = await _repository.GetQueryableTable()
+            var entities = await _unitOffWork.BillRepository.GetQueryableTable()
                                             .Include(e => e.Customer)
                                             .Include(e => e.UserPayment)
                                             .ToListAsync();
@@ -216,7 +203,7 @@ namespace App.Services
         }
         public async Task<BillPaging> GetPagingAsync(int pageIndex, int pageSize, string txtSearch)
         {
-            var queryable = _repository.GetNoTrackingEntities()
+            var queryable = _unitOffWork.BillRepository.GetNoTrackingEntities()
                                         .Include(e => e.Customer)
                                         .Include(e => e.UserPayment)
                                         .OrderBy(e => e.CreateAt);

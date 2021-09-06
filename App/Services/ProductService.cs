@@ -30,30 +30,20 @@ namespace App.Services
     public class ProductService : BaseService<Product, ProductCreateRequest, ProductUpdateRequest, ProductViewModel, int>, IProductService
     {
         private const string FOLDER = "Products";
-        private readonly ILangRepository _langRepository;
-        private readonly IProductDetailRepository _productDetailsRepository;
         private readonly IStorageService _storageService;
-        private readonly ICategoryRepository _categoryRepository;
-        public ProductService(IProductRepository productRepository, 
+        public ProductService(
             IMapper mapper, 
-            IProductDetailRepository productDetailsRepository,
-            IStorageService storageService,
-            ILangRepository langRepository,
-            ICategoryRepository categoryRepository, IUnitOffWork unitOffWork, ILogger<ProductService> logger) : base(productRepository, mapper, unitOffWork, logger)
+            IStorageService storageService,IUnitOffWork unitOffWork, ILogger<ProductService> logger) : base( mapper, unitOffWork, logger)
         {
-            _productDetailsRepository = productDetailsRepository;
             _storageService = storageService;
-            _langRepository = langRepository;
-            _categoryRepository = categoryRepository;
         }
         public override async Task<ProductViewModel> CreateAsync(ProductCreateRequest request)
         {
             if (request == null)
                 return null;
             var product = new Product();
-            var productDetails = new List<ProductDetail>();
             var oldFileName = request.File?.FileName;
-            var newFileName = Guid.NewGuid().ToString() + Path.GetExtension(oldFileName);
+            var newFileName = Guid.NewGuid().ToString() + Path.GetExtension(oldFileName); // TODO: tachs ra
             _mapper.Map(request, product);
             try
             {
@@ -61,15 +51,14 @@ namespace App.Services
                 ProductViewModel result = null;
                 await _unitOffWork.DoWorkWithTransaction(async () => {
 
-
                     if (oldFileName != null)
                     {
-                        saveFile = _storageService.SaveFileAsync(request.File.OpenReadStream(), newFileName, FOLDER);
-                        product.ImageUrl = Path.Combine(FOLDER, newFileName);
+                        saveFile = _storageService.SaveFileAsync(request.File.OpenReadStream(), newFileName, FOLDER); //5
+                        product.ImageUrl = Path.Combine(FOLDER, newFileName); // TODO: tachs ra
                     }
 
-                    await _repository.CreateAsync(product);
-
+                    await _unitOffWork.ProductRepository.CreateAsync(product); //3
+                    
                     var effectedCount = await _unitOffWork.SaveChangesAsync();
                     if (effectedCount == 0)
                     {
@@ -78,7 +67,9 @@ namespace App.Services
                     }
                     result = _mapper.Map<ProductViewModel>(product);
                     if (saveFile != null)
+                    {
                         await saveFile;
+                    }
                 });
 
                 return result;
@@ -93,7 +84,7 @@ namespace App.Services
         public async Task<int> UpdateAsync(int id, ProductViewModel request)
         {
             var dateTimeNow = DateTime.Now;
-            var product = await _repository.GetQueryableTable().Include(e => e.ProductDetails).SingleOrDefaultAsync(e => e.Id == id);
+            var product = await _unitOffWork.ProductRepository.GetQueryableTable().Include(e => e.ProductDetails).SingleOrDefaultAsync(e => e.Id == id);
             if (product == null)
                 return 0;
             var oldFileName = request.File?.FileName;
@@ -119,7 +110,7 @@ namespace App.Services
                         product.ProductDetails[i].UpdateAt = dateTimeNow;
                     }
 
-                    await _repository.UpdateAsync(product);
+                    await _unitOffWork.ProductRepository.UpdateAsync(product);
 
                     result = await _unitOffWork.SaveChangesAsync();
 
@@ -138,35 +129,34 @@ namespace App.Services
 
         public override async Task<ProductViewModel> GetByIdAsync(int id)
         {
-            try
-            {
-                var product = await _repository.GetNoTrackingEntitiesIdentityResolution().Include(e => e.ProductDetails).ThenInclude(e => e.Lang).SingleOrDefaultAsync(e => e.Id == id);
-                product.ProductDetails = product.ProductDetails.OrderBy(e => e.Lang.Order).ToList();
-                if (product == null)
-                    return null;
+            var product = await _unitOffWork.ProductRepository
+                                            .GetNoTrackingEntitiesIdentityResolution()
+                                            .Include(e => e.ProductDetails)
+                                            .ThenInclude(e => e.Lang)
+                                            .SingleOrDefaultAsync(e => e.Id == id);
+            if (product == null)
+                return null;
+            product.ProductDetails = product.ProductDetails.OrderBy(e => e.Lang.Order).ToList();
 
-                var result = _mapper.Map<ProductViewModel>(product);
-                return result;
-            }
-            catch
-            {
-                throw;
-            }
+            var result = _mapper.Map<ProductViewModel>(product);
+            return result;
         }
 
         public async Task<ProductDetailPaging> GetPagingAsync(string langId, int pageIndex, int pageSize, string searchText)
         {
-            var taskData = _productDetailsRepository.GetQueryableTable()
-                                                    .Include(e => e.Lang)
-                                                    .Include(e => e.Product)
-                                                    .Where(e => e.LangId == langId && (string.IsNullOrEmpty(searchText) || e.Name.Contains(searchText) || e.Product.Code.Contains(searchText)))
-                                                    .OrderBy(e => e.Name)
-                                                    .Skip((pageIndex - 1) * pageSize)
-                                                    .Take(pageSize)
-                                                    .ToListAsync();
+            var taskData = _unitOffWork.ProductDetailRepository
+                                        .GetQueryableTable()
+                                        .Include(e => e.Lang)
+                                        .Include(e => e.Product)
+                                        .Where(e => e.LangId == langId && (string.IsNullOrEmpty(searchText) || e.Name.Contains(searchText) || e.Product.Code.Contains(searchText)))
+                                        .OrderBy(e => e.Name)
+                                        .Skip((pageIndex - 1) * pageSize)
+                                        .Take(pageSize)
+                                        .ToListAsync();
 
-            var taskTotalRow = _productDetailsRepository.GetQueryableTable()
-                                                        .CountAsync(e => e.Lang.Id == langId && (string.IsNullOrEmpty(searchText) || e.Name.Contains(searchText)));
+            var taskTotalRow = _unitOffWork.ProductDetailRepository
+                                            .GetQueryableTable()
+                                            .CountAsync(e => e.Lang.Id == langId && (string.IsNullOrEmpty(searchText) || e.Name.Contains(searchText)));
 
             var result = new ProductDetailPaging
             {
@@ -178,13 +168,14 @@ namespace App.Services
         }
         public async Task<IEnumerable<ProductDetailViewModel>> GetAllDTOAsync(string langId, string searchText)
         {
-            var res = await _productDetailsRepository.GetQueryableTable()
-                                                    .Include(e => e.Lang)
-                                                    .Include(e => e.Product)
-                                                    .Where(e =>
-                                                        e.Lang.Id.Equals(langId) &&
-                                                        (string.IsNullOrEmpty(searchText) || e.Name.Contains(searchText) || e.Product.Code.Contains(searchText)))
-                                                    .ToListAsync();
+            var res = await _unitOffWork.ProductDetailRepository
+                                        .GetQueryableTable()
+                                        .Include(e => e.Lang)
+                                        .Include(e => e.Product)
+                                        .Where(e =>
+                                            e.Lang.Id.Equals(langId) &&
+                                            (string.IsNullOrEmpty(searchText) || e.Name.Contains(searchText) || e.Product.Code.Contains(searchText)))
+                                        .ToListAsync();
 
             var result = _mapper.Map<IEnumerable<ProductDetailViewModel>>(res);
             return result;
@@ -204,7 +195,7 @@ namespace App.Services
                         await _unitOffWork.DoWorkWithTransaction(async () => {
 
                             var productCode = reader.GetValue(0).ToString();
-                            var product = await _repository.GetQueryableTable().SingleOrDefaultAsync(e => e.Code == productCode);
+                            var product = await _unitOffWork.ProductRepository.GetQueryableTable().SingleOrDefaultAsync(e => e.Code == productCode);
                             // Trường hợp không tồn tại
                             if (product == null)
                             {
@@ -223,7 +214,7 @@ namespace App.Services
                                             Name = reader.GetValue(3).ToString()
                                         });
                                 // Gọi hàm insert database 
-                                await _repository.CreateAsync(product);
+                                await _unitOffWork.ProductRepository.CreateAsync(product);
                             }
                             else
                             {
@@ -232,7 +223,7 @@ namespace App.Services
                                 product.Price = double.Parse(reader.GetValue(1).ToString());
                                 // Lấy danh sách chi tiết Product
                                 // Tìm ngôn ngữ hiện tại của dòng trong excel đã tồn tại trong detail hay chưa
-                                var productDetail = await _productDetailsRepository.GetQueryableTable()
+                                var productDetail = await _unitOffWork.ProductDetailRepository.GetQueryableTable()
                                                                                     .Where(e => e.ProductId == product.Id && e.LangId == reader.GetValue(2).ToString())
                                                                                     .SingleOrDefaultAsync();
 
@@ -245,7 +236,7 @@ namespace App.Services
                                         LangId = reader.GetValue(2).ToString(),
                                         Name = reader.GetValue(3).ToString()
                                     };
-                                    await _productDetailsRepository.CreateAsync(productDetail);
+                                    await _unitOffWork.ProductDetailRepository.CreateAsync(productDetail);
                                 }
                                 else
                                 {
@@ -253,9 +244,9 @@ namespace App.Services
                                     productDetail.ProductId = product.Id;
                                     productDetail.LangId = reader.GetValue(2).ToString();
                                     productDetail.Name = reader.GetValue(3).ToString();
-                                    await _productDetailsRepository.UpdateAsync(productDetail);
+                                    await _unitOffWork.ProductDetailRepository.UpdateAsync(productDetail);
                                 }
-                                await _repository.UpdateAsync(product);
+                                await _unitOffWork.ProductRepository.UpdateAsync(product);
                             }
                             await _unitOffWork.SaveChangesAsync();
                         });
