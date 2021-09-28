@@ -4,6 +4,7 @@ using App.Models.Entities;
 using App.Repositories.BaseRepository;
 using App.Repositories.Interface;
 using App.Services.Interface;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -15,7 +16,7 @@ namespace App.Repositories
 {
     public class ProductDetailRepository : BaseRepository<ProductDetail, int>, IProductDetailRepository
     {
-        public ProductDetailRepository(ApplicationDbContext context, IUserService userService, ILogger<ProductDetailRepository> logger) : base(context, userService, logger)
+        public ProductDetailRepository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor) :  base(context, httpContextAccessor)
         {
         }
     }

@@ -19,7 +19,7 @@ namespace App.Services
 {
     public class CommandService : BaseService<Command, CommandCreateRequest, CommandUpdateRequest, CommandViewModel, string>, ICommandService
     {
-        public CommandService(ICommandRepository baseRepository, IMapper mapper, IUnitOffWork unitOffWork, ILogger<CommandService> logger) : base(baseRepository, mapper, unitOffWork, logger)
+        public CommandService(IMapper mapper, IUnitOffWork unitOffWork, ILogger<CommandService> logger) : base(mapper, unitOffWork, logger)
         {
         }
     }

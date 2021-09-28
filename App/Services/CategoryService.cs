@@ -21,14 +21,8 @@ namespace App.Services
 {
     public class CategoryService : BaseService<Category, CategoryCreateRequest, CategoryUpdateRequest, CategoryViewModel, int>, ICategoryService
     {
-        public readonly ICategoryRepository _categoryRepository;
-        private readonly ILangRepository _langRepository;
-        private readonly ICategoryDetailsRepository _categoryDetailsRepository;
-        public CategoryService(ICategoryRepository categoryRepository, IMapper mapper, ILangRepository langRepository, ICategoryDetailsRepository categoryDetailsRepository, IUnitOffWork unitOffWork, ILogger<CategoryService> logger) : base(categoryRepository, mapper, unitOffWork, logger)
+        public CategoryService( IMapper mapper, IUnitOffWork unitOffWork, ILogger<CategoryService> logger) : base(mapper, unitOffWork, logger)
         {
-            _categoryRepository = categoryRepository;
-            _langRepository = langRepository;
-            _categoryDetailsRepository = categoryDetailsRepository;
         }
         //public async Task<CategoryViewModel> CreateAsync(CategoryCreateRequest request)
         //{
@@ -63,7 +57,7 @@ namespace App.Services
         //}
         public override async Task<CategoryViewModel> GetByIdAsync(int id)
         {
-            var category = await _categoryRepository.GetNoTrackingEntities()
+            var category = await _unitOffWork.CategoryRepository.GetNoTrackingEntities()
                                                     .Include(e => e.CategoryDetails)
                                                     .ThenInclude(e => e.Lang)
                                                     .SingleOrDefaultAsync(e => e.Id == id);
@@ -73,7 +67,7 @@ namespace App.Services
 
         public async Task<CategoryDetailPaging> GetDetailsPagingAsync(string langId, int pageIndex, int pageSize, string searchText)
         {
-            var query = _categoryDetailsRepository.GetNoTrackingEntities()
+            var query = _unitOffWork.CategoryDetailRepository.GetNoTrackingEntities()
                                                     .Include(e => e.Lang)
                                                     .Include(e => e.Category)
                                                     .Where(e => e.LangId == langId && (string.IsNullOrEmpty(searchText) || e.Name.Contains(searchText + "")));
@@ -96,7 +90,7 @@ namespace App.Services
 
         public async Task<IEnumerable<CategoryDetailViewModel>> GetAllDTOAsync(string langId, string searchText)
         {
-            var res = await _categoryDetailsRepository.GetNoTrackingEntities()
+            var res = await _unitOffWork.CategoryDetailRepository.GetNoTrackingEntities()
                                                     .Include(e => e.Category)
                                                     .Where(e => e.LangId.Equals(langId) && (string.IsNullOrEmpty(searchText) || e.Name.Contains(searchText + "")))
                                                     .ToListAsync();

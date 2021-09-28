@@ -3,34 +3,35 @@ using App.Models;
 using App.Services.Interface;
 using AutoMapper;
 using MaxV.Base;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace App.Repositories.BaseRepository
 {
-    public class BaseRepository<TEntity, TKey> : IBaseRepository<TEntity, TKey> where TEntity : BaseEntity<TKey> 
+    public abstract class BaseRepository<TEntity, TKey> : IBaseRepository<TEntity, TKey> where TEntity : BaseEntity<TKey>
     {
         #region props
 
         protected readonly DbContext _context;
         private DbSet<TEntity> _entitiesDbSet { get; set; }
-        public readonly IUserService _userService;
-        private readonly ILogger _logger;
+        public readonly IHttpContextAccessor _httpContextAccessor;
         #endregion props
 
         #region ctor
 
-        public BaseRepository(DbContext context, IUserService userService, ILogger logger)
+        public BaseRepository(DbContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
-            _userService = userService;
-            _logger = logger;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         ~BaseRepository()
@@ -44,7 +45,7 @@ namespace App.Repositories.BaseRepository
 
         public IQueryable<TEntity> GetQueryableTable()
         {
-            return Entities.AsQueryable<TEntity>();
+            return Entities.AsQueryable();
         }
 
         public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
@@ -68,8 +69,8 @@ namespace App.Repositories.BaseRepository
         public virtual async Task<TEntity> CreateAsync(TEntity entity)
         {
             ValidateAndThrow(entity);
-            var currentUser = await _userService.GetCurrentUser();
-            entity.SetDefaultValue(currentUser?.UserName);
+            var currentUserName = GetUserNameInHttpContext();
+            entity.SetDefaultValue(currentUserName);
             Entities.Add(entity);
             return entity;
         }
@@ -77,10 +78,10 @@ namespace App.Repositories.BaseRepository
         public virtual async Task<IEnumerable<TEntity>> CreateAsync(List<TEntity> entities)
         {
             ValidateAndThrow(entities);
-            var currentUser = await _userService.GetCurrentUser();
+            var currentUserName = GetUserNameInHttpContext();
             entities.ForEach(e =>
             {
-                e.SetDefaultValue(currentUser?.UserName);
+                e.SetDefaultValue(currentUserName);
             });
 
             Entities.AddRange(entities);
@@ -90,9 +91,9 @@ namespace App.Repositories.BaseRepository
         public virtual async Task<TEntity> UpdateAsync(TEntity entity)
         {
             ValidateAndThrow(entity);
-            var currentUser = await _userService.GetCurrentUser();
-            entity.SetValueUpdate(currentUser?.UserName);
+            var currentUserName = GetUserNameInHttpContext();
             var entry = _context.Entry(entity);
+            entity.SetValueUpdate(currentUserName);
             if (entry.State < EntityState.Added)
             {
                 entry.State = EntityState.Modified;
@@ -102,11 +103,11 @@ namespace App.Repositories.BaseRepository
 
         public virtual async Task<IEnumerable<TEntity>> UpdateAsync(IEnumerable<TEntity> entities)
         {
-            var currentUser = await _userService.GetCurrentUser();
+            var currentUserName = GetUserNameInHttpContext();
             entities.ToList().ForEach(e =>
             {
                 ValidateAndThrow(e);
-                e.SetValueUpdate(currentUser?.UserName);
+                e.SetValueUpdate(currentUserName);
             });
 
             var entry = _context.Entry(entities);
@@ -117,15 +118,15 @@ namespace App.Repositories.BaseRepository
             return entities;
         }
 
-        public virtual async Task DeleteHardAsync(TKey id)
+        public virtual async Task DeleteHardAsync(params object[] keyValues)
         {
-            var entity = await _context.Set<TEntity>().FindAsync(id);
+            var entity = await _context.Set<TEntity>().FindAsync(keyValues);
             ValidateAndThrow(entity);
             Entities.Remove(entity);
         }
-        public virtual async Task DeleteSoftAsync(TKey id)
+        public virtual async Task DeleteSoftAsync(params object[] keyValues)
         {
-            var entity = await _context.Set<TEntity>().SingleOrDefaultAsync(e => e.Id.Equals(id));
+            var entity = await _context.Set<TEntity>().FindAsync(keyValues);
             ValidateAndThrow(entity);
             entity.Deleted = DateTime.Now.ToString("yyyyMMddHHmmss");
             await UpdateAsync(entity);
@@ -133,7 +134,12 @@ namespace App.Repositories.BaseRepository
         #endregion public
 
         #region private
+        protected string GetUserNameInHttpContext()
+        {
 
+            var userName = _httpContextAccessor.HttpContext.User.FindFirst(claim => claim.Type == ClaimTypes.Name)?.Value;
+            return userName;
+        }
         protected void ValidateAndThrow(TEntity entity)
         {
             if (entity == null)
@@ -144,7 +150,7 @@ namespace App.Repositories.BaseRepository
 
         protected void ValidateAndThrow(IEnumerable<TEntity> entities)
         {
-            if (entities == null || entities.Count() == 0)
+            if (entities == null || !entities.Any())
             {
                 throw new ArgumentNullException(nameof(entities));
             }

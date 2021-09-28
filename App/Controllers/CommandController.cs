@@ -69,7 +69,7 @@ namespace App.Controllers
             return NotFound();
         }
 
-        [HttpGet("filter")]
+        [HttpGet("filter-paging")]
         public async Task<ActionResult> GetPaging(int pageIndex, int pageSize, string searchText = "")
         {
             try

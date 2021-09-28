@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace App.Models.DTOs.UpdateRquests
 {
-    public class RevenueUpdateRequest : BaseUpdateRequest<int>
+    public class RevenueUpdateRequest : BaseUpdateRequest<string>
     {
-        public string Id { get; set; }
         public double TotalPrice { get; set; }
     }
 }

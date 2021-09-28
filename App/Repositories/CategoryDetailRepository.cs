@@ -5,6 +5,7 @@ using App.Repositories.BaseRepository;
 using App.Repositories.Interface;
 using App.Services.Interface;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -14,9 +15,9 @@ using System.Threading.Tasks;
 
 namespace App.Repositories
 {
-    public class CategoryDetailsRepository : BaseRepository<CategoryDetail, int>, ICategoryDetailsRepository
+    public class CategoryDetailRepository : BaseRepository<CategoryDetail, int>, ICategoryDetailRepository
     {
-        public CategoryDetailsRepository(ApplicationDbContext context, IUserService userService, ILogger<CategoryDetailsRepository> logger) : base(context, userService, logger)
+        public CategoryDetailRepository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor) :  base(context, httpContextAccessor)
         {
 
         }

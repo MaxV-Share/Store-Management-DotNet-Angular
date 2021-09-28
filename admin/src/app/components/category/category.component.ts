@@ -44,7 +44,6 @@ export class CategoryComponent extends BaseComponent implements OnInit {
     }
 
     createOrUpdate(id: number = null) {
-
         const initialState = {
             id: id,
         };
@@ -71,9 +70,11 @@ export class CategoryComponent extends BaseComponent implements OnInit {
             }
         })
     }
+
     onSearch() {
 
     }
+
     pageEventHandle(event: PageEvent) {
         this.pageSize = event.pageSize;
         this.pageIndex = event.pageIndex + 1;

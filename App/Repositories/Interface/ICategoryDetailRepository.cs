@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace App.Repositories.Interface
 {
-    public interface ICategoryDetailsRepository : IBaseRepository<CategoryDetail, int>
+    public interface ICategoryDetailRepository : IBaseRepository<CategoryDetail, int>
     {
     }
 }

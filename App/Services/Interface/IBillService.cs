@@ -14,7 +14,6 @@ namespace App.Services.Interface
 {
     public interface  IBillService : IBaseService<Bill, BillCreateRequest, BillUpdateRequest, BillViewModel, int>
     { 
-        Task<BillViewModel> CreateAsync(BillCreateRequest request);
         Task<int> UpdateAsync(int id, BillViewModel request);
         Task<BillPaging> GetPagingAsync(int pageIndex, int pageSize, string txtSearch);
     }

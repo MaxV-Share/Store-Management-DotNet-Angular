@@ -11,9 +11,9 @@ namespace App.Controllers.Base
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ApiController : ControllerBase
+    public abstract class ApiController : ControllerBase
     {
-        protected readonly ILogger _logger;
+        public readonly ILogger _logger;
         public ApiController(ILogger logger)
         {
             _logger = logger;

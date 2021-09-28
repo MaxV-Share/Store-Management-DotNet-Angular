@@ -11,8 +11,8 @@ namespace App.Repositories.BaseRepository
     {
         Task<IEnumerable<TEntity>> CreateAsync(List<TEntity> entities);
         Task<TEntity> CreateAsync(TEntity entity);
-        Task DeleteHardAsync(TKey id);
-        Task DeleteSoftAsync(TKey id);
+        Task DeleteHardAsync(params object[] keyValues);
+        Task DeleteSoftAsync(params object[] keyValues);
         Task<IEnumerable<TEntity>> GetAllAsync();
         Task<TEntity> GetByIdAsync(TKey id);
         Task<TEntity> GetByIdNoTrackingAsync(TKey id);

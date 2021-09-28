@@ -5,6 +5,7 @@ using App.Repositories.BaseRepository;
 using App.Repositories.Interface;
 using App.Services.Interface;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -15,23 +16,8 @@ namespace App.Repositories
 {
     public class DiscountRepository :  BaseRepository<Discount, int>,IDiscountRepository
     {
-        public DiscountRepository(ApplicationDbContext context, IUserService userService, ILogger<DiscountRepository> logger) : base(context, userService, logger)
+        public DiscountRepository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor) :  base(context, httpContextAccessor)
         {
-        }
-        public async Task<Discount> PostAsync(DiscountCreateRequest request)
-        {
-            if (request == null)
-                return null;
-            Discount obj = new Discount()
-            {
-                PercentDiscount = request.PercentDiscount,
-                MaxDiscountPrice = request.MaxDiscountPrice,
-                FromDate = request.FromDate,
-                ToDate = request.ToDate
-
-            };
-            var result = await CreateAsync(obj);
-            return result;
         }
     }
 }

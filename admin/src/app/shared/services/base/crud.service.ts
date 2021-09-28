@@ -17,8 +17,6 @@ export abstract class CrudService<TCreateRequest extends BaseCreateRequest, TUpd
         let data : FormData | TCreateRequest | string = entity;
         let options = OPTIONS_DEFAULT;
         if (!(entity instanceof FormData)){
-            console.log();
-
             data = JSON.stringify(entity);
             options = OPTIONS_JSON;
         }
@@ -37,9 +35,14 @@ export abstract class CrudService<TCreateRequest extends BaseCreateRequest, TUpd
 
         return this.http.put(url, data, options).pipe();
     }
+    getAll(){
+        let url = `${this.apiUrl}`;
+
+        return this.http.get(url, OPTIONS_JSON).pipe(catchError(this.handleError));
+    }
 
     getPaging(pageIndex: number, pageSize: number, searchText: string) {
-        let url = `${this.apiUrl}/filter?pageIndex=${pageIndex}&pageSize=${pageSize}&searchText=${searchText}&langId=${localStorage.getItem('lang')}`;
+        let url = `${this.apiUrl}/filter-paging?pageIndex=${pageIndex}&pageSize=${pageSize}&searchText=${searchText}&langId=${localStorage.getItem('lang')}`;
 
         return this.http.get(url, OPTIONS_JSON).pipe(catchError(this.handleError));
     }

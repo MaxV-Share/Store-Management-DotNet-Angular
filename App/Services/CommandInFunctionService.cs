@@ -18,7 +18,7 @@ namespace App.Services
 {
     public class CommandInFunctionService : BaseService<CommandInFunction, CommandInFunctionCreateRequest, CommandInFunctionUpdateRequest, CommandInFunctionViewModel, Guid>, ICommandInFunctionService
     {
-        public CommandInFunctionService(ICommandInFunctionRepository repository, IMapper mapper, IUnitOffWork unitOffWork, ILogger<CommandInFunctionService> logger) : base(repository, mapper, unitOffWork, logger)
+        public CommandInFunctionService(IMapper mapper, IUnitOffWork unitOffWork, ILogger<CommandInFunctionService> logger) : base(mapper, unitOffWork, logger)
         {
         }
     }

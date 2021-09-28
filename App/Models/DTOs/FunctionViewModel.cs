@@ -16,8 +16,7 @@ namespace App.Models.DTOs
         public string Url { get; set; }
         public int SortOrder { get; set; }
         public string ParentId { get; set; }
-        public FunctionViewModel Parent { get; set; }
-        public List<FunctionViewModel> Childs { get; set; } = new List<FunctionViewModel>();
+        public List<FunctionViewModel> Childrens { get; set; } = new List<FunctionViewModel>();
         public string Icon { get; set; }
         public virtual ICollection<CommandInFunctionViewModel> CommandInFunctions { get; set; }
     }

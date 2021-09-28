@@ -10,6 +10,7 @@ import { TreeNode } from 'primeng/api';
 import { FunctionService } from '@app/shared/services/function.service';
 import { HttpResponse } from '@angular/common/http';
 import { FunctionViewModel, HTTP_STATUS } from '@app/models';
+import { map } from 'rxjs/operators';
 
 @Component({
     selector: 'app-function',
@@ -43,6 +44,7 @@ export class FunctionsComponent extends BaseComponent implements OnInit {
             { field: 'url', header: 'Url' }
         ];
         this.loadFunction();
+
     }
 
     onSearch() {
@@ -65,7 +67,6 @@ export class FunctionsComponent extends BaseComponent implements OnInit {
             class: 'modal-lg',
             backdrop: 'static'
         });
-
         this.bsModalRef.content.saved.subscribe((e) => {
             this.bsModalRef.hide();
             this.loadFunction();
@@ -76,8 +77,13 @@ export class FunctionsComponent extends BaseComponent implements OnInit {
 
     }
     loadFunction() {
-        this.functionService.getTree().subscribe((res: HttpResponse<any>) => {
-            this.treeFunctions = <TreeNode[]>res.body;
+        this.functionService.getTreeNode().pipe(map((e : HttpResponse<any[]>) => {
+            if (HTTP_STATUS.Ok == e.status || HTTP_STATUS.NoContent == e.status) {
+                return e.body;
+            }
+            return []
+        })).subscribe((res) => {
+            this.treeFunctions = <TreeNode[]>res;
             console.log(this.treeFunctions);
         })
     }

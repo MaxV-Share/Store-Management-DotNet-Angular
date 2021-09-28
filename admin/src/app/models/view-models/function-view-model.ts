@@ -15,5 +15,5 @@ export class FunctionViewModel extends BaseViewModel{
     @AutoMap()
     icon: string;
     hasChildren: boolean;
-    children: Function[];
+    childrens: FunctionViewModel[];
 }

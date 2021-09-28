@@ -20,17 +20,13 @@ namespace App.Services
 {
     public class BillDetailService : BaseService<BillDetail, BillDetailCreateRequest, BillDetailUpdateRequest, BillDetailViewModel, int>, IBillDetailService
     {
-        private readonly IBillRepository _billRepository;
-        private readonly ILogger<BillDetailService> _logger;
-        public BillDetailService(IBillDetailRepository repository, IMapper mapper, IBillRepository billRepository, IUnitOffWork unitOffWork, ILogger<BillDetailService> logger) : base(repository, mapper, unitOffWork, logger)
+        public BillDetailService(IMapper mapper, IUnitOffWork unitOffWork, ILogger<BillDetailService> logger) : base(mapper, unitOffWork, logger)
         {
-            _billRepository = billRepository;
-            _logger = logger;
         }
 
         public async Task<IEnumerable<BillDetailViewModel>> GetByBillIdAsync(int billId, string langId)
         {
-            var entities = await _repository.GetNoTrackingEntities()
+            var entities = await _unitOffWork.BillDetailRepository.GetNoTrackingEntities()
                                             .Include(e => e.Product.ProductDetails.Where(e => e.LangId == langId))
                                             .Include(e => e.Product.ProductDetails.Where(e => e.LangId == langId))
                                             .Include(e => e.Product.Category.CategoryDetails.Where(e => e.LangId == langId))

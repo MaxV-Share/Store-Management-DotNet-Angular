@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using App.Controllers.Base;
 using App.Models.DTOs;
 using App.Models.DTOs.UpdateRquests;
+using App.Models.Entities;
 using App.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,50 +13,20 @@ using Microsoft.Extensions.Logging;
 
 namespace App.Controllers
 {
-    public class CategoriesController : ApiController
+    public class CategoriesController : CRUDContoller<Category, CategoryCreateRequest, CategoryUpdateRequest, CategoryViewModel, int>
     {
         public readonly ICategoryService _categoryService;
-        public CategoriesController(ICategoryService categoryService, ILogger<CategoriesController> logger) : base(logger)
+        public CategoriesController(ICategoryService categoryService, ILogger<CategoriesController> logger) : base(logger, categoryService)
         {
             _categoryService = categoryService;
         }
-        [HttpPost]
-        public async Task<ActionResult> Post([FromBody] CategoryCreateRequest request)
-        {
-            if (null == request)
-                return BadRequest();
-            var result = await _categoryService.CreateAsync(request);
-
-            if (null == result)
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            return Ok(result);
-        }
-        [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, CategoryUpdateRequest request)
-        {
-            if (id != request.Id)
-                return BadRequest();
-            var result = await _categoryService.UpdateAsync(id, request);
-            if (result > 0)
-                return Ok();
-            return NotFound();
-        }
-        [HttpGet("")]
-        public async Task<ActionResult> GetAll(string langId = "vi", string searchText = "")
+        [HttpGet("filter")]
+        public async Task<ActionResult> GetAllFilter( string searchText = "", string langId = "vi")
         {
             var result = await _categoryService.GetAllDTOAsync(langId, searchText);
             return Ok(result);
         }
-        [HttpGet("{id}")]
-        public async Task<ActionResult> GetById(int id)
-        {
-            var result = await _categoryService.GetByIdAsync(id);
-
-            if (result != null)
-                return Ok(result);
-            return NotFound();
-        }
-        [HttpGet("filter")]
+        [HttpGet("filter-paging")]
         public async Task<ActionResult> GetPaging(int pageIndex, int pageSize, string langId, string searchText = "")
         {
             try

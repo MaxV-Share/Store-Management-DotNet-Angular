@@ -28,8 +28,9 @@ namespace App.Infrastructures.Startup.ServicesExtensions
             //DI
             services.AddSingleton(mapper);
             services.AddScoped<DBInitializer>();
-            services.AddScoped<IUnitOffWork, UnitOffWork>();
-            services.AddScoped<UserManager<User>, UserManager<User>>();
+            services.AddTransient<IUnitOffWork, UnitOffWork>();
+
+            services.AddScoped<UserManager<User>>();
 
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IBillDetailRepository, BillDetailRepository>();
@@ -37,7 +38,7 @@ namespace App.Infrastructures.Startup.ServicesExtensions
             services.AddScoped<IBillRepository, BillRepository>();
             services.AddScoped<IBillService, BillService>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
-            services.AddScoped<ICategoryDetailsRepository, CategoryDetailsRepository>();
+            services.AddScoped<ICategoryDetailRepository, CategoryDetailRepository>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ICommandRepository, CommandRepository>();
             services.AddScoped<ICommandService, CommandService>();
@@ -57,6 +58,7 @@ namespace App.Infrastructures.Startup.ServicesExtensions
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IRevenueService, RevenueService>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IUserService, UserService>();
         }
     }

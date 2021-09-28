@@ -16,11 +16,9 @@ namespace App.Repositories.Interface
     public class UserRepository : IUserRepository
     {
         private readonly UserManager<User> _userManager;
-        public readonly IMapper _mapper;
-        public UserRepository(UserManager<User> userManager, IMapper mapper)
+        public UserRepository(UserManager<User> userManager)
         {
             _userManager = userManager;
-            _mapper = mapper;
         }
         public async Task<IEnumerable<User>> GetAllAsync(string filter)
         {

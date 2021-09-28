@@ -9,7 +9,7 @@ namespace App.Models.Entities
 {
     public class Category : BaseEntity<int>
     {
-        public override void SetValueUpdate(string updateAt)
+        public override Category SetValueUpdate(string updateAt)
         {
             base.SetValueUpdate(updateAt);
             CategoryDetails.ToList().ForEach(e =>
@@ -17,6 +17,7 @@ namespace App.Models.Entities
                 e.CreateBy = CreateBy;
                 e.SetValueUpdate(updateAt);
             });
+            return this;
         }
         public virtual Category Parent { get; set; }
         public int? ParentId { get; set; }

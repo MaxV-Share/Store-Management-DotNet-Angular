@@ -12,6 +12,7 @@ import { PermissionsComponent } from "./permissions/permissions.component";
 import { RolesComponent } from "./roles/roles.component";
 import { FunctionsDetailComponent } from "./functions/functions-detail/functions-detail.component";
 import { TreeTableModule } from "primeng-lts";
+import { RoleDetailComponent } from "./roles/role-detail/role-detail.component";
 
 @NgModule({
     imports: [
@@ -25,7 +26,7 @@ import { TreeTableModule } from "primeng-lts";
         ReactiveFormsModule,
         TreeTableModule,
     ],
-    declarations: [FunctionsComponent,UsersComponent,PermissionsComponent,RolesComponent, FunctionsDetailComponent],
+    declarations: [FunctionsComponent,UsersComponent,PermissionsComponent,RolesComponent, FunctionsDetailComponent, RoleDetailComponent],
     exports: [ReactiveFormsModule,TranslateModule]
 })
 export class SystemsModule { }

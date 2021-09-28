@@ -6,3 +6,4 @@ export * from "./discount-update-request";
 export * from "./function-update-request";
 export * from "./product-detail-update-request";
 export * from "./product-update-request";
+export * from "./role-update-request";

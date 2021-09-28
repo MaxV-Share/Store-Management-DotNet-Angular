@@ -4,6 +4,7 @@ using App.Repositories.BaseRepository;
 using App.Repositories.Interface;
 using App.Services.Interface;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -15,8 +16,9 @@ namespace App.Repositories
 {
     public class LangRepository : BaseRepository<Lang, string>, ILangRepository
     {
-        public LangRepository(ApplicationDbContext context, IUserService userService, ILogger<LangRepository> logger) : base(context, userService, logger)
+        public LangRepository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor) :  base(context, httpContextAccessor)
         {
         }
+
     }
 }
