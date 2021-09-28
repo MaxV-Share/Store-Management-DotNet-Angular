@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Transactions;
 
-namespace App.Infrastructures.Dbcontexts
+namespace App.Models.Dbcontexts
 {
     public class DBInitializer
     {

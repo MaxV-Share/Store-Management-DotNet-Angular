@@ -1,10 +1,10 @@
-﻿using App.Infrastructures.Dbcontexts;
+﻿
+using App.Models.Dbcontexts;
 using App.Models.DTOs;
 using App.Models.DTOs.CreateRequest;
 using App.Models.Entities;
 using App.Repositories.BaseRepository;
 using App.Repositories.Interface;
-using App.Services.Interface;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using System;

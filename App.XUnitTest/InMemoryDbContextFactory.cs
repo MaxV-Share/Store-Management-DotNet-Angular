@@ -1,5 +1,5 @@
 ﻿using App.Models;
-using App.Infrastructures.Dbcontexts;
+using App.Models.Dbcontexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System;

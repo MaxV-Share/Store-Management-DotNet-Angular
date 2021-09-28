@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using App.Infrastructures.Dbcontexts;
+using App.Models.Dbcontexts;
 using App.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using AutoMapper;
