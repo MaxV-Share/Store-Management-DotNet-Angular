@@ -11,7 +11,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace App.Models.Dbcontexts
+namespace App.Infrastructures.Dbcontexts
 {
     public class ApplicationDbContext : IdentityDbContext<User>
     {
