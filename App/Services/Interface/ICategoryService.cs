@@ -1,5 +1,6 @@
 ﻿using App.Models.DTOs;
-using App.Models.DTOs.Paging;
+using App.Models.DTOs.PagingViewModels;
+using App.Models.DTOs.UpdateRquests;
 using App.Models.Entities;
 using App.Services.Base;
 using MaxV.Helper.Entities;
@@ -10,11 +11,10 @@ using System.Threading.Tasks;
 
 namespace App.Services.Interface
 {
-    public interface ICategoryService : IBaseService<Category, CategoryCreateRequest, CategoryViewModel, int>
+    public interface ICategoryService : IBaseService<Category, CategoryCreateRequest, CategoryUpdateRequest, CategoryViewModel, int>
     {
         Task<CategoryViewModel> CreateAsync(CategoryCreateRequest request);
-        Task<int> UpdateAsync(int id, CategoryViewModel request);
-        Task<CategoryDetailPaging> GetPagingAsync(string langId, int pageIndex, int pageSize, string searchText);
+        Task<CategoryDetailPaging> GetDetailsPagingAsync(string langId, int pageIndex, int pageSize, string searchText);
         Task<IEnumerable<CategoryDetailViewModel>> GetAllDTOAsync(string langId, string searchText);
     }
 }

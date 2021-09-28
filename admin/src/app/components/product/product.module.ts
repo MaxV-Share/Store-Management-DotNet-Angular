@@ -4,7 +4,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { LayoutModule } from '@app/layout/layout.module';
+import { LayoutModule } from '@app/components/layout/layout.module';
 import { ProductComponent } from './product.component';
 import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { ProductRoutingModule } from './product-routing.module';

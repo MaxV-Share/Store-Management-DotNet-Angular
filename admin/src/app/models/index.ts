@@ -1,17 +1,17 @@
-export * from "./register";
-export * from "./login";
+export * from "./bases";
+export * from "./constants";
+export * from "./create-requests";
+export * from "./update-requests";
+export * from "./view-models";
 export * from "./environment";
-export * from "./use";
-export * from "./discount";
-export * from "./lang";
-export * from "./product";
-export * from "./product-detail";
-export * from "./category";
-export * from "./create-request/category-create-request";
-export * from "./category-detail";
-export * from "./create-request/category-detail-create-request";
-export * from "./paging/category-detail-paging";
-export * from "./bills/bill";
-export * from "./bills/product-in-bill";
-export * from "./create-request/bill-create-request";
-export * from "./create-request/bill-detail-create-request";
+export * from "./login";
+export * from "./register";
+
+import { createMapper } from '@automapper/core';
+import { classes } from '@automapper/classes';
+
+export const mapper = createMapper({
+    name: 'someName',
+    pluginInitializer: classes,
+  });
+

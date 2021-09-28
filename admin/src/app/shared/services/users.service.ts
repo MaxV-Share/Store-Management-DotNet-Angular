@@ -1,17 +1,20 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ENVIRONMENT, User } from '@app/models';
+import { ENVIRONMENT, OPTIONS_JSON, User } from '@app/models';
 import { catchError, map } from 'rxjs/operators';
+import { BaseService } from './base/base.service';
 
 @Injectable({
     providedIn: 'root'
 })
-export class UsersService {
+export class UsersService extends BaseService{
 
-    constructor(private http: HttpClient) { }
+    constructor(public http: HttpClient) {
+        super(http, 'users');
+    }
 
     Gets() {
-        return this.http.get(`${ENVIRONMENT.apiUrl}/api/Users` , { headers: ENVIRONMENT._sharedHeaders }).pipe(map((e: any) => {
+        return this.http.get(`${this.apiUrl}` , OPTIONS_JSON).pipe(map((e: any) => {
             return e;
         }));
     }

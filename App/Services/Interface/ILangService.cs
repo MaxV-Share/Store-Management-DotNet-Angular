@@ -1,5 +1,6 @@
 ﻿using App.Models.DTOs;
-using App.Models.DTOs.CreateRequest;
+using App.Models.DTOs.CreateRequests;
+using App.Models.DTOs.UpdateRquests;
 using App.Models.Entities;
 using App.Services.Base;
 using MaxV.Helper.Entities;
@@ -10,10 +11,7 @@ using System.Threading.Tasks;
 
 namespace App.Services.Interface
 {
-    public interface ILangService : IBaseService<Lang, LangCreateRequest, LangViewModel, string>
+    public interface ILangService : IBaseService<Lang, LangCreateRequest, LangUpdateRequest, LangViewModel, string>
     {
-        Task<LangViewModel> CreateAsync(LangCreateRequest request);
-        Task<LangViewModel> CreateAsync(List<LangCreateRequest> request);
-        Task<T> UpdateAsync<T>(string id, LangViewModel request);
     }
 }

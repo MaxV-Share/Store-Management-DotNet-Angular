@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace App.Models.DTOs.Bills
 {
-    public class BillViewModel : BaseDTO<int>
+    public class BillViewModel : BaseViewModel<int>
     {
         public string CustomerPhoneNumber { get; set; }
         public string CustomerFullName { get; set; }
@@ -16,7 +16,9 @@ namespace App.Models.DTOs.Bills
         public string UserPaymentId { get; set; }
         public string UserPaymentUserName { get; set; }
         public double? TotalPrice { get; set; }
-        public double DiscountPrice { get; set; }
+        public double? DiscountPrice { get; set; }
+        public double? PaymentAmount { get; set; }
+        public DateTime? CreateAt { get; set; } 
         public List<BillDetailViewModel> billDetails { get; set; } 
     }
 }

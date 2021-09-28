@@ -1,7 +1,10 @@
-﻿using App.Models.DTOs;
+﻿using App.Infrastructures.UnitOffWorks;
+using App.Models.DTOs;
 using App.Models.DTOs.Bills;
-using App.Models.DTOs.CreateRequest;
+using App.Models.DTOs.CreateRequests;
+using App.Models.DTOs.PagingViewModels;
 using App.Models.Entities;
+using App.Models.Entities.Identities;
 using App.Repositories.BaseRepository;
 using App.Repositories.Interface;
 using App.Services.Base;
@@ -18,7 +21,7 @@ using System.Threading.Tasks;
 
 namespace App.Services
 {
-    public class BillService : BaseService<Bill, BillCreateRequest, BillViewModel, int>, IBillService
+    public class BillService : BaseService<Bill, BillCreateRequest,  BillUpdateRequest, BillViewModel, int>, IBillService
     {
         private readonly ICustomerRepository _customerRepository;
         private readonly IProductRepository _productRepository;
@@ -27,13 +30,12 @@ namespace App.Services
         private readonly UserManager<User> _userManager;
         private readonly ILogger<BillService> _logger;
         public BillService(IBillRepository repository,
-            ILogger<BillService> logger,
             IMapper mapper,
             ICustomerRepository customerRepository,
             IUserRepository userRepository,
             UserManager<User> userManager,
             IProductRepository productRepository,
-            IBillDetailRepository billDetailRepository) : base(repository, mapper)
+            IBillDetailRepository billDetailRepository, IUnitOffWork unitOffWork, ILogger<BillService> logger) : base(repository, mapper, unitOffWork, logger)
         {
             _logger = logger;
             _customerRepository = customerRepository;
@@ -45,13 +47,14 @@ namespace App.Services
 
         public async Task<BillViewModel> CreateAsync(BillCreateRequest request)
         {
+            var dateTimeNow = DateTime.Now;
             try
             {
-                await _repository.BeginTransactionAsync();
+                await _unitOffWork.BeginTransactionAsync();
 
                 var tUserPayment = _userManager.FindByNameAsync(request.UserPaymentUserName);
                 var customer = await _customerRepository.GetByPhoneNumberAsync(request.CustomerPhoneNumber);
-                if (customer == null && string.IsNullOrEmpty(request.CustomerPhoneNumber))
+                if (customer == null && !string.IsNullOrEmpty(request.CustomerPhoneNumber))
                 {
                     customer = new Customer()
                     {
@@ -61,6 +64,7 @@ namespace App.Services
                         Birthday = request.CustomerBirthday,
                     };
                     await _customerRepository.CreateAsync(customer);
+                    await _unitOffWork.SaveChangesAsync();
                 }
 
                 var billDetails = new List<BillDetail>();
@@ -73,6 +77,7 @@ namespace App.Services
                         Price = detail.Price,
                         Quantity = detail.Quantity,
                         DiscountPrice = detail.DiscountPrice,
+                        CreateAt = dateTimeNow,
                     });
                 }
 
@@ -82,20 +87,30 @@ namespace App.Services
                     Customer = customer,
                     DiscountPrice = request.DiscountPrice,
                     TotalPrice = request.TotalPrice,
+                    PaymentAmount = request.PaymentAmount,
                     UserPaymentId = userPayment?.Id,
                     BillDetails = billDetails
                 };
 
                 await _repository.CreateAsync(bill);
 
-                await _repository.CommitTransactionAsync();
+                var effectedCount = await _unitOffWork.SaveChangesAsync();
+                if (effectedCount == 0)
+                {   
+                    //ToDo: Định nghĩa lại exceptionm
+                    throw new Exception();
+                }
 
-                return _mapper.Map<BillViewModel>(bill);
+                var result = _mapper.Map<BillViewModel>(bill);
+
+                await _unitOffWork.CommitTransactionAsync();
+
+                return result;
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.StackTrace);
-                await _repository.RollbackTransactionAsync();
+                await _unitOffWork.RollbackTransactionAsync();
                 return null;
             }
         }
@@ -103,7 +118,7 @@ namespace App.Services
         {
             try
             {
-                await _repository.BeginTransactionAsync();
+                await _unitOffWork.BeginTransactionAsync();
 
                 var tUserPayment = _userManager.FindByNameAsync(request.UserPaymentUserName);
                 var customer = await _customerRepository.GetByPhoneNumberAsync(request.CustomerPhoneNumber);
@@ -118,55 +133,72 @@ namespace App.Services
                         Birthday = request.CustomerBirthday,
                     };
                     await _customerRepository.CreateAsync(customer);
+                    await _unitOffWork.SaveChangesAsync();
                 }
 
-                var billDetailsNew = new List<BillDetail>();
-                request.billDetails.Where(e => e.Id == null).ToList().ForEach(e => {
-                    billDetailsNew.Add(new BillDetail()
-                    {
-                        Price = e.Price,
-                        ProductId = e.ProductId,
-                        Quantity = e.Quantity,
-                        DiscountPrice = e.DiscountPrice,
-                        BillId = request.Id.Value,
-                    });
-                });
-
-                var saveNewBillDetail = _billDetailRepository.CreateAsync(billDetailsNew);
-
                 var bill = await _repository.GetQueryableTable()
-                                            .Include(e => e.BillDetails.OrderBy(e => e.Id))
-                                            .SingleOrDefaultAsync(e => e.Id.Equals(id) && e.Deleted == null);
-
-                var billDetailsOld = request.billDetails.Where(e => e.Id != 0 || e.Id != null).OrderBy(e => e.Id).ToList();
+                                            .Include(e => e.BillDetails)
+                                            .SingleOrDefaultAsync(e => e.Id.Equals(id));
 
                 bill.DiscountPrice = request.DiscountPrice;
                 bill.TotalPrice = request.TotalPrice;
+                bill.PaymentAmount = request.PaymentAmount;
                 bill.UserPaymentId = (await tUserPayment)?.Id;
-                if(customer != null)
+                if (customer != null)
                 {
                     bill.CustomerId = customer.Id;
                 }
-
-                int i = 0;
-                foreach(var detail in bill.BillDetails)
+                var oldDetailsId = request.billDetails.Select(e => e.Id);
+                List<Task> tDeleteDetails = new List<Task>();
+                foreach (var detail in bill.BillDetails)
                 {
-                    detail.Price = billDetailsOld[i].Price;
-                    detail.Quantity = billDetailsOld[i].Quantity;
-                    i++;
+                    if (!request.billDetails.Any(e => e.Id == detail.Id))
+                    {
+                        tDeleteDetails.Add(_billDetailRepository.DeleteSoftAsync(detail.Id));
+                    }
                 }
+
+                var billDetailsNew = new List<BillDetail>();
+                request.billDetails.ForEach(async e =>
+                {
+
+                    var billDetail = new BillDetail();
+
+                    if (e.Id == 0) //new BillDetail
+                    {
+                        billDetail = new BillDetail()
+                        {
+                            Price = e.Price,
+                            ProductId = e.ProductId,
+                            Quantity = e.Quantity,
+                            DiscountPrice = e.DiscountPrice,
+                            BillId = request.Id,
+                        };
+                    }
+                    else // update BillDetail
+                    {
+                        billDetail = await _billDetailRepository.GetByIdAsync(e.Id);
+                        billDetail.Price = e.Price;
+                        billDetail.ProductId = e.ProductId;
+                        billDetail.Quantity = e.Quantity;
+                        billDetail.DiscountPrice = e.DiscountPrice;
+                        billDetail.BillId = request.Id;
+                    }
+
+                    billDetailsNew.Add(billDetail);
+                });
+                bill.BillDetails = billDetailsNew;
+
+                await Task.WhenAll(tDeleteDetails);
                 await _repository.UpdateAsync(bill);
+                var result = await _unitOffWork.SaveChangesAsync();
+                await _unitOffWork.CommitTransactionAsync();
 
-                await _repository.CommitTransactionAsync();
-
-                return 0;
+                return result;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _logger.LogError("object error", request);
-                _logger.LogError(ex.Message);
-                _logger.LogError(ex.StackTrace);
-                await _repository.RollbackTransactionAsync();
+                await _unitOffWork.RollbackTransactionAsync();
                 throw;
             }
         }
@@ -177,7 +209,7 @@ namespace App.Services
                                         .Include(e => e.Customer)
                                         .Include(e => e.UserPayment)
                                         .Include(e => e.BillDetails.OrderBy(e => e.Id))
-                                        .SingleOrDefaultAsync(e => e.Id.Equals(id) && e.Deleted == null);
+                                        .SingleOrDefaultAsync(e => e.Id.Equals(id));
             var result = _mapper.Map<BillViewModel>(entity);
             return result;
         }
@@ -187,22 +219,30 @@ namespace App.Services
             var entities = await _repository.GetQueryableTable()
                                             .Include(e => e.Customer)
                                             .Include(e => e.UserPayment)
-                                            .Where(e => e.Deleted == null)
                                             .ToListAsync();
             var result = _mapper.Map<IEnumerable<BillViewModel>>(entities);
+
             return result;
         }
-        public async Task<IEnumerable<BillViewModel>> GetPaging(int pageIndex, int pageSize)
+        public async Task<BillPaging> GetPagingAsync(int pageIndex, int pageSize, string txtSearch)
         {
-            var entities = await _repository.GetNoTrackingEntities()
-                                            .Include(e => e.Customer)
-                                            .Include(e => e.UserPayment)
-                                            .Where(e => e.Deleted == null)
-                                            .OrderBy(e => e.CreateAt)
-                                            .Skip((pageIndex - 1) * pageSize)
-                                            .Take(pageSize)
-                                            .ToListAsync();
-            var result = _mapper.Map<List<BillViewModel>>(entities);
+            var queryable = _repository.GetNoTrackingEntities()
+                                        .Include(e => e.Customer)
+                                        .Include(e => e.UserPayment)
+                                        .OrderBy(e => e.CreateAt);
+
+            var tEntities = queryable.Skip((pageIndex - 1) * pageSize)
+                                    .Take(pageSize)
+                                    .ToListAsync();
+
+            var tCountEntities = queryable.CountAsync();
+
+            var result = new BillPaging
+            {
+                Data = _mapper.Map<List<BillViewModel>>(await tEntities),
+                TotalRow = await tCountEntities
+            };
+
             return result;
         }
     }

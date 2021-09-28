@@ -18,6 +18,10 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
+using Microsoft.Net.Http.Headers;
+using App.Models.Entities.Identities;
+using System.Net.Http;
+using System.Text.RegularExpressions;
 
 namespace App.Services
 {
@@ -26,10 +30,17 @@ namespace App.Services
         private readonly IDistributedCache _cache;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<Role> _roleManager;
         private readonly IConfiguration _configuration;
+        private readonly IUserService _userService;
         private readonly IOptions<JwtOptions> _jwtOptions;
-        public AuthenticationService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, SignInManager<User> signInManager, IConfiguration configuration, IDistributedCache cache, IOptions<JwtOptions> jwtOptions)
+        public AuthenticationService(UserManager<User> userManager, 
+            RoleManager<Role> roleManager, 
+            SignInManager<User> signInManager, 
+            IConfiguration configuration,
+            IUserService userService,
+            IDistributedCache cache, 
+            IOptions<JwtOptions> jwtOptions)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -37,6 +48,7 @@ namespace App.Services
             _signInManager = signInManager;
             _cache = cache;
             _jwtOptions = jwtOptions;
+            _userService = userService;
         }
         public async Task<Response<string>> LoginAsync(LoginDTO request)
         {
@@ -65,7 +77,7 @@ namespace App.Services
                 issuer: _configuration["JWT:ValidIssuer"],
                 audience: _configuration["JWT:ValidAudience"],
                 claims: authClaims,
-                expires: DateTime.Now.AddHours(5),
+                expires: DateTime.Now.AddMinutes(100000),
                 signingCredentials: new SigningCredentials(authSigninKey, SecurityAlgorithms.HmacSha256)
                 );
             return new Response<string>(StatusCodes.Status200OK,"Success", new JwtSecurityTokenHandler().WriteToken(token));
@@ -107,8 +119,11 @@ namespace App.Services
 
                     var result = await _userManager.CreateAsync(user, request.Password);
 
-                    if (!await _roleManager.RoleExistsAsync(UserRole.Admin))
-                        await _roleManager.CreateAsync(new IdentityRole(UserRole.Admin));
+                    if (!await _roleManager.RoleExistsAsync(USER_ROLE.ADMIN))
+                    {
+                        Role role = (Role)new IdentityRole(roleName: USER_ROLE.ADMIN);
+                        await _roleManager.CreateAsync(role);
+                    }
 
                     await _userManager.AddToRolesAsync(user, request.Roles);
 
@@ -132,28 +147,31 @@ namespace App.Services
                 }
             }
         }
-        public string CheckToken(string authorization)
+        public async Task<string> CheckToken(string authorization)
         {
             if (AuthenticationHeaderValue.TryParse(authorization, out var headerValue))
             {
                 // we have a valid AuthenticationHeaderValue that has the following details:
 
-                var scheme = headerValue.Scheme;
-                var tokenHeader = headerValue.Parameter;
+                var result =  await Task.Run(() => {
+                    var scheme = headerValue.Scheme;
+                    var tokenHeader = headerValue.Parameter;
 
-                var validationParameters = new TokenValidationParameters()
-                {
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtOptions.Value.Secret)),
-                    ValidateIssuerSigningKey = true,
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                };
+                    var validationParameters = new TokenValidationParameters()
+                    {
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtOptions.Value.Secret)),
+                        ValidateIssuerSigningKey = true,
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                    };
 
-                var tokenHandler = new JwtSecurityTokenHandler();
-                tokenHandler.ValidateToken(tokenHeader, validationParameters, out var securityToken);
-                var jwtSecurityToken = (JwtSecurityToken)securityToken;
-                var userName = jwtSecurityToken.Claims.SingleOrDefault(x => x.Type == ClaimTypes.Name).Value;
-                return userName;
+                    var tokenHandler = new JwtSecurityTokenHandler();
+                    tokenHandler.ValidateToken(tokenHeader, validationParameters, out var securityToken);
+                    var jwtSecurityToken = (JwtSecurityToken)securityToken;
+                    var userName = jwtSecurityToken.Claims.SingleOrDefault(x => x.Type == ClaimTypes.Name).Value;
+                    return userName;
+                });
+                return result;
                 // scheme will be "Bearer"
                 // parameter will be the token itself.
             }

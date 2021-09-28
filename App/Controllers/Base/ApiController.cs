@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,10 @@ namespace App.Controllers.Base
     [ApiController]
     public class ApiController : ControllerBase
     {
-
+        protected readonly ILogger _logger;
+        public ApiController(ILogger logger)
+        {
+            _logger = logger;
+        }
     }
 }

@@ -1,7 +1,8 @@
+import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { CategoryDetail, CategoryDetailPaging } from '@app/models';
+import { Category, CategoryDetail, CategoryDetailPaging, CategoryDetailUpdateRequest, CategoryUpdateRequest, mapper } from '@app/models';
 import { CategoryService } from '@app/shared/services';
 import { GlobalService } from '@app/shared/services/global.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -9,18 +10,20 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import CategoryDetailComponent from './category-detail/category-detail.component';
-
+import { BaseComponent } from '@app/components/base';
 @Component({
     selector: 'app-category',
     templateUrl: './category.component.html',
     styleUrls: ['./category.component.scss']
 })
-export class CategoryComponent implements OnInit {
+export class CategoryComponent extends BaseComponent implements OnInit {
 
     constructor(private modalService: BsModalService,
         private categoryService: CategoryService,
-        private toastr: ToastrService,
-        public translate: TranslateService) { }
+        public toastr: ToastrService,
+        public translate: TranslateService) {
+        super(translate, toastr);
+    }
 
     public bsCategoryModalRef: BsModalRef;
     dataSource = new MatTableDataSource<CategoryDetail>();
@@ -35,9 +38,9 @@ export class CategoryComponent implements OnInit {
         this.pageSize = 5;
         this.txtSearch = "";
         this.getPaging(this.pageIndex, this.pageSize, "");
-        const buttonEl = document.querySelector("button");
-        const handler = e => console.log("clicked", e);
-        buttonEl.addEventListener("click", handler);
+        // const buttonEl = document.querySelector("button");
+        // const handler = e => console.log("clicked", e);
+        // buttonEl.addEventListener("click", handler);
     }
 
     createOrUpdate(id: number = null) {
@@ -59,11 +62,14 @@ export class CategoryComponent implements OnInit {
     }
 
     getPaging(pageIndex: number, pageSize: number, searchText: string) {
-        //this.subscription.add(
-            this.categoryService.getPaging(pageIndex, pageSize, searchText).subscribe((res: CategoryDetailPaging) => {
-            this.dataSource = new MatTableDataSource<CategoryDetail>(res.data);
-            this.totalRow = res.totalRow;
-        })//)
+        this.categoryService.getPaging(pageIndex, pageSize, searchText).subscribe((res: HttpResponse<CategoryDetailPaging>) => {
+            if (res.status == 200) {
+                this.dataSource = new MatTableDataSource<CategoryDetail>(res.body.data);
+                this.totalRow = res.body.totalRow;
+            } else {
+                console.log(res);
+            }
+        })
     }
     onSearch() {
 
@@ -73,21 +79,4 @@ export class CategoryComponent implements OnInit {
         this.pageIndex = event.pageIndex + 1;
         this.getPaging(this.pageIndex, this.pageSize, this.txtSearch);
     }
-    // editCategory(categoryId) {
-    //     const initialState = {
-    //         id: categoryId,
-    //     };
-
-    //     this.bsCategoryModalRef = this.modalService.show(CategoryDetailComponent, {
-    //         initialState: initialState,
-    //         class: 'modal-lg',
-    //         backdrop: 'static',
-    //         focus: false
-    //     });
-
-    //     this.bsCategoryModalRef.content.saved.subscribe((e) => {
-    //         this.bsCategoryModalRef.hide();
-    //         //this.getCategory();
-    //     });
-    // }
 }

@@ -9,13 +9,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { TableModule } from 'primeng-lts/table';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthGuard } from './shared';
 import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
 import { LanguageTranslationModule } from './shared/modules/language-translation/language-translation.module';
-
 @NgModule({
     imports: [
         // CommonModule,
@@ -35,8 +33,9 @@ import { LanguageTranslationModule } from './shared/modules/language-translation
     providers: [AuthGuard, {
         provide: HTTP_INTERCEPTORS,
         useClass: AuthInterceptor,
-        multi: true
-    }],
+        multi: true,
+    },
+],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

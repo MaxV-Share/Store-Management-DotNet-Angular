@@ -1,0 +1,26 @@
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
+using MaxV.Base;
+
+namespace App.Models.Entities
+{
+    public class CommandInFunction : BaseEntity<Guid>
+    {
+        [MaxLength(50)]
+        [Column(TypeName = "varchar(50)")]
+        [Required]
+        public string CommandId { get; set; }
+        public virtual Command Command { get; set; }
+
+        [MaxLength(50)]
+        [Column(TypeName = "varchar(50)")]
+        [Required]
+        public string FunctionId { get; set; }
+        public virtual Function Function { get; set; }
+    }
+}

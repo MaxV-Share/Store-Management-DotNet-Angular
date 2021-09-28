@@ -9,6 +9,11 @@ namespace App.Models.Entities
 {
     public class Lang : BaseEntity<string>
     {
+        public override void SetDefaultValue(string createBy)
+        {
+            CreateAt = DateTime.Now;
+            UpdateAt = CreateAt;
+        }
         [MaxLength(20)]
         public string Name { get; set; }
         public int Order { get; set; }

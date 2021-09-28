@@ -1,15 +1,15 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Component, Inject, OnInit } from '@angular/core';
 import { ENVIRONMENT } from '@app/models';
 import { throwError } from 'rxjs';
-
 export abstract class BaseService {
 
-    public _sharedHeaders = new HttpHeaders();
-    constructor(public http: HttpClient) {
-        this._sharedHeaders = ENVIRONMENT._sharedHeaders;
-    }
+    public apiUrl: string;
 
-    protected handleError(error: any) {
+    constructor(public http: HttpClient, public controllerName: string) {
+        this.apiUrl = `${ENVIRONMENT.apiUrl}/${controllerName}`;
+    }
+    public handleError(error: any) {
 
         const applicationError = error.headers.get('Application-Error');
 
@@ -29,3 +29,4 @@ export abstract class BaseService {
         return throwError(modelStateErrors || 'Server error');
     }
 }
+

@@ -1,8 +1,11 @@
-﻿using App.Models;
+﻿using App.Infrastructures.UnitOffWorks;
+using App.Models;
+using App.Services.Interface;
 using AutoMapper;
 using MaxV.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,138 +14,127 @@ using System.Threading.Tasks;
 
 namespace App.Repositories.BaseRepository
 {
-    public class BaseRepository<T, TKey> : IBaseRepository<T, TKey> where T : BaseEntity<TKey> 
+    public class BaseRepository<TEntity, TKey> : IBaseRepository<TEntity, TKey> where TEntity : BaseEntity<TKey> 
     {
         #region props
 
-        private readonly DbContext _context;
-        private bool _disposed = false;
-        private IDbContextTransaction _tx { get; set; }
-        private DbSet<T> _entitiesDbSet { get; set; }
-
+        protected readonly DbContext _context;
+        private DbSet<TEntity> _entitiesDbSet { get; set; }
+        public readonly IUserService _userService;
+        private readonly ILogger _logger;
         #endregion props
 
         #region ctor
 
-        public BaseRepository(DbContext context)
+        public BaseRepository(DbContext context, IUserService userService, ILogger logger)
         {
             _context = context;
+            _userService = userService;
+            _logger = logger;
         }
 
         ~BaseRepository()
         {
-            Dispose(false);
+
         }
 
         #endregion ctor
 
         #region public
 
-        public IQueryable<T> GetQueryableTable()
+        public IQueryable<TEntity> GetQueryableTable()
         {
-            return Entities;
+            return Entities.AsQueryable<TEntity>();
         }
 
-        public virtual async Task<IEnumerable<T>> GetAllAsync()
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
         {
             var entities = await GetNoTrackingEntities().ToListAsync();
             return entities;
         }
 
-        public virtual async Task<T> GetByIdAsync(TKey id)
+        public virtual async Task<TEntity> GetByIdAsync(TKey id)
         {
-            var entity = await Entities.SingleOrDefaultAsync(x => id.Equals(x.Id) && x.Deleted == null);
+            var entity = await Entities.SingleOrDefaultAsync(x => id.Equals(x.Id));
             return entity;
         }
 
-        public virtual async Task<T> GetByIdNoTrackingAsync(TKey id)
+        public virtual async Task<TEntity> GetByIdNoTrackingAsync(TKey id)
         {
-            var entity = await GetNoTrackingEntities().SingleOrDefaultAsync(x => x.Id.Equals(id) && x.Deleted == null);
+            var entity = await GetNoTrackingEntities().SingleOrDefaultAsync(x => x.Id.Equals(id));
             return entity;
         }
-        public virtual async Task<T> GetByUuidNoTrackingAsync(Guid uuid)
-        {
-            var entity = await GetNoTrackingEntities().SingleOrDefaultAsync(x => x.Uuid == uuid && x.Deleted == null);
-            return entity;
-        }
-        public async Task<T> CreateAsync(T entity)
+
+        public virtual async Task<TEntity> CreateAsync(TEntity entity)
         {
             ValidateAndThrow(entity);
-            AddDefaultValue(ref entity);
+            var currentUser = await _userService.GetCurrentUser();
+            entity.SetDefaultValue(currentUser?.UserName);
             Entities.Add(entity);
-
-            var effectedCount = await _context.SaveChangesAsync();
-            if (effectedCount == 0)
-            {
-                return null;
-            }
             return entity;
         }
 
-        public async Task<IEnumerable<T>> CreateAsync(List<T> entities)
+        public virtual async Task<IEnumerable<TEntity>> CreateAsync(List<TEntity> entities)
         {
-            for (int i = 0; i < entities.Count; i++)
+            ValidateAndThrow(entities);
+            var currentUser = await _userService.GetCurrentUser();
+            entities.ForEach(e =>
             {
-                var entity = entities[i];
-                ValidateAndThrow(entity);
-                AddDefaultValue(ref entity);
-            }
+                e.SetDefaultValue(currentUser?.UserName);
+            });
 
             Entities.AddRange(entities);
-            var effectedCount = await _context.SaveChangesAsync();
-            if (effectedCount == 0)
-            {
-                return null;
-            }
             return entities;
         }
 
-        public virtual async Task<int> UpdateAsync(T entity)
+        public virtual async Task<TEntity> UpdateAsync(TEntity entity)
         {
             ValidateAndThrow(entity);
+            var currentUser = await _userService.GetCurrentUser();
+            entity.SetValueUpdate(currentUser?.UserName);
             var entry = _context.Entry(entity);
             if (entry.State < EntityState.Added)
             {
                 entry.State = EntityState.Modified;
             }
-
-            entity.UpdateAt = DateTime.UtcNow;
-            var effectedCount = await _context.SaveChangesAsync();
-            return effectedCount;
+            return entity;
         }
 
-        public virtual async Task<int> DeleteHardAsync(TKey id)
+        public virtual async Task<IEnumerable<TEntity>> UpdateAsync(IEnumerable<TEntity> entities)
         {
-            var entity = await _context.Set<T>().SingleOrDefaultAsync(e => e.Id.Equals(id));
+            var currentUser = await _userService.GetCurrentUser();
+            entities.ToList().ForEach(e =>
+            {
+                ValidateAndThrow(e);
+                e.SetValueUpdate(currentUser?.UserName);
+            });
+
+            var entry = _context.Entry(entities);
+            if (entry.State < EntityState.Added)
+            {
+                entry.State = EntityState.Modified;
+            }
+            return entities;
+        }
+
+        public virtual async Task DeleteHardAsync(TKey id)
+        {
+            var entity = await _context.Set<TEntity>().FindAsync(id);
             ValidateAndThrow(entity);
             Entities.Remove(entity);
-            var effectedCount = await _context.SaveChangesAsync();
-            return effectedCount;
         }
-        public virtual async Task<int> DeleteSoftAsync(TKey id)
+        public virtual async Task DeleteSoftAsync(TKey id)
         {
-            var entity = await _context.Set<T>().SingleOrDefaultAsync(e => e.Id.Equals(id));
+            var entity = await _context.Set<TEntity>().SingleOrDefaultAsync(e => e.Id.Equals(id));
             ValidateAndThrow(entity);
-            entity.Deleted = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
-            var effectedCount = await UpdateAsync(entity);
-            return effectedCount;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-        public virtual async Task<T> GetByUuidAsync(Guid uuid)
-        {
-            var entity = await Entities.SingleOrDefaultAsync(x => x.Uuid == uuid && x.Deleted == null);
-            return entity;
+            entity.Deleted = DateTime.Now.ToString("yyyyMMddHHmmss");
+            await UpdateAsync(entity);
         }
         #endregion public
 
         #region private
 
-        private void ValidateAndThrow(T entity)
+        protected void ValidateAndThrow(TEntity entity)
         {
             if (entity == null)
             {
@@ -150,67 +142,31 @@ namespace App.Repositories.BaseRepository
             }
         }
 
-        private void AddDefaultValue(ref T entity)
+        protected void ValidateAndThrow(IEnumerable<TEntity> entities)
         {
-            BaseEntity<TKey>.SetDefaultValue(ref entity);
+            if (entities == null || entities.Count() == 0)
+            {
+                throw new ArgumentNullException(nameof(entities));
+            }
         }
 
-        protected DbSet<T> Entities
+        protected DbSet<TEntity> Entities
         {
             get
             {
                 if (_entitiesDbSet == null)
-                    _entitiesDbSet = _context.Set<T>();
+                    _entitiesDbSet = _context.Set<TEntity>();
                 return _entitiesDbSet;
             }
         }
 
-        public IQueryable<T> GetNoTrackingEntities()
+        public IQueryable<TEntity> GetNoTrackingEntities()
         {
             return Entities.AsNoTracking();
         }
-        public IQueryable<T> GetNoTrackingEntitiesIdentityResolution()
+        public IQueryable<TEntity> GetNoTrackingEntitiesIdentityResolution()
         {
             return Entities.AsNoTrackingWithIdentityResolution();
-        }
-
-        public async Task BeginTransactionAsync()
-        {
-            _tx = await _context.Database.BeginTransactionAsync();
-        }
-
-        public async Task CommitTransactionAsync()
-        {
-            await _tx.CommitAsync();
-            await ReleaseTransactionAsync();
-        }
-
-        public async Task RollbackTransactionAsync()
-        {
-            await _tx.RollbackAsync();
-            await ReleaseTransactionAsync();
-        }
-
-        public async Task ReleaseTransactionAsync()
-        {
-            await _tx.DisposeAsync();
-            _tx = null;
-        }
-
-        public virtual void Dispose(bool disposing)
-        {
-            if (_disposed)
-            {
-                return;
-            }
-
-            if (disposing)
-            {
-                _tx?.Dispose();
-                _tx = null;
-            }
-
-            _disposed = true;
         }
 
         #endregion private

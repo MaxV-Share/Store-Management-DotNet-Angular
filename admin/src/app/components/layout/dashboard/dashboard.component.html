@@ -1,0 +1,64 @@
+<div [@routerTransition]>
+    <h2 class="text-muted">Tổng quan <small>Hoạt động hôm nay</small></h2>
+    <hr />
+    <div></div>
+    <div class="row">
+        <div class="col-xl-3 col-lg-6">
+            <app-stat [bgClass]="'primary'" [count]="26" [icon]="'fa-comments'" [label]="'New Comments!'"></app-stat>
+        </div>
+        <div class="col-xl-3 col-lg-6">
+            <app-stat [bgClass]="'warning'" [count]="12" [icon]="'fa-tasks'" [label]="'New task!'"></app-stat>
+        </div>
+        <div class="col-xl-3 col-lg-6">
+            <app-stat
+                [bgClass]="'success'"
+                [count]="124"
+                [icon]="'fa-shopping-cart'"
+                [label]="'New Orders!'"
+            ></app-stat>
+        </div>
+        <div class="col-xl-3 col-lg-6">
+            <app-stat [bgClass]="'danger'" [count]="13" [icon]="'fa-support'" [label]="'New Tickets!'"></app-stat>
+        </div>
+    </div>
+    <hr />
+    <p-accordion [multiple]="true">
+        <p-accordionTab header="Doanh thu theo ngày" [selected]="true">
+            <div class="max-group-position">
+                <div class="max-position-center" [hidden]="!loadingRevenueDaily">
+                    <app-loading>
+                    </app-loading>
+                </div>
+                <div (click)="testLoading()" class="btn">Tháng 7 năm 2021</div>
+                <div [ngClass]="{'max-blur-1 max-disabled-events' : loadingRevenueDaily}">
+                    <p-chart type="bar" [data]="dataDaily" [options]="chartOptions" height="80vh"></p-chart>
+                </div>
+            </div>
+        </p-accordionTab>
+        <p-accordionTab header="Doanh thu hằng tháng" header="Header II">
+            <div class="max-group-position">
+                <div class="max-position-center" [hidden]="!loadingRevenueDaily">
+                    <app-loading>
+                    </app-loading>
+                </div>
+                <div (click)="testLoading()" class="btn">Năm 2021</div>
+                <div [ngClass]="{'max-blur-1 max-disabled-events' : loadingRevenueDaily}">
+                    <p-chart type="bar" [data]="dataMonthly" [options]="chartOptions" height="80vh"></p-chart>
+                </div>
+            </div>
+        </p-accordionTab>
+        <p-accordionTab header="Header III">
+            <p>
+                At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum
+                deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non
+                provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.
+                Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est
+                eligendi optio cumque nihil impedit quo minus.
+            </p>
+        </p-accordionTab>
+    </p-accordion>
+    <!-- <ngb-alert (close)="closeAlert(alert)" *ngFor="let alert of alerts" [type]="alert.type">{{
+        alert.message
+    }}</ngb-alert> -->
+    <hr />
+</div>

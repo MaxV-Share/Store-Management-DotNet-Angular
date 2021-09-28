@@ -14,6 +14,6 @@ namespace App.Services.Interface
         Task<Response<bool>> RegisterAsync(RegisterDTO request);
         Task<Response<string>> LoginAsync(LoginDTO request);
         Task LogoutAsync(string request);
-        string CheckToken(string authorization);
+        Task<string> CheckToken(string authorization);
     }
 }

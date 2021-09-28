@@ -15,7 +15,7 @@ namespace App.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
-                .HasAnnotation("ProductVersion", "5.0.7");
+                .HasAnnotation("ProductVersion", "5.0.8");
 
             modelBuilder.Entity("App.Models.Entities.Bill", b =>
                 {
@@ -44,6 +44,10 @@ namespace App.Migrations
                         .HasColumnType("double")
                         .HasColumnName("discount_price");
 
+                    b.Property<double?>("PaymentAmount")
+                        .HasColumnType("double")
+                        .HasColumnName("payment_amount");
+
                     b.Property<double?>("TotalPrice")
                         .HasColumnType("double")
                         .HasColumnName("total_price");
@@ -59,11 +63,6 @@ namespace App.Migrations
                     b.Property<string>("UserPaymentId")
                         .HasColumnType("varchar(767)")
                         .HasColumnName("user_payment_id");
-
-                    b.Property<byte[]>("Uuid")
-                        .IsRequired()
-                        .HasColumnType("varbinary(16)")
-                        .HasColumnName("uuid");
 
                     b.HasKey("Id")
                         .HasName("pk_bills");
@@ -127,11 +126,6 @@ namespace App.Migrations
                         .HasColumnType("text")
                         .HasColumnName("update_by");
 
-                    b.Property<byte[]>("Uuid")
-                        .IsRequired()
-                        .HasColumnType("varbinary(16)")
-                        .HasColumnName("uuid");
-
                     b.HasKey("Id")
                         .HasName("pk_bill_details");
 
@@ -177,11 +171,6 @@ namespace App.Migrations
                     b.Property<string>("UpdateBy")
                         .HasColumnType("text")
                         .HasColumnName("update_by");
-
-                    b.Property<byte[]>("Uuid")
-                        .IsRequired()
-                        .HasColumnType("varbinary(16)")
-                        .HasColumnName("uuid");
 
                     b.HasKey("Id")
                         .HasName("pk_categories");
@@ -238,11 +227,6 @@ namespace App.Migrations
                         .HasColumnType("text")
                         .HasColumnName("update_by");
 
-                    b.Property<byte[]>("Uuid")
-                        .IsRequired()
-                        .HasColumnType("varbinary(16)")
-                        .HasColumnName("uuid");
-
                     b.HasKey("Id")
                         .HasName("pk_category_details");
 
@@ -256,6 +240,103 @@ namespace App.Migrations
                         .HasDatabaseName("ix_category_details_lang_id");
 
                     b.ToTable("category_details");
+                });
+
+            modelBuilder.Entity("App.Models.Entities.Command", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime?>("CreateAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("create_at");
+
+                    b.Property<string>("CreateBy")
+                        .HasColumnType("text")
+                        .HasColumnName("create_by");
+
+                    b.Property<string>("Deleted")
+                        .HasColumnType("text")
+                        .HasColumnName("deleted");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("name");
+
+                    b.Property<DateTime?>("UpdateAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("update_at");
+
+                    b.Property<string>("UpdateBy")
+                        .HasColumnType("text")
+                        .HasColumnName("update_by");
+
+                    b.HasKey("Id")
+                        .HasName("pk_commands");
+
+                    b.HasIndex("Id")
+                        .HasDatabaseName("ix_commands_id");
+
+                    b.ToTable("commands");
+                });
+
+            modelBuilder.Entity("App.Models.Entities.CommandInFunction", b =>
+                {
+                    b.Property<byte[]>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varbinary(16)")
+                        .HasColumnName("id");
+
+                    b.Property<string>("CommandId")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("command_id");
+
+                    b.Property<DateTime?>("CreateAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("create_at");
+
+                    b.Property<string>("CreateBy")
+                        .HasColumnType("text")
+                        .HasColumnName("create_by");
+
+                    b.Property<string>("Deleted")
+                        .HasColumnType("text")
+                        .HasColumnName("deleted");
+
+                    b.Property<string>("FunctionId")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("function_id");
+
+                    b.Property<DateTime?>("UpdateAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("update_at");
+
+                    b.Property<string>("UpdateBy")
+                        .HasColumnType("text")
+                        .HasColumnName("update_by");
+
+                    b.HasKey("Id")
+                        .HasName("pk_command_in_function");
+
+                    b.HasIndex("CommandId")
+                        .HasDatabaseName("ix_command_in_function_command_id");
+
+                    b.HasIndex("FunctionId")
+                        .HasDatabaseName("ix_command_in_function_function_id");
+
+                    b.HasIndex("Id")
+                        .HasDatabaseName("ix_command_in_function_id");
+
+                    b.ToTable("command_in_function");
                 });
 
             modelBuilder.Entity("App.Models.Entities.Customer", b =>
@@ -302,11 +383,6 @@ namespace App.Migrations
                     b.Property<string>("UpdateBy")
                         .HasColumnType("text")
                         .HasColumnName("update_by");
-
-                    b.Property<byte[]>("Uuid")
-                        .IsRequired()
-                        .HasColumnType("varbinary(16)")
-                        .HasColumnName("uuid");
 
                     b.HasKey("Id")
                         .HasName("pk_customers");
@@ -360,11 +436,6 @@ namespace App.Migrations
                         .HasColumnType("text")
                         .HasColumnName("update_by");
 
-                    b.Property<byte[]>("Uuid")
-                        .IsRequired()
-                        .HasColumnType("varbinary(16)")
-                        .HasColumnName("uuid");
-
                     b.HasKey("Id")
                         .HasName("pk_discounts");
 
@@ -374,12 +445,12 @@ namespace App.Migrations
                     b.ToTable("discounts");
                 });
 
-            modelBuilder.Entity("App.Models.Entities.Lang", b =>
+            modelBuilder.Entity("App.Models.Entities.Function", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256)")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
                         .HasColumnName("id");
 
                     b.Property<DateTime?>("CreateAt")
@@ -393,15 +464,26 @@ namespace App.Migrations
                     b.Property<string>("Deleted")
                         .HasColumnType("text")
                         .HasColumnName("deleted");
+
+                    b.Property<string>("Icon")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("icon");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar(20)")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)")
                         .HasColumnName("name");
 
-                    b.Property<int>("Order")
+                    b.Property<string>("ParentId")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("parent_id");
+
+                    b.Property<int>("SortOrder")
                         .HasColumnType("int")
-                        .HasColumnName("order");
+                        .HasColumnName("sort_order");
 
                     b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("datetime")
@@ -411,154 +493,85 @@ namespace App.Migrations
                         .HasColumnType("text")
                         .HasColumnName("update_by");
 
-                    b.Property<byte[]>("Uuid")
+                    b.Property<string>("Url")
                         .IsRequired()
-                        .HasColumnType("varbinary(16)")
-                        .HasColumnName("uuid");
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)")
+                        .HasColumnName("url");
 
                     b.HasKey("Id")
-                        .HasName("pk_langs");
+                        .HasName("pk_functions");
 
                     b.HasIndex("Id")
-                        .HasDatabaseName("ix_langs_id");
+                        .HasDatabaseName("ix_functions_id");
 
-                    b.ToTable("langs");
+                    b.HasIndex("ParentId")
+                        .HasDatabaseName("ix_functions_parent_id");
+
+                    b.ToTable("functions");
                 });
 
-            modelBuilder.Entity("App.Models.Entities.Product", b =>
+            modelBuilder.Entity("App.Models.Entities.Identities.Role", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(767)")
                         .HasColumnName("id");
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int")
-                        .HasColumnName("category_id");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256)")
-                        .HasColumnName("code");
-
-                    b.Property<DateTime?>("CreateAt")
-                        .HasColumnType("datetime")
-                        .HasColumnName("create_at");
-
-                    b.Property<string>("CreateBy")
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
                         .HasColumnType("text")
-                        .HasColumnName("create_by");
-
-                    b.Property<string>("Deleted")
-                        .HasColumnType("text")
-                        .HasColumnName("deleted");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("text")
-                        .HasColumnName("image_url");
-
-                    b.Property<double?>("MaxDiscountPrice")
-                        .HasColumnType("double")
-                        .HasColumnName("max_discount_price");
-
-                    b.Property<int?>("PercentDiscount")
-                        .HasColumnType("int")
-                        .HasColumnName("percent_discount");
-
-                    b.Property<double?>("Price")
-                        .HasColumnType("double")
-                        .HasColumnName("price");
-
-                    b.Property<DateTime?>("UpdateAt")
-                        .HasColumnType("datetime")
-                        .HasColumnName("update_at");
-
-                    b.Property<string>("UpdateBy")
-                        .HasColumnType("text")
-                        .HasColumnName("update_by");
-
-                    b.Property<byte[]>("Uuid")
-                        .IsRequired()
-                        .HasColumnType("varbinary(16)")
-                        .HasColumnName("uuid");
-
-                    b.HasKey("Id")
-                        .HasName("pk_products");
-
-                    b.HasIndex("CategoryId")
-                        .HasDatabaseName("ix_products_category_id");
-
-                    b.HasIndex("Id")
-                        .HasDatabaseName("ix_products_id");
-
-                    b.ToTable("products");
-                });
-
-            modelBuilder.Entity("App.Models.Entities.ProductDetail", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    b.Property<DateTime?>("CreateAt")
-                        .HasColumnType("datetime")
-                        .HasColumnName("create_at");
-
-                    b.Property<string>("CreateBy")
-                        .HasColumnType("text")
-                        .HasColumnName("create_by");
-
-                    b.Property<string>("Deleted")
-                        .HasColumnType("text")
-                        .HasColumnName("deleted");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text")
-                        .HasColumnName("description");
-
-                    b.Property<string>("LangId")
-                        .HasColumnType("varchar(256)")
-                        .HasColumnName("lang_id");
+                        .HasColumnName("concurrency_stamp");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)")
                         .HasColumnName("name");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int")
-                        .HasColumnName("product_id");
-
-                    b.Property<DateTime?>("UpdateAt")
-                        .HasColumnType("datetime")
-                        .HasColumnName("update_at");
-
-                    b.Property<string>("UpdateBy")
-                        .HasColumnType("text")
-                        .HasColumnName("update_by");
-
-                    b.Property<byte[]>("Uuid")
-                        .IsRequired()
-                        .HasColumnType("varbinary(16)")
-                        .HasColumnName("uuid");
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)")
+                        .HasColumnName("normalized_name");
 
                     b.HasKey("Id")
-                        .HasName("pk_product_details");
+                        .HasName("pk_roles");
 
-                    b.HasIndex("Id")
-                        .HasDatabaseName("ix_product_details_id");
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex");
 
-                    b.HasIndex("LangId")
-                        .HasDatabaseName("ix_product_details_lang_id");
-
-                    b.HasIndex("ProductId")
-                        .HasDatabaseName("ix_product_details_product_id");
-
-                    b.ToTable("product_details");
+                    b.ToTable("AspNetRoles");
                 });
 
-            modelBuilder.Entity("App.Models.Entities.User", b =>
+            modelBuilder.Entity("App.Models.Entities.Identities.RoleClaim", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("text")
+                        .HasColumnName("claim_type");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("text")
+                        .HasColumnName("claim_value");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("varchar(767)")
+                        .HasColumnName("role_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_role_claims");
+
+                    b.HasIndex("RoleId")
+                        .HasDatabaseName("ix_role_claims_role_id");
+
+                    b.ToTable("AspNetRoleClaims");
+                });
+
+            modelBuilder.Entity("App.Models.Entities.Identities.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("varchar(767)")
@@ -642,67 +655,7 @@ namespace App.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(767)")
-                        .HasColumnName("id");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("text")
-                        .HasColumnName("concurrency_stamp");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256)")
-                        .HasColumnName("name");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256)")
-                        .HasColumnName("normalized_name");
-
-                    b.HasKey("Id")
-                        .HasName("pk_roles");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex");
-
-                    b.ToTable("AspNetRoles");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("id");
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("text")
-                        .HasColumnName("claim_type");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("text")
-                        .HasColumnName("claim_value");
-
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("varchar(767)")
-                        .HasColumnName("role_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_role_claims");
-
-                    b.HasIndex("RoleId")
-                        .HasDatabaseName("ix_role_claims_role_id");
-
-                    b.ToTable("AspNetRoleClaims");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+            modelBuilder.Entity("App.Models.Entities.Identities.UserClaim", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -731,7 +684,7 @@ namespace App.Migrations
                     b.ToTable("AspNetUserClaims");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+            modelBuilder.Entity("App.Models.Entities.Identities.UserLogin", b =>
                 {
                     b.Property<string>("LoginProvider")
                         .HasColumnType("varchar(767)")
@@ -759,7 +712,7 @@ namespace App.Migrations
                     b.ToTable("AspNetUserLogins");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+            modelBuilder.Entity("App.Models.Entities.Identities.UserRole", b =>
                 {
                     b.Property<string>("UserId")
                         .HasColumnType("varchar(767)")
@@ -778,7 +731,7 @@ namespace App.Migrations
                     b.ToTable("AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+            modelBuilder.Entity("App.Models.Entities.Identities.UserToken", b =>
                 {
                     b.Property<string>("UserId")
                         .HasColumnType("varchar(767)")
@@ -802,6 +755,235 @@ namespace App.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("App.Models.Entities.Lang", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime?>("CreateAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("create_at");
+
+                    b.Property<string>("CreateBy")
+                        .HasColumnType("text")
+                        .HasColumnName("create_by");
+
+                    b.Property<string>("Deleted")
+                        .HasColumnType("text")
+                        .HasColumnName("deleted");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)")
+                        .HasColumnName("name");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int")
+                        .HasColumnName("order");
+
+                    b.Property<DateTime?>("UpdateAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("update_at");
+
+                    b.Property<string>("UpdateBy")
+                        .HasColumnType("text")
+                        .HasColumnName("update_by");
+
+                    b.HasKey("Id")
+                        .HasName("pk_langs");
+
+                    b.HasIndex("Id")
+                        .HasDatabaseName("ix_langs_id");
+
+                    b.ToTable("langs");
+                });
+
+            modelBuilder.Entity("App.Models.Entities.Permission", b =>
+                {
+                    b.Property<byte[]>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("varbinary(16)")
+                        .HasColumnName("id");
+
+                    b.Property<string>("CommandId")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("command_id");
+
+                    b.Property<DateTime?>("CreateAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("create_at");
+
+                    b.Property<string>("CreateBy")
+                        .HasColumnType("text")
+                        .HasColumnName("create_by");
+
+                    b.Property<string>("Deleted")
+                        .HasColumnType("text")
+                        .HasColumnName("deleted");
+
+                    b.Property<string>("FunctionId")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("function_id");
+
+                    b.Property<string>("RoleId")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasColumnName("role_id");
+
+                    b.Property<DateTime?>("UpdateAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("update_at");
+
+                    b.Property<string>("UpdateBy")
+                        .HasColumnType("text")
+                        .HasColumnName("update_by");
+
+                    b.HasKey("Id")
+                        .HasName("pk_permissions");
+
+                    b.HasIndex("CommandId")
+                        .HasDatabaseName("ix_permissions_command_id");
+
+                    b.HasIndex("FunctionId")
+                        .HasDatabaseName("ix_permissions_function_id");
+
+                    b.HasIndex("Id")
+                        .HasDatabaseName("ix_permissions_id");
+
+                    b.HasIndex("RoleId")
+                        .HasDatabaseName("ix_permissions_role_id");
+
+                    b.ToTable("permissions");
+                });
+
+            modelBuilder.Entity("App.Models.Entities.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int")
+                        .HasColumnName("category_id");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)")
+                        .HasColumnName("code");
+
+                    b.Property<DateTime?>("CreateAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("create_at");
+
+                    b.Property<string>("CreateBy")
+                        .HasColumnType("text")
+                        .HasColumnName("create_by");
+
+                    b.Property<string>("Deleted")
+                        .HasColumnType("text")
+                        .HasColumnName("deleted");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("text")
+                        .HasColumnName("image_url");
+
+                    b.Property<double?>("MaxDiscountPrice")
+                        .HasColumnType("double")
+                        .HasColumnName("max_discount_price");
+
+                    b.Property<int?>("PercentDiscount")
+                        .HasColumnType("int")
+                        .HasColumnName("percent_discount");
+
+                    b.Property<double?>("Price")
+                        .HasColumnType("double")
+                        .HasColumnName("price");
+
+                    b.Property<DateTime?>("UpdateAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("update_at");
+
+                    b.Property<string>("UpdateBy")
+                        .HasColumnType("text")
+                        .HasColumnName("update_by");
+
+                    b.HasKey("Id")
+                        .HasName("pk_products");
+
+                    b.HasIndex("CategoryId")
+                        .HasDatabaseName("ix_products_category_id");
+
+                    b.HasIndex("Id")
+                        .HasDatabaseName("ix_products_id");
+
+                    b.ToTable("products");
+                });
+
+            modelBuilder.Entity("App.Models.Entities.ProductDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime?>("CreateAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("create_at");
+
+                    b.Property<string>("CreateBy")
+                        .HasColumnType("text")
+                        .HasColumnName("create_by");
+
+                    b.Property<string>("Deleted")
+                        .HasColumnType("text")
+                        .HasColumnName("deleted");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text")
+                        .HasColumnName("description");
+
+                    b.Property<string>("LangId")
+                        .HasColumnType("varchar(256)")
+                        .HasColumnName("lang_id");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)")
+                        .HasColumnName("name");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int")
+                        .HasColumnName("product_id");
+
+                    b.Property<DateTime?>("UpdateAt")
+                        .HasColumnType("datetime")
+                        .HasColumnName("update_at");
+
+                    b.Property<string>("UpdateBy")
+                        .HasColumnType("text")
+                        .HasColumnName("update_by");
+
+                    b.HasKey("Id")
+                        .HasName("pk_product_details");
+
+                    b.HasIndex("Id")
+                        .HasDatabaseName("ix_product_details_id");
+
+                    b.HasIndex("LangId")
+                        .HasDatabaseName("ix_product_details_lang_id");
+
+                    b.HasIndex("ProductId")
+                        .HasDatabaseName("ix_product_details_product_id");
+
+                    b.ToTable("product_details");
+                });
+
             modelBuilder.Entity("App.Models.Entities.Bill", b =>
                 {
                     b.HasOne("App.Models.Entities.Customer", "Customer")
@@ -811,7 +993,7 @@ namespace App.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("App.Models.Entities.User", "UserPayment")
+                    b.HasOne("App.Models.Entities.Identities.User", "UserPayment")
                         .WithMany()
                         .HasForeignKey("UserPaymentId")
                         .HasConstraintName("fk_bills_users_user_payment_id");
@@ -871,14 +1053,132 @@ namespace App.Migrations
                     b.Navigation("Lang");
                 });
 
+            modelBuilder.Entity("App.Models.Entities.CommandInFunction", b =>
+                {
+                    b.HasOne("App.Models.Entities.Command", "Command")
+                        .WithMany("CommandInFunctions")
+                        .HasForeignKey("CommandId")
+                        .HasConstraintName("fk_command_in_function_commands_command_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("App.Models.Entities.Function", "Function")
+                        .WithMany("CommandInFunctions")
+                        .HasForeignKey("FunctionId")
+                        .HasConstraintName("fk_command_in_function_functions_function_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Command");
+
+                    b.Navigation("Function");
+                });
+
+            modelBuilder.Entity("App.Models.Entities.Function", b =>
+                {
+                    b.HasOne("App.Models.Entities.Function", "Parent")
+                        .WithMany("Childrens")
+                        .HasForeignKey("ParentId")
+                        .HasConstraintName("fk_functions_functions_parent_id");
+
+                    b.Navigation("Parent");
+                });
+
+            modelBuilder.Entity("App.Models.Entities.Identities.RoleClaim", b =>
+                {
+                    b.HasOne("App.Models.Entities.Identities.Role", "Role")
+                        .WithMany("RoleClaims")
+                        .HasForeignKey("RoleId")
+                        .HasConstraintName("fk_role_claims_roles_role_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("App.Models.Entities.Identities.UserClaim", b =>
+                {
+                    b.HasOne("App.Models.Entities.Identities.User", "User")
+                        .WithMany("UserClaims")
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("fk_user_claims_users_user_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("App.Models.Entities.Identities.UserLogin", b =>
+                {
+                    b.HasOne("App.Models.Entities.Identities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("fk_user_logins_asp_net_users_user_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("App.Models.Entities.Identities.UserRole", b =>
+                {
+                    b.HasOne("App.Models.Entities.Identities.Role", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId")
+                        .HasConstraintName("fk_user_roles_roles_role_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("App.Models.Entities.Identities.User", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("fk_user_roles_users_user_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("App.Models.Entities.Identities.UserToken", b =>
+                {
+                    b.HasOne("App.Models.Entities.Identities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("fk_user_tokens_asp_net_users_user_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("App.Models.Entities.Permission", b =>
+                {
+                    b.HasOne("App.Models.Entities.Command", "Command")
+                        .WithMany()
+                        .HasForeignKey("CommandId")
+                        .HasConstraintName("fk_permissions_commands_command_id");
+
+                    b.HasOne("App.Models.Entities.Function", "Function")
+                        .WithMany()
+                        .HasForeignKey("FunctionId")
+                        .HasConstraintName("fk_permissions_functions_function_id");
+
+                    b.HasOne("App.Models.Entities.Identities.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .HasConstraintName("fk_permissions_roles_role_id");
+
+                    b.Navigation("Command");
+
+                    b.Navigation("Function");
+
+                    b.Navigation("Role");
+                });
+
             modelBuilder.Entity("App.Models.Entities.Product", b =>
                 {
                     b.HasOne("App.Models.Entities.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
-                        .HasConstraintName("fk_products_categories_category_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasConstraintName("fk_products_categories_category_id");
 
                     b.Navigation("Category");
                 });
@@ -902,63 +1202,6 @@ namespace App.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .HasConstraintName("fk_role_claims_asp_net_roles_identity_role_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.HasOne("App.Models.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .HasConstraintName("fk_user_claims_asp_net_users_user_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                {
-                    b.HasOne("App.Models.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .HasConstraintName("fk_user_logins_asp_net_users_user_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .HasConstraintName("fk_user_roles_asp_net_roles_identity_role_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("App.Models.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .HasConstraintName("fk_user_roles_asp_net_users_user_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.HasOne("App.Models.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .HasConstraintName("fk_user_tokens_asp_net_users_user_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("App.Models.Entities.Bill", b =>
                 {
                     b.Navigation("BillDetails");
@@ -967,6 +1210,32 @@ namespace App.Migrations
             modelBuilder.Entity("App.Models.Entities.Category", b =>
                 {
                     b.Navigation("CategoryDetails");
+                });
+
+            modelBuilder.Entity("App.Models.Entities.Command", b =>
+                {
+                    b.Navigation("CommandInFunctions");
+                });
+
+            modelBuilder.Entity("App.Models.Entities.Function", b =>
+                {
+                    b.Navigation("CommandInFunctions");
+
+                    b.Navigation("Childrens");
+                });
+
+            modelBuilder.Entity("App.Models.Entities.Identities.Role", b =>
+                {
+                    b.Navigation("RoleClaims");
+
+                    b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("App.Models.Entities.Identities.User", b =>
+                {
+                    b.Navigation("UserClaims");
+
+                    b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("App.Models.Entities.Product", b =>

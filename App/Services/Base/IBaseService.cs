@@ -5,11 +5,14 @@ using System.Threading.Tasks;
 
 namespace App.Services.Base
 {
-    public interface IBaseService<T, TCreateRequest, TViewModel, TKey>
+    public interface IBaseService<T, TCreateRequest, TUpdateRequest, TViewModel, TKey>
     {
-        public Task<IEnumerable<TViewModel>> GetAllDTOAsync();
-        public Task<TViewModel> GetByIdAsync(TKey id);
-        public Task<int> DeleteHardAsync(TKey id);
-        public Task<int> DeleteSoftAsync(TKey id);
+        Task<IEnumerable<TViewModel>> GetAllDTOAsync();
+        Task<TViewModel> GetByIdAsync(TKey id);
+        Task<int> DeleteHardAsync(TKey id);
+        Task<int> DeleteSoftAsync(TKey id);
+        public Task<int> UpdateAsync(TKey id, TUpdateRequest request);
+        Task<TViewModel> CreateAsync(TCreateRequest request);
+        Task<IEnumerable<TViewModel>> CreateAsync(IEnumerable<TCreateRequest> request);
     }
 }

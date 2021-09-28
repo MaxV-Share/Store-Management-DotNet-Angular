@@ -49,7 +49,10 @@
     "Detail": "Detail",
     "Price": "Price",
     "Descriptions": "Descriptions",
-    
+    "Success": "Success",
+    "Failed": "Failed",
+    "Revenue": "Revenue",
+
     "Language": "Language",
     "English": "English",
     "French": "French",
