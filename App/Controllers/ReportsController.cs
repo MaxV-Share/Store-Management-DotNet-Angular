@@ -1,5 +1,4 @@
 ﻿using App.Controllers.Base;
-using App.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -15,6 +14,5 @@ namespace App.Controllers
         {
 
         }
-
     }
 }
