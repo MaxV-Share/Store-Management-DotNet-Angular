@@ -1,5 +1,5 @@
 using App.Models;
-using App.Infrastructures.Dbcontexts;
+using App.Models.Dbcontexts;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
