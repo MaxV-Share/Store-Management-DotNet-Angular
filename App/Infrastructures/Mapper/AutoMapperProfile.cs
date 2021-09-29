@@ -12,7 +12,6 @@ using App.Models.DTOs.CreateRequests;
 using App.Models.DTOs.Bills;
 using App.Models.DTOs.UpdateRquests;
 using App.Models.Entities.Identities;
-using App.Models.DTOs.UpdateRquests;
 
 namespace App.Infrastructures.Mapper
 {
@@ -82,11 +81,6 @@ namespace App.Infrastructures.Mapper
             //    .ForMember(dest => dest.Data, opt => opt.MapFrom(source => source))
             //    .ForMember(dest => dest.Children, opt => opt.MapFrom(source => source));
 
-            CreateMap<User, UserCreateRequest>();
-            CreateMap<UserCreateRequest, User>();
-            CreateMap<User, UserUpdateRequest>();
-            CreateMap<UserUpdateRequest, User>();
-
             CreateMap<Permission, PermissionCreateRequest>();
             CreateMap<PermissionCreateRequest, Permission>();
             CreateMap<Permission, PermissionUpdateRequest>();
@@ -109,6 +103,18 @@ namespace App.Infrastructures.Mapper
             CreateMap<ProductDetailUpdateRequest, ProductDetail>();
             CreateMap<ProductDetail, ProductDetailViewModel>();
             CreateMap<ProductDetailViewModel, ProductDetail>();
+
+            CreateMap<User, UserCreateRequest>();
+            CreateMap<UserCreateRequest, User>();
+            CreateMap<User, UserUpdateRequest>();
+            CreateMap<UserUpdateRequest, User>();
+
+            CreateMap<Role, RoleCreateRequest>();
+            CreateMap<RoleCreateRequest, Role>();
+            CreateMap<Role, RoleUpdateRequest>();
+            CreateMap<RoleUpdateRequest, Role>();
+            CreateMap<Role, RoleViewModel>();
+            CreateMap<RoleViewModel, Role>();
 
         }
 

@@ -6,3 +6,4 @@ export * from "./discount-create-request";
 export * from "./function-create-request";
 export * from "./product-create-request";
 export * from "./product-detail-create-request";
+export * from "./role-create-request";

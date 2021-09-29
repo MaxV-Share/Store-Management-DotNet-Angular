@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using App.Infrastructures.Dbcontexts;
+using App.Models.Dbcontexts;
 using App.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 using AutoMapper;
@@ -35,7 +35,7 @@ namespace App.Infrastructures.Startup.ServicesExtensions
 
                 options.UseMySQL(connectionStrings.DefaultConnection,
                     x => {
-                        x.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.GetName().Name);
+                        x.MigrationsAssembly("App");
                         });
                 options.UseSnakeCaseNamingConvention();
             }); 

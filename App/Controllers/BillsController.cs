@@ -61,15 +61,15 @@ namespace App.Controllers
                 return Ok(result);
             return NotFound();
         }
-        [HttpGet("")]
-        public async Task<ActionResult> GetAll()
-        {
-            var result = await _billService.GetAllDTOAsync();
+        //[HttpGet("")]
+        //public async Task<ActionResult> GetAll() // 
+        //{
+        //    var result = await _billService.GetAllDTOAsync();
 
-            if (result != null)
-                return Ok(result);
-            return NotFound();
-        }
+        //    if (result != null)
+        //        return Ok(result);
+        //    return NotFound();
+        //}
 
         [HttpGet("{id}")]
         public async Task<ActionResult> GetById(int id)
@@ -80,7 +80,7 @@ namespace App.Controllers
                 return Ok(result);
             return NotFound();
         }
-        [HttpGet("{id}/details")]
+        [HttpGet("{id}/bill-details")]// bills/1/bill-details
         public async Task<ActionResult> GetBillDetailByBillId(int id, string langId)
         {
             var result = await _billDetailService.GetByBillIdAsync(id, langId);
@@ -89,8 +89,8 @@ namespace App.Controllers
                 return Ok(result);
             return NotFound();
         }
-        [HttpGet("filter")]
-        public async Task<ActionResult> GetAllPaging(int pageIndex, int pageSize, string txtSearch)
+        [HttpGet("paging")]// bills?paging=true&pageIndex=1&pageSize=5......
+        public async Task<ActionResult> GetAllPaging(string txtSearch, int pageIndex = 0, int pageSize = 100)
         {
             var result = await _billService.GetPagingAsync(pageIndex, pageSize, txtSearch);
 

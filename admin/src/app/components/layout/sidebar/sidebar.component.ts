@@ -1,7 +1,9 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { CookieConsentService } from '@app/shared/services';
+import { CookieConsentService, FunctionService } from '@app/shared/services';
+import { FunctionViewModel, HTTP_STATUS } from '@app/models';
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
     selector: 'app-sidebar',
@@ -13,10 +15,14 @@ export class SidebarComponent implements OnInit {
     collapsed: boolean;
     showMenu: string;
     pushRightClass: string;
+    treeFunctions: FunctionViewModel[];
 
     @Output() collapsedEvent = new EventEmitter<boolean>();
 
-    constructor(private translate: TranslateService, public router: Router, private cookieConsentService: CookieConsentService) {
+    constructor(private translate: TranslateService,
+        private functionService: FunctionService,
+        public router: Router,
+        private cookieConsentService: CookieConsentService) {
         this.router.events.subscribe((val) => {
             if (val instanceof NavigationEnd && window.innerWidth <= 992 && this.isToggled()) {
                 this.toggleSidebar();
@@ -29,6 +35,7 @@ export class SidebarComponent implements OnInit {
         this.collapsed = false;
         this.showMenu = '';
         this.pushRightClass = 'push-right';
+        this.loadFunction();
     }
 
     eventCalled() {
@@ -71,5 +78,14 @@ export class SidebarComponent implements OnInit {
 
     onLoggedout() {
         this.cookieConsentService.deleteCookie('token');
+    }
+    loadFunction() {
+        this.functionService.getTree().subscribe((res: HttpResponse<FunctionViewModel[]>) => {
+            if(res.status === HTTP_STATUS.Ok) {
+                this.treeFunctions = res.body;
+                this.treeFunctions.forEach(e => e.hasChildren  = e.childrens?.length > 0)
+                console.log(this.treeFunctions);
+            }
+        })
     }
 }

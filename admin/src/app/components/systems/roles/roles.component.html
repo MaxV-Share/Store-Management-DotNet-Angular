@@ -1,3 +1,27 @@
-<p>
-  roles works!
-</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th style="width: 8rem">
+                <button class="btn btn-sm btn-primary" (click)="createOrUpdate(null)">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                </button>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let role of roles | async">
+            <td>{{role.id}}</td>
+            <td>{{role.name}}</td>
+            <td>
+                <button class="btn btn-sm btn-warning" (click)="createOrUpdate(role)">
+                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                </button>
+                <button class="btn btn-sm btn-danger" (click)="delete(role.id)">
+                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -16,7 +16,7 @@ export class CategoryService extends CrudService<CategoryCreateRequest, Category
     }
 
     getAll(searchText: string = '') {
-        return this.http.get(`${ENVIRONMENT.apiUrl}/${this.controllerName}?searchText=${searchText}&langId=${localStorage.getItem('lang')}`, OPTIONS_JSON)
+        return this.http.get(`${ENVIRONMENT.apiUrl}/${this.controllerName}/filter?searchText=${searchText}&langId=${localStorage.getItem('lang')}`, OPTIONS_JSON)
         // .pipe(catchError(this.handleError));
     }
 

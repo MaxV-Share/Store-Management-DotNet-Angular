@@ -5,10 +5,10 @@ import { ToastrService } from 'ngx-toastr';
 import * as Models from '@app/models';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { FunctionService } from '@app/shared/services';
-import { FunctionViewModel } from '@app/models';
+import { FunctionViewModel, HTTP_STATUS } from '@app/models';
 import { HttpResponse } from '@angular/common/http';
 import { FormControl } from '@angular/forms';
-import { debounceTime, delay, finalize, switchMap, tap } from 'rxjs/operators';
+import { debounceTime, delay, finalize, map, switchMap, tap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 
 @Component({
@@ -48,14 +48,15 @@ export class FunctionsDetailComponent extends BaseComponent implements OnInit {
                             this.isLoadingAutocompleteFunction = false
                         }))
                 }))
-            .subscribe((res: HttpResponse<FunctionViewModel[]>) => {
-                if (res.status == 200) {
-
-                    this.isLoadingAutocompleteFunction = true;
-                    console.log(this.isLoadingAutocompleteFunction);
-                    this.cbFunctions = res.body;
-                    this.filteredOptions = of(res.body.filter(e => e.id != this.functionId));
+            .pipe(map((res:HttpResponse<FunctionViewModel[]>) => {
+                if (HTTP_STATUS.Ok == res.status ) {
+                    return res.body;
                 }
+
+            }))
+            .subscribe((res: FunctionViewModel[]) => {
+                    this.cbFunctions = res;
+                    this.filteredOptions = of(res.filter(e => e.id != this.functionId));
             });
         this.function = new Models.FunctionViewModel();
         if (this.functionId != null) {
@@ -76,17 +77,17 @@ export class FunctionsDetailComponent extends BaseComponent implements OnInit {
 
     getFunctionsWithoutChildren() {
         this.functionService.getFunctionsWithoutChildren().subscribe((res: HttpResponse<FunctionViewModel[]>) => {
-            if (res.status == 200) {
+            if (HTTP_STATUS.Ok == res.status || HTTP_STATUS.NoContent == res.status) {
                 this.ctrFunction.setValue(res.body.find(e => e.id == this.function.parentId));
                 this.filteredOptions = of(res.body.filter(e => e.id != this.functionId));
             }
         });
     }
     onSave() {
-        this.function.parentId = this.ctrFunction.value.id;
+        this.function.parentId = this.ctrFunction.value?.id;
         if (this.function.id == null) {
             this.functionService.add(this.function).subscribe((res: HttpResponse<FunctionViewModel>) => {
-                if (res.status == 200) {
+                if (HTTP_STATUS.Ok == res.status || HTTP_STATUS.NoContent == res.status) {
                     this.translate.get('Success').subscribe(e => {
                         this.toastr.success(e)
                     });
@@ -96,11 +97,9 @@ export class FunctionsDetailComponent extends BaseComponent implements OnInit {
             })
 
         }else{
-            this.functionService.update(this.function.id, this.function).subscribe((res: HttpResponse<FunctionViewModel>) => {
-                if (res.status == 200) {
-                    this.translate.get('Success').subscribe(e => {
-                        this.toastr.success(e)
-                    });
+            this.functionService.update(this.function.id, this.function).subscribe(async (res: HttpResponse<FunctionViewModel>) => {
+                if (HTTP_STATUS.Ok == res.status || HTTP_STATUS.NoContent == res.status) {
+                    this.toastr.success(await this.translate.get('Success').toPromise().then(e => e))
                     this.saved.emit("success");
                 }
             })

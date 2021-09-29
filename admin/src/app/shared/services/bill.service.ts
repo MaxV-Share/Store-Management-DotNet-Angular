@@ -28,7 +28,7 @@ export class BillService extends CrudService<BillCreateRequest, BillUpdateReques
     //     // .pipe(catchError(this.handleError));
     // }
     getPaging(pageIndex: number, pageSize: number, searchText: string) {
-        let url = `${this.apiUrl}/filter?pageIndex=${pageIndex}&pageSize=${pageSize}&searchText=${searchText}&langId=${this.translate.currentLang}`;
+        let url = `${this.apiUrl}/filter-paging?pageIndex=${pageIndex}&pageSize=${pageSize}&searchText=${searchText}&langId=${this.translate.currentLang}`;
         return this.http.get(url,OPTIONS_JSON);
         // .pipe(catchError(this.handleError));
     }
