@@ -19,102 +19,63 @@ namespace App.Infrastructures.Mapper
     {
         public AutoMapperProfile()
         {
-            CreateMap<Bill, BillCreateRequest>();
-            CreateMap<BillCreateRequest, Bill>();
-            CreateMap<Bill, BillViewModel>();
-            CreateMap<BillViewModel, Bill>();
+            CreateMap<Bill, BillCreateRequest>().ReverseMap();
+            CreateMap<Bill, BillViewModel>().ReverseMap();
 
-            CreateMap<BillDetail, BillDetailCreateRequest>();
-            CreateMap<BillDetailCreateRequest, BillDetail>();
-            CreateMap<BillDetail, BillDetailViewModel>();
-            CreateMap<BillDetailViewModel, BillDetail>();
+            CreateMap<BillDetail, BillDetailCreateRequest>().ReverseMap();
+            CreateMap<BillDetail, BillDetailViewModel>().ReverseMap();
 
-            CreateMap<Category, CategoryCreateRequest>();
-            CreateMap<CategoryCreateRequest, Category>();
-            CreateMap<Category, CategoryUpdateRequest>();
-            CreateMap<CategoryUpdateRequest, Category>();
-            CreateMap<Category, CategoryViewModel>();
-            CreateMap<CategoryViewModel, Category>();
+            CreateMap<Category, CategoryCreateRequest>().ReverseMap();
+            CreateMap<Category, CategoryUpdateRequest>().ReverseMap();
+            CreateMap<Category, CategoryViewModel>().ReverseMap();
 
-            CreateMap<CategoryDetail, CategoryDetailCreateRequest>();
-            CreateMap<CategoryDetailCreateRequest, CategoryDetail>();
-            CreateMap<CategoryDetail, CategoryDetailUpdateRequest>();
-            CreateMap<CategoryDetailUpdateRequest, CategoryDetail>();
-            CreateMap<CategoryDetail, CategoryDetailViewModel>();
-            CreateMap<CategoryDetailViewModel, CategoryDetail>();
+            CreateMap<CategoryDetail, CategoryDetailCreateRequest>().ReverseMap(); 
+            CreateMap<CategoryDetail, CategoryDetailUpdateRequest>().ReverseMap();
+            CreateMap<CategoryDetail, CategoryDetailViewModel>().ReverseMap();
 
-            CreateMap<CommandInFunction, CommandInFunctionCreateRequest>();
-            CreateMap<CommandInFunctionCreateRequest, CommandInFunction>();
-            CreateMap<CommandInFunction, CommandInFunctionUpdateRequest>();
-            CreateMap<CommandInFunctionUpdateRequest, CommandInFunction>();
-            CreateMap<CommandInFunction, CommandInFunctionViewModel>();
-            CreateMap<CommandInFunctionViewModel, CommandInFunction>();
+            CreateMap<CommandInFunction, CommandInFunctionCreateRequest>().ReverseMap();
+            CreateMap<CommandInFunction, CommandInFunctionUpdateRequest>().ReverseMap();
+            CreateMap<CommandInFunction, CommandInFunctionViewModel>().ReverseMap();
 
-            CreateMap<Command, CommandCreateRequest>();
-            CreateMap<CommandCreateRequest, Command>();
-            CreateMap<Command, CommandUpdateRequest>();
-            CreateMap<CommandUpdateRequest, Command>();
-            CreateMap<Command, CommandViewModel>();
-            CreateMap<CommandViewModel, Command>();
+            CreateMap<Command, CommandCreateRequest>().ReverseMap();
+            CreateMap<Command, CommandUpdateRequest>().ReverseMap();
+            CreateMap<Command, CommandViewModel>().ReverseMap();
 
-            CreateMap<Customer, CustomerCreateRequest>();
-            CreateMap<CustomerCreateRequest, Customer>();
-            CreateMap<Customer, CustomerUpdateRequest>();
-            CreateMap<CustomerUpdateRequest, Customer>();
-            CreateMap<Customer, CustomerViewModel>();
-            CreateMap<CustomerViewModel, Customer>();
+            CreateMap<Customer, CustomerCreateRequest>().ReverseMap();
+            CreateMap<Customer, CustomerUpdateRequest>().ReverseMap();
+            CreateMap<Customer, CustomerViewModel>().ReverseMap();
 
-            CreateMap<Discount, DiscountCreateRequest>();
-            CreateMap<DiscountCreateRequest, Discount>();
-            CreateMap<Discount, DiscountUpdateRequest>();
-            CreateMap<DiscountUpdateRequest, Discount>();
-            CreateMap<Discount, DiscountViewModel>();
-            CreateMap<DiscountViewModel, Discount>();
+            CreateMap<Discount, DiscountCreateRequest>().ReverseMap();
+            CreateMap<Discount, DiscountUpdateRequest>().ReverseMap();
+            CreateMap<Discount, DiscountViewModel>().ReverseMap();
 
-            CreateMap<Function, FunctionCreateRequest>();
-            CreateMap<FunctionCreateRequest, Function>();
-            CreateMap<Function, FunctionUpdateRequest>();
-            CreateMap<FunctionUpdateRequest, Function>();
-            CreateMap<Function, FunctionViewModel>();
-            CreateMap<FunctionViewModel, Function>();
+            CreateMap<Function, FunctionCreateRequest>().ReverseMap();
+            CreateMap<Function, FunctionUpdateRequest>().ReverseMap();
+            CreateMap<Function, FunctionViewModel>().ReverseMap();
             //CreateMap<FunctionViewModel, TreeFunctionViewModel>()
             //    .ForMember(dest => dest.Data, opt => opt.MapFrom(source => source))
             //    .ForMember(dest => dest.Children, opt => opt.MapFrom(source => source));
 
-            CreateMap<Permission, PermissionCreateRequest>();
-            CreateMap<PermissionCreateRequest, Permission>();
-            CreateMap<Permission, PermissionUpdateRequest>();
-            CreateMap<PermissionUpdateRequest, Permission>();
-            CreateMap<Permission, PermissionViewModel>();
-            CreateMap<PermissionViewModel, Permission>();
+            CreateMap<Permission, PermissionCreateRequest>().ReverseMap();
+            CreateMap<Permission, PermissionUpdateRequest>().ReverseMap();
+            CreateMap<Permission, PermissionViewModel>().ReverseMap();
 
-            CreateMap<Product, ProductCreateRequest>();
-            CreateMap<ProductCreateRequest, Product>();
-            CreateMap<Product, ProductUpdateRequest>();
-            CreateMap<ProductUpdateRequest, Product>();
-            CreateMap<Product, ProductViewModel>();
-            CreateMap<ProductViewModel, Product>();
+            CreateMap<Product, ProductCreateRequest>().ReverseMap();
+            CreateMap<Product, ProductUpdateRequest>().ReverseMap();
+            CreateMap<Product, ProductViewModel>().ReverseMap();
             CreateMap<Product, ProductInBillViewModel>()
-                .ForMember(dest => dest.Detail, option => option.MapFrom(source => source.ProductDetails.SingleOrDefault()));
+                .ForMember(dest => dest.Detail, option => option.MapFrom(source => source.ProductDetails.SingleOrDefault())).ReverseMap();
 
-            CreateMap<ProductDetail, ProductDetailCreateRequest>();
-            CreateMap<ProductDetailCreateRequest, ProductDetail>();
-            CreateMap<ProductDetail, ProductDetailUpdateRequest>();
-            CreateMap<ProductDetailUpdateRequest, ProductDetail>();
-            CreateMap<ProductDetail, ProductDetailViewModel>();
-            CreateMap<ProductDetailViewModel, ProductDetail>();
+            CreateMap<ProductDetail, ProductDetailCreateRequest>().ReverseMap();
+            CreateMap<ProductDetail, ProductDetailUpdateRequest>().ReverseMap();
+            CreateMap<ProductDetail, ProductDetailViewModel>().ReverseMap();
 
-            CreateMap<User, UserCreateRequest>();
-            CreateMap<UserCreateRequest, User>();
-            CreateMap<User, UserUpdateRequest>();
-            CreateMap<UserUpdateRequest, User>();
+            CreateMap<User, UserCreateRequest>().ReverseMap();
+            CreateMap<User, UserUpdateRequest>().ReverseMap();
 
-            CreateMap<Role, RoleCreateRequest>();
-            CreateMap<RoleCreateRequest, Role>();
-            CreateMap<Role, RoleUpdateRequest>();
-            CreateMap<RoleUpdateRequest, Role>();
-            CreateMap<Role, RoleViewModel>();
-            CreateMap<RoleViewModel, Role>();
+            CreateMap<Role, RoleCreateRequest>().ReverseMap();
+            CreateMap<Role, RoleUpdateRequest>().ReverseMap();
+            CreateMap<Role, RoleViewModel>().ReverseMap();
 
         }
 
