@@ -10,6 +10,6 @@ namespace App.Repositories.Interface
 {
     public interface IUserRepository
     {
-        Task<IEnumerable<User>> GetAllAsync(string filter);
+        IQueryable<User> GetAll(string filter);
     }
 }

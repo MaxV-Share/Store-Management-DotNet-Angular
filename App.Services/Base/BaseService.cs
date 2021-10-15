@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using App.Repositories.UnitOffWorks;
 using MaxV.Base.DTOs;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace App.Services.Base
 {
@@ -42,7 +43,7 @@ namespace App.Services.Base
         public virtual async Task<IEnumerable<TViewModel>> GetAllDTOAsync()
         {
             var repository = _unitOffWork.BaseRepository<TEntity, TKey>();
-            var entities = await repository.GetAllAsync();
+            var entities = await repository.GetNoTrackingEntities().ToListAsync();
             var result = _mapper.Map<IEnumerable<TViewModel>>(entities);
             return result;
         }

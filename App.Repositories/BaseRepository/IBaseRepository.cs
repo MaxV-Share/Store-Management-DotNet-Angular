@@ -13,7 +13,7 @@ namespace App.Repositories.BaseRepository
         Task<TEntity> CreateAsync(TEntity entity);
         Task DeleteHardAsync(params object[] keyValues);
         Task DeleteSoftAsync(params object[] keyValues);
-        Task<IEnumerable<TEntity>> GetAllAsync();
+        Task<List<TEntity>> GetAllAsync();
         Task<TEntity> GetByIdAsync(TKey id);
         Task<TEntity> GetByIdNoTrackingAsync(TKey id);
         IQueryable<TEntity> GetQueryableTable();

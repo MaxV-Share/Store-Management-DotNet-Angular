@@ -20,11 +20,9 @@ namespace App.Repositories.Interface
         {
             _userManager = userManager;
         }
-        public async Task<IEnumerable<User>> GetAllAsync(string filter)
+        public IQueryable<User> GetAll(string filter)
         {
-            var result = await  _userManager.Users
-                                            .Where(e =>(e.UserName.Contains(filter) || e.PhoneNumber.Contains(filter)))
-                                            .ToListAsync();
+            var result = _userManager.Users.Where(e => e.UserName.Contains(filter) || e.PhoneNumber.Contains(filter));
             return result;
         }
     }

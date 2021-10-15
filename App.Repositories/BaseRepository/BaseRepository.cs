@@ -47,34 +47,34 @@ namespace App.Repositories.BaseRepository
             return Entities.AsQueryable();
         }
 
-        public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
+        public virtual Task<List<TEntity>> GetAllAsync()
         {
-            var entities = await GetNoTrackingEntities().ToListAsync();
+            var entities = GetNoTrackingEntities().ToListAsync();
             return entities;
         }
 
-        public virtual async Task<TEntity> GetByIdAsync(TKey id)
+        public virtual Task<TEntity> GetByIdAsync(TKey id)
         {
-            var entity = await Entities.SingleOrDefaultAsync(x => id.Equals(x.Id));
+            var entity = Entities.SingleOrDefaultAsync(x => id.Equals(x.Id));
             return entity;
         }
 
-        public virtual async Task<TEntity> GetByIdNoTrackingAsync(TKey id)
+        public virtual Task<TEntity> GetByIdNoTrackingAsync(TKey id)
         {
-            var entity = await GetNoTrackingEntities().SingleOrDefaultAsync(x => x.Id.Equals(id));
+            var entity = GetNoTrackingEntities().SingleOrDefaultAsync(x => x.Id.Equals(id));
             return entity;
         }
 
-        public virtual async Task<TEntity> CreateAsync(TEntity entity)
+        public virtual Task<TEntity> CreateAsync(TEntity entity)
         {
             ValidateAndThrow(entity);
             var currentUserName = GetUserNameInHttpContext();
             entity.SetDefaultValue(currentUserName);
             Entities.Add(entity);
-            return entity;
+            return Task.FromResult(entity);
         }
 
-        public virtual async Task<IEnumerable<TEntity>> CreateAsync(List<TEntity> entities)
+        public virtual Task<IEnumerable<TEntity>> CreateAsync(List<TEntity> entities)
         {
             ValidateAndThrow(entities);
             var currentUserName = GetUserNameInHttpContext();
@@ -84,10 +84,10 @@ namespace App.Repositories.BaseRepository
             });
 
             Entities.AddRange(entities);
-            return entities;
+            return Task.FromResult(entities.AsEnumerable());
         }
 
-        public virtual async Task<TEntity> UpdateAsync(TEntity entity)
+        public virtual Task<TEntity> UpdateAsync(TEntity entity)
         {
             ValidateAndThrow(entity);
             var currentUserName = GetUserNameInHttpContext();
@@ -97,10 +97,10 @@ namespace App.Repositories.BaseRepository
             {
                 entry.State = EntityState.Modified;
             }
-            return entity;
+            return Task.FromResult(entity);
         }
 
-        public virtual async Task<IEnumerable<TEntity>> UpdateAsync(IEnumerable<TEntity> entities)
+        public virtual Task<IEnumerable<TEntity>> UpdateAsync(IEnumerable<TEntity> entities)
         {
             var currentUserName = GetUserNameInHttpContext();
             entities.ToList().ForEach(e =>
@@ -114,7 +114,7 @@ namespace App.Repositories.BaseRepository
             {
                 entry.State = EntityState.Modified;
             }
-            return entities;
+            return Task.FromResult(entities);
         }
 
         public virtual async Task DeleteHardAsync(params object[] keyValues)
@@ -128,7 +128,7 @@ namespace App.Repositories.BaseRepository
             var entity = await _context.Set<TEntity>().FindAsync(keyValues);
             ValidateAndThrow(entity);
             entity.Deleted = DateTime.Now.ToString("yyyyMMddHHmmss");
-            await UpdateAsync(entity);
+            UpdateAsync(entity);
         }
         #endregion public
 

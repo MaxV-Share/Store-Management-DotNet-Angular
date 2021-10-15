@@ -30,7 +30,7 @@ namespace App.Services
 
         public async Task<IEnumerable<UserUpdateRequest>> GetAllAsync(string filter)
         {
-            var entities = await _unitOffWork.UserRepository.GetAllAsync(filter);
+            var entities = await _unitOffWork.UserRepository.GetAll(filter).ToListAsync();
             var result = _mapper.Map<IEnumerable<UserUpdateRequest>>(entities);
             return result;
         }
