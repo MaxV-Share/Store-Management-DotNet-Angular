@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using App.Controllers.Base;
+﻿using App.Controllers.Base;
 using App.Models.DTOs;
 using App.Models.DTOs.UpdateRquests;
 using App.Models.Entities;
@@ -10,6 +6,8 @@ using App.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Threading.Tasks;
 
 namespace App.Controllers
 {
@@ -21,7 +19,7 @@ namespace App.Controllers
             _categoryService = categoryService;
         }
         [HttpGet("filter")]
-        public async Task<ActionResult> GetAllFilter( string searchText = "", string langId = "vi")
+        public async Task<ActionResult> GetAllFilter(string searchText = "", string langId = "vi")
         {
             var result = await _categoryService.GetAllDTOAsync(langId, searchText);
             return Ok(result);

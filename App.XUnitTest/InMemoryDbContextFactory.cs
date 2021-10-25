@@ -1,11 +1,5 @@
-﻿using App.Models;
-using App.Models.Dbcontexts;
+﻿using App.Models.Dbcontexts;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Xunit;
 
 namespace App.XUnitTest
 {

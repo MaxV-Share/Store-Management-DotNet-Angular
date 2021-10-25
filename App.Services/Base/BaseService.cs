@@ -1,14 +1,12 @@
-﻿using MaxV.Base;
-using App.Repositories.BaseRepository;
+﻿using App.Repositories.UnitOffWorks;
 using AutoMapper;
+using MaxV.Base;
+using MaxV.Base.DTOs;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using App.Repositories.UnitOffWorks;
-using MaxV.Base.DTOs;
-using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
 
 namespace App.Services.Base
 {

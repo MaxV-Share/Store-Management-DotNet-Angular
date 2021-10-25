@@ -1,9 +1,6 @@
-﻿using App.Models.Entities;
-using MaxV.Base.DTOs;
+﻿using MaxV.Base.DTOs;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace App.Models.DTOs.Bills
 {
@@ -18,6 +15,6 @@ namespace App.Models.DTOs.Bills
         public double? TotalPrice { get; set; }
         public double? DiscountPrice { get; set; }
         public double? PaymentAmount { get; set; }
-        public List<BillDetailViewModel> billDetails { get; set; } 
+        public List<BillDetailViewModel> billDetails { get; set; }
     }
 }

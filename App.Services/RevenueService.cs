@@ -1,15 +1,10 @@
 ﻿using App.Models.DTOs;
-using App.Repositories;
 using App.Repositories.Interface;
 using App.Services.Interface;
-using AutoMapper.Configuration;
 using Dapper;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using MySql.Data.MySqlClient;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace App.Services

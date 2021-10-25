@@ -1,16 +1,16 @@
-﻿using App.Models.Entities;
+﻿using App.Infrastructures.Mapper;
 using App.Models.Dbcontexts;
+using App.Models.Entities;
+using App.Models.Entities.Identities;
+using App.Repositories;
 using App.Repositories.BaseRepository;
 using App.Repositories.Interface;
+using App.Repositories.UnitOffWorks;
 using App.Services;
 using App.Services.Interface;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using App.Repositories;
-using App.Repositories.UnitOffWorks;
-using App.Models.Entities.Identities;
-using App.Infrastructures.Mapper;
 using System;
 
 namespace App.Infrastructures.Startup.ServicesExtensions

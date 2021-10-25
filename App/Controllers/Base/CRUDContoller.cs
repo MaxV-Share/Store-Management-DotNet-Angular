@@ -1,17 +1,8 @@
-﻿using App.Models.DTOs;
-using App.Models.DTOs.CreateRequests;
-using App.Models.DTOs.UpdateRquests;
-using App.Models.Entities;
-using App.Services;
-using App.Services.Base;
-using App.Services.Interface;
+﻿using App.Services.Base;
 using MaxV.Base.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace App.Controllers.Base
@@ -51,7 +42,7 @@ namespace App.Controllers.Base
             return Ok(result);
         }
         [HttpPut("{id}")]
-        public virtual async Task<ActionResult> Put(TKey id,[FromForm] TUpdateRequest request)
+        public virtual async Task<ActionResult> Put(TKey id, [FromForm] TUpdateRequest request)
         {
             if (!id.Equals(request.Id))
                 return BadRequest();
@@ -62,7 +53,7 @@ namespace App.Controllers.Base
         }
         [HttpDelete("{id}")]
         public virtual async Task<ActionResult> Delete(TKey id)
-{
+        {
             var result = await _baseService.DeleteHardAsync(id);
             if (result > 0)
                 return Ok();
@@ -70,7 +61,7 @@ namespace App.Controllers.Base
         }
         [HttpGet("")]
         public virtual async Task<ActionResult> GetAll()
-{
+        {
             var result = await _baseService.GetAllDTOAsync();
             return Ok(result);
         }

@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace App.Services
@@ -19,7 +18,7 @@ namespace App.Services
         private readonly ILogger<RoleService> _logger;
         private readonly RoleManager<Role> _roleManager;
         private readonly IMapper _mapper;
-        public RoleService(ILogger<RoleService> logger,RoleManager<Role> roleManager, IMapper mapper)
+        public RoleService(ILogger<RoleService> logger, RoleManager<Role> roleManager, IMapper mapper)
         {
             _logger = logger;
             _roleManager = roleManager;
@@ -58,7 +57,7 @@ namespace App.Services
             var entity = new Role();
             _mapper.Map(request, entity);
             var result = await _roleManager.CreateAsync(entity);
-            if(result.Succeeded)
+            if (result.Succeeded)
                 return _mapper.Map<RoleViewModel>(entity);
             return null;
         }

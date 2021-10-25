@@ -1,5 +1,5 @@
-﻿using App.Models.Entities;
-using App.DTO;
+﻿using App.DTO;
+using App.Models.Entities.Identities;
 using App.Services.Interface;
 using MaxV.Base.DTOs;
 using MaxV.Helper.Entities;
@@ -18,10 +18,6 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using Microsoft.Net.Http.Headers;
-using App.Models.Entities.Identities;
-using System.Net.Http;
-using System.Text.RegularExpressions;
 
 namespace App.Services
 {
@@ -34,12 +30,12 @@ namespace App.Services
         private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
         private readonly IOptions<JwtOptions> _jwtOptions;
-        public AuthenticationService(UserManager<User> userManager, 
-            RoleManager<Role> roleManager, 
-            SignInManager<User> signInManager, 
+        public AuthenticationService(UserManager<User> userManager,
+            RoleManager<Role> roleManager,
+            SignInManager<User> signInManager,
             IConfiguration configuration,
             IUserService userService,
-            IDistributedCache cache, 
+            IDistributedCache cache,
             IOptions<JwtOptions> jwtOptions)
         {
             _userManager = userManager;
@@ -80,7 +76,7 @@ namespace App.Services
                 expires: DateTime.Now.AddMinutes(100000),
                 signingCredentials: new SigningCredentials(authSigninKey, SecurityAlgorithms.HmacSha256)
                 );
-            return new Response<string>(StatusCodes.Status200OK,"Success", new JwtSecurityTokenHandler().WriteToken(token));
+            return new Response<string>(StatusCodes.Status200OK, "Success", new JwtSecurityTokenHandler().WriteToken(token));
         }
 
         public async Task LogoutAsync(string request)
@@ -131,7 +127,7 @@ namespace App.Services
 
                     if (!result.Succeeded)
                     {
-                        return new Response<bool>(StatusCodes.Status400BadRequest, "User already exists.",false);
+                        return new Response<bool>(StatusCodes.Status400BadRequest, "User already exists.", false);
                     }
 
                     response.StatusCode = StatusCodes.Status200OK;
@@ -153,7 +149,8 @@ namespace App.Services
             {
                 // we have a valid AuthenticationHeaderValue that has the following details:
 
-                var result =  await Task.Run(() => {
+                var result = await Task.Run(() =>
+                {
                     var scheme = headerValue.Scheme;
                     var tokenHeader = headerValue.Parameter;
 

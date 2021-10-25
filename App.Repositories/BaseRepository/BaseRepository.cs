@@ -1,16 +1,9 @@
-﻿using App.Repositories.UnitOffWorks;
-using App.Models;
-using AutoMapper;
-using MaxV.Base;
+﻿using MaxV.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -128,7 +121,7 @@ namespace App.Repositories.BaseRepository
             var entity = await _context.Set<TEntity>().FindAsync(keyValues);
             ValidateAndThrow(entity);
             entity.Deleted = DateTime.Now.ToString("yyyyMMddHHmmss");
-            UpdateAsync(entity);
+            await UpdateAsync(entity);
         }
         #endregion public
 

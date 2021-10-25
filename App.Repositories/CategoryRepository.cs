@@ -1,5 +1,4 @@
 ﻿using App.Models.Dbcontexts;
-using App.Models.DTOs;
 using App.Models.Entities;
 using App.Repositories.BaseRepository;
 using App.Repositories.Interface;
@@ -12,7 +11,7 @@ namespace App.Repositories
 {
     public class CategoryRepository : BaseRepository<Category, int>, ICategoryRepository
     {
-        public CategoryRepository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor) :  base(context, httpContextAccessor)
+        public CategoryRepository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor) : base(context, httpContextAccessor)
         {
         }
 

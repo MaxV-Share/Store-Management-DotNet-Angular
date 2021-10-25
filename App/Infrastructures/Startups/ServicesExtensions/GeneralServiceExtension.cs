@@ -1,22 +1,15 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using App.DTO;
 using App.Models.Dbcontexts;
-using App.Models.Entities;
-using Microsoft.AspNetCore.Identity;
-using AutoMapper;
-using App.Services.Interface;
-using App.Services;
-using App.Repositories.Interface;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using App.DTO;
-using Microsoft.Extensions.Configuration;
-using Microsoft.OpenApi.Models;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
 using App.Models.DTOs;
 using App.Models.Entities.Identities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Collections.Generic;
+using System.Text;
 
 namespace App.Infrastructures.Startup.ServicesExtensions
 {
@@ -34,11 +27,12 @@ namespace App.Infrastructures.Startup.ServicesExtensions
                 options.EnableDetailedErrors(true);
 
                 options.UseMySQL(connectionStrings.DefaultConnection,
-                    x => {
+                    x =>
+                    {
                         x.MigrationsAssembly("App");
-                        });
+                    });
                 options.UseSnakeCaseNamingConvention();
-            }); 
+            });
             services.AddIdentity<User, Role>().AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddDistributedMemoryCache();

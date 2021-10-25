@@ -1,9 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace App.Models.DTOs.Bills
 {
@@ -20,7 +17,7 @@ namespace App.Models.DTOs.Bills
         [JsonProperty("imageUrl")]
         public string ImageUrl { get; set; }
         [JsonProperty("detail")]
-        public ProductDetailViewModel Detail { get; set; } 
+        public ProductDetailViewModel Detail { get; set; }
         [MaxLength(256)]
         [JsonProperty("name")]
         public string Name { get; set; }

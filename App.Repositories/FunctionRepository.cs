@@ -8,7 +8,7 @@ namespace App.Repositories
 {
     public class FunctionRepository : BaseRepository<Function, string>, IFunctionRepository
     {
-        public FunctionRepository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor) :  base(context, httpContextAccessor)
+        public FunctionRepository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor) : base(context, httpContextAccessor)
         {
         }
     }

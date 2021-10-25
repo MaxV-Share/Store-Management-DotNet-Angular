@@ -1,14 +1,6 @@
-﻿using App.Models.Entities;
-using App.DTO;
-using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
+﻿using App.Models.Entities.Identities;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using App.Models.Entities.Identities;
 
 namespace App.Repositories.Interface
 {

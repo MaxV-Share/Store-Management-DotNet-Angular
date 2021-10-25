@@ -1,18 +1,13 @@
-﻿using App.Models.DTOs.CreateRequests;
+﻿using App.Models.DTOs;
+using App.Models.DTOs.CreateRequests;
 using App.Models.DTOs.UpdateRquests;
-using App.Models.DTOs;
 using App.Models.Entities;
-using App.Services.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using App.Services.Interface;
-using App.Repositories.BaseRepository;
-using AutoMapper;
 using App.Repositories.UnitOffWorks;
+using App.Services.Base;
+using App.Services.Interface;
+using AutoMapper;
 using Microsoft.Extensions.Logging;
-using App.Repositories.Interface;
+using System;
 
 namespace App.Services
 {

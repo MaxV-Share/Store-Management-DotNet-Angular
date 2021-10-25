@@ -1,16 +1,12 @@
 ﻿using App.Controllers.Base;
+using App.Models.DTOs.CreateRequests;
 using App.Models.DTOs.UpdateRquests;
-using App.Models.DTOs;
-using App.Services;
 using App.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using App.Models.DTOs.CreateRequests;
 
 namespace App.Controllers
 {
@@ -53,7 +49,7 @@ namespace App.Controllers
             return NotFound();
         }
         [HttpGet("")]
-        public async Task<ActionResult> GetAll( string searchText = "")
+        public async Task<ActionResult> GetAll(string searchText = "")
         {
             var result = await _commandService.GetAllDTOAsync();
             return Ok(result);
@@ -83,7 +79,7 @@ namespace App.Controllers
                 _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.StackTrace);
                 _logger.LogError(ex.Message);

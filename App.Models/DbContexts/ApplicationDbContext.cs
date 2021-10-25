@@ -1,19 +1,8 @@
-﻿using App.Models.Entities.Identities;
-using App.Models.Entities;
-using MaxV.Base;
-using Microsoft.AspNetCore.Identity;
+﻿using App.Models.Entities;
+using App.Models.Entities.Identities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace App.Models.Dbcontexts
 {

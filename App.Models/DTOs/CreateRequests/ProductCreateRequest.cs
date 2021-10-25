@@ -3,17 +3,14 @@ using MaxV.Base.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace App.Models.DTOs
 {
     public class ProductCreateRequest : BaseCreateRequest
     {
-        public int CategoryId{ get; set; }
+        public int CategoryId { get; set; }
         public string Description { get; set; }
         [MaxLength(256)]
         public string Code { get; set; }

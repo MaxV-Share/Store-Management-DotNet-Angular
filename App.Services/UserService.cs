@@ -1,16 +1,10 @@
 ﻿using App.DTO;
 using App.Repositories.UnitOffWorks;
-using App.Models.Entities;
-using App.Models.Entities.Identities;
-using App.Repositories.Interface;
 using App.Services.Interface;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 

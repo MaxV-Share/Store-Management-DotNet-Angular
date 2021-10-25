@@ -1,17 +1,14 @@
 ﻿
-using App.Models.Entities;
 using App.DTO;
-using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using App.DTOs;
 using App.Models.DTOs;
-using App.Models.DTOs.CreateRequests;
 using App.Models.DTOs.Bills;
+using App.Models.DTOs.CreateRequests;
 using App.Models.DTOs.UpdateRquests;
+using App.Models.Entities;
 using App.Models.Entities.Identities;
+using AutoMapper;
+using System.Linq;
 
 namespace App.Infrastructures.Mapper
 {
@@ -29,7 +26,7 @@ namespace App.Infrastructures.Mapper
             CreateMap<Category, CategoryUpdateRequest>().ReverseMap();
             CreateMap<Category, CategoryViewModel>().ReverseMap();
 
-            CreateMap<CategoryDetail, CategoryDetailCreateRequest>().ReverseMap(); 
+            CreateMap<CategoryDetail, CategoryDetailCreateRequest>().ReverseMap();
             CreateMap<CategoryDetail, CategoryDetailUpdateRequest>().ReverseMap();
             CreateMap<CategoryDetail, CategoryDetailViewModel>().ReverseMap();
 

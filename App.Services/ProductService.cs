@@ -1,18 +1,13 @@
-﻿using App.Repositories.UnitOffWorks;
-using App.Models.DTOs;
-using App.Models.DTOs.Imports;
+﻿using App.Models.DTOs;
 using App.Models.DTOs.PagingViewModels;
 using App.Models.DTOs.UpdateRquests;
 using App.Models.Entities;
-using App.Repositories;
-using App.Repositories.BaseRepository;
-using App.Repositories.Interface;
+using App.Repositories.UnitOffWorks;
 using App.Services.Base;
 using App.Services.Interface;
 using AutoMapper;
 using ExcelDataReader;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -28,8 +23,8 @@ namespace App.Services
         private const string FOLDER = "Products";
         private readonly IStorageService _storageService;
         public ProductService(
-            IMapper mapper, 
-            IStorageService storageService,IUnitOffWork unitOffWork, ILogger<ProductService> logger) : base( mapper, unitOffWork, logger)
+            IMapper mapper,
+            IStorageService storageService, IUnitOffWork unitOffWork, ILogger<ProductService> logger) : base(mapper, unitOffWork, logger)
         {
             _storageService = storageService;
         }
@@ -45,7 +40,8 @@ namespace App.Services
             {
                 Task saveFile = null;
                 ProductViewModel result = null;
-                await _unitOffWork.DoWorkWithTransaction(async () => {
+                await _unitOffWork.DoWorkWithTransaction(async () =>
+                {
 
                     if (oldFileName != null)
                     {
@@ -54,7 +50,7 @@ namespace App.Services
                     }
 
                     await _unitOffWork.ProductRepository.CreateAsync(product); //3
-                    
+
                     var effectedCount = await _unitOffWork.SaveChangesAsync();
                     if (effectedCount == 0)
                     {
@@ -89,7 +85,8 @@ namespace App.Services
             {
                 Task saveFile = null;
                 var result = 0;
-                await _unitOffWork.DoWorkWithTransaction(async () => {
+                await _unitOffWork.DoWorkWithTransaction(async () =>
+                {
                     if (oldFileName != null)
                     {
                         saveFile = _storageService.SaveFileAsync(request.File.OpenReadStream(), newFileName, FOLDER);
@@ -188,7 +185,8 @@ namespace App.Services
                 {
                     if (i > 0)
                     {
-                        await _unitOffWork.DoWorkWithTransaction(async () => {
+                        await _unitOffWork.DoWorkWithTransaction(async () =>
+                        {
 
                             var productCode = reader.GetValue(0).ToString();
                             var product = await _unitOffWork.ProductRepository.GetQueryableTable().SingleOrDefaultAsync(e => e.Code == productCode);

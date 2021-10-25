@@ -1,22 +1,12 @@
 ﻿using App.Controllers.Base;
-using App.DTOs;
 using App.Models.Dbcontexts;
 using App.Models.DTOs;
 using App.Models.DTOs.Imports;
 using App.Models.DTOs.UpdateRquests;
 using App.Models.Entities;
 using App.Services.Interface;
-using ExcelDataReader;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 
@@ -26,7 +16,7 @@ namespace App.Controllers
     public class ProductsController : CRUDContoller<Product, ProductCreateRequest, ProductUpdateRequest, ProductViewModel, int>
     {
         private readonly IProductService _productService;
-        public ProductsController(IProductService productService, ILogger<ProductsController> logger,ApplicationDbContext context) : base(logger, productService)
+        public ProductsController(IProductService productService, ILogger<ProductsController> logger, ApplicationDbContext context) : base(logger, productService)
         {
             _productService = productService;
         }
@@ -46,10 +36,10 @@ namespace App.Controllers
         [HttpPut("{id}")]
         public override async Task<ActionResult> Put(int id, [FromForm] ProductUpdateRequest request)
         {
-            if(id != request.Id)
+            if (id != request.Id)
                 return BadRequest();
             var effectedCount = await _productService.UpdateAsync(id, request);
-            if(effectedCount > 0)
+            if (effectedCount > 0)
                 return Ok();
             return Accepted();
         }
