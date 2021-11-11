@@ -1,4 +1,4 @@
-﻿namespace App.DTOs.UpdateRquests
+﻿namespace App.Models.DTOs.UpdateRquests
 {
     public class UserUpdateRequest
     {

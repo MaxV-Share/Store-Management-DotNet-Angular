@@ -1,5 +1,4 @@
-﻿using App.DTO;
-using App.Models.Dbcontexts;
+﻿using App.Models.Dbcontexts;
 using App.Models.DTOs;
 using App.Models.Entities.Identities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -8,19 +7,62 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using MaxV.Helper;
+using System.Linq;
 
-namespace App.Infrastructures.Startup.ServicesExtensions
+namespace App.Infrastructures.Startups.ServicesExtensions
 {
     public static class GeneralServiceExtension
     {
         public static void AddGeneralConfigurations(this IServiceCollection services, IConfiguration configuration)
         {
+            var corsSection = configuration.GetSection("CorsOptions");
+            if (corsSection == null)
+            {
+                throw new NullReferenceException(nameof(corsSection));
+            }
+            var corsOption = corsSection.Get<CorsOptions>();
+            var policyName = corsOption.PolicyName.Nullify("AppCorsPolicy");
+            services.AddCors(c =>
+            {
+                c.AddPolicy(policyName, options => {
+                    options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                    if (corsOption.AllowedOrigins.IsAllowedAll())
+                    {
+                        options.AllowAnyOrigin();
+                    }
+                    else
+                    {
+                        options.WithOrigins(corsOption.AllowedOrigins);
+                    }
+
+                    if (corsOption.AllowedMethods.IsAllowedAll())
+                    {
+                        options.AllowAnyMethod();
+                    }
+                    else
+                    {
+                        options.WithMethods(corsOption.AllowedMethods);
+                    }
+
+                    if (corsOption.ExposedHeaders.IsAllowedAll())
+                    {
+                        options.AllowAnyHeader();
+                    }
+                    else
+                    {
+                        options.WithHeaders(corsOption.ExposedHeaders);
+                    }
+                });
+            });
+
             services.Configure<ConnectionString>(configuration.GetSection("ConnectionStrings"));
             var connectionStrings = configuration.GetSection("ConnectionStrings").Get<ConnectionString>();
             services.Configure<JwtOptions>(configuration.GetSection("JWT"));
-            var appSettings = configuration.GetSection("JWT").Get<JwtOptions>();
+            var jwtOptions = configuration.GetSection("JWT").Get<JwtOptions>();
 
             services.AddDbContext<ApplicationDbContext>(options =>
             {
@@ -50,9 +92,9 @@ namespace App.Infrastructures.Startup.ServicesExtensions
                 {
                     ValidateIssuer = true,
                     ValidateAudience = true,
-                    ValidAudience = appSettings.ValidAudience,
-                    ValidIssuer = appSettings.ValidIssuer,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appSettings.Secret))
+                    ValidAudience = jwtOptions.ValidAudience,
+                    ValidIssuer = jwtOptions.ValidIssuer,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Secret))
                 };
             });
             services.AddSwaggerGenNewtonsoftSupport();
@@ -86,6 +128,10 @@ namespace App.Infrastructures.Startup.ServicesExtensions
                     }
                 });
             });
+        }
+        private static bool IsAllowedAll(this string[] values)
+        {
+            return values == null || values.Length == 0 || values.Contains("*");   
         }
     }
 }

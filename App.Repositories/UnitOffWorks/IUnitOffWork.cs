@@ -13,7 +13,7 @@ namespace App.Repositories.UnitOffWorks
         Task<int> SaveChangesAsync();
         int SaveChanges();
         Task DoWorkWithTransaction(Action action);
-        IBaseRepository<TEntity, TKey> BaseRepository<TEntity, TKey>() where TEntity : BaseEntity<TKey>;
+        IBaseRepository<TEntity, TKey> Repository<TEntity, TKey>() where TEntity : BaseEntity<TKey>;
         IBillDetailRepository BillDetailRepository { get; }
         IBillRepository BillRepository { get; }
         ICategoryDetailRepository CategoryDetailRepository { get; }

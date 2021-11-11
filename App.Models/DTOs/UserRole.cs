@@ -1,4 +1,4 @@
-﻿namespace App.DTO
+﻿namespace App.Models.DTOs
 {
     public static class USER_ROLE
     {

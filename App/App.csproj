@@ -5,10 +5,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Repositories\**" />
+    <Compile Remove="Services\**" />
+    <Content Remove="Repositories\**" />
+    <Content Remove="Services\**" />
+    <EmbeddedResource Remove="Repositories\**" />
+    <EmbeddedResource Remove="Services\**" />
+    <None Remove="Repositories\**" />
+    <None Remove="Services\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Startup-VNLT126.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="Devart.Data.MySql.EFCore" Version="8.19.1930" />
     <PackageReference Include="EFCore.NamingConventions" Version="5.0.0" />
     <PackageReference Include="EPPlus" Version="5.7.2" />
@@ -41,8 +53,6 @@
 
   <ItemGroup>
     <Folder Include="Contants\" />
-    <Folder Include="Repositories\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>

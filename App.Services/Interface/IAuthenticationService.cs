@@ -1,4 +1,4 @@
-﻿using App.DTO;
+﻿using App.Models.DTOs;
 using MaxV.Base.DTOs;
 using MaxV.Helper.Entities;
 using System.Threading.Tasks;

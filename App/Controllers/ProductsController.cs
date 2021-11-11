@@ -1,6 +1,7 @@
 ﻿using App.Controllers.Base;
 using App.Models.Dbcontexts;
 using App.Models.DTOs;
+using App.Models.DTOs.CreateRequests;
 using App.Models.DTOs.Imports;
 using App.Models.DTOs.UpdateRquests;
 using App.Models.Entities;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 namespace App.Controllers
 {
 
-    public class ProductsController : CRUDContoller<Product, ProductCreateRequest, ProductUpdateRequest, ProductViewModel, int>
+    public class ProductsController : CrudController<Product, ProductCreateRequest, ProductUpdateRequest, ProductViewModel, int>
     {
         private readonly IProductService _productService;
         public ProductsController(IProductService productService, ILogger<ProductsController> logger, ApplicationDbContext context) : base(logger, productService)

@@ -1,7 +1,4 @@
-﻿
-using App.DTO;
-using App.DTOs;
-using App.Models.DTOs;
+﻿using App.Models.DTOs;
 using App.Models.DTOs.Bills;
 using App.Models.DTOs.CreateRequests;
 using App.Models.DTOs.UpdateRquests;
@@ -10,7 +7,7 @@ using App.Models.Entities.Identities;
 using AutoMapper;
 using System.Linq;
 
-namespace App.Infrastructures.Mapper
+namespace App.Models.Mapper
 {
     public class AutoMapperProfile : Profile
     {
@@ -69,6 +66,7 @@ namespace App.Infrastructures.Mapper
 
             CreateMap<User, UserCreateRequest>().ReverseMap();
             CreateMap<User, UserUpdateRequest>().ReverseMap();
+            CreateMap<User, UserViewModel>().ReverseMap();
 
             CreateMap<Role, RoleCreateRequest>().ReverseMap();
             CreateMap<Role, RoleUpdateRequest>().ReverseMap();

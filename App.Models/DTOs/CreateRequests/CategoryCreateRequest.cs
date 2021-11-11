@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace App.Models.DTOs
+namespace App.Models.DTOs.CreateRequests
 {
     public class CategoryCreateRequest : BaseCreateRequest
     {

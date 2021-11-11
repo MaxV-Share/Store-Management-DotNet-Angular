@@ -1,12 +1,11 @@
-﻿using App.Models.DTOs.CreateRequests;
-using MaxV.Base.DTOs;
+﻿using MaxV.Base.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace App.Models.DTOs
+namespace App.Models.DTOs.CreateRequests
 {
     public class ProductCreateRequest : BaseCreateRequest
     {

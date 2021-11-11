@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace App.Controllers
 {
-    public class RolesController : CRUDContoller<Role, RoleCreateRequest, RoleUpdateRequest, RoleViewModel, string>
+    public class RolesController : CrudController<Role, RoleCreateRequest, RoleUpdateRequest, RoleViewModel, string>
     {
         public readonly IRoleService _roleService;
         public readonly IConfiguration _configuration;

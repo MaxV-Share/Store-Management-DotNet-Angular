@@ -1,4 +1,5 @@
 ﻿using App.Models.DTOs;
+using App.Models.DTOs.CreateRequests;
 using App.Models.DTOs.PagingViewModels;
 using App.Models.DTOs.UpdateRquests;
 using App.Models.Entities;
@@ -52,10 +53,7 @@ namespace App.Services
         //}
         public override async Task<CategoryViewModel> GetByIdAsync(int id)
         {
-            var category = await _unitOffWork.CategoryRepository.GetNoTrackingEntities()
-                                                    .Include(e => e.CategoryDetails)
-                                                    .ThenInclude(e => e.Lang)
-                                                    .SingleOrDefaultAsync(e => e.Id == id);
+            var category = await _unitOffWork.Repository<Category, int>().GetByIdNoTrackingAsync(id, e => e.CategoryDetails.OrderBy(e => e.Lang.Order));
             var result = _mapper.Map<CategoryViewModel>(category);
             return result;
         }

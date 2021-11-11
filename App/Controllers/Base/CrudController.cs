@@ -7,26 +7,15 @@ using System.Threading.Tasks;
 
 namespace App.Controllers.Base
 {
-    //public interface ICRUDContoller<TEntity, TCreateRequest, TUpdateRequest, TViewModel, TKey>
-    //    where TCreateRequest : BaseCreateRequest, new()
-    //    where TUpdateRequest : BaseUpdateRequest<TKey>, new()
-    //{
-    //    Task<ActionResult> Post([FromBody] TCreateRequest request);
-    //    Task<ActionResult> Put(TKey id, TUpdateRequest request);
-    //    Task<ActionResult> Delete(TKey id); 
-    //    Task<ActionResult> GetById(TKey id);
-    //    Task<ActionResult> GetAll();
-    //}
 
-    public abstract class CRUDContoller<TEntity, TCreateRequest, TUpdateRequest, TViewModel, TKey> : ApiController//, ICRUDContoller<TEntity, TCreateRequest, TUpdateRequest, TViewModel, TKey>
+    public abstract class CrudController<TEntity, TCreateRequest, TUpdateRequest, TViewModel, TKey> : ApiController
         where TEntity : class, new()
         where TCreateRequest : BaseCreateRequest, new()
         where TUpdateRequest : BaseUpdateRequest<TKey>, new()
         where TViewModel : BaseViewModel<TKey>, new()
     {
-
         private readonly IBaseService<TEntity, TCreateRequest, TUpdateRequest, TViewModel, TKey> _baseService;
-        protected CRUDContoller(ILogger logger, IBaseService<TEntity, TCreateRequest, TUpdateRequest, TViewModel, TKey> baseService) : base(logger)
+        protected CrudController(ILogger logger, IBaseService<TEntity, TCreateRequest, TUpdateRequest, TViewModel, TKey> baseService) : base(logger)
         {
             _baseService = baseService;
         }
@@ -54,7 +43,7 @@ namespace App.Controllers.Base
         [HttpDelete("{id}")]
         public virtual async Task<ActionResult> Delete(TKey id)
         {
-            var result = await _baseService.DeleteHardAsync(id);
+            var result = await _baseService.DeleteSoftAsync(id);
             if (result > 0)
                 return Ok();
             return NotFound();

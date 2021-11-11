@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace App.Infrastructures.Startup.PipelineExtensions
+namespace App.Infrastructures.Startups.PipelineExtensions
 {
     public static class GeneralPipelineExtension
     {

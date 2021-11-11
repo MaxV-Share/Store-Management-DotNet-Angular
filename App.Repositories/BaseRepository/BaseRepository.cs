@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -35,26 +36,55 @@ namespace App.Repositories.BaseRepository
 
         #region public
 
-        public IQueryable<TEntity> GetQueryableTable()
+        public IQueryable<TEntity> GetNoTrackingEntities(params Expression<Func<TEntity, object>>[] includes)
         {
-            return Entities.AsQueryable();
+            var query = Entities.AsNoTracking();
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+            return query;
+        }
+        public IQueryable<TEntity> GetNoTrackingEntitiesIdentityResolution(params Expression<Func<TEntity, object>>[] includes)
+        {
+            var query = Entities.AsNoTrackingWithIdentityResolution();
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+            return query;
+        }
+        public IQueryable<TEntity> GetQueryableTable(params Expression<Func<TEntity, object>>[] includes)
+        {
+            var query = Entities.AsQueryable();
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+            return query;
         }
 
-        public virtual Task<List<TEntity>> GetAllAsync()
+        public virtual Task<List<TEntity>> GetAllAsync(params Expression<Func<TEntity, object>>[] includes)
         {
-            var entities = GetNoTrackingEntities().ToListAsync();
+            var query = GetNoTrackingEntities();
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+            var entities = query.ToListAsync();
             return entities;
         }
 
-        public virtual Task<TEntity> GetByIdAsync(TKey id)
+        public virtual Task<TEntity> GetByIdAsync(TKey id, params Expression<Func<TEntity, object>>[] includes)
         {
             var entity = Entities.SingleOrDefaultAsync(x => id.Equals(x.Id));
             return entity;
         }
 
-        public virtual Task<TEntity> GetByIdNoTrackingAsync(TKey id)
+        public virtual Task<TEntity> GetByIdNoTrackingAsync(TKey id, params Expression<Func<TEntity, object>>[] includes)
         {
-            var entity = GetNoTrackingEntities().SingleOrDefaultAsync(x => x.Id.Equals(id));
+            var query = GetNoTrackingEntities();
+            var entity = query.SingleOrDefaultAsync(x => x.Id.Equals(id));
             return entity;
         }
 
@@ -126,6 +156,16 @@ namespace App.Repositories.BaseRepository
         #endregion public
 
         #region private
+
+        protected DbSet<TEntity> Entities
+        {
+            get
+            {
+                if (_entitiesDbSet == null)
+                    _entitiesDbSet = _context.Set<TEntity>();
+                return _entitiesDbSet;
+            }
+        }
         protected string GetUserNameInHttpContext()
         {
 
@@ -146,25 +186,6 @@ namespace App.Repositories.BaseRepository
             {
                 throw new ArgumentNullException(nameof(entities));
             }
-        }
-
-        protected DbSet<TEntity> Entities
-        {
-            get
-            {
-                if (_entitiesDbSet == null)
-                    _entitiesDbSet = _context.Set<TEntity>();
-                return _entitiesDbSet;
-            }
-        }
-
-        public IQueryable<TEntity> GetNoTrackingEntities()
-        {
-            return Entities.AsNoTracking();
-        }
-        public IQueryable<TEntity> GetNoTrackingEntitiesIdentityResolution()
-        {
-            return Entities.AsNoTrackingWithIdentityResolution();
         }
 
         #endregion private

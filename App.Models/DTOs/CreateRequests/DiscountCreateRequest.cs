@@ -1,7 +1,7 @@
 ﻿using MaxV.Base.DTOs;
 using System;
 
-namespace App.DTOs
+namespace App.Models.DTOs.CreateRequests
 {
     public class DiscountCreateRequest : BaseCreateRequest
     {

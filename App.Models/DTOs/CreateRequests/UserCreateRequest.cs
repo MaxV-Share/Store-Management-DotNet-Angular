@@ -1,6 +1,6 @@
 ﻿using MaxV.Base.DTOs;
 
-namespace App.DTO
+namespace App.Models.DTOs.CreateRequests
 {
     public class UserCreateRequest : BaseCreateRequest
     {

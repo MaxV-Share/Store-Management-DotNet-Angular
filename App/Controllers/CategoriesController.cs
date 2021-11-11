@@ -1,5 +1,6 @@
 ﻿using App.Controllers.Base;
 using App.Models.DTOs;
+using App.Models.DTOs.CreateRequests;
 using App.Models.DTOs.UpdateRquests;
 using App.Models.Entities;
 using App.Services.Interface;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace App.Controllers
 {
-    public class CategoriesController : CRUDContoller<Category, CategoryCreateRequest, CategoryUpdateRequest, CategoryViewModel, int>
+    public class CategoriesController : CrudController<Category, CategoryCreateRequest, CategoryUpdateRequest, CategoryViewModel, int>
     {
         public readonly ICategoryService _categoryService;
         public CategoriesController(ICategoryService categoryService, ILogger<CategoriesController> logger) : base(logger, categoryService)

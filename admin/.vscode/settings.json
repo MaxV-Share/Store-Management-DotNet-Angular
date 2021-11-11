@@ -1,5 +1,6 @@
 {
     "workbench.iconTheme": "material-icon-theme",
     "editor.fontFamily": "Cascadia Code, Fira Code, Consolas, 'Courier New', monospace",
-    "angular.enable-strict-mode-prompt": true, // ==
+    "angular.enable-strict-mode-prompt": true, // ===
+    "editor.fontWeight": "400",
 }

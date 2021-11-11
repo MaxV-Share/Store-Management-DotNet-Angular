@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace App.DTO
+namespace App.Models.DTOs
 {
     public class RegisterDTO
     {

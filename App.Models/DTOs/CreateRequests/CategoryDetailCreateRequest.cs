@@ -1,7 +1,7 @@
 ﻿using MaxV.Base.DTOs;
 using Newtonsoft.Json;
 
-namespace App.Models.DTOs
+namespace App.Models.DTOs.CreateRequests
 {
     public class CategoryDetailCreateRequest : BaseCreateRequest
     {

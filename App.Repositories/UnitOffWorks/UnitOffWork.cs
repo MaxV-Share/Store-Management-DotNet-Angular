@@ -97,7 +97,7 @@ namespace App.Repositories.UnitOffWorks
             return result;
         }
 
-        public IBaseRepository<TEntity, TKey> BaseRepository<TEntity, TKey>() where TEntity : BaseEntity<TKey>
+        public IBaseRepository<TEntity, TKey> Repository<TEntity, TKey>() where TEntity : BaseEntity<TKey>
         {
             return _serviceProvider.GetService<IBaseRepository<TEntity, TKey>>();
         }

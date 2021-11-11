@@ -1,8 +1,9 @@
 ﻿using App.Models.Entities.Identities;
+using App.Repositories.Interface;
 using Microsoft.AspNetCore.Identity;
 using System.Linq;
 
-namespace App.Repositories.Interface
+namespace App.Repositories
 {
 
     public class UserRepository : IUserRepository

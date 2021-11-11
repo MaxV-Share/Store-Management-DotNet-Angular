@@ -1,4 +1,4 @@
-﻿using App.DTO;
+﻿using App.Models.DTOs;
 using App.Models.Entities.Identities;
 using App.Services.Interface;
 using MaxV.Base.DTOs;
@@ -29,7 +29,7 @@ namespace App.Services
         private readonly RoleManager<Role> _roleManager;
         private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
-        private readonly IOptions<JwtOptions> _jwtOptions;
+        private readonly JwtOptions _jwtOptions;
         public AuthenticationService(UserManager<User> userManager,
             RoleManager<Role> roleManager,
             SignInManager<User> signInManager,
@@ -43,7 +43,7 @@ namespace App.Services
             _configuration = configuration;
             _signInManager = signInManager;
             _cache = cache;
-            _jwtOptions = jwtOptions;
+            _jwtOptions = jwtOptions.Value;
             _userService = userService;
         }
         public async Task<Response<string>> LoginAsync(LoginDTO request)
@@ -68,10 +68,10 @@ namespace App.Services
 
             await _signInManager.SignInAsync(user, true);
 
-            var authSigninKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+            var authSigninKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Secret));
             var token = new JwtSecurityToken(
-                issuer: _configuration["JWT:ValidIssuer"],
-                audience: _configuration["JWT:ValidAudience"],
+                issuer: _jwtOptions.ValidIssuer,
+                audience: _jwtOptions.ValidAudience,
                 claims: authClaims,
                 expires: DateTime.Now.AddMinutes(100000),
                 signingCredentials: new SigningCredentials(authSigninKey, SecurityAlgorithms.HmacSha256)
@@ -151,12 +151,11 @@ namespace App.Services
 
                 var result = await Task.Run(() =>
                 {
-                    var scheme = headerValue.Scheme;
                     var tokenHeader = headerValue.Parameter;
 
                     var validationParameters = new TokenValidationParameters()
                     {
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtOptions.Value.Secret)),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtOptions.Secret)),
                         ValidateIssuerSigningKey = true,
                         ValidateIssuer = false,
                         ValidateAudience = false,

@@ -1,5 +1,5 @@
 ﻿using App.Controllers.Base;
-using App.DTO;
+using App.Models.DTOs;
 using App.Services.Interface;
 using MaxV.Base.DTOs;
 using Microsoft.AspNetCore.Http;

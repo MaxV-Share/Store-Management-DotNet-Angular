@@ -1,4 +1,4 @@
-﻿using App.DTO;
+﻿using App.Models.DTOs;
 using App.Repositories.UnitOffWorks;
 using App.Services.Interface;
 using AutoMapper;
@@ -22,20 +22,20 @@ namespace App.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<IEnumerable<UserUpdateRequest>> GetAllAsync(string filter)
+        public async Task<IEnumerable<UserViewModel>> GetAllAsync(string filter)
         {
             var entities = await _unitOffWork.UserRepository.GetAll(filter).ToListAsync();
-            var result = _mapper.Map<IEnumerable<UserUpdateRequest>>(entities);
+            var result = _mapper.Map<IEnumerable<UserViewModel>>(entities);
             return result;
         }
 
-        public async Task<UserUpdateRequest> GetUserById(string id)
+        public async Task<UserViewModel> GetUserById(string id)
         {
             var entity = await _unitOffWork.UserManager.FindByIdAsync(id);
-            var result = _mapper.Map<UserUpdateRequest>(entity);
+            var result = _mapper.Map<UserViewModel>(entity);
             return result;
         }
-        public async Task<UserUpdateRequest> GetCurrentUser()
+        public async Task<UserViewModel> GetCurrentUser()
         {
             var userName = _httpContextAccessor.HttpContext.User.FindFirst(claim => claim.Type == ClaimTypes.Name)?.Value;
             if (userName == null)
@@ -43,7 +43,7 @@ namespace App.Services
                 return null;
             }
             var user = await _unitOffWork.UserManager.FindByNameAsync(userName);
-            var result = _mapper.Map<UserUpdateRequest>(user);
+            var result = _mapper.Map<UserViewModel>(user);
 
             return result;
         }
