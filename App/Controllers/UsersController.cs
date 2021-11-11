@@ -1,13 +1,9 @@
 ﻿using App.Controllers.Base;
-using App.DTO;
-using App.Repositories.Interface;
 using App.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace App.Controllers

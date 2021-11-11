@@ -1,7 +1,5 @@
 ﻿using App.Models.Dbcontexts;
-using App.Models.Entities;
 using App.Models.Entities.Identities;
-using App.Repositories;
 using App.Repositories.BaseRepository;
 using App.Repositories.Interface;
 using Dapper;
@@ -9,12 +7,10 @@ using MaxV.Base;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace App.Repositories.UnitOffWorks
@@ -101,7 +97,7 @@ namespace App.Repositories.UnitOffWorks
             return result;
         }
 
-        public IBaseRepository<TEntity, TKey> BaseRepository<TEntity, TKey>() where TEntity : BaseEntity<TKey>
+        public IBaseRepository<TEntity, TKey> Repository<TEntity, TKey>() where TEntity : BaseEntity<TKey>
         {
             return _serviceProvider.GetService<IBaseRepository<TEntity, TKey>>();
         }

@@ -3,7 +3,6 @@ using App.Models.Entities.Identities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Transactions;
@@ -70,7 +69,7 @@ namespace App.Models.Dbcontexts
                 #endregion User
 
                 #region Lang
-                if(!_context.Langs.Any())
+                if (!_context.Langs.Any())
                 {
                     await _context.Langs.AddAsync(new Lang
                     {

@@ -1,16 +1,9 @@
-﻿using App.Models.Entities;
-using App.DTO;
-using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
+﻿using App.Models.Entities.Identities;
+using App.Repositories.Interface;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using App.Models.Entities.Identities;
 
-namespace App.Repositories.Interface
+namespace App.Repositories
 {
 
     public class UserRepository : IUserRepository
@@ -20,11 +13,9 @@ namespace App.Repositories.Interface
         {
             _userManager = userManager;
         }
-        public async Task<IEnumerable<User>> GetAllAsync(string filter)
+        public IQueryable<User> GetAll(string filter)
         {
-            var result = await  _userManager.Users
-                                            .Where(e =>(e.UserName.Contains(filter) || e.PhoneNumber.Contains(filter)))
-                                            .ToListAsync();
+            var result = _userManager.Users.Where(e => e.UserName.Contains(filter) || e.PhoneNumber.Contains(filter));
             return result;
         }
     }

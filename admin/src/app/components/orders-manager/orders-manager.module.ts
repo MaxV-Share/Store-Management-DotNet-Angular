@@ -11,7 +11,7 @@ import { OrderManagerDetailsComponent } from './order-manager-details/order-mana
 
 
 @NgModule({
-    imports: [
+    imports: [ 
         OrdersManagerRoutingModule,
         CommonModule,
         NgbModule,

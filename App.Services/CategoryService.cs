@@ -1,19 +1,15 @@
-﻿using App.Repositories.UnitOffWorks;
-using App.Models.DTOs;
+﻿using App.Models.DTOs;
+using App.Models.DTOs.CreateRequests;
 using App.Models.DTOs.PagingViewModels;
 using App.Models.DTOs.UpdateRquests;
 using App.Models.Entities;
-using App.Repositories.BaseRepository;
-using App.Repositories.Interface;
+using App.Repositories.UnitOffWorks;
 using App.Services.Base;
 using App.Services.Interface;
 using AutoMapper;
-using MaxV.Helper.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,7 +17,7 @@ namespace App.Services
 {
     public class CategoryService : BaseService<Category, CategoryCreateRequest, CategoryUpdateRequest, CategoryViewModel, int>, ICategoryService
     {
-        public CategoryService( IMapper mapper, IUnitOffWork unitOffWork, ILogger<CategoryService> logger) : base(mapper, unitOffWork, logger)
+        public CategoryService(IMapper mapper, IUnitOffWork unitOffWork, ILogger<CategoryService> logger) : base(mapper, unitOffWork, logger)
         {
         }
         //public async Task<CategoryViewModel> CreateAsync(CategoryCreateRequest request)
@@ -57,10 +53,7 @@ namespace App.Services
         //}
         public override async Task<CategoryViewModel> GetByIdAsync(int id)
         {
-            var category = await _unitOffWork.CategoryRepository.GetNoTrackingEntities()
-                                                    .Include(e => e.CategoryDetails)
-                                                    .ThenInclude(e => e.Lang)
-                                                    .SingleOrDefaultAsync(e => e.Id == id);
+            var category = await _unitOffWork.Repository<Category, int>().GetByIdNoTrackingAsync(id, e => e.CategoryDetails.OrderBy(e => e.Lang.Order));
             var result = _mapper.Map<CategoryViewModel>(category);
             return result;
         }

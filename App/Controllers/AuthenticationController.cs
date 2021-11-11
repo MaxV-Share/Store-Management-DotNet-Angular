@@ -1,25 +1,11 @@
-﻿
-using App.Repositories.Interface;
-using App.DTO;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Threading.Tasks;
-using AutoMapper;
-using App.Controllers.Base;
+﻿using App.Controllers.Base;
+using App.Models.DTOs;
 using App.Services.Interface;
 using MaxV.Base.DTOs;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Net.Http.Headers;
-using System.Net.Http.Headers;
-using System.Net;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
-using System.Linq;
-using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace App.Controllers
 {
@@ -67,7 +53,7 @@ namespace App.Controllers
         //[Authorize]
         public async Task<IActionResult> ValidateToken([FromHeader] string authorization)
         {
-            var result = await  _authenticationService.CheckToken(authorization);
+            var result = await _authenticationService.CheckToken(authorization);
             if (string.IsNullOrEmpty(result))
                 return Unauthorized();
             return Ok(result);

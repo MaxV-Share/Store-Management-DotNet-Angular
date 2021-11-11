@@ -1,11 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using MaxV.Base;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using MaxV.Base;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace App.Models.Entities
 {

@@ -1,19 +1,13 @@
-﻿
-using App.Models.Entities;
-using App.DTO;
-using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using App.DTOs;
-using App.Models.DTOs;
-using App.Models.DTOs.CreateRequests;
+﻿using App.Models.DTOs;
 using App.Models.DTOs.Bills;
+using App.Models.DTOs.CreateRequests;
 using App.Models.DTOs.UpdateRquests;
+using App.Models.Entities;
 using App.Models.Entities.Identities;
+using AutoMapper;
+using System.Linq;
 
-namespace App.Infrastructures.Mapper
+namespace App.Models.Mapper
 {
     public class AutoMapperProfile : Profile
     {
@@ -29,7 +23,7 @@ namespace App.Infrastructures.Mapper
             CreateMap<Category, CategoryUpdateRequest>().ReverseMap();
             CreateMap<Category, CategoryViewModel>().ReverseMap();
 
-            CreateMap<CategoryDetail, CategoryDetailCreateRequest>().ReverseMap(); 
+            CreateMap<CategoryDetail, CategoryDetailCreateRequest>().ReverseMap();
             CreateMap<CategoryDetail, CategoryDetailUpdateRequest>().ReverseMap();
             CreateMap<CategoryDetail, CategoryDetailViewModel>().ReverseMap();
 
@@ -72,6 +66,7 @@ namespace App.Infrastructures.Mapper
 
             CreateMap<User, UserCreateRequest>().ReverseMap();
             CreateMap<User, UserUpdateRequest>().ReverseMap();
+            CreateMap<User, UserViewModel>().ReverseMap();
 
             CreateMap<Role, RoleCreateRequest>().ReverseMap();
             CreateMap<Role, RoleUpdateRequest>().ReverseMap();

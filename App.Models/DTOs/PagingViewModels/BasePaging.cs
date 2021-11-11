@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace App.Models.DTOs.PagingViewModels
 {
 
-    public class BasePaging<T> 
+    public class BasePaging<T>
     {
         private const string _PAGE_NUMBER_BELOW_1 = "Page number cannot be below 1.";
         private const string _PAGE_SIZE_LESS_THAN_1 = "Page size cannot be less than 1.";
@@ -61,7 +61,7 @@ namespace App.Models.DTOs.PagingViewModels
 
             var taskTotalRow = queryable.CountAsync();
             TotalRow = await taskTotalRow;
-            if(TotalRow > 0 && TotalRow <= skip)
+            if (TotalRow > 0 && TotalRow <= skip)
             {
                 throw new ArgumentOutOfRangeException(
                     paramName: nameof(pageSize),

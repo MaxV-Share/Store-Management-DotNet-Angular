@@ -1,12 +1,9 @@
-﻿using App.Models.Entities;
-using App.Models.Entities.Identities;
+﻿using App.Models.Entities.Identities;
 using App.Repositories.BaseRepository;
 using App.Repositories.Interface;
 using MaxV.Base;
 using Microsoft.AspNetCore.Identity;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace App.Repositories.UnitOffWorks
@@ -16,7 +13,7 @@ namespace App.Repositories.UnitOffWorks
         Task<int> SaveChangesAsync();
         int SaveChanges();
         Task DoWorkWithTransaction(Action action);
-        IBaseRepository<TEntity,TKey> BaseRepository<TEntity, TKey>() where TEntity : BaseEntity<TKey>;
+        IBaseRepository<TEntity, TKey> Repository<TEntity, TKey>() where TEntity : BaseEntity<TKey>;
         IBillDetailRepository BillDetailRepository { get; }
         IBillRepository BillRepository { get; }
         ICategoryDetailRepository CategoryDetailRepository { get; }
@@ -31,6 +28,6 @@ namespace App.Repositories.UnitOffWorks
         IProductDetailRepository ProductDetailRepository { get; }
         IProductRepository ProductRepository { get; }
         IUserRepository UserRepository { get; }
-        UserManager<User> UserManager  { get; }
+        UserManager<User> UserManager { get; }
     }
 }
