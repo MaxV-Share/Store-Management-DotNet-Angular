@@ -1,9 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using MaxV.Base;
+using MaxV.Base.DTOs;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace App.Services.Base
 {
-    public interface IBaseService<T, TCreateRequest, TUpdateRequest, TViewModel, TKey>
+    public interface IBaseService<TEntity, TCreateRequest, TUpdateRequest, TViewModel, TKey>
+        where TEntity : class, new()
+        where TCreateRequest : BaseCreateRequest, new()
+        where TUpdateRequest : BaseUpdateRequest<TKey>, new()
+        where TViewModel : BaseViewModel<TKey>, new()
     {
         Task<IEnumerable<TViewModel>> GetAllDTOAsync();
         Task<TViewModel> GetByIdAsync(TKey id);

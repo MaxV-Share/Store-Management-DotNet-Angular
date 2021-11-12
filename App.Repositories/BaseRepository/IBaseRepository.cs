@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MaxV.Base;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace App.Repositories.BaseRepository
 {
-    public interface IBaseRepository<TEntity, TKey>
+    public interface IBaseRepository<TEntity, TKey> where TEntity : BaseEntity<TKey>
     {
         Task<IEnumerable<TEntity>> CreateAsync(List<TEntity> entities);
         Task<TEntity> CreateAsync(TEntity entity);

@@ -1,7 +1,7 @@
 ﻿using App.Models.Dbcontexts;
 using Microsoft.EntityFrameworkCore;
 
-namespace App.XUnitTest
+namespace App.Repositories.XUnitTest
 {
     public class InMemoryDbContextFactory
     {
