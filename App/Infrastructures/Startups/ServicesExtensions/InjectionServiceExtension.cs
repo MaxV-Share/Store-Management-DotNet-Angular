@@ -1,6 +1,5 @@
 ﻿using App.Models.Dbcontexts;
 using App.Models.Entities.Identities;
-using App.Models.Extensions;
 using App.Models.Mapper;
 using App.Repositories.Extenstions;
 using App.Repositories.UnitOffWorks;
