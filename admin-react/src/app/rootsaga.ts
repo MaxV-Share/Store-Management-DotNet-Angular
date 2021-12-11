@@ -1,0 +1,20 @@
+import citySaga from 'features/city/citySaga';
+import dashboardSaga from 'features/dashboard/dashboardSaga';
+import studentSaga from 'features/student/studentSaga';
+import { all } from 'redux-saga/effects';
+import authSaga from '../features/auth/authSaga';
+
+
+function* helloSaga() {
+  console.log('hello saga');
+}
+
+export default function* rootSaga() {
+  console.log("rootSaga");
+  yield all([
+    authSaga(),
+    dashboardSaga(),
+    studentSaga(),
+    citySaga()
+  ])
+}

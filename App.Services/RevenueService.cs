@@ -2,8 +2,8 @@
 using App.Repositories.Interface;
 using App.Services.Interface;
 using Dapper;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
-using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -32,7 +32,7 @@ namespace App.Services
 	                                        MONTH( bills.create_at )
                                         ORDER BY MONTH( bills.create_at )", year);
 
-            using (var connection = new MySqlConnection(_connectionString.DefaultConnection))
+            using (var connection = new SqlConnection(_connectionString.DefaultConnection))
             {
                 connection.Open();
 
@@ -56,7 +56,7 @@ namespace App.Services
 	                                        DAY( bills.create_at )
                                         ORDER BY DAY( bills.create_at )", year, month);
 
-            using (var connection = new MySqlConnection(_connectionString.DefaultConnection))
+            using (var connection = new SqlConnection(_connectionString.DefaultConnection))
             {
                 connection.Open();
 

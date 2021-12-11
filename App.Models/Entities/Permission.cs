@@ -24,7 +24,7 @@ namespace App.Models.Entities
         [MaxLength(50)]
         [Column(TypeName = "varchar(50)")]
         public string RoleId { get; set; }
-        public virtual Role Role { get; set; }
+        public virtual UserRole Role { get; set; }
 
         [MaxLength(50)]
         [Column(TypeName = "varchar(50)")]

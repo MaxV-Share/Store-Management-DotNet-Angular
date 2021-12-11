@@ -21,7 +21,7 @@ namespace App.Repositories.BaseRepository
 
         #region ctor
 
-        public BaseRepository(DbContext context, IHttpContextAccessor httpContextAccessor)
+        protected BaseRepository(DbContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
@@ -77,13 +77,22 @@ namespace App.Repositories.BaseRepository
 
         public virtual Task<TEntity> GetByIdAsync(TKey id, params Expression<Func<TEntity, object>>[] includes)
         {
-            var entity = Entities.SingleOrDefaultAsync(x => id.Equals(x.Id));
+            var query = Entities.AsQueryable();
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+            var entity = query.SingleOrDefaultAsync(x => id.Equals(x.Id));
             return entity;
         }
 
         public virtual Task<TEntity> GetByIdNoTrackingAsync(TKey id, params Expression<Func<TEntity, object>>[] includes)
         {
             var query = GetNoTrackingEntities();
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
             var entity = query.SingleOrDefaultAsync(x => x.Id.Equals(id));
             return entity;
         }
@@ -146,9 +155,23 @@ namespace App.Repositories.BaseRepository
             ValidateAndThrow(entity);
             Entities.Remove(entity);
         }
+
+        public virtual void DeleteHard(TEntity entity)
+        {
+            ValidateAndThrow(entity);
+            Entities.Remove(entity);
+        }
+
         public virtual async Task DeleteSoftAsync(params object[] keyValues)
         {
             var entity = await _context.Set<TEntity>().FindAsync(keyValues);
+            ValidateAndThrow(entity);
+            entity.Deleted = DateTime.Now.ToString("yyyyMMddHHmmss");
+            await UpdateAsync(entity);
+        }
+
+        public virtual async Task DeleteSoftAsync(TEntity entity)
+        {
             ValidateAndThrow(entity);
             entity.Deleted = DateTime.Now.ToString("yyyyMMddHHmmss");
             await UpdateAsync(entity);
@@ -168,7 +191,6 @@ namespace App.Repositories.BaseRepository
         }
         protected string GetUserNameInHttpContext()
         {
-
             var userName = _httpContextAccessor.HttpContext.User.FindFirst(claim => claim.Type == ClaimTypes.Name)?.Value;
             return userName;
         }
