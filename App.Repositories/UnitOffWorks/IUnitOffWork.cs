@@ -1,19 +1,23 @@
 ﻿using App.Models.Entities.Identities;
 using App.Repositories.BaseRepository;
 using App.Repositories.Interface;
-using MaxV.Base;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Threading.Tasks;
+using MaxV.Common.Model;
 
 namespace App.Repositories.UnitOffWorks
 {
-    public interface IUnitOffWork : IDisposable
+    public interface IUnitOffWork //: IDisposable
     {
         Task<int> SaveChangesAsync();
+
         int SaveChanges();
+
         Task DoWorkWithTransaction(Action action);
+
         IBaseRepository<TEntity, TKey> Repository<TEntity, TKey>() where TEntity : BaseEntity<TKey>;
+
         IBillDetailRepository BillDetailRepository { get; }
         IBillRepository BillRepository { get; }
         ICategoryDetailRepository CategoryDetailRepository { get; }

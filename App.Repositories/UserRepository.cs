@@ -5,14 +5,15 @@ using System.Linq;
 
 namespace App.Repositories
 {
-
     public class UserRepository : IUserRepository
     {
         private readonly UserManager<User> _userManager;
+
         public UserRepository(UserManager<User> userManager)
         {
             _userManager = userManager;
         }
+
         public IQueryable<User> GetAll(string filter)
         {
             var result = _userManager.Users.Where(e => e.UserName.Contains(filter) || e.PhoneNumber.Contains(filter));

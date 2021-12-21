@@ -46,6 +46,15 @@ export function Sidebar() {
             <ListItemText primary="Students" />
           </ListItem>
         </NavLink>
+
+        <NavLink to="/admin/product-category" className={classes.link}>
+          <ListItem button>
+            <ListItemIcon>
+              <PeopleAlt />
+            </ListItemIcon>
+            <ListItemText primary="ProductCategory" />
+          </ListItem>
+        </NavLink>
       </List>
     </div>
   );
