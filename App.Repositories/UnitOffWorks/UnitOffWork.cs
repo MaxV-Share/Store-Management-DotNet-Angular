@@ -5,10 +5,10 @@ using App.Repositories.Interface;
 using Dapper;
 using MaxV.Base;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
-using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -88,7 +88,7 @@ namespace App.Repositories.UnitOffWorks
         public async Task<IEnumerable<TResult>> OpenConnection<TResult>(string query)
         {
             IEnumerable<TResult> result;
-            using (var connection = new MySqlConnection(_dbContext.Database.GetDbConnection().ConnectionString))
+            using (var connection = new SqlConnection(_dbContext.Database.GetDbConnection().ConnectionString))
             {
                 connection.Open();
 

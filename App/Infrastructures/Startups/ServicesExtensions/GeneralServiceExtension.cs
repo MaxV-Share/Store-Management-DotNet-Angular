@@ -1,6 +1,7 @@
 ﻿using App.Models.Dbcontexts;
 using App.Models.DTOs;
 using App.Models.Entities.Identities;
+using MaxV.Helper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -9,9 +10,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using MaxV.Helper;
 using System.Linq;
+using System.Text;
 
 namespace App.Infrastructures.Startups.ServicesExtensions
 {
@@ -28,7 +28,8 @@ namespace App.Infrastructures.Startups.ServicesExtensions
             var policyName = corsOption.PolicyName.Nullify("AppCorsPolicy");
             services.AddCors(c =>
             {
-                c.AddPolicy(policyName, options => {
+                c.AddPolicy(policyName, options =>
+                {
                     options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                     if (corsOption.AllowedOrigins.IsAllowedAll())
                     {
@@ -68,11 +69,7 @@ namespace App.Infrastructures.Startups.ServicesExtensions
             {
                 options.EnableDetailedErrors(true);
 
-                options.UseMySQL(connectionStrings.DefaultConnection,
-                    x =>
-                    {
-                        x.MigrationsAssembly("App");
-                    });
+                options.UseSqlServer(connectionStrings.DefaultConnection);
                 options.UseSnakeCaseNamingConvention();
             });
             services.AddIdentity<User, Role>().AddEntityFrameworkStores<ApplicationDbContext>();
@@ -131,7 +128,7 @@ namespace App.Infrastructures.Startups.ServicesExtensions
         }
         private static bool IsAllowedAll(this string[] values)
         {
-            return values == null || values.Length == 0 || values.Contains("*");   
+            return values == null || values.Length == 0 || values.Contains("*");
         }
     }
 }
