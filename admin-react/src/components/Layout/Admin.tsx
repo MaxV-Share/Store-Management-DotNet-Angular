@@ -3,10 +3,11 @@ import Dashboard from "features/dashboard";
 import StudentFeature from "features/student";
 import * as React from "react";
 import { Route, Switch } from "react-router-dom";
+import ProductCategory from '../../features/ProductCategory';
 import { Sidebar } from "../Common";
 import { Header } from "../Common/Header";
 
-export interface IAdminLayoutProps {}
+export interface IAdminLayoutProps { }
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "grid",
@@ -52,6 +53,10 @@ export function AdminLayout(props: IAdminLayoutProps) {
 
           <Route path="/admin/students">
             <StudentFeature />
+          </Route>
+
+          <Route path="/admin/product-category">
+            <ProductCategory />
           </Route>
         </Switch>
       </Box>

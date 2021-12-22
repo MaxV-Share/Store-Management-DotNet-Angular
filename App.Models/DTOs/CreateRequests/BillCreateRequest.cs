@@ -1,7 +1,7 @@
-﻿using MaxV.Base.DTOs;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using MaxV.Common.Model.DTOs;
 
 namespace App.Models.DTOs.CreateRequests
 {
