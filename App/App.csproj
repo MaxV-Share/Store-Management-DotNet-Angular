@@ -55,6 +55,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\App.Services\App.Services.csproj" />
+    <ProjectReference Include="..\App.Sub.MaxV.Base\MaxV.Base\MaxV.Base.csproj" />
+    <ProjectReference Include="..\App.Sub.MaxV.Helper\MaxV.Helper\MaxV.Helper.csproj" />
   </ItemGroup>
 
 

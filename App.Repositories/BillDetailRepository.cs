@@ -10,6 +10,7 @@ namespace App.Repositories
     {
         public BillDetailRepository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor) : base(context, httpContextAccessor)
         {
+
         }
     }
 }

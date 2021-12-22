@@ -54,12 +54,13 @@ namespace App.Models.DTOs.PagingViewModels
                 );
             }
             var skip = (pageIndex - 1) * pageSize;
-            var data = await queryable.OrderBy(orderBy)
+            var taskData = queryable.OrderBy(orderBy)
                                    .Skip(skip)
                                    .Take(pageSize)
                                    .ToListAsync();
 
-            TotalRow = await queryable.CountAsync();
+            var taskTotalRow = queryable.CountAsync();
+            TotalRow = await taskTotalRow;
             if (TotalRow > 0 && TotalRow <= skip)
             {
                 throw new ArgumentOutOfRangeException(
@@ -71,7 +72,7 @@ namespace App.Models.DTOs.PagingViewModels
             PageIndex = pageIndex;
             PageSize = pageSize;
             PageCount = TotalRow > 0 ? (int)Math.Ceiling(TotalRow / (double)pageSize) : 0;
-            Data = _mapper.Map<IEnumerable<T>>(data);
+            Data = _mapper.Map<IEnumerable<T>>(await taskData);
         }
     }
 }

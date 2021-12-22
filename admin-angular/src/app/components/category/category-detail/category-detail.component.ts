@@ -1,13 +1,14 @@
-import { HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, OnInit } from '@angular/core';
-import { BaseComponent } from '@app/components/base';
-import { BaseUpdateRequest, Category, CategoryCreateRequest, CategoryUpdateRequest, Lang, LANGS, mapper } from '@app/models';
-import { CategoryService, UtilitiesService } from '@app/shared/services';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
-import { ToastrService } from 'ngx-toastr';
+import { Lang, Category, LANGS, CategoryDetail, CategoryCreateRequest, CategoryUpdateRequest, mapper, BaseUpdateRequest } from '@app/models';
+import { CategoryService, UtilitiesService } from '@app/shared/services';
 import { Subscription } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
+import { HttpResponse } from '@angular/common/http';
+import { BaseComponent } from '@app/components/base';
+import { CategoryDetailUpdateRequest } from '../../../models/update-requests/category-detail-update-request';
 @Component({
     selector: 'app-category-detail',
     templateUrl: './category-detail.component.html',
@@ -70,9 +71,7 @@ export default class CategoryDetailComponent extends BaseComponent implements On
 
     add() {
         let objCreate = mapper.map(this.entity, CategoryCreateRequest, Category);
-        let formData = new FormData();
-        formData = this.utilitiesService.ToFormData(objCreate, formData);
-        this.subscription.add(this.categoryService.add(formData)
+        this.subscription.add(this.categoryService.add(objCreate)
             .subscribe(() => {
                 this.notifySuccess('Success');
                 this.saved.emit("success");
@@ -82,8 +81,8 @@ export default class CategoryDetailComponent extends BaseComponent implements On
     }
 
     update(id: number) {
-        let objUpdate: any = mapper.map(this.entity, CategoryUpdateRequest, Category);
-        let formData: any = this.utilitiesService.ToFormData(objUpdate);
+        let objUpdate : any = mapper.map(this.entity, CategoryUpdateRequest, Category);
+        let formData : any = this.utilitiesService.ToFormData(objUpdate);
         console.log(objUpdate instanceof BaseUpdateRequest);
         console.log(formData instanceof FormData);
 

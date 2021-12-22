@@ -1,5 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { BaseService } from './base/base.service';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class UtilitiesService {
@@ -50,7 +52,7 @@ export class UtilitiesService {
     }
 
 
-    b64toBlob(b64Data, contentType = '', sliceSize = 512) {
+    b64toBlob(b64Data, contentType = '', sliceSize = 512){
         const byteCharacters = atob(b64Data);
         const byteArrays = [];
 
@@ -88,7 +90,8 @@ export class UtilitiesService {
     //     return formData;
     // }
 
-    ToFormData(object: Object, formData = new FormData(), namespace: string | undefined = undefined): FormData {
+    ToFormData(object: Object, form?: FormData, namespace?: string): FormData {
+        const formData = form || new FormData();
         for (let property in object) {
             if (!object.hasOwnProperty(property) || !object[property]) {
                 continue;

@@ -1,5 +1,5 @@
-﻿using System;
-using MaxV.Common.Model.DTOs;
+﻿using MaxV.Base.DTOs;
+using System;
 
 namespace App.Models.DTOs
 {

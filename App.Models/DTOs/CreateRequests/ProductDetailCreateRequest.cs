@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using MaxV.Common.Model.DTOs;
+﻿using MaxV.Base.DTOs;
+using Newtonsoft.Json;
 
 namespace App.Models.DTOs.CreateRequests
 {

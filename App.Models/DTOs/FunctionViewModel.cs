@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using MaxV.Common.Model.DTOs;
+﻿using MaxV.Base.DTOs;
+using System.Collections.Generic;
 
 namespace App.Models.DTOs
 {

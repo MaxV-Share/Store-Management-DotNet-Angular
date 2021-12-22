@@ -17,30 +17,40 @@ namespace App.Services
 {
     public class CategoryService : BaseService<Category, CategoryCreateRequest, CategoryUpdateRequest, CategoryViewModel, int>, ICategoryService
     {
-
         public CategoryService(IMapper mapper, IUnitOffWork unitOffWork, ILogger<CategoryService> logger) : base(mapper, unitOffWork, logger)
         {
         }
-        public override async Task<CategoryViewModel> CreateAsync(CategoryCreateRequest request)
-        {
-            if (request == null)
-                return null;
+        //public async Task<CategoryViewModel> CreateAsync(CategoryCreateRequest request)
+        //{
+        //    if (request == null)
+        //        return null;
 
-            var entity = new Category();
-            var categoryDetails = new List<CategoryDetail>();
-            CategoryViewModel result = null;
-            await _unitOffWork.DoWorkWithTransaction(async () =>
-            {
-                entity = _mapper.Map(request, entity);
+        //    var entity = new Category();
+        //    var categoryDetails = new List<CategoryDetail>();
 
-                await _unitOffWork.Repository<Category, int>().CreateAsync(entity);
+        //    try
+        //    {
+        //        await _unitOffWork.BeginTransactionAsync();
 
-                result = _mapper.Map<CategoryViewModel>(entity);
-            });
+        //        entity = _mapper.Map(request, entity);
 
-            return result;
+        //        entity = await _categoryRepository.CreateAsync(entity);
 
-        }
+        //        await _unitOffWork.SaveChangesAsync();
+
+        //        await _unitOffWork.CommitTransactionAsync();
+
+        //        var result = _mapper.Map<CategoryViewModel>(entity);
+        //        return result;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Debug.WriteLine(ex.StackTrace);
+        //        await _unitOffWork.RollbackTransactionAsync();
+        //        return null;
+        //    }
+
+        //}
         public override async Task<CategoryViewModel> GetByIdAsync(int id)
         {
             var category = await _unitOffWork.Repository<Category, int>().GetByIdNoTrackingAsync(id, e => e.CategoryDetails.OrderBy(e => e.Lang.Order));
@@ -48,7 +58,7 @@ namespace App.Services
             return result;
         }
 
-        public async Task<CategoryDetailPaging> GetPagingAsync(string langId, int pageIndex, int pageSize, string searchText)
+        public async Task<CategoryDetailPaging> GetDetailsPagingAsync(string langId, int pageIndex, int pageSize, string searchText)
         {
             var query = _unitOffWork.CategoryDetailRepository.GetNoTrackingEntities()
                                                     .Include(e => e.Lang)

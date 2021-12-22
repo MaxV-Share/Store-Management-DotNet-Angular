@@ -138,7 +138,7 @@ namespace App.Services
 
         public async Task<ProductDetailPaging> GetPagingAsync(string langId, int pageIndex, int pageSize, string searchText)
         {
-            var data = await _unitOffWork.ProductDetailRepository
+            var taskData = _unitOffWork.ProductDetailRepository
                                         .GetQueryableTable()
                                         .Include(e => e.Lang)
                                         .Include(e => e.Product)
@@ -148,14 +148,14 @@ namespace App.Services
                                         .Take(pageSize)
                                         .ToListAsync();
 
-            var totalRow = await _unitOffWork.ProductDetailRepository
+            var taskTotalRow = _unitOffWork.ProductDetailRepository
                                             .GetQueryableTable()
                                             .CountAsync(e => e.Lang.Id == langId && (string.IsNullOrEmpty(searchText) || e.Name.Contains(searchText)));
 
             var result = new ProductDetailPaging
             {
-                TotalRow = totalRow,
-                Data = _mapper.Map<IEnumerable<ProductDetailViewModel>>(data)
+                TotalRow = await taskTotalRow,
+                Data = _mapper.Map<IEnumerable<ProductDetailViewModel>>(await taskData)
             };
 
             return result;

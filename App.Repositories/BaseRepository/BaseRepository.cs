@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MaxV.Base;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using MaxV.Common.Model;
 
 namespace App.Repositories.BaseRepository
 {
@@ -17,7 +17,6 @@ namespace App.Repositories.BaseRepository
         protected readonly DbContext _context;
         private DbSet<TEntity> _entitiesDbSet { get; set; }
         public readonly IHttpContextAccessor _httpContextAccessor;
-
         #endregion props
 
         #region ctor
@@ -30,6 +29,7 @@ namespace App.Repositories.BaseRepository
 
         ~BaseRepository()
         {
+
         }
 
         #endregion ctor
@@ -45,7 +45,6 @@ namespace App.Repositories.BaseRepository
             }
             return query;
         }
-
         public IQueryable<TEntity> GetNoTrackingEntitiesIdentityResolution(params Expression<Func<TEntity, object>>[] includes)
         {
             var query = Entities.AsNoTrackingWithIdentityResolution();
@@ -55,7 +54,6 @@ namespace App.Repositories.BaseRepository
             }
             return query;
         }
-
         public IQueryable<TEntity> GetQueryableTable(params Expression<Func<TEntity, object>>[] includes)
         {
             var query = Entities.AsQueryable();
@@ -99,17 +97,16 @@ namespace App.Repositories.BaseRepository
             return entity;
         }
 
-        public virtual async Task<int> CreateAsync(TEntity entity)
+        public virtual Task<TEntity> CreateAsync(TEntity entity)
         {
             ValidateAndThrow(entity);
             var currentUserName = GetUserNameInHttpContext();
             entity.SetDefaultValue(currentUserName);
-            await Entities.AddAsync(entity);
-            var countAffect = _context.SaveChanges();
-            return countAffect;
+            Entities.Add(entity);
+            return Task.FromResult(entity);
         }
 
-        public virtual async Task<int> CreateAsync(List<TEntity> entities)
+        public virtual Task<IEnumerable<TEntity>> CreateAsync(List<TEntity> entities)
         {
             ValidateAndThrow(entities);
             var currentUserName = GetUserNameInHttpContext();
@@ -118,12 +115,11 @@ namespace App.Repositories.BaseRepository
                 e.SetDefaultValue(currentUserName);
             });
 
-            await Entities.AddRangeAsync(entities);
-            var countAffect = _context.SaveChanges();
-            return countAffect;
+            Entities.AddRange(entities);
+            return Task.FromResult(entities.AsEnumerable());
         }
 
-        public virtual Task<int> UpdateAsync(TEntity entity)
+        public virtual Task<TEntity> UpdateAsync(TEntity entity)
         {
             ValidateAndThrow(entity);
             var currentUserName = GetUserNameInHttpContext();
@@ -133,11 +129,10 @@ namespace App.Repositories.BaseRepository
             {
                 entry.State = EntityState.Modified;
             }
-            var countAffect = _context.SaveChanges();
-            return Task.FromResult(countAffect);
+            return Task.FromResult(entity);
         }
 
-        public virtual Task<int> UpdateAsync(IEnumerable<TEntity> entities)
+        public virtual Task<IEnumerable<TEntity>> UpdateAsync(IEnumerable<TEntity> entities)
         {
             var currentUserName = GetUserNameInHttpContext();
             entities.ToList().ForEach(e =>
@@ -151,8 +146,7 @@ namespace App.Repositories.BaseRepository
             {
                 entry.State = EntityState.Modified;
             }
-            var countAffect = _context.SaveChanges();
-            return Task.FromResult(countAffect);
+            return Task.FromResult(entities);
         }
 
         public virtual async Task DeleteHardAsync(params object[] keyValues)
@@ -182,7 +176,6 @@ namespace App.Repositories.BaseRepository
             entity.Deleted = DateTime.Now.ToString("yyyyMMddHHmmss");
             await UpdateAsync(entity);
         }
-
         #endregion public
 
         #region private
@@ -196,13 +189,11 @@ namespace App.Repositories.BaseRepository
                 return _entitiesDbSet;
             }
         }
-
         protected string GetUserNameInHttpContext()
         {
             var userName = _httpContextAccessor.HttpContext.User.FindFirst(claim => claim.Type == ClaimTypes.Name)?.Value;
             return userName;
         }
-
         protected void ValidateAndThrow(TEntity entity)
         {
             if (entity == null)
@@ -220,5 +211,6 @@ namespace App.Repositories.BaseRepository
         }
 
         #endregion private
+
     }
 }

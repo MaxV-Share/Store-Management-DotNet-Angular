@@ -19,10 +19,6 @@ namespace App.Controllers
         {
             _categoryService = categoryService;
         }
-        public override Task<ActionResult> Post([FromForm] CategoryCreateRequest request)
-        {
-            return base.Post(request);
-        }
         [HttpGet("filter")]
         public async Task<ActionResult> GetAllFilter(string searchText = "", string langId = "vi")
         {
@@ -34,7 +30,7 @@ namespace App.Controllers
         {
             try
             {
-                var result = await _categoryService.GetPagingAsync(langId, pageIndex, pageSize, searchText);
+                var result = await _categoryService.GetDetailsPagingAsync(langId, pageIndex, pageSize, searchText);
                 return Ok(result);
             }
             catch (ArgumentOutOfRangeException ex)

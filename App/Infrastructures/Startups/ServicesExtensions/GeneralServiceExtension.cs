@@ -1,36 +1,20 @@
 ﻿using App.Models.Dbcontexts;
 using App.Models.DTOs;
 using App.Models.Entities.Identities;
+using MaxV.Helper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
-using App.Common;
 
 namespace App.Infrastructures.Startups.ServicesExtensions
 {
-    public class EnumSchemaFilter : ISchemaFilter
-    {
-        public void Apply(OpenApiSchema model, SchemaFilterContext context)
-        {
-            if (context.Type.IsEnum)
-            {
-                model.Enum.Clear();
-                Enum.GetNames(context.Type)
-                    .ToList()
-                    .ForEach(name => model.Enum.Add(new OpenApiString($"{Convert.ToInt64(Enum.Parse(context.Type, name))} = {name}")));
-            }
-        }
-    }
     public static class GeneralServiceExtension
     {
         public static void AddGeneralConfigurations(this IServiceCollection services, IConfiguration configuration)
@@ -85,10 +69,9 @@ namespace App.Infrastructures.Startups.ServicesExtensions
             {
                 options.EnableDetailedErrors(true);
 
-                options.UseSqlServer(connectionStrings.MigrationConnection);
+                options.UseSqlServer(connectionStrings.DefaultConnection);
                 options.UseSnakeCaseNamingConvention();
-            },
-             ServiceLifetime.Transient);
+            });
             services.AddIdentity<User, Role>().AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddDistributedMemoryCache();
@@ -112,7 +95,7 @@ namespace App.Infrastructures.Startups.ServicesExtensions
                 };
             });
             services.AddSwaggerGenNewtonsoftSupport();
-            services.AddControllers().AddNewtonsoftJson().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+            services.AddControllers().AddNewtonsoftJson();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "App Api", Version = "v1" });
@@ -141,8 +124,6 @@ namespace App.Infrastructures.Startups.ServicesExtensions
                         new List<string>()
                     }
                 });
-                c.SchemaFilter<EnumSchemaFilter>();
-
             });
         }
         private static bool IsAllowedAll(this string[] values)

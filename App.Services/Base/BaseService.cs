@@ -1,17 +1,12 @@
 ﻿using App.Repositories.UnitOffWorks;
 using AutoMapper;
+using MaxV.Base;
+using MaxV.Base.DTOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Linq;
-using System.Linq.Expressions;
-using App.Models.DTOs.PagingViewModels;
-using App.EFCore;
-using MaxV.Common.Model.DTOs;
-using MaxV.Common.Model;
-using App.Common.Extensions;
 
 namespace App.Services.Base
 {
@@ -68,20 +63,6 @@ namespace App.Services.Base
             var entities = await repository.GetNoTrackingEntities().ToListAsync();
             var result = _mapper.Map<IEnumerable<TViewModel>>(entities);
             return result;
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public virtual async Task<IEnumerable<TViewModel>> GetAllDTOAsync(RequestFilterBody request, Expression<Func<TEntity, TViewModel>> selector)
-        {
-            var repository = _unitOffWork.Repository<TEntity, TKey>();
-            var query = repository.GetNoTrackingEntities();
-            var ViewModelQuery = query.Select(selector);
-            if (request.Filter != null && request.Filter.Details.IsNullOrEmpty())
-                ViewModelQuery = ViewModelQuery.Filter(request.Filter);
-            //var result = ViewModelQuery.ToPa
-            return await ViewModelQuery.ToListAsync();
         }
         /// <summary>
         /// 
@@ -150,22 +131,16 @@ namespace App.Services.Base
             IEnumerable<TEntity> response = new List<TEntity>();
             await _unitOffWork.DoWorkWithTransaction(async () =>
             {
-                var affectedCount = await _unitOffWork.Repository<TEntity, TKey>().CreateAsync(entitiesNew);
-                if (affectedCount <= 0)
+                response = await _unitOffWork.Repository<TEntity, TKey>().CreateAsync(entitiesNew);
+                var effectedCount = await _unitOffWork.SaveChangesAsync();
+                if (effectedCount <= 0)
                 {
                     throw new NullReferenceException();
                 }
             });
-
+            
             var result = _mapper.Map<IEnumerable<TViewModel>>(response);
             return result;
         }
-        #region private method
-        protected virtual async Task<BasePaging<TViewModel>> PagingAsync()
-        {
-            return null;
-        }
-        #endregion
-
     }
 }

@@ -1,6 +1,8 @@
 ﻿using App.Models.DTOs;
 using App.Models.Entities.Identities;
 using App.Services.Interface;
+using MaxV.Base.DTOs;
+using MaxV.Helper.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Distributed;
@@ -16,8 +18,6 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using MaxV.Common.Model.DTOs;
-using MaxV.Common.Model;
 
 namespace App.Services
 {

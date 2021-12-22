@@ -1,11 +1,11 @@
 ﻿using App.Controllers.Base;
 using App.Models.DTOs;
 using App.Services.Interface;
+using MaxV.Base.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
-using MaxV.Common.Model.DTOs;
 
 namespace App.Controllers
 {

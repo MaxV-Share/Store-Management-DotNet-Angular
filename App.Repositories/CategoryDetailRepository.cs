@@ -10,6 +10,7 @@ namespace App.Repositories
     {
         public CategoryDetailRepository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor) : base(context, httpContextAccessor)
         {
+
         }
     }
 }

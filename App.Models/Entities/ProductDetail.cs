@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using MaxV.Common.Model;
+﻿using MaxV.Base;
+using System.ComponentModel.DataAnnotations;
 
 namespace App.Models.Entities
 {

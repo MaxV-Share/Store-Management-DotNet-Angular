@@ -1,7 +1,7 @@
-﻿using System;
+﻿using MaxV.Base;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using MaxV.Common.Model;
 
 namespace App.Models.Entities
 {

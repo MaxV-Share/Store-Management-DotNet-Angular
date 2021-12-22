@@ -1,10 +1,10 @@
 ﻿using App.Services.Base;
+using MaxV.Base;
+using MaxV.Base.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
-using MaxV.Common.Model.DTOs;
-using MaxV.Common.Model;
 
 namespace App.Controllers.Base
 {
@@ -49,8 +49,8 @@ namespace App.Controllers.Base
                 return Ok();
             return NotFound();
         }
-        [HttpPost("filter")]
-        public virtual async Task<ActionResult> GetAll(RequestFilterBody request)
+        [HttpGet("")]
+        public virtual async Task<ActionResult> GetAll()
         {
             var result = await _baseService.GetAllDTOAsync();
             return Ok(result);
