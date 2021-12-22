@@ -1,7 +1,7 @@
 ﻿using App.Models.Entities.Identities;
-using MaxV.Base;
 using System.Collections.Generic;
 using System.Linq;
+using MaxV.Common.Model;
 
 namespace App.Models.Entities
 {
