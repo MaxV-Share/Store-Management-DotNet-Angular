@@ -1,4 +1,4 @@
-﻿using MaxV.Base.DTOs;
+﻿using MaxV.Common.Model.DTOs;
 
 namespace App.Models.DTOs
 {

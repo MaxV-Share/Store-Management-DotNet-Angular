@@ -12,8 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\App.Sub.MaxV.Base\MaxV.Base\MaxV.Base.csproj" />
-    <ProjectReference Include="..\App.Sub.MaxV.Helper\MaxV.Helper\MaxV.Helper.csproj" />
+    <ProjectReference Include="..\MaxV.Base\MaxV.Common.Model.csproj" />
   </ItemGroup>
 
 </Project>

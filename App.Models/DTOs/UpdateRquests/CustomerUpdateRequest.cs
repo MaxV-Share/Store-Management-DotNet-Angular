@@ -1,5 +1,5 @@
-﻿using MaxV.Base.DTOs;
-using System;
+﻿using System;
+using MaxV.Common.Model.DTOs;
 
 namespace App.Models.DTOs.UpdateRquests
 {

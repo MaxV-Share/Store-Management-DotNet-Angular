@@ -1,7 +1,6 @@
-﻿using MaxV.Base;
-using MaxV.Base.DTOs;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using MaxV.Common.Model.DTOs;
 
 namespace App.Services.Base
 {

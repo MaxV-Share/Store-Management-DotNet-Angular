@@ -5,13 +5,11 @@ import cityReducer from 'features/city/citySlice';
 import dashboardReducer from 'features/dashboard/dashboardSlice';
 import studentReducer from 'features/student/studentSlice';
 import authReducer from '../features/auth/authSlice';
-import counterReducer from '../features/counter/counterSlice';
 import { history } from '../utils';
 import rootSaga from './rootsaga';
 
 const rootReducer = combineReducers({
   router: connectRouter(history),
-  counter: counterReducer,
   auth: authReducer,
   dashboard: dashboardReducer,
   student: studentReducer,

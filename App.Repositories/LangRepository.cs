@@ -11,6 +11,5 @@ namespace App.Repositories
         public LangRepository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor) : base(context, httpContextAccessor)
         {
         }
-
     }
 }
