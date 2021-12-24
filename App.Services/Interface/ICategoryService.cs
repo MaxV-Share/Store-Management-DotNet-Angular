@@ -6,6 +6,7 @@ using App.Models.Entities;
 using App.Services.Base;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using App.Models.DTOs.Categories;
 
 namespace App.Services.Interface
 {

@@ -69,37 +69,12 @@ namespace App.Services.Base
             var result = _mapper.Map<IEnumerable<TViewModel>>(entities);
             return result;
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public virtual async Task<IEnumerable<TViewModel>> GetAllDTOAsync(RequestFilterBody request, Expression<Func<TEntity, TViewModel>> selector)
-        {
-            var repository = _unitOffWork.Repository<TEntity, TKey>();
-            var query = repository.GetNoTrackingEntities();
-            var ViewModelQuery = query.Select(selector);
-            if (request.Filter != null && request.Filter.Details.IsNullOrEmpty())
-                ViewModelQuery = ViewModelQuery.Filter(request.Filter);
-            //var result = ViewModelQuery.ToPa
-            return await ViewModelQuery.ToListAsync();
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
         public virtual async Task<TViewModel> GetByIdAsync(TKey id)
         {
             var entity = await _unitOffWork.Repository<TEntity, TKey>().GetByIdAsync(id);
             var result = _mapper.Map<TViewModel>(entity);
             return result;
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="request"></param>
-        /// <returns></returns>
         public virtual async Task<int> UpdateAsync(TKey id, TUpdateRequest request)
         {
             if (!id.Equals(request.Id))
@@ -160,12 +135,6 @@ namespace App.Services.Base
             var result = _mapper.Map<IEnumerable<TViewModel>>(response);
             return result;
         }
-        #region private method
-        protected virtual async Task<BasePaging<TViewModel>> PagingAsync()
-        {
-            return null;
-        }
-        #endregion
 
     }
 }

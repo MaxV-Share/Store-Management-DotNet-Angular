@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MaxV.Common.Model.Enums
 {
-    public enum SortBy
+    public enum SortDirection
     {
         Asc,
         Desc,

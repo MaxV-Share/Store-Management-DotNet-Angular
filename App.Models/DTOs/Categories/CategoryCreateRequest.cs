@@ -3,8 +3,9 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel;
 using MaxV.Common.Model.DTOs;
+using App.Models.DTOs.CreateRequests;
 
-namespace App.Models.DTOs.CreateRequests
+namespace App.Models.DTOs.Categories
 {
     public class CategoryCreateRequest : BaseCreateRequest
     {

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MaxV.Common.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,9 +12,6 @@ namespace App.Models.DTOs.PagingViewModels
 
     public class BasePaging<T>
     {
-        private const string _PAGE_NUMBER_BELOW_1 = "Page number cannot be below 1.";
-        private const string _PAGE_SIZE_LESS_THAN_1 = "Page size cannot be less than 1.";
-        private const string _PAGE_INDEX_OUT_OF_RANGE = "Page index out of range.";
         public int TotalRow { get; set; }
         public int PageCount { get; set; }
         public int PageIndex { get; set; }
@@ -41,7 +39,7 @@ namespace App.Models.DTOs.PagingViewModels
                 throw new ArgumentOutOfRangeException(
                     paramName: nameof(pageIndex),
                     actualValue: pageIndex,
-                    message: _PAGE_NUMBER_BELOW_1
+                    message: ConstantCommon.PAGE_NUMBER_BELOW_1
                 );
             }
 
@@ -50,7 +48,7 @@ namespace App.Models.DTOs.PagingViewModels
                 throw new ArgumentOutOfRangeException(
                     paramName: nameof(pageSize),
                     actualValue: pageSize,
-                    message: _PAGE_SIZE_LESS_THAN_1
+                    message: ConstantCommon.PAGE_SIZE_LESS_THAN_1
                 );
             }
             var skip = (pageIndex - 1) * pageSize;
@@ -65,7 +63,7 @@ namespace App.Models.DTOs.PagingViewModels
                 throw new ArgumentOutOfRangeException(
                     paramName: nameof(pageSize),
                     actualValue: pageSize,
-                    message: _PAGE_INDEX_OUT_OF_RANGE
+                    message: ConstantCommon.PAGE_INDEX_OUT_OF_RANGE
                 );
             }
             PageIndex = pageIndex;

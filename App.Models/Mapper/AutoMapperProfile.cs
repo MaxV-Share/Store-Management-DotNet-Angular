@@ -6,6 +6,7 @@ using App.Models.Entities;
 using App.Models.Entities.Identities;
 using AutoMapper;
 using System.Linq;
+using App.Models.DTOs.Categories;
 
 namespace App.Models.Mapper
 {

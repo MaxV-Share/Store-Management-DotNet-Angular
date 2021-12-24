@@ -5,7 +5,7 @@ using MaxV.Common.Model.Enums;
 
 namespace MaxV.Common.Model
 {
-    public class FilterRequestDetails
+    public class RequestFilterDetails
     {
         public string AttributeName { get; set; }
         public string Value { get; set; }

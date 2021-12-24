@@ -7,9 +7,9 @@ using MaxV.Common.Model;
 
 namespace MaxV.Common.Model
 {
-    public class FilterRequest
+    public class RequestFilter
     {
         public FilterLogicalOperator LogicalOperator { get; set; }
-        public FilterRequestDetails[] Details { get; set; }
+        public IEnumerable<RequestFilterDetails> Details { get; set; }
     }
 }
