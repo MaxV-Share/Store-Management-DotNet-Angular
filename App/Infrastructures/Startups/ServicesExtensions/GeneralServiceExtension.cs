@@ -1,5 +1,4 @@
-﻿using App.Models.Dbcontexts;
-using App.Models.DTOs;
+﻿using App.Models.DTOs;
 using App.Models.Entities.Identities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using App.Common;
+using App.Models.DbContexts;
 
 namespace App.Infrastructures.Startups.ServicesExtensions
 {

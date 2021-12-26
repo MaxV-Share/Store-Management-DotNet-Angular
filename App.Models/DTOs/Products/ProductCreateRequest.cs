@@ -4,8 +4,10 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using MaxV.Common.Model.DTOs;
+using App.Models.DTOs.ProductDetails;
+using App.Models.DTOs.CreateRequests;
 
-namespace App.Models.DTOs.CreateRequests
+namespace App.Models.DTOs.Products
 {
     public class ProductCreateRequest : BaseCreateRequest
     {

@@ -1,5 +1,4 @@
-﻿using App.Models.Dbcontexts;
-using App.Models.Entities.Identities;
+﻿using App.Models.Entities.Identities;
 using App.Repositories.BaseRepository;
 using App.Repositories.Interface;
 using Dapper;
@@ -12,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MaxV.Common.Model;
+using App.Models.DbContexts;
 
 namespace App.Repositories.UnitOffWorks
 {

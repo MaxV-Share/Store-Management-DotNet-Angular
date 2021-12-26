@@ -135,6 +135,5 @@ namespace App.Services.Base
             var result = _mapper.Map<IEnumerable<TViewModel>>(response);
             return result;
         }
-
     }
 }

@@ -7,6 +7,10 @@ using App.Models.Entities.Identities;
 using AutoMapper;
 using System.Linq;
 using App.Models.DTOs.Categories;
+using App.Models.DTOs.CategoryDetails;
+using App.Models.DTOs.BillDetails;
+using App.Models.DTOs.ProductDetails;
+using App.Models.DTOs.Products;
 
 namespace App.Models.Mapper
 {

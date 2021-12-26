@@ -4,6 +4,7 @@ using App.Models.Entities;
 using App.Services.Base;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using App.Models.DTOs.BillDetails;
 
 namespace App.Services.Interface
 {

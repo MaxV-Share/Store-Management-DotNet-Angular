@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using App.Models.DTOs.Categories;
+using MaxV.Common.Model;
 
 namespace App.Controllers
 {
@@ -25,17 +26,11 @@ namespace App.Controllers
             return base.Post(request);
         }
         [HttpGet("filter")]
-        public async Task<ActionResult> GetAllFilter(string searchText = "", string langId = "vi")
-        {
-            var result = await _categoryService.GetAllDTOAsync(langId, searchText);
-            return Ok(result);
-        }
-        [HttpGet("filter-paging")]
-        public async Task<ActionResult> GetPaging(int pageIndex, int pageSize, string langId, string searchText = "")
+        public override async Task<ActionResult> GetPaging(FilterBodyRequest request)
         {
             try
             {
-                var result = await _categoryService.GetPagingAsync(langId, pageIndex, pageSize, searchText);
+                var result = await _categoryService.GetPagingAsync(request);
                 return Ok(result);
             }
             catch (ArgumentOutOfRangeException ex)

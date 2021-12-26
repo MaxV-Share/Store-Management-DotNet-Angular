@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace App.Models.DTOs.Categories
+namespace App.Models.DTOs.Langs
 {
-    public class CategoryFilterRequest : FilterRequest
+    public class LangFilterRequest : FilterBodyRequest
     {
     }
 }

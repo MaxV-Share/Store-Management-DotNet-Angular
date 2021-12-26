@@ -5,8 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using MaxV.Common.Model.DTOs;
+using App.Models.DTOs.ProductDetails;
+using App.Models.DTOs.UpdateRquests;
 
-namespace App.Models.DTOs.UpdateRquests
+namespace App.Models.DTOs.Products
 {
     public class ProductUpdateRequest : BaseUpdateRequest<int>
     {

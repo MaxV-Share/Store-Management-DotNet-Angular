@@ -50,11 +50,7 @@ namespace App.Controllers.Base
             return NotFound();
         }
         [HttpPost("filter")]
-        public virtual async Task<ActionResult> GetAll(RequestFilterBody request)
-        {
-            var result = await _baseService.GetAllDTOAsync();
-            return Ok(result);
-        }
+        public abstract Task<ActionResult> GetPaging(FilterBodyRequest request);
         [HttpGet("{id}")]
         public virtual async Task<ActionResult> GetById(TKey id)
         {

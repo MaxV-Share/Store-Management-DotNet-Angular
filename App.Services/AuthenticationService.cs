@@ -46,12 +46,12 @@ namespace App.Services
             _jwtOptions = jwtOptions.Value;
             _userService = userService;
         }
-        public async Task<Response<string>> LoginAsync(LoginDTO request)
+        public async Task<BaseResponse<string>> LoginAsync(LoginDTO request)
         {
             var user = await _userManager.FindByNameAsync(request.UserName);
 
             if (user == null || !await _userManager.CheckPasswordAsync(user, request.Password))
-                return new Response<string>(StatusCodes.Status404NotFound, "UserName or Password is incorrect");
+                return new BaseResponse<string>(StatusCodes.Status404NotFound, "UserName or Password is incorrect");
 
             IEnumerable<string> userRoles = await _userManager.GetRolesAsync(user);
             var authClaims = new List<Claim>
@@ -76,7 +76,7 @@ namespace App.Services
                 expires: DateTime.Now.AddMinutes(100000),
                 signingCredentials: new SigningCredentials(authSigninKey, SecurityAlgorithms.HmacSha256)
                 );
-            return new Response<string>(StatusCodes.Status200OK, "Success", new JwtSecurityTokenHandler().WriteToken(token));
+            return new BaseResponse<string>(StatusCodes.Status200OK, "Success", new JwtSecurityTokenHandler().WriteToken(token));
         }
 
         public async Task LogoutAsync(string request)
@@ -89,12 +89,12 @@ namespace App.Services
             await _signInManager.SignOutAsync();
         }
 
-        public async Task<Response<bool>> RegisterAsync(RegisterDTO request)
+        public async Task<BaseResponse<bool>> RegisterAsync(RegisterDTO request)
         {
-            var response = new Response<bool>();
+            var response = new BaseResponse<bool>();
             if (request.Password != request.ConfirmPassword)
             {
-                return new Response<bool>(StatusCodes.Status400BadRequest, "Passwords didn't match.", false);
+                return new BaseResponse<bool>(StatusCodes.Status400BadRequest, "Passwords didn't match.", false);
             }
 
             using (var transaction = new CommittableTransaction(new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
@@ -104,7 +104,7 @@ namespace App.Services
                     var userExist = await _userManager.FindByNameAsync(request.UserName);
                     if (userExist != null)
                     {
-                        return new Response<bool>(StatusCodes.Status400BadRequest, "User already exists.", false);
+                        return new BaseResponse<bool>(StatusCodes.Status400BadRequest, "User already exists.", false);
                     }
                     var user = new User()
                     {
@@ -127,7 +127,7 @@ namespace App.Services
 
                     if (!result.Succeeded)
                     {
-                        return new Response<bool>(StatusCodes.Status400BadRequest, "User already exists.", false);
+                        return new BaseResponse<bool>(StatusCodes.Status400BadRequest, "User already exists.", false);
                     }
 
                     response.StatusCode = StatusCodes.Status200OK;

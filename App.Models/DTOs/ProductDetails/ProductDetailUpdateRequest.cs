@@ -1,8 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 using MaxV.Common.Model.DTOs;
+using App.Models.DTOs.UpdateRquests;
 
-namespace App.Models.DTOs.UpdateRquests
+namespace App.Models.DTOs.ProductDetails
 {
     public class ProductDetailUpdateRequest : BaseUpdateRequest<int>
     {

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using MaxV.Common.Model.DTOs;
 using App.Models.DTOs.CreateRequests;
+using App.Models.DTOs.CategoryDetails;
 
 namespace App.Models.DTOs.Categories
 {

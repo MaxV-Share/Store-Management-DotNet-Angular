@@ -1,12 +1,12 @@
 ﻿namespace MaxV.Common.Model
 {
-    public class Response<T>
+    public class BaseResponse<T>
     {
-        public Response()
+        public BaseResponse()
         {
 
         }
-        public Response(int statusCode, string message, T body = default(T))
+        public BaseResponse(int statusCode, string message, T body = default(T))
         {
             StatusCode = statusCode;
             Message = message;

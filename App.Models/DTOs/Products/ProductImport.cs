@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace App.Models.DTOs.Imports
+namespace App.Models.DTOs.Products
 {
     public class ProductImport
     {

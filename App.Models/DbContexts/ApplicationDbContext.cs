@@ -3,8 +3,9 @@ using App.Models.Entities.Identities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using App.Models.DbContexts;
 
-namespace App.Models.Dbcontexts
+namespace App.Models.DbContexts
 {
     public class ApplicationDbContext : IdentityDbContext<User, Role, string, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
     {

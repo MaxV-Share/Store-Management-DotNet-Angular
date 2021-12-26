@@ -4,6 +4,7 @@ using App.Models.DTOs.CreateRequests;
 using App.Models.DTOs.UpdateRquests;
 using App.Models.Entities;
 using App.Services.Interface;
+using MaxV.Common.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
@@ -17,6 +18,12 @@ namespace App.Controllers
         {
             _discountService = discountService;
         }
+
+        public override Task<ActionResult> GetPaging(FilterBodyRequest request)
+        {
+            throw new System.NotImplementedException();
+        }
+
         [HttpPost]
         public override async Task<ActionResult> Post([FromBody] DiscountCreateRequest request)
         {

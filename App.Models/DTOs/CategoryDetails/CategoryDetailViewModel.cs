@@ -1,8 +1,9 @@
 ﻿using MaxV.Common.Model.DTOs;
+using App.Models.DTOs;
 
-namespace App.Models.DTOs.UpdateRquests
+namespace App.Models.DTOs.CategoryDetails
 {
-    public class CategoryDetailUpdateRequest : BaseUpdateRequest<int>
+    public class CategoryDetailViewModel : BaseViewModel<int>
     {
         public int CategoryId { get; set; }
         public string LangId { get; set; }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MaxV.Common.Model
 {
-    public class RequestBody
+    public class BodyRequest
     {
     }
 }

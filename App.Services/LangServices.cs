@@ -7,6 +7,14 @@ using App.Services.Base;
 using App.Services.Interface;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
+using App.Models.DTOs.Langs;
+using App.Models.DTOs.PagingViewModels;
+using System.Threading.Tasks;
+using App.EFCore;
+using App.Common.Extensions;
+using System.Linq;
+using System;
+using MaxV.Common.Model;
 
 namespace App.Services
 {
@@ -14,6 +22,23 @@ namespace App.Services
     {
         public LangService(IMapper mapper, IUnitOffWork unitOffWork, ILogger<LangService> logger) : base(mapper, unitOffWork, logger)
         {
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public async Task<IBasePaging<LangViewModel>> GetPagingAsync(LangFilterRequest request)
+        {
+            var query = _unitOffWork.LangRepository.GetNoTrackingEntities().ToLangViewModel();
+            if (!request.SearchValue.IsNullOrEmpty())
+            {
+                query = query.Where(e => e.Name.Contains(request.SearchValue));
+            }
+            var result = await query.ToPagingAsync(request);
+
+            return result;
         }
     }
 }

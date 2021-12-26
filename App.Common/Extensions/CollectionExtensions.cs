@@ -16,6 +16,11 @@ namespace App.Common.Extensions
         /// <returns></returns>
         public static bool IsNullOrEmpty<T>(this IEnumerable<T> source)
         {
+            if (typeof(T) is string)
+            {
+                return string.IsNullOrWhiteSpace(source as string);
+            }
+
             return source == null || !source.Any();
         }
     }

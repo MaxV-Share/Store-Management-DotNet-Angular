@@ -13,6 +13,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using App.Models.DTOs.Categories;
+using App.Models.DTOs.CategoryDetails;
+using MaxV.Common.Model;
+using App.EFCore;
 
 namespace App.Services
 {
@@ -49,15 +52,13 @@ namespace App.Services
             return result;
         }
 
-        public async Task<CategoryDetailPaging> GetPagingAsync(string langId, int pageIndex, int pageSize, string searchText)
+        public async Task<IBasePaging<CategoryDetailViewModel>> GetPagingAsync(FilterBodyRequest request)
         {
             var query = _unitOffWork.CategoryDetailRepository.GetNoTrackingEntities()
-                                                    .Include(e => e.Lang)
                                                     .Include(e => e.Category)
-                                                    .Where(e => e.LangId == langId && (string.IsNullOrEmpty(searchText) || e.Name.Contains(searchText + "")));
-            var result = new CategoryDetailPaging();
-            await result.ToPagingAsync(_mapper, query, x => x.Name, pageIndex, pageSize);
-            return result;
+                                                    .Where(e => e.LangId == request.LangId && (string.IsNullOrEmpty(request.SearchValue) || e.Name.Contains(request.SearchValue + "")))
+                                                    .ToCategoryDetailViewModel();
+            return await query.ToPagingAsync(request);
         }
 
         //public async Task<CategoryPaging> GetPagingWithMultilangAsync(int pageIndex, int pageSize, string searchText)
