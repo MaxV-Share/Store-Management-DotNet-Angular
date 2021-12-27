@@ -18,7 +18,7 @@ namespace App.Controllers
         {
             _discountService = discountService;
         }
-
+        [HttpPost("filter")]
         public override Task<ActionResult> GetPaging(FilterBodyRequest request)
         {
             throw new System.NotImplementedException();

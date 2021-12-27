@@ -25,7 +25,7 @@ namespace App.Controllers
         {
             return base.Post(request);
         }
-        [HttpGet("filter")]
+        [HttpPost("filter")]
         public override async Task<ActionResult> GetPaging(FilterBodyRequest request)
         {
             try

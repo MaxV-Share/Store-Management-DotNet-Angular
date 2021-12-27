@@ -22,12 +22,6 @@ namespace App.Controllers
         {
             _productService = productService;
         }
-        [HttpGet("filter")]
-        public async Task<ActionResult> GetAllFilter(string langId = "vi", string searchText = "")
-        {
-            var result = await _productService.GetAllDTOAsync(langId, searchText);
-            return Ok(result);
-        }
         [HttpPut("import")]
         public async Task<ActionResult> ImportProduct([FromForm] ProductImport files)
         {
@@ -46,7 +40,7 @@ namespace App.Controllers
             return Accepted();
         }
 
-        [HttpGet("filter")]
+        [HttpPost("filter")]
         public override async Task<ActionResult> GetPaging(FilterBodyRequest request)
         {
             return Ok(await _productService.GetPagingAsync(request));
