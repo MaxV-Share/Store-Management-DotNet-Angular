@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using MaxV.Common.Model.Enums;
+using App.Common.Model.Enums;
 
-namespace MaxV.Common.Model
+namespace App.Common.Model
 {
     public class FilterDetailsRequest
     {

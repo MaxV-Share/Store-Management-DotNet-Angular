@@ -4,11 +4,11 @@ using App.Models.DTOs.CreateRequests;
 using App.Models.DTOs.UpdateRquests;
 using App.Models.Entities.Identities;
 using App.Services.Interface;
-using MaxV.Common.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
+using App.Common.Model;
 
 namespace App.Controllers
 {

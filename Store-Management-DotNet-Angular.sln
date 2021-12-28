@@ -19,9 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Services.XUnitTest", "A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.EFCore", "App.EFCore\App.EFCore.csproj", "{7AED5669-A048-4568-8E45-BB6C01BA09F1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaxV.Common.Model", "MaxV.Base\MaxV.Common.Model.csproj", "{83E9A9A3-B461-402C-A2DD-B570704E7D0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Common.Model", "MaxV.Base\App.Common.Model.csproj", "{83E9A9A3-B461-402C-A2DD-B570704E7D0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Common", "App.Common\App.Common.csproj", "{29614914-ACBA-411F-A75B-8B160FB7C38C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "App.Common", "App.Common\App.Common.csproj", "{29614914-ACBA-411F-A75B-8B160FB7C38C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

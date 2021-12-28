@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MaxV.Common.Model.Enums
+namespace App.Common.Model.Enums
 {
     public enum SortDirection
     {

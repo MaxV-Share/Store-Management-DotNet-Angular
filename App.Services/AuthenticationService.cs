@@ -16,8 +16,8 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using MaxV.Common.Model.DTOs;
-using MaxV.Common.Model;
+using App.Common.Model.DTOs;
+using App.Common.Model;
 
 namespace App.Services
 {

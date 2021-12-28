@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace MaxV.Common.Model
+namespace App.Common.Model
 {
     public static class TypeList
     {

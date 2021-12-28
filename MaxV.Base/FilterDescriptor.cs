@@ -1,7 +1,7 @@
-﻿using MaxV.Common.Model.Enums;
-using MaxV.Common.Model;
+﻿using App.Common.Model.Enums;
+using App.Common.Model;
 
-namespace MaxV.Common.Model
+namespace App.Common.Model
 {
     public class FilterDescriptor
     {

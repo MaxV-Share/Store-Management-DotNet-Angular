@@ -1,7 +1,7 @@
 ﻿using App.Models.DTOs;
 using System.Threading.Tasks;
-using MaxV.Common.Model.DTOs;
-using MaxV.Common.Model;
+using App.Common.Model.DTOs;
+using App.Common.Model;
 
 namespace App.Services.Interface
 {

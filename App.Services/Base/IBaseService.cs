@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using App.Models.DTOs.PagingViewModels;
-using MaxV.Common.Model;
-using MaxV.Common.Model.DTOs;
+using App.Common.Model.DTOs;
 
 namespace App.Services.Base
 {

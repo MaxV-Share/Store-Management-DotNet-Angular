@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using App.Models.DTOs.Categories;
-using MaxV.Common.Model;
+using App.Common.Model;
 
 namespace App.Controllers
 {

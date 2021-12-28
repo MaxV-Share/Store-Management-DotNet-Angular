@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
-using MaxV.Common.Model.DTOs;
-using MaxV.Common.Model;
+using App.Common.Model.DTOs;
+using App.Common.Model;
 
 namespace App.Controllers.Base
 {

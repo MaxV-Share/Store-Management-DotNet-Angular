@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using MaxV.Common.Model.DTOs;
+using App.Common.Model.DTOs;
 
-namespace MaxV.Common.Model.DTOs
+namespace App.Common.Model.DTOs
 {
     public interface IBaseTreeViewModel<T>
     {

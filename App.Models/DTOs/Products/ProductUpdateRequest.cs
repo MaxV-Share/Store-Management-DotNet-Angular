@@ -4,9 +4,9 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using MaxV.Common.Model.DTOs;
 using App.Models.DTOs.ProductDetails;
 using App.Models.DTOs.UpdateRquests;
+using App.Common.Model.DTOs;
 
 namespace App.Models.DTOs.Products
 {

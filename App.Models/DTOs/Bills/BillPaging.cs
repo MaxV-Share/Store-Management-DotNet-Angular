@@ -1,5 +1,5 @@
 ﻿using App.Models.DTOs.Bills;
-using App.Models.DTOs.PagingViewModels;
+using App.Common.Model.DTOs;
 
 namespace App.Models.DTOs.Bills
 {

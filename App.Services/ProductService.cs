@@ -1,7 +1,6 @@
 ﻿using App.EFCore;
 using App.Models.DTOs;
 using App.Models.DTOs.CreateRequests;
-using App.Models.DTOs.PagingViewModels;
 using App.Models.DTOs.ProductDetails;
 using App.Models.DTOs.Products;
 using App.Models.DTOs.UpdateRquests;
@@ -11,7 +10,6 @@ using App.Services.Base;
 using App.Services.Interface;
 using AutoMapper;
 using ExcelDataReader;
-using MaxV.Common.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -20,6 +18,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using App.Common.Model.DTOs;
+using App.Common.Model;
 
 namespace App.Services
 {

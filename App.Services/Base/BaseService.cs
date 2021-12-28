@@ -7,11 +7,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Linq.Expressions;
-using App.Models.DTOs.PagingViewModels;
 using App.EFCore;
-using MaxV.Common.Model.DTOs;
-using MaxV.Common.Model;
 using App.Common.Extensions;
+using App.Common.Model.DTOs;
+using App.Common.Model;
 
 namespace App.Services.Base
 {

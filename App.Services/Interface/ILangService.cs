@@ -4,8 +4,8 @@ using App.Models.DTOs.UpdateRquests;
 using App.Models.Entities;
 using App.Services.Base;
 using App.Models.DTOs.Langs;
-using App.Models.DTOs.PagingViewModels;
 using System.Threading.Tasks;
+using App.Common.Model.DTOs;
 
 namespace App.Services.Interface
 {

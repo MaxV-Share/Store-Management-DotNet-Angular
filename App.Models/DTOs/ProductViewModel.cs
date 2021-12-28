@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using MaxV.Common.Model.DTOs;
+using App.Common.Model.DTOs;
 
 namespace App.Models.DTOs
 {

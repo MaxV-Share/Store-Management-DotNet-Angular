@@ -4,7 +4,7 @@ using App.Repositories.Interface;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Threading.Tasks;
-using MaxV.Common.Model;
+using App.Common.Model;
 
 namespace App.Repositories.UnitOffWorks
 {

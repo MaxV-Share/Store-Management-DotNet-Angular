@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
-using MaxV.Common.Model.DTOs;
+using App.Common.Model.DTOs;
 
 namespace App.Controllers
 {

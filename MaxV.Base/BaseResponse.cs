@@ -1,4 +1,4 @@
-﻿namespace MaxV.Common.Model
+﻿namespace App.Common.Model
 {
     public class BaseResponse<T>
     {

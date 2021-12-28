@@ -1,4 +1,5 @@
 import { Box, makeStyles } from "@material-ui/core";
+import { Category } from "features/Category";
 import Dashboard from "features/dashboard";
 import StudentFeature from "features/student";
 import * as React from "react";
@@ -57,6 +58,10 @@ export function AdminLayout(props: IAdminLayoutProps) {
 
           <Route path="/admin/product-category">
             <ProductCategory />
+          </Route>
+
+          <Route path="/admin/category">
+            <Category />
           </Route>
         </Switch>
       </Box>

@@ -1,5 +1,5 @@
-﻿using MaxV.Common.Model.DTOs;
-using App.Models.DTOs.Bills;
+﻿using App.Models.DTOs.Bills;
+using App.Common.Model.DTOs;
 
 namespace App.Models.DTOs.BillDetails
 {

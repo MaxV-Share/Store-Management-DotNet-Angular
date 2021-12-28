@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using MaxV.Common.Model;
+using App.Common.Model;
 
-namespace MaxV.Common.Model
+namespace App.Common.Model
 {
     public class FilterBodyRequest : BodyRequest
     {

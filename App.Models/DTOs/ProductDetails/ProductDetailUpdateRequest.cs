@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
-using MaxV.Common.Model.DTOs;
 using App.Models.DTOs.UpdateRquests;
+using App.Common.Model.DTOs;
 
 namespace App.Models.DTOs.ProductDetails
 {

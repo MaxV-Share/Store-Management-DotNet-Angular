@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MaxV.Common.Model
+namespace App.Common.Model
 {
     public class Pagination
     {
@@ -12,7 +12,11 @@ namespace MaxV.Common.Model
         {
             PageIndex = 1;
             PageSize = 10;
+            TotalRow = 0;
+            PageCount = 0;
         }
+        public int TotalRow { get; set; }
+        public int PageCount { get; set; }
         public int PageIndex { get; set; }
         public int PageSize { get; set; }
     }

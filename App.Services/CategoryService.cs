@@ -1,6 +1,5 @@
 ﻿using App.Models.DTOs;
 using App.Models.DTOs.CreateRequests;
-using App.Models.DTOs.PagingViewModels;
 using App.Models.DTOs.UpdateRquests;
 using App.Models.Entities;
 using App.Repositories.UnitOffWorks;
@@ -14,8 +13,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using App.Models.DTOs.Categories;
 using App.Models.DTOs.CategoryDetails;
-using MaxV.Common.Model;
 using App.EFCore;
+using App.Common.Model.DTOs;
+using App.Common.Model;
 
 namespace App.Services
 {
@@ -30,14 +30,16 @@ namespace App.Services
             if (request == null)
                 return null;
 
-            var entity = new Category();
-            var categoryDetails = new List<CategoryDetail>();
             CategoryViewModel result = null;
             await _unitOffWork.DoWorkWithTransaction(async () =>
             {
-                entity = _mapper.Map(request, entity);
+                var entity = _mapper.Map<Category>(request);
 
-                await _unitOffWork.Repository<Category, int>().CreateAsync(entity);
+                var countAffect = await _unitOffWork.Repository<Category, int>().CreateAsync(entity);
+                if (countAffect == 0)
+                {
+                    result = null;
+                }
 
                 result = _mapper.Map<CategoryViewModel>(entity);
             });

@@ -8,13 +8,12 @@ using App.Services.Interface;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using App.Models.DTOs.Langs;
-using App.Models.DTOs.PagingViewModels;
 using System.Threading.Tasks;
 using App.EFCore;
 using App.Common.Extensions;
 using System.Linq;
 using System;
-using MaxV.Common.Model;
+using App.Common.Model.DTOs;
 
 namespace App.Services
 {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using MaxV.Common.Model.DTOs;
 using App.Models.DTOs.BillDetails;
 using App.Models.DTOs.CreateRequests;
+using App.Common.Model.DTOs;
 
 namespace App.Models.DTOs.Bills
 {

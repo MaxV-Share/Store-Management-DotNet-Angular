@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MaxV.Common.Model
+namespace App.Common.Model
 {
     public static class ConstantCommon
     {

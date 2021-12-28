@@ -1,4 +1,4 @@
-﻿namespace MaxV.Common.Model.Enums
+﻿namespace App.Common.Model.Enums
 {
     public enum FilterType
     {

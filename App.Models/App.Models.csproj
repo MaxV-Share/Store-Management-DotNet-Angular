@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MaxV.Base\MaxV.Common.Model.csproj" />
+    <ProjectReference Include="..\MaxV.Base\App.Common.Model.csproj" />
   </ItemGroup>
 
 </Project>

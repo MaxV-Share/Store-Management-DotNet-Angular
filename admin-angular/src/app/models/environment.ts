@@ -3,11 +3,20 @@
 // The list of file replacements can be found in `angular.json`.
 
 import { HttpHeaders, HttpParams } from "@angular/common/http";
+/*
+ * For easier debugging in development mode, you can import the following file
+ * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
+ *
+ * This import should be commented out in production mode because it will have a negative impact
+ * on performance if an error is thrown.
+ */
+// import 'zone.js/dist/zone-error';  // Included with Angular CLI.
+import { Lang } from '@app/models';
 
 export const ENVIRONMENT = {
     production: false,
-    apiUrl: `http://localhost:5000/api`,
-    fileUrl: `http://localhost:5000/Files/`,
+    apiUrl: `https://localhost:5000/api`,
+    fileUrl: `https://localhost:5000/Files/`,
 
 };
 export const LANGS: Lang[] = [
@@ -36,7 +45,7 @@ export const OPTIONS_DEFAULT: {
     observe: 'events',
     reportProgress: true,
 }
-export const OPTIONS_JSON : {
+export const OPTIONS_JSON: {
     headers?: HttpHeaders | {
         [header: string]: string | string[];
     };
@@ -69,12 +78,4 @@ export const OPTIONS_TEXT: {
     observe: 'events',
     responseType: 'text',
 }
-/*
- * For easier debugging in development mode, you can import the following file
- * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
- *
- * This import should be commented out in production mode because it will have a negative impact
- * on performance if an error is thrown.
- */
-// import 'zone.js/dist/zone-error';  // Included with Angular CLI.
-import { Lang } from '@app/models';
+

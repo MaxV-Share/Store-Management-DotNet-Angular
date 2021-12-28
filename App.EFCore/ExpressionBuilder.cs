@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Linq.Expressions;
 using System.Reflection;
-using MaxV.Common.Model.Enums;
-using MaxV.Common.Model;
 using App.Common.Utilities;
 using App.Common;
+using App.Common.Model.Enums;
+using App.Common.Model;
 
 namespace App.EFCore
 {

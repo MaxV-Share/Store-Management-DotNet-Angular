@@ -1,6 +1,5 @@
 ﻿using App.Models.DTOs.Bills;
 using App.Models.DTOs.CreateRequests;
-using App.Models.DTOs.PagingViewModels;
 using App.Models.Entities;
 using App.Models.Entities.Identities;
 using App.Repositories.UnitOffWorks;
@@ -213,7 +212,7 @@ namespace App.Services
             var result = new BillPaging
             {
                 Data = _mapper.Map<List<BillViewModel>>(await tEntities),
-                TotalRow = await tCountEntities
+                //TotalRow = await tCountEntities
             };
 
             return result;

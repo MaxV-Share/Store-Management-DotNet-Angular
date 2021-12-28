@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MaxV.Common.Model.Enums;
-using MaxV.Common.Model;
 using App.Common.Extensions;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using App.Models.DTOs.PagingViewModels;
+using App.Common.Model.DTOs;
+using App.Common.Model.Enums;
+using App.Common.Model;
 
 namespace App.EFCore
 {
@@ -288,11 +288,12 @@ namespace App.EFCore
                                    .Skip(skip)
                                    .Take(pageSize)
                                    .ToListAsync();
-
-            result.TotalRow = totalRow;
-            result.PageCount = totalRow > 0 ? (int)Math.Ceiling(totalRow / (double)pageSize) : 0;
-            result.PageIndex = pageIndex;
-            result.PageSize = pageSize;
+            var newPagination = new Pagination();
+            newPagination.TotalRow = totalRow;
+            newPagination.PageCount = totalRow > 0 ? (int)Math.Ceiling(totalRow / (double)pageSize) : 0;
+            newPagination.PageIndex = pageIndex;
+            newPagination.PageSize = pageSize;
+            result.Pagination = newPagination;
             return result;
         }
         /// <summary>

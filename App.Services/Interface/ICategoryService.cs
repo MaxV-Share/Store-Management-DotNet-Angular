@@ -1,6 +1,5 @@
 ﻿using App.Models.DTOs;
 using App.Models.DTOs.CreateRequests;
-using App.Models.DTOs.PagingViewModels;
 using App.Models.DTOs.UpdateRquests;
 using App.Models.Entities;
 using App.Services.Base;
@@ -8,7 +7,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using App.Models.DTOs.Categories;
 using App.Models.DTOs.CategoryDetails;
-using MaxV.Common.Model;
+using App.Common.Model.DTOs;
+using App.Common.Model;
 
 namespace App.Services.Interface
 {

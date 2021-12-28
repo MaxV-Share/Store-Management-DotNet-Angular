@@ -2,9 +2,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using MaxV.Common.Model;
+using App.Common.Model;
 
-namespace MaxV.Common.Model
+namespace App.Common.Model
 {
     [Microsoft.EntityFrameworkCore.Index(nameof(Id))]
     public abstract class BaseEntity<TKey>

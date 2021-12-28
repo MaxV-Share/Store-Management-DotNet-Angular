@@ -1,4 +1,4 @@
-﻿using MaxV.Common.Model.DTOs;
+﻿using App.Common.Model.DTOs;
 
 namespace App.Models.DTOs.UpdateRquests
 {
