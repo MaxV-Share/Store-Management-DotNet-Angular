@@ -1,5 +1,4 @@
-﻿using App.Models.Dbcontexts;
-using App.Models.Entities.Identities;
+﻿using App.Models.Entities.Identities;
 using App.Models.Mapper;
 using App.Repositories.Extenstions;
 using App.Repositories.UnitOffWorks;
@@ -7,6 +6,7 @@ using App.Services.Extenstions;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using App.Models.DbContexts;
 
 namespace App.Infrastructures.Startups.ServicesExtensions
 {

@@ -1,6 +1,8 @@
-﻿using App.Models.DTOs;
+﻿using App.EFCore;
+using App.Models.DTOs;
 using App.Models.DTOs.CreateRequests;
-using App.Models.DTOs.PagingViewModels;
+using App.Models.DTOs.ProductDetails;
+using App.Models.DTOs.Products;
 using App.Models.DTOs.UpdateRquests;
 using App.Models.Entities;
 using App.Repositories.UnitOffWorks;
@@ -16,6 +18,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using App.Common.Model.DTOs;
+using App.Common.Model;
 
 namespace App.Services
 {
@@ -136,28 +140,29 @@ namespace App.Services
             return result;
         }
 
-        public async Task<ProductDetailPaging> GetPagingAsync(string langId, int pageIndex, int pageSize, string searchText)
+        public async Task<IBasePaging<ProductDetailViewModel>> GetPagingAsync(FilterBodyRequest request)
         {
-            var taskData = _unitOffWork.ProductDetailRepository
+            var query = _unitOffWork.ProductDetailRepository
                                         .GetQueryableTable()
                                         .Include(e => e.Lang)
                                         .Include(e => e.Product)
-                                        .Where(e => e.LangId == langId && (string.IsNullOrEmpty(searchText) || e.Name.Contains(searchText) || e.Product.Code.Contains(searchText)))
-                                        .OrderBy(e => e.Name)
-                                        .Skip((pageIndex - 1) * pageSize)
-                                        .Take(pageSize)
-                                        .ToListAsync();
-
-            var taskTotalRow = _unitOffWork.ProductDetailRepository
-                                            .GetQueryableTable()
-                                            .CountAsync(e => e.Lang.Id == langId && (string.IsNullOrEmpty(searchText) || e.Name.Contains(searchText)));
-
-            var result = new ProductDetailPaging
-            {
-                TotalRow = await taskTotalRow,
-                Data = _mapper.Map<IEnumerable<ProductDetailViewModel>>(await taskData)
-            };
-
+                                        .Where(e => e.LangId == request.LangId && (string.IsNullOrEmpty(request.SearchValue) || e.Name.Contains(request.SearchValue) || e.Product.Code.Contains(request.SearchValue)))
+                                        .Select(e => new ProductDetailViewModel()
+                                        {
+                                            Id = e.Id,
+                                            Name = e.Name,
+                                            LangId = e.LangId,
+                                            Description = e.Description,
+                                            ProductCode = e.Product.Code,
+                                            ProductId = e.ProductId,
+                                            ProductImageUrl = e.Product.ImageUrl,
+                                            ProductPrice = e.Product.Price,
+                                            CreateAt = e.CreateAt,
+                                            CreateBy = e.CreateBy,
+                                            UpdateAt = e.UpdateAt,
+                                            UpdateBy = e.UpdateBy,
+                                        });
+            var result = await query.ToPagingAsync(request);
             return result;
         }
         public async Task<IEnumerable<ProductDetailViewModel>> GetAllDTOAsync(string langId, string searchText)

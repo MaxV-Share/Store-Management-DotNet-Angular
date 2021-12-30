@@ -8,6 +8,9 @@ using App.Services.Interface;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Threading.Tasks;
+using App.Common.Model.DTOs;
+using App.Common.Model;
 
 namespace App.Services
 {
@@ -15,6 +18,10 @@ namespace App.Services
     {
         public CommandInFunctionService(IMapper mapper, IUnitOffWork unitOffWork, ILogger<CommandInFunctionService> logger) : base(mapper, unitOffWork, logger)
         {
+        }
+        public async Task<BasePaging<CommandInFunctionViewModel>> GetPagingAsync(FilterBodyRequest request)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,4 +1,3 @@
-using App.Models.Dbcontexts;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -9,6 +8,7 @@ using Serilog;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using App.Models.DbContexts;
 
 namespace App
 {

@@ -1,5 +1,5 @@
-﻿using MaxV.Base.DTOs;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using App.Common.Model.DTOs;
 
 namespace App.Models.DTOs
 {

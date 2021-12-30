@@ -1,14 +1,14 @@
 ﻿using App.Models.DTOs;
-using MaxV.Base.DTOs;
-using MaxV.Helper.Entities;
 using System.Threading.Tasks;
+using App.Common.Model.DTOs;
+using App.Common.Model;
 
 namespace App.Services.Interface
 {
     public interface IAuthenticationService
     {
-        Task<Response<bool>> RegisterAsync(RegisterDTO request);
-        Task<Response<string>> LoginAsync(LoginDTO request);
+        Task<BaseResponse<bool>> RegisterAsync(RegisterDTO request);
+        Task<BaseResponse<string>> LoginAsync(LoginDTO request);
         Task LogoutAsync(string request);
         Task<string> CheckToken(string authorization);
     }

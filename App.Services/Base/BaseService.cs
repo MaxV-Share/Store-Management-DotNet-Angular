@@ -1,12 +1,16 @@
 ﻿using App.Repositories.UnitOffWorks;
 using AutoMapper;
-using MaxV.Base;
-using MaxV.Base.DTOs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
+using System.Linq.Expressions;
+using App.EFCore;
+using App.Common.Extensions;
+using App.Common.Model.DTOs;
+using App.Common.Model;
 
 namespace App.Services.Base
 {
@@ -64,23 +68,12 @@ namespace App.Services.Base
             var result = _mapper.Map<IEnumerable<TViewModel>>(entities);
             return result;
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
         public virtual async Task<TViewModel> GetByIdAsync(TKey id)
         {
             var entity = await _unitOffWork.Repository<TEntity, TKey>().GetByIdAsync(id);
             var result = _mapper.Map<TViewModel>(entity);
             return result;
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="request"></param>
-        /// <returns></returns>
         public virtual async Task<int> UpdateAsync(TKey id, TUpdateRequest request)
         {
             if (!id.Equals(request.Id))
@@ -131,14 +124,13 @@ namespace App.Services.Base
             IEnumerable<TEntity> response = new List<TEntity>();
             await _unitOffWork.DoWorkWithTransaction(async () =>
             {
-                response = await _unitOffWork.Repository<TEntity, TKey>().CreateAsync(entitiesNew);
-                var effectedCount = await _unitOffWork.SaveChangesAsync();
-                if (effectedCount <= 0)
+                var affectedCount = await _unitOffWork.Repository<TEntity, TKey>().CreateAsync(entitiesNew);
+                if (affectedCount <= 0)
                 {
                     throw new NullReferenceException();
                 }
             });
-            
+
             var result = _mapper.Map<IEnumerable<TViewModel>>(response);
             return result;
         }

@@ -1,7 +1,7 @@
-﻿using MaxV.Base;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using App.Common.Model;
 
 namespace App.Models.Entities
 {

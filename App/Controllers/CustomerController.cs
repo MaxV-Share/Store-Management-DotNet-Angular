@@ -4,7 +4,10 @@ using App.Models.DTOs.CreateRequests;
 using App.Models.DTOs.UpdateRquests;
 using App.Models.Entities;
 using App.Services.Interface;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
+using App.Common.Model;
 
 namespace App.Controllers
 {
@@ -14,6 +17,11 @@ namespace App.Controllers
         public CustomerController(ICustomerService customerService, ILogger<CustomerController> logger) : base(logger, customerService)
         {
             _customerService = customerService;
+        }
+
+        public override async Task<ActionResult> GetPaging(FilterBodyRequest request)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

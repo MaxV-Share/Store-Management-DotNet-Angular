@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
+using App.Models.DTOs.Categories;
+using App.Common.Model;
 
 namespace App.Controllers
 {
@@ -19,18 +21,16 @@ namespace App.Controllers
         {
             _categoryService = categoryService;
         }
-        [HttpGet("filter")]
-        public async Task<ActionResult> GetAllFilter(string searchText = "", string langId = "vi")
+        public override Task<ActionResult> Post([FromForm] CategoryCreateRequest request)
         {
-            var result = await _categoryService.GetAllDTOAsync(langId, searchText);
-            return Ok(result);
+            return base.Post(request);
         }
-        [HttpGet("filter-paging")]
-        public async Task<ActionResult> GetPaging(int pageIndex, int pageSize, string langId, string searchText = "")
+        [HttpPost("filter")]
+        public override async Task<ActionResult> GetPaging(FilterBodyRequest request)
         {
             try
             {
-                var result = await _categoryService.GetDetailsPagingAsync(langId, pageIndex, pageSize, searchText);
+                var result = await _categoryService.GetPagingAsync(request);
                 return Ok(result);
             }
             catch (ArgumentOutOfRangeException ex)

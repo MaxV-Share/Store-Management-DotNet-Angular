@@ -1,6 +1,5 @@
 ﻿using App.Models.DTOs;
 using App.Models.DTOs.CreateRequests;
-using App.Models.DTOs.PagingViewModels;
 using App.Models.DTOs.UpdateRquests;
 using App.Models.Entities;
 using App.Repositories.UnitOffWorks;
@@ -12,45 +11,42 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using App.Models.DTOs.Categories;
+using App.Models.DTOs.CategoryDetails;
+using App.EFCore;
+using App.Common.Model.DTOs;
+using App.Common.Model;
 
 namespace App.Services
 {
     public class CategoryService : BaseService<Category, CategoryCreateRequest, CategoryUpdateRequest, CategoryViewModel, int>, ICategoryService
     {
+
         public CategoryService(IMapper mapper, IUnitOffWork unitOffWork, ILogger<CategoryService> logger) : base(mapper, unitOffWork, logger)
         {
         }
-        //public async Task<CategoryViewModel> CreateAsync(CategoryCreateRequest request)
-        //{
-        //    if (request == null)
-        //        return null;
+        public override async Task<CategoryViewModel> CreateAsync(CategoryCreateRequest request)
+        {
+            if (request == null)
+                return null;
 
-        //    var entity = new Category();
-        //    var categoryDetails = new List<CategoryDetail>();
+            CategoryViewModel result = null;
+            await _unitOffWork.DoWorkWithTransaction(async () =>
+            {
+                var entity = _mapper.Map<Category>(request);
 
-        //    try
-        //    {
-        //        await _unitOffWork.BeginTransactionAsync();
+                var countAffect = await _unitOffWork.Repository<Category, int>().CreateAsync(entity);
+                if (countAffect == 0)
+                {
+                    result = null;
+                }
 
-        //        entity = _mapper.Map(request, entity);
+                result = _mapper.Map<CategoryViewModel>(entity);
+            });
 
-        //        entity = await _categoryRepository.CreateAsync(entity);
+            return result;
 
-        //        await _unitOffWork.SaveChangesAsync();
-
-        //        await _unitOffWork.CommitTransactionAsync();
-
-        //        var result = _mapper.Map<CategoryViewModel>(entity);
-        //        return result;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Debug.WriteLine(ex.StackTrace);
-        //        await _unitOffWork.RollbackTransactionAsync();
-        //        return null;
-        //    }
-
-        //}
+        }
         public override async Task<CategoryViewModel> GetByIdAsync(int id)
         {
             var category = await _unitOffWork.Repository<Category, int>().GetByIdNoTrackingAsync(id, e => e.CategoryDetails.OrderBy(e => e.Lang.Order));
@@ -58,15 +54,13 @@ namespace App.Services
             return result;
         }
 
-        public async Task<CategoryDetailPaging> GetDetailsPagingAsync(string langId, int pageIndex, int pageSize, string searchText)
+        public async Task<IBasePaging<CategoryDetailViewModel>> GetPagingAsync(FilterBodyRequest request)
         {
             var query = _unitOffWork.CategoryDetailRepository.GetNoTrackingEntities()
-                                                    .Include(e => e.Lang)
                                                     .Include(e => e.Category)
-                                                    .Where(e => e.LangId == langId && (string.IsNullOrEmpty(searchText) || e.Name.Contains(searchText + "")));
-            var result = new CategoryDetailPaging();
-            await result.ToPagingAsync(_mapper, query, x => x.Name, pageIndex, pageSize);
-            return result;
+                                                    .Where(e => e.LangId == request.LangId && (string.IsNullOrEmpty(request.SearchValue) || e.Name.Contains(request.SearchValue + "")))
+                                                    .ToCategoryDetailViewModel();
+            return await query.ToPagingAsync(request);
         }
 
         //public async Task<CategoryPaging> GetPagingWithMultilangAsync(int pageIndex, int pageSize, string searchText)

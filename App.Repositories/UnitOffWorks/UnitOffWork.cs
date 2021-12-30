@@ -1,9 +1,7 @@
-﻿using App.Models.Dbcontexts;
-using App.Models.Entities.Identities;
+﻿using App.Models.Entities.Identities;
 using App.Repositories.BaseRepository;
 using App.Repositories.Interface;
 using Dapper;
-using MaxV.Base;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -12,12 +10,13 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using App.Models.DbContexts;
+using App.Common.Model;
 
 namespace App.Repositories.UnitOffWorks
 {
     public class UnitOffWork : IUnitOffWork
     {
-
         private readonly ApplicationDbContext _dbContext;
         private bool _disposed = false;
         private readonly IServiceProvider _serviceProvider;
@@ -37,54 +36,66 @@ namespace App.Repositories.UnitOffWorks
         private IProductRepository _productRepository;
         private IUserRepository _userRepository;
         private UserManager<User> _userManager;
+
         public UnitOffWork(ApplicationDbContext context, IServiceProvider serviceProvider)
         {
             _dbContext = context;
             _serviceProvider = serviceProvider;
         }
 
-        ~UnitOffWork()
+        //~UnitOffWork()
+        //{
+        //    Dispose(false);
+        //}
+
+        //public virtual void Dispose(bool disposing)
+        //{
+        //    if (_disposed)
+        //    {
+        //        return;
+        //    }
+
+        //    if (disposing)
+        //    {
+        //        _tx?.Dispose();
+        //        _tx = null;
+        //    }
+
+        //    _disposed = true;
+        //}
+        //void IDisposable.Dispose()
+        //{
+        //    Dispose(true);
+        //    GC.SuppressFinalize(this);
+        //}
+
+        public Task<int> SaveChangesAsync()
         {
-            Dispose(false);
+            return _dbContext.SaveChangesAsync();
         }
 
-        public virtual void Dispose(bool disposing)
-        {
-            if (_disposed)
-            {
-                return;
-            }
-
-            if (disposing)
-            {
-                _tx?.Dispose();
-                _tx = null;
-            }
-
-            _disposed = true;
-        }
-        void IDisposable.Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        public async Task<int> SaveChangesAsync()
-        {
-            return await _dbContext.SaveChangesAsync();
-        }
         public int SaveChanges()
         {
             return _dbContext.SaveChanges();
         }
+
         public async Task DoWorkWithTransaction(Action action)
         {
             using (var trans = await _dbContext.Database.BeginTransactionAsync())
             {
-                action.Invoke();
-                await trans.CommitAsync();
+                try
+                {
+                    action.Invoke();
+                    await trans.CommitAsync();
+                }
+                catch
+                {
+                    trans.Rollback();
+                    throw;
+                }
             }
         }
+
         public async Task<IEnumerable<TResult>> OpenConnection<TResult>(string query)
         {
             IEnumerable<TResult> result;
@@ -106,7 +117,6 @@ namespace App.Repositories.UnitOffWorks
         {
             get
             {
-
                 if (_billDetailRepository == null)
                 {
                     _billDetailRepository = _serviceProvider.GetService<IBillDetailRepository>();
@@ -114,11 +124,11 @@ namespace App.Repositories.UnitOffWorks
                 return _billDetailRepository;
             }
         }
+
         public IBillRepository BillRepository
         {
             get
             {
-
                 if (_billRepository == null)
                 {
                     _billRepository = _serviceProvider.GetService<IBillRepository>();
@@ -131,7 +141,6 @@ namespace App.Repositories.UnitOffWorks
         {
             get
             {
-
                 if (_categoryDetailRepository == null)
                 {
                     _categoryDetailRepository = _serviceProvider.GetService<ICategoryDetailRepository>();
@@ -144,7 +153,6 @@ namespace App.Repositories.UnitOffWorks
         {
             get
             {
-
                 if (_categoryRepository == null)
                 {
                     _categoryRepository = _serviceProvider.GetService<ICategoryRepository>();
@@ -157,7 +165,6 @@ namespace App.Repositories.UnitOffWorks
         {
             get
             {
-
                 if (_commandInFunctionRepository == null)
                 {
                     _commandInFunctionRepository = _serviceProvider.GetService<ICommandInFunctionRepository>();
@@ -170,7 +177,6 @@ namespace App.Repositories.UnitOffWorks
         {
             get
             {
-
                 if (_commandRepository == null)
                 {
                     _commandRepository = _serviceProvider.GetService<ICommandRepository>();
@@ -183,7 +189,6 @@ namespace App.Repositories.UnitOffWorks
         {
             get
             {
-
                 if (_customerRepository == null)
                 {
                     _customerRepository = _serviceProvider.GetService<ICustomerRepository>();
@@ -192,13 +197,10 @@ namespace App.Repositories.UnitOffWorks
             }
         }
 
-
-
         public IDiscountRepository DiscountRepository
         {
             get
             {
-
                 if (_discountRepository == null)
                 {
                     _discountRepository = _serviceProvider.GetService<IDiscountRepository>();
@@ -211,7 +213,6 @@ namespace App.Repositories.UnitOffWorks
         {
             get
             {
-
                 if (_functionRepository == null)
                 {
                     _functionRepository = _serviceProvider.GetService<IFunctionRepository>();
@@ -224,7 +225,6 @@ namespace App.Repositories.UnitOffWorks
         {
             get
             {
-
                 if (_langRepository == null)
                 {
                     _langRepository = _serviceProvider.GetService<ILangRepository>();
@@ -237,7 +237,6 @@ namespace App.Repositories.UnitOffWorks
         {
             get
             {
-
                 if (_permissionRepository == null)
                 {
                     _permissionRepository = _serviceProvider.GetService<IPermissionRepository>();
@@ -250,7 +249,6 @@ namespace App.Repositories.UnitOffWorks
         {
             get
             {
-
                 if (_productDetailRepository == null)
                 {
                     _productDetailRepository = _serviceProvider.GetService<IProductDetailRepository>();
@@ -263,7 +261,6 @@ namespace App.Repositories.UnitOffWorks
         {
             get
             {
-
                 if (_productRepository == null)
                 {
                     _productRepository = _serviceProvider.GetService<IProductRepository>();
@@ -276,7 +273,6 @@ namespace App.Repositories.UnitOffWorks
         {
             get
             {
-
                 if (_userRepository == null)
                 {
                     _userRepository = _serviceProvider.GetService<IUserRepository>();
@@ -289,7 +285,6 @@ namespace App.Repositories.UnitOffWorks
         {
             get
             {
-
                 if (_userManager == null)
                 {
                     _userManager = _serviceProvider.GetService<UserManager<User>>();

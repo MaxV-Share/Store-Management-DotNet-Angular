@@ -1,6 +1,6 @@
-﻿using MaxV.Base;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using App.Common.Model;
 
 namespace App.Models.Entities
 {

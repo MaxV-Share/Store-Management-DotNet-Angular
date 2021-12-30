@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
+using App.Common.Model;
 
 namespace App.Controllers
 {
@@ -61,14 +62,13 @@ namespace App.Controllers
                 return Ok(result);
             return NotFound();
         }
-        [HttpGet("filter-paging")]
-        public async Task<ActionResult> GetPaging(int pageIndex, int pageSize, string searchText = "")
+        [HttpPost("filter")]
+        public async Task<ActionResult> GetPaging(FilterBodyRequest request)
         {
             try
             {
-                throw new NotImplementedException();
-                //var result = await _commandInFunctionService.GetDetailsPagingAsync(pageIndex, pageSize, searchText);
-                //return Ok(result);
+                var result = await _commandInFunctionService.GetPagingAsync(request);
+                return Ok(result);
             }
             catch (ArgumentOutOfRangeException ex)
             {

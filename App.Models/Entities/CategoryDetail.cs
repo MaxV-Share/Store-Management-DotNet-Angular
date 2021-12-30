@@ -1,4 +1,4 @@
-﻿using MaxV.Base;
+﻿using App.Common.Model;
 
 namespace App.Models.Entities
 {

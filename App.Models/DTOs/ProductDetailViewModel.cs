@@ -1,6 +1,6 @@
-﻿using MaxV.Base.DTOs;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
+using App.Common.Model.DTOs;
 
 namespace App.Models.DTOs
 {

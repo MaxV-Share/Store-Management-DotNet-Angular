@@ -1,6 +1,7 @@
-﻿using MaxV.Base.DTOs;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using App.Models.DTOs.BillDetails;
+using App.Common.Model.DTOs;
 
 namespace App.Models.DTOs.Bills
 {
