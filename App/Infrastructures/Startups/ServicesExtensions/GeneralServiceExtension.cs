@@ -112,7 +112,9 @@ namespace App.Infrastructures.Startups.ServicesExtensions
                 };
             });
             services.AddSwaggerGenNewtonsoftSupport();
-            services.AddControllers().AddNewtonsoftJson().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+            services.AddControllers()
+                .AddNewtonsoftJson()
+                .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "App Api", Version = "v1" });
@@ -142,7 +144,6 @@ namespace App.Infrastructures.Startups.ServicesExtensions
                     }
                 });
                 c.SchemaFilter<EnumSchemaFilter>();
-
             });
         }
         private static bool IsAllowedAll(this string[] values)

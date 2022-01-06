@@ -1,8 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 using App.Common.Model.DTOs;
+using App.Models.DTOs;
 
-namespace App.Models.DTOs
+namespace App.Models.DTOs.ProductDetails
 {
     public class ProductDetailViewModel : BaseViewModel<int>
     {

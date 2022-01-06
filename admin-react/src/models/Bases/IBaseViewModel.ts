@@ -1,4 +1,4 @@
-export interface BaseViewModel<TKey> {
+export interface IBaseViewModel<TKey> {
   id: TKey,
   createAt: Date,
   updateAt: Date,

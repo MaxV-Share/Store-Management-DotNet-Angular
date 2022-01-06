@@ -11,26 +11,25 @@ import './index.css';
 import * as serviceWorker from './serviceWorker';
 import { history } from './utils';
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <ConnectedRouter history={history}>
-        <CssBaseline />
-        <App />
-      </ConnectedRouter>
+  // <React.StrictMode>
+  <Provider store={store}>
+    <ConnectedRouter history={history}>
+      <CssBaseline />
+      <App />
+    </ConnectedRouter>
 
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
-    </Provider>
-  </React.StrictMode>,
+    <ToastContainer
+      position="top-right"
+      autoClose={5000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+    />
+  </Provider>,
   document.getElementById('root')
 );
 

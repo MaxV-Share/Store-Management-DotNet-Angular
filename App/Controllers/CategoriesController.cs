@@ -11,6 +11,8 @@ using System;
 using System.Threading.Tasks;
 using App.Models.DTOs.Categories;
 using App.Common.Model;
+using App.Models.DTOs.CategoryDetails;
+using App.Common.Model.DTOs;
 
 namespace App.Controllers
 {
@@ -26,6 +28,9 @@ namespace App.Controllers
             return base.Post(request);
         }
         [HttpPost("filter")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IBasePaging<CategoryDetailViewModel>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public override async Task<ActionResult> GetPaging(FilterBodyRequest request)
         {
             try

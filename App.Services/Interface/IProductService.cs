@@ -17,7 +17,6 @@ namespace App.Services.Interface
     {
         Task<int> UpdateAsync(int id, ProductViewModel request);
         Task<IBasePaging<ProductDetailViewModel>> GetPagingAsync(FilterBodyRequest request);
-        Task<IEnumerable<ProductDetailViewModel>> GetAllDTOAsync(string langId, string searchText);
         Task ImportProducts(IFormFile file);
     }
 }

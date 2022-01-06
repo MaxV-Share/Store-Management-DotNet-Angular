@@ -1,4 +1,8 @@
-﻿using App.Models.DTOs;
+﻿using App.Common.Extensions;
+using App.Common.Model;
+using App.Common.Model.DTOs;
+using App.EFCore;
+using App.Models.DTOs;
 using App.Models.DTOs.CreateRequests;
 using App.Models.DTOs.UpdateRquests;
 using App.Models.Entities;
@@ -21,28 +25,39 @@ namespace App.Services
         }
         public override async Task<IEnumerable<FunctionViewModel>> GetAllDTOAsync()
         {
-            var entities = await _unitOffWork.FunctionRepository.GetNoTrackingEntities().OrderBy(e => e.ParentId).ThenBy(e => e.SortOrder).ToListAsync();
-            var functions = _mapper.Map<List<FunctionViewModel>>(entities);
+            var query = _unitOffWork.FunctionRepository.GetNoTrackingEntities().OrderBy(e => e.ParentId).ThenBy(e => e.SortOrder);
+            var functions = await _mapper.ProjectTo<FunctionViewModel>(query).ToListAsync();
             return functions;
         }
         public async Task<IEnumerable<FunctionViewModel>> GetTreeAsync()
         {
-            var entities = await _unitOffWork.FunctionRepository.GetNoTrackingEntities().Include(e => e.Childrens).Where(e => e.ParentId == null).OrderBy(e => e.ParentId).ThenBy(e => e.SortOrder).ToListAsync();
-            var result = _mapper.Map<List<FunctionViewModel>>(entities);
+            var query = _unitOffWork.FunctionRepository.GetNoTrackingEntities().Include(e => e.Childrens).Where(e => e.ParentId == null).OrderBy(e => e.ParentId).ThenBy(e => e.SortOrder);
+            var result = await _mapper.ProjectTo<FunctionViewModel>(query).ToListAsync();
             return result;
         }
         public async Task<IEnumerable<TreeFunctionViewModel>> GetTreeNodeAsync()
         {
-            var entities = await _unitOffWork.FunctionRepository.GetNoTrackingEntities().OrderBy(e => e.ParentId).ThenBy(e => e.SortOrder).ToListAsync();
-            var functions = _mapper.Map<List<FunctionViewModel>>(entities);
+            var query = _unitOffWork.FunctionRepository.GetNoTrackingEntities().OrderBy(e => e.ParentId).ThenBy(e => e.SortOrder);
+            var functions = await _mapper.ProjectTo<FunctionViewModel>(query).ToListAsync();
             var result = functions.ToNodeChildTree(null);
             return result;
         }
         public async Task<IEnumerable<FunctionViewModel>> GetFunctionsWithoutChildren(string textSearch)
         {
-            var entities = await _unitOffWork.FunctionRepository.GetNoTrackingEntities().Where(e => e.ParentId == null && EF.Functions.Like(e.Name, $"%{textSearch}%")).OrderBy(e => e.SortOrder).ThenBy(e => e.Name).ToListAsync();
-            var result = _mapper.Map<List<FunctionViewModel>>(entities);
+            var query = _unitOffWork.FunctionRepository.GetNoTrackingEntities().Where(e => e.ParentId == null && EF.Functions.Like(e.Name, $"%{textSearch}%")).OrderBy(e => e.SortOrder).ThenBy(e => e.Name);
+            var result = await _mapper.ProjectTo<FunctionViewModel>(query).ToListAsync();
             return result;
+        }
+
+        public async Task<IBasePaging<FunctionViewModel>> GetPagingAsync(IFilterBodyRequest request)
+        {
+            var query = _mapper.ProjectTo<FunctionViewModel>(_unitOffWork.FunctionRepository.GetNoTrackingEntities().OrderBy(e => e.ParentId).ThenBy(e => e.SortOrder));
+
+            if (!request.SearchValue.IsNullOrEmpty())
+            {
+                query = query.Where(e => e.Name.Contains(request.SearchValue));
+            }
+            return await query.ToPagingAsync(request);
         }
     }
 }

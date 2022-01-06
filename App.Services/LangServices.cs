@@ -14,6 +14,9 @@ using App.Common.Extensions;
 using System.Linq;
 using System;
 using App.Common.Model.DTOs;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
+using App.Common.Model;
 
 namespace App.Services
 {
@@ -30,11 +33,18 @@ namespace App.Services
         /// <exception cref="ArgumentNullException"></exception>
         public async Task<IBasePaging<LangViewModel>> GetPagingAsync(LangFilterRequest request)
         {
-            var query = _unitOffWork.LangRepository.GetNoTrackingEntities().ToLangViewModel();
+            var query = _mapper.ProjectTo<LangViewModel>(_unitOffWork.LangRepository.GetNoTrackingEntities());
+
+            if (!request.LangId.IsNullOrEmpty())
+            {
+                query = query.Where(e => e.Id.Contains(request.SearchValue));
+            }
+
             if (!request.SearchValue.IsNullOrEmpty())
             {
                 query = query.Where(e => e.Name.Contains(request.SearchValue));
             }
+
             var result = await query.ToPagingAsync(request);
 
             return result;

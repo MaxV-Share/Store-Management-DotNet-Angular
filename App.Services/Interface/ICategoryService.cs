@@ -14,7 +14,6 @@ namespace App.Services.Interface
 {
     public interface ICategoryService : IBaseService<Category, CategoryCreateRequest, CategoryUpdateRequest, CategoryViewModel, int>
     {
-        Task<IBasePaging<CategoryDetailViewModel>> GetPagingAsync(FilterBodyRequest request);
-        Task<IEnumerable<CategoryDetailViewModel>> GetAllDTOAsync(string langId, string searchText);
+        Task<IBasePaging<CategoryDetailViewModel>> GetPagingAsync(IFilterBodyRequest request);
     }
 }

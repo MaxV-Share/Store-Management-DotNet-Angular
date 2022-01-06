@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using App.Common.Model;
 using App.Common.Model.DTOs;
 
 namespace App.Services.Base

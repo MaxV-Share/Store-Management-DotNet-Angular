@@ -20,6 +20,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using App.Common.Model.DTOs;
 using App.Common.Model;
+using App.Common.Extensions;
 
 namespace App.Services
 {
@@ -81,7 +82,10 @@ namespace App.Services
         public async Task<int> UpdateAsync(int id, ProductViewModel request)
         {
             var dateTimeNow = DateTime.Now;
-            var product = await _unitOffWork.ProductRepository.GetQueryableTable().Include(e => e.ProductDetails).SingleOrDefaultAsync(e => e.Id == id);
+            var product = await _unitOffWork.ProductRepository
+                .GetQueryableTable()
+                .Include(e => e.ProductDetails)
+                .SingleOrDefaultAsync(e => e.Id == id);
             if (product == null)
                 return 0;
             var oldFileName = request.File?.FileName;
@@ -127,56 +131,31 @@ namespace App.Services
 
         public override async Task<ProductViewModel> GetByIdAsync(int id)
         {
-            var product = await _unitOffWork.ProductRepository
+            var result = await _mapper.ProjectTo<ProductViewModel>(_unitOffWork.ProductRepository
                                             .GetNoTrackingEntitiesIdentityResolution()
-                                            .Include(e => e.ProductDetails)
-                                            .ThenInclude(e => e.Lang)
+                                            .Include(e => e.ProductDetails.OrderBy(e => e.Lang.Order))
+                                            .ThenInclude(e => e.Lang))
                                             .SingleOrDefaultAsync(e => e.Id == id);
-            if (product == null)
-                return null;
-            product.ProductDetails = product.ProductDetails.OrderBy(e => e.Lang.Order).ToList();
 
-            var result = _mapper.Map<ProductViewModel>(product);
             return result;
         }
 
         public async Task<IBasePaging<ProductDetailViewModel>> GetPagingAsync(FilterBodyRequest request)
         {
-            var query = _unitOffWork.ProductDetailRepository
-                                        .GetQueryableTable()
-                                        .Include(e => e.Lang)
-                                        .Include(e => e.Product)
-                                        .Where(e => e.LangId == request.LangId && (string.IsNullOrEmpty(request.SearchValue) || e.Name.Contains(request.SearchValue) || e.Product.Code.Contains(request.SearchValue)))
-                                        .Select(e => new ProductDetailViewModel()
-                                        {
-                                            Id = e.Id,
-                                            Name = e.Name,
-                                            LangId = e.LangId,
-                                            Description = e.Description,
-                                            ProductCode = e.Product.Code,
-                                            ProductId = e.ProductId,
-                                            ProductImageUrl = e.Product.ImageUrl,
-                                            ProductPrice = e.Product.Price,
-                                            CreateAt = e.CreateAt,
-                                            CreateBy = e.CreateBy,
-                                            UpdateAt = e.UpdateAt,
-                                            UpdateBy = e.UpdateBy,
-                                        });
-            var result = await query.ToPagingAsync(request);
-            return result;
-        }
-        public async Task<IEnumerable<ProductDetailViewModel>> GetAllDTOAsync(string langId, string searchText)
-        {
-            var res = await _unitOffWork.ProductDetailRepository
-                                        .GetQueryableTable()
-                                        .Include(e => e.Lang)
-                                        .Include(e => e.Product)
-                                        .Where(e =>
-                                            e.Lang.Id.Equals(langId) &&
-                                            (string.IsNullOrEmpty(searchText) || e.Name.Contains(searchText) || e.Product.Code.Contains(searchText)))
-                                        .ToListAsync();
+            var query = _mapper.ProjectTo<ProductDetailViewModel>(_unitOffWork.ProductDetailRepository.GetQueryableTable(e => e.Lang, e => e.Product));
 
-            var result = _mapper.Map<IEnumerable<ProductDetailViewModel>>(res);
+            if (!request.LangId.IsNullOrEmpty())
+            {
+                query = query.Where(e => e.LangId.Contains(request.SearchValue));
+            }
+
+            if (!request.SearchValue.IsNullOrEmpty())
+            {
+                query = query.Where(e => e.Name.Contains(request.SearchValue) || e.ProductCode.Contains(request.SearchValue));
+            }
+
+            var result = await query.ToPagingAsync(request);
+
             return result;
         }
         public async Task ImportProducts(IFormFile file)
@@ -206,13 +185,12 @@ namespace App.Services
                                     Price = double.Parse(reader.GetValue(1).ToString()),
                                     ProductDetails = new List<ProductDetail>()
                                 };
-                                product.ProductDetails.Add(
-                                        new ProductDetail()
-                                        {
-                                            ProductId = product.Id,
-                                            LangId = reader.GetValue(2).ToString(),
-                                            Name = reader.GetValue(3).ToString()
-                                        });
+                                product.ProductDetails.Add(new ProductDetail()
+                                {
+                                    ProductId = product.Id,
+                                    LangId = reader.GetValue(2).ToString(),
+                                    Name = reader.GetValue(3).ToString()
+                                });
                                 // Gọi hàm insert database 
                                 await _unitOffWork.ProductRepository.CreateAsync(product);
                             }

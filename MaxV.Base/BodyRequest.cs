@@ -4,7 +4,10 @@ using System.Text;
 
 namespace App.Common.Model
 {
-    public class BodyRequest
+    public class BodyRequest : IBodyRequest
+    {
+    }
+    public interface IBodyRequest
     {
     }
 }

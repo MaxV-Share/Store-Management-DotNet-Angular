@@ -1,4 +1,5 @@
-﻿using App.Controllers.Base;
+﻿using App.Common.Model;
+using App.Controllers.Base;
 using App.Models.DTOs.CreateRequests;
 using App.Models.DTOs.UpdateRquests;
 using App.Services.Interface;
@@ -74,45 +75,16 @@ namespace App.Controllers
             return NotFound();
         }
         [HttpPost("filter")]
-        public async Task<ActionResult> GetPaging(int pageIndex, int pageSize, string searchText = "")
+        public async Task<ActionResult> GetPaging(IFilterBodyRequest request)
         {
-            try
-            {
-                throw new NotImplementedException();
-                //var result = await _functionService.GetDetailsPagingAsync(pageIndex, pageSize, searchText);
-                //return Ok(result);
-            }
-            catch (ArgumentOutOfRangeException ex)
-            {
-                _logger.LogError(ex.Message);
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.StackTrace);
-                _logger.LogError(ex.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            var result = await _functionService.GetPagingAsync(request);
+            return Ok(result);
         }
         [HttpGet("without-children")]
         public async Task<ActionResult> GetFunctionsWithoutChildren(string textSearch = "")
         {
-            try
-            {
-                var result = await _functionService.GetFunctionsWithoutChildren(textSearch);
-                return Ok(result);
-            }
-            catch (ArgumentOutOfRangeException ex)
-            {
-                _logger.LogError(ex.Message);
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.StackTrace);
-                _logger.LogError(ex.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            var result = await _functionService.GetFunctionsWithoutChildren(textSearch);
+            return Ok(result);
         }
     }
 }
