@@ -55,7 +55,7 @@ namespace App.Services
                         product.ImageUrl = Path.Combine(FOLDER, newFileName); // TODO: tachs ra
                     }
 
-                    await _unitOffWork.ProductRepository.CreateAsync(product); //3
+                    await _unitOffWork.Repository<Product, int>().CreateAsync(product); //3
 
                     var effectedCount = await _unitOffWork.SaveChangesAsync();
                     if (effectedCount == 0)
@@ -82,7 +82,7 @@ namespace App.Services
         public async Task<int> UpdateAsync(int id, ProductViewModel request)
         {
             var dateTimeNow = DateTime.Now;
-            var product = await _unitOffWork.ProductRepository
+            var product = await _unitOffWork.Repository<Product, int>()
                 .GetQueryableTable()
                 .Include(e => e.ProductDetails)
                 .SingleOrDefaultAsync(e => e.Id == id);
@@ -112,7 +112,7 @@ namespace App.Services
                         product.ProductDetails[i].UpdateAt = dateTimeNow;
                     }
 
-                    await _unitOffWork.ProductRepository.UpdateAsync(product);
+                    await _unitOffWork.Repository<Product, int>().UpdateAsync(product);
 
                     result = await _unitOffWork.SaveChangesAsync();
 
@@ -131,7 +131,7 @@ namespace App.Services
 
         public override async Task<ProductViewModel> GetByIdAsync(int id)
         {
-            var result = await _mapper.ProjectTo<ProductViewModel>(_unitOffWork.ProductRepository
+            var result = await _mapper.ProjectTo<ProductViewModel>(_unitOffWork.Repository<Product, int>()
                                             .GetNoTrackingEntitiesIdentityResolution()
                                             .Include(e => e.ProductDetails.OrderBy(e => e.Lang.Order))
                                             .ThenInclude(e => e.Lang))
@@ -142,7 +142,7 @@ namespace App.Services
 
         public async Task<IBasePaging<ProductDetailViewModel>> GetPagingAsync(FilterBodyRequest request)
         {
-            var query = _mapper.ProjectTo<ProductDetailViewModel>(_unitOffWork.ProductDetailRepository.GetQueryableTable(e => e.Lang, e => e.Product));
+            var query = _mapper.ProjectTo<ProductDetailViewModel>(_unitOffWork.Repository<ProductDetail, int>().GetQueryableTable(e => e.Lang, e => e.Product));
 
             if (!request.LangId.IsNullOrEmpty())
             {
@@ -174,7 +174,7 @@ namespace App.Services
                         {
 
                             var productCode = reader.GetValue(0).ToString();
-                            var product = await _unitOffWork.ProductRepository.GetQueryableTable().SingleOrDefaultAsync(e => e.Code == productCode);
+                            var product = await _unitOffWork.Repository<Product, int>().GetQueryableTable().SingleOrDefaultAsync(e => e.Code == productCode);
                             // Trường hợp không tồn tại
                             if (product == null)
                             {
@@ -192,7 +192,7 @@ namespace App.Services
                                     Name = reader.GetValue(3).ToString()
                                 });
                                 // Gọi hàm insert database 
-                                await _unitOffWork.ProductRepository.CreateAsync(product);
+                                await _unitOffWork.Repository<Product, int>().CreateAsync(product);
                             }
                             else
                             {
@@ -201,7 +201,7 @@ namespace App.Services
                                 product.Price = double.Parse(reader.GetValue(1).ToString());
                                 // Lấy danh sách chi tiết Product
                                 // Tìm ngôn ngữ hiện tại của dòng trong excel đã tồn tại trong detail hay chưa
-                                var productDetail = await _unitOffWork.ProductDetailRepository.GetQueryableTable()
+                                var productDetail = await _unitOffWork.Repository<ProductDetail, int>().GetQueryableTable()
                                                                                     .Where(e => e.ProductId == product.Id && e.LangId == reader.GetValue(2).ToString())
                                                                                     .SingleOrDefaultAsync();
 
@@ -214,7 +214,7 @@ namespace App.Services
                                         LangId = reader.GetValue(2).ToString(),
                                         Name = reader.GetValue(3).ToString()
                                     };
-                                    await _unitOffWork.ProductDetailRepository.CreateAsync(productDetail);
+                                    await _unitOffWork.Repository<ProductDetail, int>().CreateAsync(productDetail);
                                 }
                                 else
                                 {
@@ -222,9 +222,9 @@ namespace App.Services
                                     productDetail.ProductId = product.Id;
                                     productDetail.LangId = reader.GetValue(2).ToString();
                                     productDetail.Name = reader.GetValue(3).ToString();
-                                    await _unitOffWork.ProductDetailRepository.UpdateAsync(productDetail);
+                                    await _unitOffWork.Repository<ProductDetail, int>().UpdateAsync(productDetail);
                                 }
-                                await _unitOffWork.ProductRepository.UpdateAsync(product);
+                                await _unitOffWork.Repository<Product, int>().UpdateAsync(product);
                             }
                             await _unitOffWork.SaveChangesAsync();
                         });

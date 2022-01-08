@@ -63,6 +63,7 @@ namespace App.Services.Base
         /// <returns></returns>
         public virtual async Task<IEnumerable<TViewModel>> GetAllDTOAsync()
         {
+            await Task.Delay(3000);
             var query = _unitOffWork.Repository<TEntity, TKey>();
             var result = await _mapper.ProjectTo<TViewModel>(query.GetNoTrackingEntities()).ToListAsync();
             return result;

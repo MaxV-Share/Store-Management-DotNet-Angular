@@ -1,4 +1,8 @@
-﻿using App.Models.DTOs.Bills;
+﻿using App.Common.Extensions;
+using App.Common.Model;
+using App.Common.Model.DTOs;
+using App.EFCore;
+using App.Models.DTOs.Bills;
 using App.Models.DTOs.CreateRequests;
 using App.Models.Entities;
 using App.Models.Entities.Identities;
@@ -35,7 +39,7 @@ namespace App.Services
                 await _unitOffWork.DoWorkWithTransaction(async () =>
                 {
                     var tUserPayment = _userManager.FindByNameAsync(request.UserPaymentUserName);
-                    var customer = await _unitOffWork.CustomerRepository.GetByPhoneNumberAsync(request.CustomerPhoneNumber);
+                    var customer = await _unitOffWork.Repository<Customer, int>().GetQueryableTable().SingleOrDefaultAsync(e => e.PhoneNumber == request.CustomerPhoneNumber);
                     if (customer == null && !string.IsNullOrEmpty(request.CustomerPhoneNumber))
                     {
                         customer = new Customer()
@@ -45,14 +49,14 @@ namespace App.Services
                             Address = request.CustomerAddress,
                             Birthday = request.CustomerBirthday,
                         };
-                        await _unitOffWork.CustomerRepository.CreateAsync(customer);
+                        await _unitOffWork.Repository<Customer, int>().CreateAsync(customer);
                         await _unitOffWork.SaveChangesAsync();
                     }
 
                     var billDetails = new List<BillDetail>();
                     foreach (var detail in request.BillDetails)
                     {
-                        var product = _unitOffWork.ProductRepository.GetByIdAsync(detail.ProductId);
+                        var product = _unitOffWork.Repository<Product, int>().GetByIdAsync(detail.ProductId);
                         billDetails.Add(new BillDetail()
                         {
                             ProductId = detail.ProductId,
@@ -74,7 +78,7 @@ namespace App.Services
                         BillDetails = billDetails
                     };
 
-                    await _unitOffWork.BillRepository.CreateAsync(bill);
+                    await _unitOffWork.Repository<Bill, int>().CreateAsync(bill);
 
                     var effectedCount = await _unitOffWork.SaveChangesAsync();
                     if (effectedCount == 0)
@@ -99,7 +103,7 @@ namespace App.Services
             await _unitOffWork.DoWorkWithTransaction(async () =>
             {
                 var tUserPayment = _userManager.FindByNameAsync(request.UserPaymentUserName);
-                var customer = await _unitOffWork.CustomerRepository.GetByPhoneNumberAsync(request.CustomerPhoneNumber);
+                var customer = await _unitOffWork.Repository<Customer, int>().GetQueryableTable().SingleOrDefaultAsync(e => e.PhoneNumber == request.CustomerPhoneNumber);
 
                 if (customer == null && !string.IsNullOrEmpty(request.CustomerPhoneNumber))
                 {
@@ -110,11 +114,11 @@ namespace App.Services
                         Address = request.CustomerAddress,
                         Birthday = request.CustomerBirthday,
                     };
-                    await _unitOffWork.CustomerRepository.CreateAsync(customer);
+                    await _unitOffWork.Repository<Customer, int>().CreateAsync(customer);
                     await _unitOffWork.SaveChangesAsync();
                 }
 
-                var bill = await _unitOffWork.BillRepository.GetQueryableTable()
+                var bill = await _unitOffWork.Repository<Bill, int>().GetQueryableTable()
                                             .Include(e => e.BillDetails)
                                             .SingleOrDefaultAsync(e => e.Id.Equals(id));
 
@@ -132,7 +136,7 @@ namespace App.Services
                 {
                     if (!request.billDetails.Any(e => e.Id == detail.Id))
                     {
-                        tDeleteDetails.Add(_unitOffWork.BillDetailRepository.DeleteSoftAsync(detail.Id));
+                        tDeleteDetails.Add(_unitOffWork.Repository<BillDetail, int>().DeleteSoftAsync(detail.Id));
                     }
                 }
 
@@ -155,7 +159,7 @@ namespace App.Services
                     }
                     else // update BillDetail
                     {
-                        billDetail = await _unitOffWork.BillDetailRepository.GetByIdAsync(e.Id);
+                        billDetail = await _unitOffWork.Repository<BillDetail, int>().GetByIdAsync(e.Id);
                         billDetail.Price = e.Price;
                         billDetail.ProductId = e.ProductId;
                         billDetail.Quantity = e.Quantity;
@@ -168,7 +172,7 @@ namespace App.Services
                 bill.BillDetails = billDetailsNew;
 
                 await Task.WhenAll(tDeleteDetails);
-                await _unitOffWork.BillRepository.UpdateAsync(bill);
+                await _unitOffWork.Repository<Bill, int>().UpdateAsync(bill);
                 result = await _unitOffWork.SaveChangesAsync();
             });
 
@@ -177,7 +181,7 @@ namespace App.Services
 
         public override async Task<BillViewModel> GetByIdAsync(int id)
         {
-            var entity = await _unitOffWork.BillRepository.GetNoTrackingEntities()
+            var entity = await _unitOffWork.Repository<Bill, int>().GetNoTrackingEntities()
                                         .Include(e => e.Customer)
                                         .Include(e => e.UserPayment)
                                         .Include(e => e.BillDetails.OrderBy(e => e.Id))
@@ -188,7 +192,7 @@ namespace App.Services
 
         public override async Task<IEnumerable<BillViewModel>> GetAllDTOAsync()
         {
-            var entities = await _unitOffWork.BillRepository.GetQueryableTable()
+            var entities = await _unitOffWork.Repository<Bill, int>().GetQueryableTable()
                                             .Include(e => e.Customer)
                                             .Include(e => e.UserPayment)
                                             .ToListAsync();
@@ -196,26 +200,16 @@ namespace App.Services
 
             return result;
         }
-        public async Task<BillPaging> GetPagingAsync(int pageIndex, int pageSize, string txtSearch)
+        public async Task<IBasePaging<BillViewModel>> GetPagingAsync(IFilterBodyRequest request)
         {
-            var queryable = _unitOffWork.BillRepository.GetNoTrackingEntities()
+            var queryEntities = _unitOffWork.Repository<Bill, int>().GetNoTrackingEntities()
                                         .Include(e => e.Customer)
                                         .Include(e => e.UserPayment)
                                         .OrderBy(e => e.CreateAt);
 
-            var tEntities = queryable.Skip((pageIndex - 1) * pageSize)
-                                    .Take(pageSize)
-                                    .ToListAsync();
+            var query = _mapper.ProjectTo<BillViewModel>(queryEntities);
 
-            var tCountEntities = queryable.CountAsync();
-
-            var result = new BillPaging
-            {
-                Data = _mapper.Map<List<BillViewModel>>(await tEntities),
-                //TotalRow = await tCountEntities
-            };
-
-            return result;
+            return await query.ToPagingAsync(request);
         }
     }
 }

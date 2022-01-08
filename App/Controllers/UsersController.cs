@@ -1,4 +1,5 @@
-﻿using App.Controllers.Base;
+﻿using App.Common.Model;
+using App.Controllers.Base;
 using App.Services.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,10 +21,10 @@ namespace App.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetUsers()
+        public async Task<IActionResult> GetUsers(IFilterBodyRequest request)
         {
             //Request.Headers
-            var result = await _userService.GetAllAsync("");
+            var result = await _userService.GetAllAsync(request);
             return Ok(result);
         }
     }

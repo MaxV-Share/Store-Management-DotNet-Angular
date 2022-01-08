@@ -1,6 +1,5 @@
 ﻿using App.Models.Entities.Identities;
 using App.Repositories.BaseRepository;
-using App.Repositories.Interface;
 using Dapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
@@ -20,21 +19,8 @@ namespace App.Repositories.UnitOffWorks
         private readonly ApplicationDbContext _dbContext;
         private bool _disposed = false;
         private readonly IServiceProvider _serviceProvider;
+        private Dictionary<Type, object> _repositories;
         private IDbContextTransaction _tx { get; set; }
-        private IBillRepository _billRepository;
-        private IBillDetailRepository _billDetailRepository;
-        private ICategoryDetailRepository _categoryDetailRepository;
-        private ICategoryRepository _categoryRepository;
-        private ICommandInFunctionRepository _commandInFunctionRepository;
-        private ICommandRepository _commandRepository;
-        private ICustomerRepository _customerRepository;
-        private IDiscountRepository _discountRepository;
-        private IFunctionRepository _functionRepository;
-        private ILangRepository _langRepository;
-        private IPermissionRepository _permissionRepository;
-        private IProductDetailRepository _productDetailRepository;
-        private IProductRepository _productRepository;
-        private IUserRepository _userRepository;
         private UserManager<User> _userManager;
 
         public UnitOffWork(ApplicationDbContext context, IServiceProvider serviceProvider)
@@ -96,7 +82,7 @@ namespace App.Repositories.UnitOffWorks
             }
         }
 
-        public async Task<IEnumerable<TResult>> OpenConnection<TResult>(string query)
+        public async Task<IEnumerable<TResult>> QueryAsync<TResult>(string query)
         {
             IEnumerable<TResult> result;
             using (var connection = new SqlConnection(_dbContext.Database.GetDbConnection().ConnectionString))
@@ -110,175 +96,20 @@ namespace App.Repositories.UnitOffWorks
 
         public IBaseRepository<TEntity, TKey> Repository<TEntity, TKey>() where TEntity : BaseEntity<TKey>
         {
-            return _serviceProvider.GetService<IBaseRepository<TEntity, TKey>>();
-        }
 
-        public IBillDetailRepository BillDetailRepository
-        {
-            get
+            if (_repositories == null)
             {
-                if (_billDetailRepository == null)
-                {
-                    _billDetailRepository = _serviceProvider.GetService<IBillDetailRepository>();
-                }
-                return _billDetailRepository;
+                _repositories = new Dictionary<Type, object>();
             }
-        }
 
-        public IBillRepository BillRepository
-        {
-            get
+            var type = typeof(TEntity);
+            if (!_repositories.ContainsKey(type))
             {
-                if (_billRepository == null)
-                {
-                    _billRepository = _serviceProvider.GetService<IBillRepository>();
-                }
-                return _billRepository;
+                _repositories[type] = _serviceProvider.GetService<IBaseRepository<TEntity, TKey>>();
             }
-        }
 
-        public ICategoryDetailRepository CategoryDetailRepository
-        {
-            get
-            {
-                if (_categoryDetailRepository == null)
-                {
-                    _categoryDetailRepository = _serviceProvider.GetService<ICategoryDetailRepository>();
-                }
-                return _categoryDetailRepository;
-            }
-        }
 
-        public ICategoryRepository CategoryRepository
-        {
-            get
-            {
-                if (_categoryRepository == null)
-                {
-                    _categoryRepository = _serviceProvider.GetService<ICategoryRepository>();
-                }
-                return _categoryRepository;
-            }
-        }
-
-        public ICommandInFunctionRepository CommandInFunctionRepository
-        {
-            get
-            {
-                if (_commandInFunctionRepository == null)
-                {
-                    _commandInFunctionRepository = _serviceProvider.GetService<ICommandInFunctionRepository>();
-                }
-                return _commandInFunctionRepository;
-            }
-        }
-
-        public ICommandRepository CommandRepository
-        {
-            get
-            {
-                if (_commandRepository == null)
-                {
-                    _commandRepository = _serviceProvider.GetService<ICommandRepository>();
-                }
-                return _commandRepository;
-            }
-        }
-
-        public ICustomerRepository CustomerRepository
-        {
-            get
-            {
-                if (_customerRepository == null)
-                {
-                    _customerRepository = _serviceProvider.GetService<ICustomerRepository>();
-                }
-                return _customerRepository;
-            }
-        }
-
-        public IDiscountRepository DiscountRepository
-        {
-            get
-            {
-                if (_discountRepository == null)
-                {
-                    _discountRepository = _serviceProvider.GetService<IDiscountRepository>();
-                }
-                return _discountRepository;
-            }
-        }
-
-        public IFunctionRepository FunctionRepository
-        {
-            get
-            {
-                if (_functionRepository == null)
-                {
-                    _functionRepository = _serviceProvider.GetService<IFunctionRepository>();
-                }
-                return _functionRepository;
-            }
-        }
-
-        public ILangRepository LangRepository
-        {
-            get
-            {
-                if (_langRepository == null)
-                {
-                    _langRepository = _serviceProvider.GetService<ILangRepository>();
-                }
-                return _langRepository;
-            }
-        }
-
-        public IPermissionRepository PermissionRepository
-        {
-            get
-            {
-                if (_permissionRepository == null)
-                {
-                    _permissionRepository = _serviceProvider.GetService<IPermissionRepository>();
-                }
-                return _permissionRepository;
-            }
-        }
-
-        public IProductDetailRepository ProductDetailRepository
-        {
-            get
-            {
-                if (_productDetailRepository == null)
-                {
-                    _productDetailRepository = _serviceProvider.GetService<IProductDetailRepository>();
-                }
-                return _productDetailRepository;
-            }
-        }
-
-        public IProductRepository ProductRepository
-        {
-            get
-            {
-                if (_productRepository == null)
-                {
-                    _productRepository = _serviceProvider.GetService<IProductRepository>();
-                }
-                return _productRepository;
-            }
-        }
-
-        public IUserRepository UserRepository
-        {
-            get
-            {
-                if (_userRepository == null)
-                {
-                    _userRepository = _serviceProvider.GetService<IUserRepository>();
-                }
-                return _userRepository;
-            }
+            return (IBaseRepository<TEntity, TKey>)_repositories[type];
         }
 
         public UserManager<User> UserManager

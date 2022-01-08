@@ -1,4 +1,5 @@
-﻿using App.Controllers.Base;
+﻿using App.Common.Model;
+using App.Controllers.Base;
 using App.Models.DTOs.Bills;
 using App.Models.DTOs.CreateRequests;
 using App.Services.Interface;
@@ -85,10 +86,10 @@ namespace App.Controllers
                 return Ok(result);
             return NotFound();
         }
-        [HttpGet("paging")]// bills?paging=true&pageIndex=1&pageSize=5......
-        public async Task<ActionResult> GetAllPaging(string txtSearch, int pageIndex = 0, int pageSize = 100)
+        [HttpPost("paging")]
+        public async Task<ActionResult> GetAllPaging(IFilterBodyRequest request)
         {
-            var result = await _billService.GetPagingAsync(pageIndex, pageSize, txtSearch);
+            var result = await _billService.GetPagingAsync(request);
 
             if (result != null)
                 return Ok(result);

@@ -57,7 +57,7 @@ namespace App.Services
 
         public async Task<IBasePaging<CategoryDetailViewModel>> GetPagingAsync(IFilterBodyRequest request)
         {
-            var query = _mapper.ProjectTo<CategoryDetailViewModel>(_unitOffWork.CategoryDetailRepository.GetNoTrackingEntities(e => e.Category));
+            var query = _mapper.ProjectTo<CategoryDetailViewModel>(_unitOffWork.Repository<CategoryDetail, int>().GetNoTrackingEntities(e => e.Category));
 
             if (!request.LangId.IsNullOrEmpty())
             {

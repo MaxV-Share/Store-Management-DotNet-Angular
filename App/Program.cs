@@ -14,13 +14,14 @@ namespace App
 {
     public class Program
     {
-        public static async Task Main(string[] args)
-        {
-            var configuration = new ConfigurationBuilder()
+        public static IConfiguration Configuration { get; } = new ConfigurationBuilder()
+                                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                                 .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json")
                                 .Build();
+        public static async Task Main(string[] args)
+        {
             Log.Logger = new LoggerConfiguration()
-                    .ReadFrom.Configuration(configuration)
+                    .ReadFrom.Configuration(Configuration)
                     .CreateLogger();
 
             var host = CreateHostBuilder(args).Build();
