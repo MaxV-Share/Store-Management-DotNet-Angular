@@ -1,6 +1,8 @@
+using App.Infrastructures.Middlewares;
 using App.Infrastructures.Startups.ServicesExtensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -27,6 +29,7 @@ namespace App
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+
             app.UseHttpsRedirection();
 
             if (env.IsDevelopment())
@@ -42,6 +45,7 @@ namespace App
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
                 });
             }
+
             app.UseStaticFiles();
 
             app.UseAuthentication();
@@ -49,6 +53,8 @@ namespace App
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseMiddleware<PerformanceLoggingMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

@@ -16,6 +16,7 @@ using App.Models.DTOs.CategoryDetails;
 using App.EFCore;
 using App.Common.Model.DTOs;
 using App.Common.Model;
+using App.Common.Extensions;
 
 namespace App.Services
 {
@@ -54,35 +55,21 @@ namespace App.Services
             return result;
         }
 
-        public async Task<IBasePaging<CategoryDetailViewModel>> GetPagingAsync(FilterBodyRequest request)
+        public async Task<IBasePaging<CategoryDetailViewModel>> GetPagingAsync(IFilterBodyRequest request)
         {
-            var query = _unitOffWork.CategoryDetailRepository.GetNoTrackingEntities()
-                                                    .Include(e => e.Category)
-                                                    .Where(e => e.LangId == request.LangId && (string.IsNullOrEmpty(request.SearchValue) || e.Name.Contains(request.SearchValue + "")))
-                                                    .ToCategoryDetailViewModel();
+            var query = _mapper.ProjectTo<CategoryDetailViewModel>(_unitOffWork.Repository<CategoryDetail, int>().GetNoTrackingEntities(e => e.Category));
+
+            if (!request.LangId.IsNullOrEmpty())
+            {
+                query = query.Where(e => e.LangId.Contains(request.SearchValue));
+            }
+
+            if (!request.SearchValue.IsNullOrEmpty())
+            {
+                query = query.Where(e => e.Name.Contains(request.SearchValue));
+            }
+
             return await query.ToPagingAsync(request);
-        }
-
-        //public async Task<CategoryPaging> GetPagingWithMultilangAsync(int pageIndex, int pageSize, string searchText)
-        //{
-        //    var query = _categoryRepository.GetNoTrackingEntities()
-        //                                            .Include(e => e.CategoryDetails)
-        //                                            .Where(e => string.IsNullOrEmpty(searchText) || !e.CategoryDetails.Where(ee => ee.Name.Contains(searchText)).Any());
-
-        //    var result = new CategoryPaging();
-        //    await result.ToPagingAsync(_mapper, query, e => e.Id, pageIndex, pageSize);
-
-        //    return result;
-        //}
-
-        public async Task<IEnumerable<CategoryDetailViewModel>> GetAllDTOAsync(string langId, string searchText)
-        {
-            var res = await _unitOffWork.CategoryDetailRepository.GetNoTrackingEntities()
-                                                    .Include(e => e.Category)
-                                                    .Where(e => e.LangId.Equals(langId) && (string.IsNullOrEmpty(searchText) || e.Name.Contains(searchText + "")))
-                                                    .ToListAsync();
-            var result = _mapper.Map<List<CategoryDetailViewModel>>(res);
-            return result;
         }
     }
 }

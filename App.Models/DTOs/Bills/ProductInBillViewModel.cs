@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
+using App.Models.DTOs.ProductDetails;
 
 namespace App.Models.DTOs.Bills
 {

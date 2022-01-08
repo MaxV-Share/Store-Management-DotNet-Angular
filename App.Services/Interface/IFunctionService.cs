@@ -1,4 +1,6 @@
-﻿using App.Models.DTOs;
+﻿using App.Common.Model;
+using App.Common.Model.DTOs;
+using App.Models.DTOs;
 using App.Models.DTOs.CreateRequests;
 using App.Models.DTOs.UpdateRquests;
 using App.Models.Entities;
@@ -13,5 +15,6 @@ namespace App.Services.Interface
         Task<IEnumerable<TreeFunctionViewModel>> GetTreeNodeAsync();
         Task<IEnumerable<FunctionViewModel>> GetTreeAsync();
         Task<IEnumerable<FunctionViewModel>> GetFunctionsWithoutChildren(string textSearch);
+        Task<IBasePaging<FunctionViewModel>> GetPagingAsync(IFilterBodyRequest request);
     }
 }

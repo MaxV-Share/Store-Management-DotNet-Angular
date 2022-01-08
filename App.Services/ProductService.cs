@@ -20,6 +20,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using App.Common.Model.DTOs;
 using App.Common.Model;
+using App.Common.Extensions;
 
 namespace App.Services
 {
@@ -54,7 +55,7 @@ namespace App.Services
                         product.ImageUrl = Path.Combine(FOLDER, newFileName); // TODO: tachs ra
                     }
 
-                    await _unitOffWork.ProductRepository.CreateAsync(product); //3
+                    await _unitOffWork.Repository<Product, int>().CreateAsync(product); //3
 
                     var effectedCount = await _unitOffWork.SaveChangesAsync();
                     if (effectedCount == 0)
@@ -81,7 +82,10 @@ namespace App.Services
         public async Task<int> UpdateAsync(int id, ProductViewModel request)
         {
             var dateTimeNow = DateTime.Now;
-            var product = await _unitOffWork.ProductRepository.GetQueryableTable().Include(e => e.ProductDetails).SingleOrDefaultAsync(e => e.Id == id);
+            var product = await _unitOffWork.Repository<Product, int>()
+                .GetQueryableTable()
+                .Include(e => e.ProductDetails)
+                .SingleOrDefaultAsync(e => e.Id == id);
             if (product == null)
                 return 0;
             var oldFileName = request.File?.FileName;
@@ -108,7 +112,7 @@ namespace App.Services
                         product.ProductDetails[i].UpdateAt = dateTimeNow;
                     }
 
-                    await _unitOffWork.ProductRepository.UpdateAsync(product);
+                    await _unitOffWork.Repository<Product, int>().UpdateAsync(product);
 
                     result = await _unitOffWork.SaveChangesAsync();
 
@@ -127,56 +131,31 @@ namespace App.Services
 
         public override async Task<ProductViewModel> GetByIdAsync(int id)
         {
-            var product = await _unitOffWork.ProductRepository
+            var result = await _mapper.ProjectTo<ProductViewModel>(_unitOffWork.Repository<Product, int>()
                                             .GetNoTrackingEntitiesIdentityResolution()
-                                            .Include(e => e.ProductDetails)
-                                            .ThenInclude(e => e.Lang)
+                                            .Include(e => e.ProductDetails.OrderBy(e => e.Lang.Order))
+                                            .ThenInclude(e => e.Lang))
                                             .SingleOrDefaultAsync(e => e.Id == id);
-            if (product == null)
-                return null;
-            product.ProductDetails = product.ProductDetails.OrderBy(e => e.Lang.Order).ToList();
 
-            var result = _mapper.Map<ProductViewModel>(product);
             return result;
         }
 
         public async Task<IBasePaging<ProductDetailViewModel>> GetPagingAsync(FilterBodyRequest request)
         {
-            var query = _unitOffWork.ProductDetailRepository
-                                        .GetQueryableTable()
-                                        .Include(e => e.Lang)
-                                        .Include(e => e.Product)
-                                        .Where(e => e.LangId == request.LangId && (string.IsNullOrEmpty(request.SearchValue) || e.Name.Contains(request.SearchValue) || e.Product.Code.Contains(request.SearchValue)))
-                                        .Select(e => new ProductDetailViewModel()
-                                        {
-                                            Id = e.Id,
-                                            Name = e.Name,
-                                            LangId = e.LangId,
-                                            Description = e.Description,
-                                            ProductCode = e.Product.Code,
-                                            ProductId = e.ProductId,
-                                            ProductImageUrl = e.Product.ImageUrl,
-                                            ProductPrice = e.Product.Price,
-                                            CreateAt = e.CreateAt,
-                                            CreateBy = e.CreateBy,
-                                            UpdateAt = e.UpdateAt,
-                                            UpdateBy = e.UpdateBy,
-                                        });
-            var result = await query.ToPagingAsync(request);
-            return result;
-        }
-        public async Task<IEnumerable<ProductDetailViewModel>> GetAllDTOAsync(string langId, string searchText)
-        {
-            var res = await _unitOffWork.ProductDetailRepository
-                                        .GetQueryableTable()
-                                        .Include(e => e.Lang)
-                                        .Include(e => e.Product)
-                                        .Where(e =>
-                                            e.Lang.Id.Equals(langId) &&
-                                            (string.IsNullOrEmpty(searchText) || e.Name.Contains(searchText) || e.Product.Code.Contains(searchText)))
-                                        .ToListAsync();
+            var query = _mapper.ProjectTo<ProductDetailViewModel>(_unitOffWork.Repository<ProductDetail, int>().GetQueryableTable(e => e.Lang, e => e.Product));
 
-            var result = _mapper.Map<IEnumerable<ProductDetailViewModel>>(res);
+            if (!request.LangId.IsNullOrEmpty())
+            {
+                query = query.Where(e => e.LangId.Contains(request.SearchValue));
+            }
+
+            if (!request.SearchValue.IsNullOrEmpty())
+            {
+                query = query.Where(e => e.Name.Contains(request.SearchValue) || e.ProductCode.Contains(request.SearchValue));
+            }
+
+            var result = await query.ToPagingAsync(request);
+
             return result;
         }
         public async Task ImportProducts(IFormFile file)
@@ -195,7 +174,7 @@ namespace App.Services
                         {
 
                             var productCode = reader.GetValue(0).ToString();
-                            var product = await _unitOffWork.ProductRepository.GetQueryableTable().SingleOrDefaultAsync(e => e.Code == productCode);
+                            var product = await _unitOffWork.Repository<Product, int>().GetQueryableTable().SingleOrDefaultAsync(e => e.Code == productCode);
                             // Trường hợp không tồn tại
                             if (product == null)
                             {
@@ -206,15 +185,14 @@ namespace App.Services
                                     Price = double.Parse(reader.GetValue(1).ToString()),
                                     ProductDetails = new List<ProductDetail>()
                                 };
-                                product.ProductDetails.Add(
-                                        new ProductDetail()
-                                        {
-                                            ProductId = product.Id,
-                                            LangId = reader.GetValue(2).ToString(),
-                                            Name = reader.GetValue(3).ToString()
-                                        });
+                                product.ProductDetails.Add(new ProductDetail()
+                                {
+                                    ProductId = product.Id,
+                                    LangId = reader.GetValue(2).ToString(),
+                                    Name = reader.GetValue(3).ToString()
+                                });
                                 // Gọi hàm insert database 
-                                await _unitOffWork.ProductRepository.CreateAsync(product);
+                                await _unitOffWork.Repository<Product, int>().CreateAsync(product);
                             }
                             else
                             {
@@ -223,7 +201,7 @@ namespace App.Services
                                 product.Price = double.Parse(reader.GetValue(1).ToString());
                                 // Lấy danh sách chi tiết Product
                                 // Tìm ngôn ngữ hiện tại của dòng trong excel đã tồn tại trong detail hay chưa
-                                var productDetail = await _unitOffWork.ProductDetailRepository.GetQueryableTable()
+                                var productDetail = await _unitOffWork.Repository<ProductDetail, int>().GetQueryableTable()
                                                                                     .Where(e => e.ProductId == product.Id && e.LangId == reader.GetValue(2).ToString())
                                                                                     .SingleOrDefaultAsync();
 
@@ -236,7 +214,7 @@ namespace App.Services
                                         LangId = reader.GetValue(2).ToString(),
                                         Name = reader.GetValue(3).ToString()
                                     };
-                                    await _unitOffWork.ProductDetailRepository.CreateAsync(productDetail);
+                                    await _unitOffWork.Repository<ProductDetail, int>().CreateAsync(productDetail);
                                 }
                                 else
                                 {
@@ -244,9 +222,9 @@ namespace App.Services
                                     productDetail.ProductId = product.Id;
                                     productDetail.LangId = reader.GetValue(2).ToString();
                                     productDetail.Name = reader.GetValue(3).ToString();
-                                    await _unitOffWork.ProductDetailRepository.UpdateAsync(productDetail);
+                                    await _unitOffWork.Repository<ProductDetail, int>().UpdateAsync(productDetail);
                                 }
-                                await _unitOffWork.ProductRepository.UpdateAsync(product);
+                                await _unitOffWork.Repository<Product, int>().UpdateAsync(product);
                             }
                             await _unitOffWork.SaveChangesAsync();
                         });

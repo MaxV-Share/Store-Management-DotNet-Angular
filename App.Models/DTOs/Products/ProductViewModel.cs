@@ -5,8 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using App.Common.Model.DTOs;
+using App.Models.DTOs.ProductDetails;
+using App.Models.DTOs;
 
-namespace App.Models.DTOs
+namespace App.Models.DTOs.Products
 {
     public class ProductViewModel : BaseViewModel<int>
     {

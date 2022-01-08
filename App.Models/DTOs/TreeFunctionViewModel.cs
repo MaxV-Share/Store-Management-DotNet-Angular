@@ -11,6 +11,12 @@ namespace App.Models.DTOs
     }
     public static class TreeNode
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sources"></param>
+        /// <param name="parentId"></param>
+        /// <returns></returns>
         public static List<TreeFunctionViewModel> ToNodeChildTree(this List<FunctionViewModel> sources, string parentId = null)
         {
             var results = new List<TreeFunctionViewModel>();
@@ -27,6 +33,11 @@ namespace App.Models.DTOs
             }
             return results;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="functions"></param>
         private static void GetChild(FunctionViewModel parent, List<FunctionViewModel> functions)
         {
             parent.Childrens = functions.Where(e => e.ParentId == parent.Id).ToList();

@@ -15,10 +15,10 @@ namespace App.Infrastructures.Startups.ServicesExtensions
         public static void AddInjectedServices(this IServiceCollection services)
         {
             services.AddAutoMapper(typeof(AutoMapperProfile));
-            services.AddTransient<DBInitializer>();
-            services.AddScoped<IUnitOffWork, UnitOffWork>();
-            services.AddScoped<UserManager<User>>();
             services.AddRepositories();
+            services.AddTransient<DBInitializer>();
+            services.AddScoped<UserManager<User>>();
+            services.AddScoped<IUnitOffWork, UnitOffWork>();
             services.AddServices();
         }
     }

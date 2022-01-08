@@ -63,14 +63,14 @@ namespace App.Services.Base
         /// <returns></returns>
         public virtual async Task<IEnumerable<TViewModel>> GetAllDTOAsync()
         {
-            var repository = _unitOffWork.Repository<TEntity, TKey>();
-            var entities = await repository.GetNoTrackingEntities().ToListAsync();
-            var result = _mapper.Map<IEnumerable<TViewModel>>(entities);
+            await Task.Delay(3000);
+            var query = _unitOffWork.Repository<TEntity, TKey>();
+            var result = await _mapper.ProjectTo<TViewModel>(query.GetNoTrackingEntities()).ToListAsync();
             return result;
         }
         public virtual async Task<TViewModel> GetByIdAsync(TKey id)
         {
-            var entity = await _unitOffWork.Repository<TEntity, TKey>().GetByIdAsync(id);
+            var entity = await _unitOffWork.Repository<TEntity, TKey>().GetByIdNoTrackingAsync(id);
             var result = _mapper.Map<TViewModel>(entity);
             return result;
         }

@@ -22,7 +22,7 @@ namespace App.Services
 
         public async Task<IEnumerable<BillDetailViewModel>> GetByBillIdAsync(int billId, string langId)
         {
-            var entities = await _unitOffWork.BillDetailRepository.GetNoTrackingEntities()
+            var entities = await _unitOffWork.Repository<BillDetail, int>().GetNoTrackingEntities()
                                             .Include(e => e.Product.ProductDetails.Where(e => e.LangId == langId))
                                             .Include(e => e.Product.ProductDetails.Where(e => e.LangId == langId))
                                             .Include(e => e.Product.Category.CategoryDetails.Where(e => e.LangId == langId))

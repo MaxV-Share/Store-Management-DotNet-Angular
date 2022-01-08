@@ -32,15 +32,24 @@ namespace App.Common
         /// <returns></returns>
         public static string Nullify(this string value, string defaultValue = null, bool trim = true)
         {
-            if(value == null)
+            if (value == null)
             {
                 return defaultValue;
             }
-            if(trim)
+            if (trim)
             {
                 value = value.Trim();
             }
             return value.Length == 0 ? defaultValue : value;
+        }
+        /// <summary>
+        /// Trim start, Trim end and Trim middle space
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string FullTrim(this string value)
+        {
+            return Regex.Replace(value, @"\s+", " ");
         }
     }
 }

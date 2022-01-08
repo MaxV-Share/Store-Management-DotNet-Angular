@@ -1,9 +1,9 @@
-import categoryApi from 'api/categoryApi';
-import { useAppDispatch } from 'app/hooks';
-import { IFilterBodyRequest } from 'models/Bases/IFilterBodyRequest';
+import { Box } from '@material-ui/core';
+import { Pagination } from '@material-ui/lab';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
 import * as React from 'react';
 import { useEffect } from 'react';
-import { categoryActions } from './categorySlice';
+import { categoryActions, selectCategories, selectCategoryFilter, selectCategoryPagination } from './categorySlice';
 import { CategoryTable } from './components/CategoryTable';
 
 export interface ICategoryProps {
@@ -12,26 +12,32 @@ export interface ICategoryProps {
 export function Category(props: ICategoryProps) {
 
 
-  //const filter = useAppSelector(selectCategoryFilter);
-
-  let request: IFilterBodyRequest = {
-    pagination: {
-      pageIndex: 1,
-      pageSize: 10,
-    },
-    langId: "EN",
-    searchValue: "",
-  }
-  categoryApi.getAll(request);
-
+  const filter = useAppSelector(selectCategoryFilter);
+  const pagination = useAppSelector(selectCategoryPagination);
   const dispatch = useAppDispatch();
 
+  const categories = useAppSelector(selectCategories);
   useEffect(() => {
-    dispatch(categoryActions.fetchCategories(request));
+    dispatch(categoryActions.fetchCategories(filter));
   }, [dispatch]);
+
+  const handlePageChange = () => {
+    console.log("ád")
+  }
+
   return (
     <div>
-      <CategoryTable></CategoryTable>
+      <CategoryTable categories={categories}></CategoryTable>
+
+      {/* Pagination */}
+      <Box my={2} display="flex" justifyContent="center">
+        <Pagination
+          color="primary"
+          count={pagination.pageCount}
+          page={pagination.pageIndex}
+          onChange={handlePageChange}
+        />
+      </Box>
     </div>
   );
 }

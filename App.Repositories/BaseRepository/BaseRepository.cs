@@ -7,14 +7,15 @@ using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using App.Common.Model;
+using App.Models.DbContexts;
 
 namespace App.Repositories.BaseRepository
 {
-    public abstract class BaseRepository<TEntity, TKey> : IBaseRepository<TEntity, TKey> where TEntity : BaseEntity<TKey>
+    public class BaseRepository<TEntity, TKey> : IBaseRepository<TEntity, TKey> where TEntity : BaseEntity<TKey>
     {
         #region props
 
-        protected readonly DbContext _context;
+        protected readonly ApplicationDbContext _context;
         private DbSet<TEntity> _entitiesDbSet { get; set; }
         public readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -22,7 +23,7 @@ namespace App.Repositories.BaseRepository
 
         #region ctor
 
-        protected BaseRepository(DbContext context, IHttpContextAccessor httpContextAccessor)
+        public BaseRepository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;

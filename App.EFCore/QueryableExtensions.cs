@@ -303,14 +303,14 @@ namespace App.EFCore
         /// <param name="queryable"></param>
         /// <param name="request"></param>
         /// <returns></returns>
-        public static async Task<IBasePaging<TSource>> ToPagingAsync<TSource>(this IQueryable<TSource> queryable, FilterBodyRequest request)
+        public static async Task<IBasePaging<TSource>> ToPagingAsync<TSource>(this IQueryable<TSource> queryable, IFilterBodyRequest request)
             where TSource : class
         {
 
-            if (request.Filter != null && request.Filter.Details.IsNullOrEmpty())
+            if (request.Filter != null && !request.Filter.Details.IsNullOrEmpty())
                 queryable = queryable.Filter(request.Filter);
 
-            if (request.Orders.IsNullOrEmpty())
+            if (!request.Orders.IsNullOrEmpty())
                 queryable = queryable.OrderBy(request.Orders, true);
 
             if (request.Pagination == null || request.Pagination.PageIndex < 1)
@@ -331,7 +331,7 @@ namespace App.EFCore
         /// <param name="selector"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public static async Task<IBasePaging<TResult>> ToPagingAsync<TResult, TSource>(this IQueryable<TSource> queryable, FilterBodyRequest request, Expression<Func<TSource, TResult>> selector) where TResult : class
+        public static async Task<IBasePaging<TResult>> ToPagingAsync<TResult, TSource>(this IQueryable<TSource> queryable, IFilterBodyRequest request, Expression<Func<TSource, TResult>> selector) where TResult : class
         {
             if (request == null || request.Pagination == null)
                 throw new ArgumentNullException(nameof(request));

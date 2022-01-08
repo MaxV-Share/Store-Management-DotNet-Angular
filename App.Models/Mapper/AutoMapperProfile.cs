@@ -11,6 +11,7 @@ using App.Models.DTOs.CategoryDetails;
 using App.Models.DTOs.BillDetails;
 using App.Models.DTOs.ProductDetails;
 using App.Models.DTOs.Products;
+using App.Models.DTOs.Langs;
 
 namespace App.Models.Mapper
 {
@@ -54,6 +55,11 @@ namespace App.Models.Mapper
             //CreateMap<FunctionViewModel, TreeFunctionViewModel>()
             //    .ForMember(dest => dest.Data, opt => opt.MapFrom(source => source))
             //    .ForMember(dest => dest.Children, opt => opt.MapFrom(source => source));
+
+            CreateMap<Lang, LangCreateRequest>().ReverseMap();
+            CreateMap<Lang, LangUpdateRequest>().ReverseMap();
+            CreateMap<Lang, LangViewModel>().ReverseMap();
+            CreateMap<Lang, Lang>().ReverseMap();
 
             CreateMap<Permission, PermissionCreateRequest>().ReverseMap();
             CreateMap<Permission, PermissionUpdateRequest>().ReverseMap();
