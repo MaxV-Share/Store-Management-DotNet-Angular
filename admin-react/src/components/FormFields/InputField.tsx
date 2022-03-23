@@ -25,7 +25,13 @@ export function InputField({ name, control, label, ...inputProps }: InputFieldPr
   });
 
   return (
-    <FormControl fullWidth variant="outlined" error={invalid} size="small" className={classes.margin}>
+    <FormControl
+      fullWidth
+      variant="outlined"
+      error={invalid}
+      size="small"
+      className={classes.margin}
+    >
       <InputLabel htmlFor="outlined-adornment-amount">{label}</InputLabel>
       <OutlinedInput
         id="outlined-adornment-amount"

@@ -4,7 +4,8 @@ import axiosClient from './axiosClient';
 const langApi = {
   getAll(data: IFilterBodyRequest): Promise<IBasePaging<ILangViewModel>> {
     const url = '/langs/filter';
-    return axiosClient.post(url, data);
+    console.log("url", url);
+    return axiosClient().post(url, data);
   },
 };
 

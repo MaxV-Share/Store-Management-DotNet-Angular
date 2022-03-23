@@ -78,7 +78,6 @@ namespace App.Services
                 );
             return new BaseResponse<string>(StatusCodes.Status200OK, "Success", new JwtSecurityTokenHandler().WriteToken(token));
         }
-
         public async Task LogoutAsync(string request)
         {
             await _cache.SetStringAsync($"tokens:{request}:deactivated",
@@ -88,7 +87,6 @@ namespace App.Services
                });
             await _signInManager.SignOutAsync();
         }
-
         public async Task<BaseResponse<bool>> RegisterAsync(RegisterDTO request)
         {
             var response = new BaseResponse<bool>();

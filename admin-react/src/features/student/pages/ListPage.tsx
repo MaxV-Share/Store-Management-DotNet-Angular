@@ -3,7 +3,8 @@ import { Pagination } from '@material-ui/lab';
 import studentApi from 'api/studentApi';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { selectCityList, selectCityMap } from 'features/city/citySlice';
-import { ListParams, Student } from 'models';
+import { Student } from 'models';
+import { IListParams } from 'models/Common';
 import * as React from 'react';
 import { useEffect } from 'react';
 import { Link, useHistory, useRouteMatch } from 'react-router-dom';
@@ -60,11 +61,11 @@ export default function ListPage() {
     );
   };
 
-  const handleSearchChange = (newFilter: ListParams) => {
+  const handleSearchChange = (newFilter: IListParams) => {
     dispatch(studentActions.setFilterWithDebounce(newFilter));
   };
 
-  const handleFilterChange = (newFilter: ListParams) => {
+  const handleFilterChange = (newFilter: IListParams) => {
     dispatch(studentActions.setFilter(newFilter));
   };
 

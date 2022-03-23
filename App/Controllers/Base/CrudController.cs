@@ -39,7 +39,7 @@ namespace App.Controllers.Base
             var result = await _baseService.UpdateAsync(id, request);
             if (result > 0)
                 return NoContent();
-            return NotFound();
+            return StatusCode(500);
         }
         [HttpDelete("{id}")]
         public virtual async Task<ActionResult> Delete(TKey id)
@@ -47,7 +47,7 @@ namespace App.Controllers.Base
             var result = await _baseService.DeleteSoftAsync(id);
             if (result > 0)
                 return Ok();
-            return NotFound();
+            return StatusCode(500);
         }
         [HttpPost("filter")]
         public abstract Task<ActionResult> GetPaging(FilterBodyRequest request);
@@ -58,7 +58,7 @@ namespace App.Controllers.Base
 
             if (result != null)
                 return Ok(result);
-            return NotFound();
+            return StatusCode(500);
         }
     }
 }

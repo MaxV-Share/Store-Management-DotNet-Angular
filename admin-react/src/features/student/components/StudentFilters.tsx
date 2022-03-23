@@ -3,15 +3,16 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import { Search } from '@material-ui/icons';
-import { City, ListParams } from 'models';
+import { City } from 'models';
+import { IListParams } from 'models/Common';
 import React, { ChangeEvent, useRef } from 'react';
 
 export interface StudentFiltersProps {
-  filter: ListParams;
+  filter: IListParams;
   cityList: City[];
 
-  onChange?: (newFilter: ListParams) => void;
-  onSearchChange?: (newFilter: ListParams) => void;
+  onChange?: (newFilter: IListParams) => void;
+  onSearchChange?: (newFilter: IListParams) => void;
 }
 
 export default function StudentFilters({
@@ -25,7 +26,7 @@ export default function StudentFilters({
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (!onSearchChange) return;
 
-    const newFilter: ListParams = {
+    const newFilter: IListParams = {
       ...filter,
       name_like: e.target.value,
       _page: 1,
@@ -36,7 +37,7 @@ export default function StudentFilters({
   const handleCityChange = (e: ChangeEvent<{ name?: string; value: unknown }>) => {
     if (!onChange) return;
 
-    const newFilter: ListParams = {
+    const newFilter: IListParams = {
       ...filter,
       _page: 1,
       city: e.target.value || undefined,
@@ -49,7 +50,7 @@ export default function StudentFilters({
 
     const value = e.target.value;
     const [_sort, _order] = (value as string).split('.');
-    const newFilter: ListParams = {
+    const newFilter: IListParams = {
       ...filter,
       _sort: _sort || undefined,
       _order: (_order as 'asc' | 'desc') || undefined,
@@ -60,7 +61,7 @@ export default function StudentFilters({
   const handleClearFilter = () => {
     if (!onChange) return;
 
-    const newFilter: ListParams = {
+    const newFilter: IListParams = {
       ...filter,
       _page: 1,
       _sort: undefined,

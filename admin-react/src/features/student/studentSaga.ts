@@ -1,10 +1,11 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import studentApi from 'api/studentApi';
-import { ListParams, ListResponse, Student } from 'models';
+import { Student } from 'models';
+import { IListParams, ListResponse } from 'models/Common';
 import { call, debounce, put, takeLatest } from 'redux-saga/effects';
 import { studentActions } from './studentSlice';
 
-function* fetchStudentList(action: PayloadAction<ListParams>) {
+function* fetchStudentList(action: PayloadAction<IListParams>) {
   try {
     const response: ListResponse<Student> = yield call(studentApi.getAll, action.payload);
     yield put(studentActions.fetchStudentListSuccess(response));
@@ -13,7 +14,7 @@ function* fetchStudentList(action: PayloadAction<ListParams>) {
     yield put(studentActions.fetchStudentListFailed());
   }
 }
-function* handleSearchDebounce(action: PayloadAction<ListParams>) {
+function* handleSearchDebounce(action: PayloadAction<IListParams>) {
   yield put(studentActions.setFilter(action.payload));
 }
 

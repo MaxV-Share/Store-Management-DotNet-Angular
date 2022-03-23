@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'app/store';
-import { ListParams, ListResponse, PaginationParams, Student } from 'models';
+import { Student } from 'models';
+import { IListParams, ListResponse, PaginationParams } from 'models/Common';
 
 export interface StudentState {
   loading: boolean;
   list: Student[];
-  filter: ListParams;
+  filter: IListParams;
   pagination: PaginationParams;
 }
 
@@ -27,7 +28,7 @@ const studentSlice = createSlice({
   name: 'student',
   initialState,
   reducers: {
-    fetchStudentList(state, action: PayloadAction<ListParams>) {
+    fetchStudentList(state, action: PayloadAction<IListParams>) {
       state.loading = true;
     },
     fetchStudentListSuccess(state, action: PayloadAction<ListResponse<Student>>) {
@@ -39,10 +40,10 @@ const studentSlice = createSlice({
       state.loading = false;
     },
 
-    setFilter(state, action: PayloadAction<ListParams>) {
+    setFilter(state, action: PayloadAction<IListParams>) {
       state.filter = action.payload;
     },
-    setFilterWithDebounce(state, action: PayloadAction<ListParams>) { },
+    setFilterWithDebounce(state, action: PayloadAction<IListParams>) { },
   },
 });
 

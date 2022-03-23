@@ -29,7 +29,6 @@ namespace App.Services
         {
             _userManager = userManager;
         }
-
         public override async Task<BillViewModel> CreateAsync(BillCreateRequest request)
         {
             var dateTimeNow = DateTime.Now;
@@ -178,7 +177,6 @@ namespace App.Services
 
             return result;
         }
-
         public override async Task<BillViewModel> GetByIdAsync(int id)
         {
             var entity = await _unitOffWork.Repository<Bill, int>().GetNoTrackingEntities()
@@ -189,7 +187,6 @@ namespace App.Services
             var result = _mapper.Map<BillViewModel>(entity);
             return result;
         }
-
         public override async Task<IEnumerable<BillViewModel>> GetAllDTOAsync()
         {
             var entities = await _unitOffWork.Repository<Bill, int>().GetQueryableTable()
