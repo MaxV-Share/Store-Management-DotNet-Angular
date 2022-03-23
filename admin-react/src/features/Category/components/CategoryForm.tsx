@@ -1,17 +1,16 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AppBar, Box, Button, Container, Dialog, IconButton, makeStyles, Tab, Tabs, Toolbar, Typography, useTheme } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
-import { useAppSelector } from 'app/hooks';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { Transition } from 'components/Common';
 import TabPanel from 'components/Common/TabPanel';
 import { InputField } from 'components/FormFields';
-import { selectCityOptions } from 'features/city/citySlice';
-import { IBaseAddOrUpdateBodyRequest, ICategoryViewModel } from 'models';
+import { IBaseAddOrUpdateBodyRequest, ICategoryAddOrUpdateRequest } from 'models';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import SwipeableViews from 'react-swipeable-views';
 import * as yup from 'yup';
-import { selectLangs } from '../categorySlice';
+import { categoryActions, selectCategoryAddOrUpdate, selectLangs } from '../categorySlice';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -30,73 +29,62 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export interface CategoryFormProps {
-  // initialValues?: ICategoryViewModel;
+  //initialValues: ICategoryAddOrUpdateRequest | undefined;
+  openModal: boolean;
+  onClose: () => void;
+  // categoryId?: number | null;
   // control: Control<ICategoryViewModel, object>;
   // onSubmit?: (formValues: ICategoryViewModel) => void;
 }
 
 const schema = yup.object().shape({
-  data: yup.array().of(yup.object().shape({
-    name: yup
-      .string()
-      .required('Please enter name.')
-  }))
+  data: yup.object().shape({
+    details: yup.array().of(yup.object().shape({
+      name: yup
+        .string()
+        .required('Please enter name.')
+    }))
+  })
 });
 
-export default function CategoryForm({ }: CategoryFormProps) {
-  const cityOptions = useAppSelector(selectCityOptions);
+export default function CategoryForm({ openModal, onClose: handleCloseForm }: CategoryFormProps) {
   const [error, setError] = useState<string>('');
   const classes = useStyles();
   const theme = useTheme();
-  const [open, setOpen] = useState(false);
   const [value, setValue] = React.useState(0);
   const langs = useAppSelector(selectLangs);
+  const dispatch = useAppDispatch();
 
   const handleClose = () => {
-    setOpen(false);
+    handleCloseForm();
   };
+
+  const categoryAddOrUpdate = useAppSelector(selectCategoryAddOrUpdate);
+  useEffect(() => {
+    reset({ data: categoryAddOrUpdate });
+  }, [categoryAddOrUpdate, openModal])
 
   const { control,
     handleSubmit,
-    formState: { isSubmitting, errors }, } = useForm<IBaseAddOrUpdateBodyRequest<ICategoryViewModel[]>, object>({
+    reset,
+    formState: { isSubmitting, errors }, } = useForm<IBaseAddOrUpdateBodyRequest<ICategoryAddOrUpdateRequest>, object>({
       defaultValues: {
-        data: [{
-          name: '',
-        }, {
-          name: '',
+        data: {
+          details: [{
+            name: '123',
+          }, {
+            name: '',
+          }
+          ]
         }
-        ]
       },
       resolver: yupResolver(schema),
     });
 
-  useEffect(() => {
-    console.log(errors);
-  }, [errors])
-  const handleRemoveConfirm = (category: ICategoryViewModel) => {
-    // onRemove?.(student);
-    setOpen(false);
-  };
-  const onClose = () => {
-    setOpen(false);
-  }
-
-  const handleSubmitDialog = () => {
-
-  }
-  const addCategory = () => {
-    setOpen(true);
-  };
-
-  const handleSaveCategory = (category: ICategoryViewModel) => {
-    setOpen(false);
-  };
-
-  const handleFormSubmit = async (formValues: IBaseAddOrUpdateBodyRequest<ICategoryViewModel[]>) => {
+  const handleFormSubmit = (formValues: IBaseAddOrUpdateBodyRequest<ICategoryAddOrUpdateRequest>) => {
     try {
-      // Clear previous submission error
-      setError('');
-      console.log(formValues);
+      dispatch(categoryActions.addOrUpdate(formValues.data));
+      handleClose();
       // await onSubmit?.(formValues);
     } catch (error: any) {
       setError(error.message);
@@ -110,23 +98,18 @@ export default function CategoryForm({ }: CategoryFormProps) {
   const handleChangeIndex = (index: number) => {
     setValue(index);
   };
+
   return (
     <>
-      <Button variant="outlined" color="primary" onClick={addCategory}>
-        Add Category
-      </Button>
-      <Dialog fullScreen open={open} onClose={onClose} TransitionComponent={Transition}>
-        <Button autoFocus color="inherit" type="submit" onClick={handleSubmit(handleFormSubmit)}>
-          Test
-        </Button>
+      <Dialog fullScreen open={openModal} onClose={handleClose} TransitionComponent={Transition}>
         <form onSubmit={handleSubmit(handleFormSubmit)}>
           <AppBar className={classes.appBar}>
             <Toolbar>
-              <IconButton edge="start" color="inherit" onClick={onClose} aria-label="close">
+              <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
                 <CloseIcon />
               </IconButton>
               <Typography variant="h6" className={classes.title}>
-                Category Detail
+                Category Detail {categoryAddOrUpdate.id == null ? 'Add' : 'Edit'}
               </Typography>
               <Button autoFocus color="inherit" type="submit" >
                 save
@@ -162,8 +145,8 @@ export default function CategoryForm({ }: CategoryFormProps) {
                   {langs.map((e, i) => {
                     return (
                       <TabPanel value={value} index={i} dir={theme.direction} key={e.id}>
-                        <InputField name={`data.${i}.name`} control={control} label={`Category name`} />
-                        <InputField name={`data.${i}.description`} control={control} label={`Category description`} />
+                        <InputField name={`data.details.${i}.name`} control={control} label={`Category name`} />
+                        <InputField name={`data.details.${i}.description`} control={control} label={`Category description`} />
                       </TabPanel>
                     );
                   })}

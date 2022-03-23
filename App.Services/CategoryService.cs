@@ -17,6 +17,7 @@ using App.EFCore;
 using App.Common.Model.DTOs;
 using App.Common.Model;
 using App.Common.Extensions;
+using System.Net.Http;
 
 namespace App.Services
 {
@@ -54,14 +55,13 @@ namespace App.Services
             var result = _mapper.Map<CategoryViewModel>(category);
             return result;
         }
-
         public async Task<IBasePaging<CategoryDetailViewModel>> GetPagingAsync(IFilterBodyRequest request)
         {
             var query = _mapper.ProjectTo<CategoryDetailViewModel>(_unitOffWork.Repository<CategoryDetail, int>().GetNoTrackingEntities(e => e.Category));
 
             if (!request.LangId.IsNullOrEmpty())
             {
-                query = query.Where(e => e.LangId.Contains(request.SearchValue));
+                query = query.Where(e => e.LangId.ToLower().Equals(request.LangId.ToLower()));
             }
 
             if (!request.SearchValue.IsNullOrEmpty())

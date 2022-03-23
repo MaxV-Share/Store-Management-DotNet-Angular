@@ -10,7 +10,7 @@ namespace App.EFCore
 {
     internal class Criteria
     {
-        public string Field { get; set; }
+        public string? Field { get; set; }
         public object Value { get; set; }
         public FilterType Operator { get; set; }
         public FilterLogicalOperator LogicalOperator { get; set; }
@@ -31,7 +31,7 @@ namespace App.EFCore
             var criteria = GetCriteria(filterDescriptor);
 
             var parameter = Expression.Parameter(typeof(TModel), parameterName);
-            Expression expression = null;
+            Expression? expression = null;
 
             if (filterDescriptor != null)
             {
@@ -192,7 +192,8 @@ namespace App.EFCore
                         return ExpressionUtils.IsIn(member, value);
                     }
                     var inElementType = member.Type.GenericTypeArguments[0]; var containsMethod = member.Type.GetRuntimeMethod("Contains", new[] { inElementType });
-                    Expression inExpression = null; foreach (var inValue in inValues)
+                    Expression? inExpression = null;
+                    foreach (var inValue in inValues)
                     {
                         var containValue = ExpressionUtils.CreateConstantExpression(inValue, inElementType); var innerExpression = Expression.Call(member, containsMethod, containValue);
 
@@ -209,7 +210,8 @@ namespace App.EFCore
                     }
                     var notInElementType = member.Type.GenericTypeArguments[0]; var notInContainsMethod = member.Type.GetRuntimeMethod("Contains", new[] { notInElementType });
 
-                    Expression notInExpression = null; foreach (var notInValue in notInValues)
+                    Expression notInExpression = null;
+                    foreach (var notInValue in notInValues)
                     {
                         var notContainValue = ExpressionUtils.CreateConstantExpression(notInValue, notInElementType); var innerExpression = Expression.Call(member, notInContainsMethod, notContainValue);
 

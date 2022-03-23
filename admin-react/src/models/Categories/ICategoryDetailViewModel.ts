@@ -1,6 +1,6 @@
 import { IBaseViewModel } from "models";
 
-export interface ICategoryViewModel extends IBaseViewModel<number> {
+export interface ICategoryDetailViewModel extends IBaseViewModel<number> {
   categoryId: number,
   langId: string,
   name: string,

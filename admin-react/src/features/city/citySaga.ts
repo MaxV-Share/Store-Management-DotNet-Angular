@@ -1,5 +1,6 @@
 import cityApi from 'api/cityApi';
-import { City, ListResponse } from 'models';
+import { City } from 'models';
+import { ListResponse } from 'models/Common';
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { cityActions } from './citySlice';
 

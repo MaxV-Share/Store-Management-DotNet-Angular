@@ -1,6 +1,7 @@
 import cityApi from 'api/cityApi';
 import studentApi from 'api/studentApi';
-import { City, ListResponse, Student } from 'models';
+import { City, Student } from 'models';
+import { ListResponse } from 'models/Common';
 import { all, call, put, takeLatest } from 'redux-saga/effects';
 import { dashboardActions, RankingByCity } from './dashboardSlice';
 

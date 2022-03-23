@@ -85,8 +85,7 @@ namespace App.Services.Base
                 throw new NullReferenceException();
             }
             entity = _mapper.Map(request, entity);
-            await _unitOffWork.Repository<TEntity, TKey>().UpdateAsync(entity);
-            var result = await _unitOffWork.SaveChangesAsync();
+            var result = await _unitOffWork.Repository<TEntity, TKey>().UpdateAsync(entity);
             return result;
         }
         /// <summary>

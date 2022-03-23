@@ -1,6 +1,7 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from 'app/store';
-import { City, ListResponse } from 'models';
+import { City } from 'models';
+import { ListResponse } from 'models/Common';
 
 export interface CityState {
   loading: boolean;

@@ -1,6 +1,6 @@
-import { SortDirection } from "@material-ui/core";
+import { MaxSortDirection } from "models/Common";
 
 export interface ISortDescriptor {
   field: string,
-  direction: SortDirection
+  direction?: MaxSortDirection
 }

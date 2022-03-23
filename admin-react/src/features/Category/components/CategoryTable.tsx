@@ -1,9 +1,14 @@
-import { Button, makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
-import { ICategoryViewModel } from 'models';
+import { IconButton, makeStyles, Table, TableBody, TableCell, TableRow, Tooltip, Zoom } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import { GridFilterModel } from '@mui/x-data-grid';
+import { GridData } from '@mui/x-data-grid-generator';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { MaxTableHeader } from 'components/Common';
+import { ISortDescriptor } from 'models';
 import * as React from 'react';
-import { useState } from 'react';
 import * as yup from 'yup';
-import CategoryForm from './CategoryForm';
+import { categoryActions, ICategoryTable, selectFilterCategoryRequest } from '../categorySlice';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -24,8 +29,27 @@ const useStyles = makeStyles((theme) => ({
       width: '25ch',
     },
   },
+  visuallyHidden: {
+    border: 0,
+    clip: 'rect(0 0 0 0)',
+    height: 1,
+    margin: -1,
+    overflow: 'hidden',
+    padding: 0,
+    position: 'absolute',
+    top: 20,
+    width: 1,
+  },
 }));
 
+
+function loadServerRows(page: number, data: GridData): Promise<any> {
+  return new Promise<any>((resolve) => {
+    setTimeout(() => {
+      resolve(data.rows.slice(page * 5, (page + 1) * 5));
+    }, Math.random() * 500 + 100); // simulate network latency
+  });
+}
 
 const schema = yup.array().of(yup.object().shape({
   name: yup
@@ -59,57 +83,68 @@ const schema = yup.array().of(yup.object().shape({
 }));
 
 export interface ICategoryTableProps {
-  categories: ICategoryViewModel[];
+  tableCategories: ICategoryTable;
+  onEdit: (id?: number) => void;
+  onDelete?: (id?: number) => void;
 }
-export function CategoryTable({ categories }: ICategoryTableProps) {
-
+export function CategoryTable({ tableCategories, onEdit, onDelete }: ICategoryTableProps) {
   const classes = useStyles();
-  const [selectedStudent, setSelectedStudent] = useState<ICategoryViewModel>();
+  const dispatch = useAppDispatch();
+  const filterCategoryRequest = useAppSelector(selectFilterCategoryRequest);
+
+  const handleFilter = (model: GridFilterModel, details?: any) => {
+    console.log("handleFilter", model, details);
+  }
+
+  const handleSortTable = (key: string) => {
+    let sort: ISortDescriptor = {
+      field: key,
+      direction: 'asc'
+    }
+    if (filterCategoryRequest.orders?.length) {
+      sort.direction = filterCategoryRequest.orders?.[0].direction == 'asc' ? 'desc' : 'asc';
+    }
+    if (filterCategoryRequest.orders?.length && filterCategoryRequest.orders?.[0].direction == 'desc') {
+      dispatch(categoryActions.setFilter({ key: `orders`, value: [] }));
+    } else {
+      dispatch(categoryActions.setFilter({ key: `orders.${0}`, value: sort }));
+    }
+  }
 
   const tableBodyCategory = React.useMemo(() => {
-    return (categories.map((c, i) => (
+    return (tableCategories.data.map((c, i) => (
       <TableRow key={i}>
         <TableCell>{i + 1}</TableCell>
-        <TableCell>{c.name}</TableCell>
+        <TableCell>{c['name']}</TableCell>
         <TableCell>{c.description}</TableCell><TableCell align="right">
-          <Button
-            className={classes.edit}
-            size="small"
-            color="primary"
-          // onClick={() => handleSaveCategory?.(c)}
-          >
-            Edit
-          </Button>
+          <Tooltip title="Edit" TransitionComponent={Zoom} onClick={() => onEdit?.(c.id)}>
+            <IconButton color='primary' aria-label="edit" size='small'>
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
 
-          {/* <Button size="small" color="secondary" onClick={() => handleRemoveClick(c)}>
-            Remove
-          </Button> */}
+          <Tooltip title="Delete" TransitionComponent={Zoom} onClick={() => onDelete?.(c.id)}>
+            <IconButton color='secondary' aria-label="delete" size='small'>
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
         </TableCell>
       </TableRow>
     )))
-  }, [categories]);
+  }, [tableCategories]);
 
   return (
     <>
-      <TableContainer component={Paper}>
-        <Table className={classes.table} size="small" aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>No</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>description</TableCell>
-              <TableCell align="right">Actions</TableCell>
-            </TableRow>
-          </TableHead>
-
-          <TableBody>
-            {tableBodyCategory}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-      {/* edit/add */}
-      <CategoryForm></CategoryForm>
+      <Table className={classes.table} size="small" aria-label="simple table">
+        <MaxTableHeader
+          columns={[{ key: "no", label: "No", disableSort: true }, { key: "name", label: "Name" }, { key: "description", label: "Description" }, { key: "actions", label: "Actions", disableSort: true, headerClassName: 'MuiTableCell-alignRight' },]}
+          orders={filterCategoryRequest.orders}
+          onSort={handleSortTable}
+        />
+        <TableBody>
+          {tableBodyCategory}
+        </TableBody>
+      </Table>
     </>
   );
 }

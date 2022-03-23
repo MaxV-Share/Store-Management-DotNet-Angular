@@ -2,7 +2,7 @@
 
 namespace App.Common.Model.DTOs
 {
-    public abstract class BaseViewModel<TKey>
+    public abstract class BaseViewModel<TKey> : BaseDTO
     {
         public virtual TKey Id { get; set; }
         public DateTime? CreateAt { get; set; }
