@@ -25,7 +25,9 @@ namespace App.Models.DbContexts
         public virtual DbSet<Lang> Langs { set; get; }
         public virtual DbSet<Permission> Permissions { set; get; }
         public virtual DbSet<Command> Commands { set; get; }
+        public virtual DbSet<CommandDetail> CommandDetails { set; get; }
         public virtual DbSet<Function> Functions { set; get; }
+        public virtual DbSet<FunctionDetail> FunctionDetails { set; get; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

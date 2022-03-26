@@ -12,9 +12,7 @@ namespace App.Models.Entities
         [MaxLength(50)]
         [Column(TypeName = "varchar(50)")]
         public override string Id { get; set; }
-        [MaxLength(200)]
-        [Required]
-        public string Name { get; set; }
+        public virtual ICollection<FunctionDetail> FunctionDetail { get; set; }
         [MaxLength(200)]
         [Required]
         public string Url { get; set; }

@@ -19,10 +19,7 @@ namespace App.Models.Entities
         [Column(TypeName = "varchar(50)")]
         [Key]
         public override string Id { get; set; }
-
-        [MaxLength(50)]
-        [Required]
-        public string Name { get; set; }
+        public virtual ICollection<CommandDetail> CommandDetail { get; set; }
         public virtual ICollection<CommandInFunction> CommandInFunctions { get; set; }
     }
 }

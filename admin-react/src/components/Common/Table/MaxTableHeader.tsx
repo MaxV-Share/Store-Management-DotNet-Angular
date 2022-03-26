@@ -52,19 +52,24 @@ export function MaxTableHeader(props: IMaxTableHeaderProps) {
               padding={'normal'}
               sortDirection={order?.field === column.key ? order?.direction : false}
             >
-              <TableSortLabel
-                active={order?.field === column.key}
-                direction={order?.field === column.key ? order?.direction : undefined}
-                onClick={() => onSort?.(column.key)}
-              >
-                {/* {order?.field === column.key ? (
-                  <span className={classes.visuallyHidden}>
-                    {order?.direction === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                  </span>
-                ) : null} */}
-                {column.label}
+              {
+                column.isSortable ?
+                  (<TableSortLabel
+                    active={order?.field === column.key}
+                    direction={order?.field === column.key ? order?.direction : undefined}
+                    onClick={() => onSort?.(column.key)}
+                  >
+                    {order?.field === column.key ? (
+                      <span className={classes.visuallyHidden}>
+                        {order?.direction === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                      </span>
+                    ) : null}
+                    {column.label}
 
-              </TableSortLabel>
+                  </TableSortLabel>
+                  ) :
+                  (column.label)
+              }
             </TableCell>
           )
         })}

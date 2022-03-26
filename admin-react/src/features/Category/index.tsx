@@ -4,7 +4,7 @@ import { MaxGridFooter } from 'components/Common';
 import { MaxGridHeader } from 'components/Common/MaxGrid/MaxGridHeader';
 import * as React from 'react';
 import { useEffect } from 'react';
-import { categoryActions, selectCategories, selectCategoryTablePagination, selectFilterCategoryRequest } from './categorySlice';
+import { categoryActions, selectCategoryTable, selectCategoryTablePagination, selectFilterCategoryRequest } from './categorySlice';
 import CategoryForm from './components/CategoryForm';
 import { CategoryTable } from './components/CategoryTable';
 
@@ -26,7 +26,7 @@ export function Category(props: ICategoryProps) {
     setOpenModal(true);
   }
 
-  const tableCategories = useAppSelector(selectCategories);
+  const tableCategories = useAppSelector(selectCategoryTable);
   useEffect(() => {
     dispatch(categoryActions.fetchCategories(filter));
   }, [dispatch, filter]);

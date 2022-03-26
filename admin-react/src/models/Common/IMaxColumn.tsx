@@ -1,6 +1,6 @@
 export interface IMaxColumn {
   key: string;
   label?: string;
-  disableSort?: boolean;
+  isSortable?: boolean;
   headerClassName?: string;
 }

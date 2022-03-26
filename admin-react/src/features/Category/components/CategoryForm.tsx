@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { Transition } from 'components/Common';
 import TabPanel from 'components/Common/TabPanel';
 import { InputField } from 'components/FormFields';
-import { IBaseAddOrUpdateBodyRequest, ICategoryAddOrUpdateRequest } from 'models';
+import { IBaseAddOrUpdateBodyRequest, ICategoryAddOrUpdateModel } from 'models';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import SwipeableViews from 'react-swipeable-views';
@@ -51,11 +51,12 @@ export default function CategoryForm({ openModal, onClose: handleCloseForm }: Ca
   const [error, setError] = useState<string>('');
   const classes = useStyles();
   const theme = useTheme();
-  const [value, setValue] = React.useState(0);
+  const [tabId, setTabId] = React.useState(0);
   const langs = useAppSelector(selectLangs);
   const dispatch = useAppDispatch();
 
   const handleClose = () => {
+    reset({})
     handleCloseForm();
   };
 
@@ -67,7 +68,7 @@ export default function CategoryForm({ openModal, onClose: handleCloseForm }: Ca
   const { control,
     handleSubmit,
     reset,
-    formState: { isSubmitting, errors }, } = useForm<IBaseAddOrUpdateBodyRequest<ICategoryAddOrUpdateRequest>, object>({
+    formState: { isSubmitting, errors }, } = useForm<IBaseAddOrUpdateBodyRequest<ICategoryAddOrUpdateModel>, object>({
       defaultValues: {
         data: {
           details: [{
@@ -81,7 +82,7 @@ export default function CategoryForm({ openModal, onClose: handleCloseForm }: Ca
       resolver: yupResolver(schema),
     });
 
-  const handleFormSubmit = (formValues: IBaseAddOrUpdateBodyRequest<ICategoryAddOrUpdateRequest>) => {
+  const handleFormSubmit = (formValues: IBaseAddOrUpdateBodyRequest<ICategoryAddOrUpdateModel>) => {
     try {
       dispatch(categoryActions.addOrUpdate(formValues.data));
       handleClose();
@@ -92,11 +93,11 @@ export default function CategoryForm({ openModal, onClose: handleCloseForm }: Ca
   };
 
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
-    setValue(newValue);
+    setTabId(newValue);
   };
 
   const handleChangeIndex = (index: number) => {
-    setValue(index);
+    setTabId(index);
   };
 
   return (
@@ -121,7 +122,7 @@ export default function CategoryForm({ openModal, onClose: handleCloseForm }: Ca
               <legend>Personalia:</legend>
               <AppBar position="static" color="default">
                 <Tabs
-                  value={value}
+                  value={tabId}
                   onChange={handleChange}
                   indicatorColor="primary"
                   textColor="primary"
@@ -139,12 +140,12 @@ export default function CategoryForm({ openModal, onClose: handleCloseForm }: Ca
                 <SwipeableViews
                   className={classes.root}
                   axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-                  index={value}
+                  index={tabId}
                   onChangeIndex={handleChangeIndex}
                 >
                   {langs.map((e, i) => {
                     return (
-                      <TabPanel value={value} index={i} dir={theme.direction} key={e.id}>
+                      <TabPanel value={tabId} index={i} dir={theme.direction} key={e.id}>
                         <InputField name={`data.details.${i}.name`} control={control} label={`Category name`} />
                         <InputField name={`data.details.${i}.description`} control={control} label={`Category description`} />
                       </TabPanel>

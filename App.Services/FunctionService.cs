@@ -58,13 +58,11 @@ namespace App.Services
         }
         public async Task<IEnumerable<FunctionViewModel>> GetFunctionsWithoutChildren(string textSearch)
         {
-            var query = _unitOffWork.Repository<Function, string>()
-                                    .GetNoTrackingEntities()
+            var result = await _mapper.ProjectTo<FunctionViewModel>(_unitOffWork.Repository<Function, string>().GetNoTrackingEntities())
                                     .Where(e => e.ParentId == null && EF.Functions.Like(e.Name, $"%{textSearch}%"))
                                     .OrderBy(e => e.SortOrder)
-                                    .ThenBy(e => e.Name);
-
-            var result = await _mapper.ProjectTo<FunctionViewModel>(query).ToListAsync();
+                                    .ThenBy(e => e.Name)
+                                    .ToListAsync();
             return result;
         }
 

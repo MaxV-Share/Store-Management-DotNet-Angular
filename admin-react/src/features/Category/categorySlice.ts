@@ -1,27 +1,21 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "app/store";
 import { get, set } from "lodash";
-import { IBasePaging, ICategoryAddOrUpdateRequest, IFilterBodyRequest, ILangViewModel, IPagination } from "models";
-import { ICategoryDetailViewModel } from '../../models/Categories/ICategoryDetailViewModel';
+import { IBaseLoading, IBasePaging, ICategoryAddOrUpdateModel, ICategoryDetailModel, ICategoryModel, IFilterBodyRequest, ILangViewModel, IPagination } from "models";
+import { IKeyValue } from "models/Common/IKeyValue";
 
 export interface ICategoryTable {
-  isLoading: boolean,
-  data: ICategoryDetailViewModel[],
+  data: ICategoryDetailModel[],
   pagination: IPagination,
-}
-
-export interface SetInterface {
-  key: string;
-  value: any;
 }
 
 export interface CategoryState {
   isLoading: boolean,
-  table: ICategoryTable
+  table: IBaseLoading & ICategoryTable
   filterCategoryRequest: IFilterBodyRequest,
   langFilterRequest: IFilterBodyRequest,
   langs: ILangViewModel[],
-  categoryAddOrUpdate: ICategoryAddOrUpdateRequest,
+  categoryAddOrUpdate: IBaseLoading & ICategoryAddOrUpdateModel,
 }
 const initialPagination: IPagination = {
   pageIndex: 1,
@@ -69,7 +63,7 @@ const categorySlice = createSlice({
     fetchCategories(state, action: PayloadAction<IFilterBodyRequest>) {
       state.isLoading = true;
     },
-    fetchCategoriesSuccess(state, action: PayloadAction<IBasePaging<ICategoryDetailViewModel>>) {
+    fetchCategoriesSuccess(state, action: PayloadAction<IBasePaging<ICategoryDetailModel>>) {
       state.table.data = action.payload.data;
       state.table.isLoading = false;
       state.table.pagination = action.payload.pagination;
@@ -81,7 +75,7 @@ const categorySlice = createSlice({
         pagination: initialPagination
       }
     },
-    setFilter(state, action: PayloadAction<SetInterface>) {
+    setFilter(state, action: PayloadAction<IKeyValue>) {
       if (get(state.filterCategoryRequest, action.payload.key) != action.payload.value) {
         set(state.filterCategoryRequest, action.payload.key, action.payload.value);
         state.table.isLoading = true;
@@ -93,7 +87,7 @@ const categorySlice = createSlice({
     fetchLangsSuccess(state, action: PayloadAction<IBasePaging<ILangViewModel>>) {
       state.langs = action.payload.data;
     },
-    addOrUpdate(state, action: PayloadAction<ICategoryAddOrUpdateRequest>) {
+    addOrUpdate(state, action: PayloadAction<ICategoryAddOrUpdateModel>) {
       state.categoryAddOrUpdate.isLoading = true;
     },
     addOrUpdateSuccess(state, action: PayloadAction<any>) {
@@ -107,7 +101,7 @@ const categorySlice = createSlice({
       // state.categoryAddOrUpdate = action.payload
       state.categoryAddOrUpdate.isLoading = true;
     },
-    fetchCategoryUpdateSuccess(state, action: PayloadAction<any>) {
+    fetchCategoryUpdateSuccess(state, action: PayloadAction<ICategoryModel>) {
       state.categoryAddOrUpdate = { ...action.payload };
       state.categoryAddOrUpdate.isLoading = false;
     },
@@ -142,7 +136,7 @@ const categoryReducer = categorySlice.reducer;
 export default categoryReducer;
 
 // Selectors
-export const selectCategories = (state: RootState) => state.category.table;
+export const selectCategoryTable = (state: RootState) => state.category.table;
 export const selectLangs = (state: RootState) => state.category.langs;
 export const selectCategoryTableLoading = (state: RootState) => state.category.isLoading;
 export const selectCategoryTablePagination = (state: RootState) => state.category.table.pagination;

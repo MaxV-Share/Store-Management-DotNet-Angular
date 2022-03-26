@@ -32,6 +32,7 @@ function* fetchLangs() {
 export default function* rootSaga() {
   yield all([
     fetchLangs(),
+    helloSaga(),
     authSaga(),
     dashboardSaga(),
     studentSaga(),

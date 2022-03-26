@@ -1,15 +1,15 @@
-import { ICategoryAddOrUpdateRequest, ICategoryDetailViewModel } from 'models';
+import { ICategoryAddOrUpdateModel, ICategoryDetailModel } from 'models';
 import { ToFormData } from 'utils';
-import { IBasePaging, ICategoryViewModel } from '../models';
+import { IBasePaging, ICategoryModel } from '../models';
 import { IFilterBodyRequest } from '../models/Bases/IFilterBodyRequest';
 import axiosClient from './axiosClient';
 
 const categoryApi = {
-  getAll(data: IFilterBodyRequest): Promise<IBasePaging<ICategoryDetailViewModel>> {
+  getAll(data: IFilterBodyRequest): Promise<IBasePaging<ICategoryDetailModel>> {
     const url = '/categories/filter';
     return axiosClient().post(url, data);
   },
-  getById(id: number): Promise<ICategoryViewModel> {
+  getById(id: number): Promise<ICategoryModel> {
     const url = `/categories/${id}`;
     return axiosClient().get(url);
   },
@@ -21,7 +21,7 @@ const categoryApi = {
   //   const url = `/categories/${data.id}`;
   //   return axiosClient().put(url, data);
   // },
-  addOrUpdate(request: ICategoryAddOrUpdateRequest): Promise<any> {
+  addOrUpdate(request: ICategoryAddOrUpdateModel): Promise<any> {
     console.log("categoryApi.addOrUpdate");
     var formRequest = new FormData();
     formRequest = ToFormData(request, formRequest);

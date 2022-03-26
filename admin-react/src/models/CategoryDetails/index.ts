@@ -1,1 +1,3 @@
-export * from './ICategoryDetailAddOrUpdateRequest';
+export * from './ICategoryDetailAddOrUpdateModel';
+export * from "./ICategoryDetailModel";
+

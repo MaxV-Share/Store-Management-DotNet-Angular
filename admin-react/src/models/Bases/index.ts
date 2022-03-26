@@ -1,6 +1,6 @@
 export * from "./BasePaging";
 export * from "./IBaseAddOrUpdateBodyRequest";
-export * from "./IBaseAddOrUpdateRequest";
+export * from "./IBaseLoading";
 export * from "./IBaseModel";
 export * from "./IBaseViewModel";
 export * from "./IFilterBodyRequest";

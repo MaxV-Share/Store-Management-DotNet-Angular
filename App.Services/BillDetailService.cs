@@ -26,26 +26,6 @@ namespace App.Services
                                             .Include(e => e.Product.ProductDetails.Where(e => e.LangId == langId))
                                             .Include(e => e.Product.Category.CategoryDetails.Where(e => e.LangId == langId))
                                             .Where(e => e.BillId == id)
-                                            //.Select(e => new BillDetailViewModel()
-                                            //{
-                                            //    BillId = billId,
-                                            //    DiscountPrice = e.DiscountPrice,
-                                            //    Id = e.Id,
-                                            //    Price = e.Price,
-                                            //    Product = new ProductInBillViewModel()
-                                            //    {
-                                            //        Id = e.Product.Id,
-                                            //        Name = e.Product.ProductDetails.SingleOrDefault(e => e.LangId == langId).Name,
-                                            //        CategoryName = e.Product.Category.CategoryDetails.SingleOrDefault(e => e.LangId == langId).Name,
-                                            //        CategoryId = e.Product.CategoryId,
-                                            //        Code = e.Product.Code,
-                                            //        ImageUrl = e.Product.ImageUrl,
-                                            //        Uuid = e.Product.Uuid,
-                                            //    },
-                                            //    ProductId = e.Product.Id,
-                                            //    Quantity = e.Quantity,
-                                            //    Uuid = e.Uuid
-                                            //})
                                             .ToListAsync();
             var result = _mapper.Map<List<BillDetailViewModel>>(entities);
 
