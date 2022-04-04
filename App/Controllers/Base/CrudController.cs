@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using App.Common.Model.DTOs;
 using App.Common.Model;
+using System;
 
 namespace App.Controllers.Base
 {
@@ -50,7 +51,13 @@ namespace App.Controllers.Base
             return StatusCode(500);
         }
         [HttpPost("filter")]
-        public abstract Task<ActionResult> GetPaging(FilterBodyRequest request);
+        //[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IBasePaging<TViewModel>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public virtual async Task<ActionResult> GetPaging(FilterBodyRequest request)
+        {
+            throw new NotImplementedException();
+        }
         [HttpGet("{id}")]
         public virtual async Task<ActionResult> GetById(TKey id)
         {

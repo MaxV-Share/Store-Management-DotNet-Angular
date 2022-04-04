@@ -33,20 +33,8 @@ namespace App.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public override async Task<ActionResult> GetPaging(FilterBodyRequest request)
         {
-            try
-            {
-                var result = await _categoryService.GetPagingAsync(request);
-                return Ok(result);
-            }
-            catch (ArgumentOutOfRangeException ex)
-            {
-                _logger.LogError(ex.Message);
-                return BadRequest(ex.Message);
-            }
-            catch
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            var result = await _categoryService.GetPagingAsync(request);
+            return Ok(result);
         }
     }
 }

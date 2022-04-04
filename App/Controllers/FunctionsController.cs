@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
+using App.Models.DTOs.Functions;
 
 namespace App.Controllers
 {
@@ -75,7 +76,7 @@ namespace App.Controllers
             return NotFound();
         }
         [HttpPost("filter")]
-        public async Task<ActionResult> GetPaging(IFilterBodyRequest request)
+        public async Task<ActionResult> GetPaging(FilterBodyRequest request)
         {
             var result = await _functionService.GetPagingAsync(request);
             return Ok(result);

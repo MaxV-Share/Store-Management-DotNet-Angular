@@ -169,19 +169,19 @@ namespace App.Repositories.BaseRepository
             Entities.Remove(entity);
         }
 
-        public virtual async Task DeleteSoftAsync(params object[] keyValues)
+        public virtual async Task<int> DeleteSoftAsync(params object[] keyValues)
         {
             var entity = await _context.Set<TEntity>().FindAsync(keyValues);
             ValidateAndThrow(entity);
             entity.Deleted = DateTime.Now.ToString("yyyyMMddHHmmss");
-            await UpdateAsync(entity);
+            return await UpdateAsync(entity);
         }
 
-        public virtual async Task DeleteSoftAsync(TEntity entity)
+        public virtual async Task<int> DeleteSoftAsync(TEntity entity)
         {
             ValidateAndThrow(entity);
             entity.Deleted = DateTime.Now.ToString("yyyyMMddHHmmss");
-            await UpdateAsync(entity);
+            return await UpdateAsync(entity);
         }
 
         #endregion public

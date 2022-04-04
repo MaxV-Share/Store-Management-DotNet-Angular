@@ -82,6 +82,42 @@ namespace App.Repositories.UnitOffWorks
             }
         }
 
+        public async Task<T> DoWorkWithTransaction<T>(Func<Task<T>> action)
+        {
+            using (var trans = await _dbContext.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    var result = await action.Invoke();
+                    await trans.CommitAsync();
+                    return result;
+                }
+                catch
+                {
+                    trans.Rollback();
+                    throw;
+                }
+            }
+        }
+
+        //public async Task<T> DoWorkWithTransaction<T>(Func<T> action)
+        //{
+        //    using (var trans = await _dbContext.Database.BeginTransactionAsync())
+        //    {
+        //        try
+        //        {
+        //            var result = action.Invoke();
+        //            await trans.CommitAsync();
+        //            return result;
+        //        }
+        //        catch
+        //        {
+        //            trans.Rollback();
+        //            throw;
+        //        }
+        //    }
+        //}
+
         public async Task<IEnumerable<TResult>> QueryAsync<TResult>(string query)
         {
             IEnumerable<TResult> result;

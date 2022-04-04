@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using App.Models.DTOs.Functions;
 
 namespace App.Models.DTOs
 {
@@ -40,8 +41,8 @@ namespace App.Models.DTOs
         /// <param name="functions"></param>
         private static void GetChild(FunctionViewModel parent, List<FunctionViewModel> functions)
         {
-            parent.Childrens = functions.Where(e => e.ParentId == parent.Id).ToList();
-            parent.Childrens.ForEach(e => GetChild(e, functions));
+            //parent.Childrens = functions.Where(e => e.ParentId == parent.Id).ToList();
+            //parent.Childrens.ForEach(e => GetChild(e, functions));
         }
     }
 }

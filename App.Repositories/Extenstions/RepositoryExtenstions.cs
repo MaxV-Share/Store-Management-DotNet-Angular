@@ -19,6 +19,7 @@ namespace App.Repositories.Extenstions
             services.AddProxiedScoped<IBaseRepository<Customer, int>, BaseRepository<Customer, int>>();
             services.AddProxiedScoped<IBaseRepository<Discount, int>, BaseRepository<Discount, int>>();
             services.AddProxiedScoped<IBaseRepository<Function, string>, BaseRepository<Function, string>>();
+            services.AddProxiedScoped<IBaseRepository<FunctionDetail, int>, BaseRepository<FunctionDetail, int>>();
             services.AddProxiedScoped<IBaseRepository<Lang, string>, BaseRepository<Lang, string>>();
             services.AddProxiedScoped<IBaseRepository<Product, int>, BaseRepository<Product, int>>();
             services.AddProxiedScoped<IBaseRepository<ProductDetail, int>, BaseRepository<ProductDetail, int>>();

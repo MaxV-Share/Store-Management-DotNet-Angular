@@ -12,6 +12,8 @@ using App.Models.DTOs.BillDetails;
 using App.Models.DTOs.ProductDetails;
 using App.Models.DTOs.Products;
 using App.Models.DTOs.Langs;
+using App.Models.DTOs.Functions;
+using App.Models.DTOs.FunctionDetails;
 
 namespace App.Models.Mapper
 {
@@ -49,9 +51,16 @@ namespace App.Models.Mapper
             CreateMap<Discount, DiscountUpdateRequest>().ReverseMap();
             CreateMap<Discount, DiscountViewModel>().ReverseMap();
 
-            CreateMap<Function, FunctionCreateRequest>().ReverseMap();
-            CreateMap<Function, FunctionUpdateRequest>().ReverseMap();
-            CreateMap<Function, FunctionViewModel>().ReverseMap();
+            CreateMap<FunctionDetail, FunctionDetailCreateRequest>().ReverseMap();
+            CreateMap<FunctionDetail, FunctionDetailUpdateRequest>().ReverseMap();
+            CreateMap<FunctionDetail, FunctionDetailViewModel>().ReverseMap();
+
+            CreateMap<Function, FunctionCreateRequest>()
+                .ForMember(dest => dest.Detail, opt => opt.Ignore()).ReverseMap();
+            CreateMap<Function, FunctionUpdateRequest>()
+                .ForMember(dest => dest.Detail, opt => opt.Ignore()).ReverseMap();
+            CreateMap<Function, FunctionViewModel>().ForMember(dest => dest.Name, opt => opt.MapFrom(source => source.Detail.FirstOrDefault().Name)).ReverseMap();
+            CreateMap<Function, FunctionFullViewModel>().ReverseMap();
             //CreateMap<FunctionViewModel, TreeFunctionViewModel>()
             //    .ForMember(dest => dest.Data, opt => opt.MapFrom(source => source))
             //    .ForMember(dest => dest.Children, opt => opt.MapFrom(source => source));

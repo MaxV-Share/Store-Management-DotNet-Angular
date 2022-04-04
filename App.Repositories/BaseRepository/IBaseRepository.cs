@@ -49,13 +49,13 @@ namespace App.Repositories.BaseRepository
         /// </summary>
         /// <param name="keyValues"></param>
         /// <returns></returns>
-        Task DeleteSoftAsync(params object[] keyValues);
+        Task<int> DeleteSoftAsync(params object[] keyValues);
         /// <summary>
         /// 
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        Task DeleteSoftAsync(TEntity entity);
+        Task<int> DeleteSoftAsync(TEntity entity);
         /// <summary>
         /// 
         /// </summary>

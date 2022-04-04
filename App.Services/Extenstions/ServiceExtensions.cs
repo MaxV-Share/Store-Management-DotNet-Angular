@@ -27,6 +27,7 @@ namespace App.Services.Extenstions
             services.AddProxiedScoped<ICustomerService, CustomerService>();
             services.AddProxiedScoped<IDiscountService, DiscountService>();
             services.AddProxiedScoped<IStorageService, FileStorageService>();
+            services.AddProxiedScoped<IFunctionDetailService, FunctionDetailService>();
             services.AddProxiedScoped<IFunctionService, FunctionService>();
             services.AddProxiedScoped<ILangService, LangService>();
             services.AddProxiedScoped<IProductService, ProductService>();

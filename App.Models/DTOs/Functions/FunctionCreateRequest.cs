@@ -1,13 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using App.Common.Model.DTOs;
+using App.Models.DTOs.CreateRequests;
+using App.Models.DTOs.FunctionDetails;
 
-namespace App.Models.DTOs.CreateRequests
+namespace App.Models.DTOs.Functions
 {
     public class FunctionCreateRequest : BaseCreateRequest
     {
         public string Id { get; set; }
         [Required]
-        public string Name { get; set; }
+        public List<FunctionDetailCreateRequest> Detail { get; set; }
         [Required]
         public string Url { get; set; }
         [Required]
