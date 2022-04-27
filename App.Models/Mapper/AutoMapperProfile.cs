@@ -59,7 +59,7 @@ namespace App.Models.Mapper
                 .ForMember(dest => dest.Detail, opt => opt.Ignore()).ReverseMap();
             CreateMap<Function, FunctionUpdateRequest>()
                 .ForMember(dest => dest.Detail, opt => opt.Ignore()).ReverseMap();
-            CreateMap<Function, FunctionViewModel>().ForMember(dest => dest.Name, opt => opt.MapFrom(source => source.Detail.FirstOrDefault().Name)).ReverseMap();
+            CreateMap<Function, FunctionViewModel>().ForMember(dest => dest.Name, opt => opt.MapFrom(source => source.Details.FirstOrDefault().Name)).ReverseMap();
             CreateMap<Function, FunctionFullViewModel>().ReverseMap();
             //CreateMap<FunctionViewModel, TreeFunctionViewModel>()
             //    .ForMember(dest => dest.Data, opt => opt.MapFrom(source => source))

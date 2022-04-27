@@ -20,7 +20,7 @@ namespace App.Controllers
             _functionService = functionService;
         }
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] FunctionCreateRequest request)
+        public async Task<ActionResult> Post([FromForm] FunctionCreateRequest request)
         {
             if (null == request)
                 return BadRequest();
@@ -31,7 +31,7 @@ namespace App.Controllers
             return Ok(result);
         }
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(string id, FunctionUpdateRequest request)
+        public async Task<ActionResult> Put(string id, [FromForm] FunctionUpdateRequest request)
         {
             if (id != request.Id)
                 return BadRequest();

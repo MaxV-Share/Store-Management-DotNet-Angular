@@ -7,10 +7,10 @@ namespace App.Models.Entities
 {
     public class Bill : BaseEntity<int>
     {
-        public override Bill SetValueUpdate(string updateAt)
+        public override Bill SetValueUpdate(string updateBy)
         {
-            BillDetails.ToList().ForEach(e => e.SetValueUpdate(updateAt));
-            base.SetValueUpdate(updateAt);
+            BillDetails.ToList().ForEach(e => e.SetValueUpdate(updateBy));
+            base.SetValueUpdate(updateBy);
             return this;
         }
         public virtual Customer Customer { get; set; }

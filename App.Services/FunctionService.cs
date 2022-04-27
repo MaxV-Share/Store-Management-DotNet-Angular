@@ -3,8 +3,7 @@ using App.Common.Model;
 using App.Common.Model.DTOs;
 using App.EFCore;
 using App.Models.DTOs;
-using App.Models.DTOs.CreateRequests;
-using App.Models.DTOs.UpdateRquests;
+using App.Models.DTOs.Functions;
 using App.Models.Entities;
 using App.Repositories.UnitOffWorks;
 using App.Services.Base;
@@ -12,11 +11,10 @@ using App.Services.Interface;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using App.Models.DTOs.Functions;
-using System;
 
 namespace App.Services
 {
@@ -81,6 +79,7 @@ namespace App.Services
         {
             var queryEntities = _unitOffWork.Repository<Function, string>()
                                             .GetNoTrackingEntities()
+                                            .Include(e => e.Details).ThenInclude(e => e.Lang)
                                             .OrderBy(e => e.Parent.SortOrder)
                                             .ThenBy(e => e.SortOrder);
             var query = _mapper.ProjectTo<FunctionFullViewModel>(queryEntities);
@@ -96,6 +95,7 @@ namespace App.Services
         {
             var function = new Function();
             _mapper.Map(request, function);
+            function.Details = null;
             var effectedCount = await _unitOffWork.Repository<Function, string>().CreateAsync(function);
             request.Detail.ForEach(e =>
             {

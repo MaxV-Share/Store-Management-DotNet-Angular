@@ -10,7 +10,7 @@ namespace App.Models.DTOs.FunctionDetails
     public class FunctionDetailViewModel : BaseViewModel<int>
     {
         public string LangId { get; set; }
-        public int LangOrder { get; set; }
+        public int? LangOrder { get; set; }
         public string Name { get; set; }
         public string FunctionId { get; set; }
     }

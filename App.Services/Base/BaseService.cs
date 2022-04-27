@@ -55,7 +55,6 @@ namespace App.Services.Base
         public async Task<int> DeleteSoftAsync(TKey id)
         {
             return await _unitOffWork.Repository<TEntity, TKey>().DeleteSoftAsync(id);
-            //await _unitOffWork.SaveChangesAsync();
         }
         /// <summary>
         /// 

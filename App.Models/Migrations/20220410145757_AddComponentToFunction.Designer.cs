@@ -4,6 +4,7 @@ using App.Models.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace App.Models.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220410145757_AddComponentToFunction")]
+    partial class AddComponentToFunction
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1243,7 +1245,7 @@ namespace App.Models.Migrations
             modelBuilder.Entity("App.Models.Entities.FunctionDetail", b =>
                 {
                     b.HasOne("App.Models.Entities.Function", "Function")
-                        .WithMany("Details")
+                        .WithMany("Detail")
                         .HasForeignKey("FunctionId")
                         .HasConstraintName("fk_function_details_functions_function_id");
 
@@ -1398,7 +1400,7 @@ namespace App.Models.Migrations
 
                     b.Navigation("CommandInFunctions");
 
-                    b.Navigation("Details");
+                    b.Navigation("Detail");
                 });
 
             modelBuilder.Entity("App.Models.Entities.Identities.Role", b =>
