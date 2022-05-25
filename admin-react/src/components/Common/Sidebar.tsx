@@ -3,7 +3,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import { makeStyles } from "@material-ui/core/styles";
-import { Dashboard, PeopleAlt } from "@material-ui/icons";
+import * as Icons from '@material-ui/icons/';
 import React from "react";
 import { NavLink } from "react-router-dom";
 
@@ -32,25 +32,16 @@ export function Sidebar() {
         <NavLink to="/admin/dashboard" className={classes.link}>
           <ListItem button>
             <ListItemIcon>
-              <Dashboard />
+              {React.createElement(Icons['Dashboard'])}
             </ListItemIcon>
             <ListItemText primary="Dashboard" />
-          </ListItem>
-        </NavLink>
-
-        <NavLink to="/admin/students" className={classes.link}>
-          <ListItem button>
-            <ListItemIcon>
-              <PeopleAlt />
-            </ListItemIcon>
-            <ListItemText primary="Students" />
           </ListItem>
         </NavLink>
 
         <NavLink to="/admin/product-category" className={classes.link}>
           <ListItem button>
             <ListItemIcon>
-              <PeopleAlt />
+              {React.createElement(Icons['PeopleAlt'])}
             </ListItemIcon>
             <ListItemText primary="ProductCategory" />
           </ListItem>
@@ -59,9 +50,18 @@ export function Sidebar() {
         <NavLink to="/admin/category" className={classes.link}>
           <ListItem button>
             <ListItemIcon>
-              <PeopleAlt />
+              {React.createElement(Icons['PeopleAlt'])}
             </ListItemIcon>
             <ListItemText primary="Category" />
+          </ListItem>
+        </NavLink>
+
+        <NavLink to="/admin/function" className={classes.link}>
+          <ListItem button>
+            <ListItemIcon>
+              {React.createElement(Icons['Dashboard'])}
+            </ListItemIcon>
+            <ListItemText primary="Function" />
           </ListItem>
         </NavLink>
       </List>

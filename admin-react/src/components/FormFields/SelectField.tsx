@@ -1,8 +1,8 @@
-import { FormHelperText, MenuItem, Select } from '@material-ui/core';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import * as React from 'react';
-import { Control, useController } from 'react-hook-form';
+import { FormHelperText, MenuItem, Select } from "@material-ui/core";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import * as React from "react";
+import { Control, useController } from "react-hook-form";
 
 export interface SelectOption {
   label?: string;
@@ -17,7 +17,13 @@ export interface SelectFieldProps {
   options: SelectOption[];
 }
 
-export function SelectField({ name, control, label, disabled, options }: SelectFieldProps) {
+export function SelectField({
+  name,
+  control,
+  label,
+  disabled,
+  options,
+}: SelectFieldProps) {
   const {
     field: { value, onChange, onBlur },
     fieldState: { invalid, error },

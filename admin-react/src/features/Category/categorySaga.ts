@@ -1,5 +1,4 @@
 import { PayloadAction } from "@reduxjs/toolkit";
-import langApi from "api/langApi";
 import { IBasePaging, ICategoryDetailModel, ICategoryModel, IFilterBodyRequest, ILangViewModel } from "models";
 import { call, put, takeLatest } from "redux-saga/effects";
 import categoryApi from '../../api/categoryApi';
@@ -14,22 +13,12 @@ function* fetchCategories(action: PayloadAction<IFilterBodyRequest>) {
   }
 }
 
-function* sagaFetchLangs(action: PayloadAction<IFilterBodyRequest>) {
-  try {
-
-    const res: IBasePaging<ILangViewModel> = yield call(langApi.getAll, action.payload);
-    yield put(categoryActions.fetchLangsSuccess(res))
-  } catch (error) {
-
-  }
-}
-
-function* sagaAddOrUpdate(action: PayloadAction<any>) {
+function* sagaAddOrUpdateCategory(action: PayloadAction<any>) {
   try {
     const res: IBasePaging<ILangViewModel> = yield call(categoryApi.addOrUpdate, action.payload);
-    yield put(categoryActions.addOrUpdateSuccess(res));
+    yield put(categoryActions.addOrUpdateCategorySuccess(res));
   } catch (error) {
-
+    throw error;
   }
 }
 
@@ -44,7 +33,6 @@ function* fetchCategoryUpdate(action: PayloadAction<number>) {
 
 export default function* categorySaga() {
   yield takeLatest(categoryActions.fetchCategories, fetchCategories)
-  yield takeLatest(categoryActions.fetchLangs, sagaFetchLangs)
   yield takeLatest(categoryActions.fetchCategoryUpdate, fetchCategoryUpdate)
-  yield takeLatest(categoryActions.addOrUpdate, sagaAddOrUpdate)
+  yield takeLatest(categoryActions.addOrUpdateCategory, sagaAddOrUpdateCategory)
 }

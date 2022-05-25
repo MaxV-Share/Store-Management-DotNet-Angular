@@ -1,10 +1,8 @@
 import { Box, makeStyles } from "@material-ui/core";
-import { Category } from "features/Category";
-import Dashboard from "features/dashboard";
-import StudentFeature from "features/student";
+import * as components from "features";
+import { Components, ComponentsEnum } from "models";
 import * as React from "react";
 import { Route, Switch } from "react-router-dom";
-import ProductCategory from '../../features/ProductCategory';
 import { Sidebar } from "../Common";
 import { Header } from "../Common/Header";
 
@@ -33,7 +31,8 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2, 3),
   },
 }));
-
+console.log('ComponentsEnum', ComponentsEnum)
+console.log('Components', Components)
 export function AdminLayout(props: IAdminLayoutProps) {
   const classes = useStyles();
   return (
@@ -48,21 +47,10 @@ export function AdminLayout(props: IAdminLayoutProps) {
 
       <Box className={classes.main}>
         <Switch>
-          <Route path="/admin/dashboard">
-            <Dashboard />
-          </Route>
-
-          <Route path="/admin/students">
-            <StudentFeature />
-          </Route>
-
-          <Route path="/admin/product-category">
-            <ProductCategory />
-          </Route>
-
-          <Route path="/admin/category">
-            <Category />
-          </Route>
+          <Route path="/admin/dashboard" component={components['Dashboard']} />
+          <Route path="/admin/product-category" component={components['ProductCategory']} />
+          <Route path="/admin/category" component={components['Category']} />
+          <Route path="/admin/function" component={components['Function']} />
         </Switch>
       </Box>
     </Box>

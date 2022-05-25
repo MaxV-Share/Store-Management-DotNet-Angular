@@ -8,7 +8,7 @@
             "args": [
                 "build",
                 "${workspaceFolder}/App/App.csproj",
-                "/property:GenerateFullPaths=true",
+                "dotnet build App.csproj /property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
             "problemMatcher": "$msCompile"
@@ -20,7 +20,7 @@
             "args": [
                 "publish",
                 "${workspaceFolder}/App/App.csproj",
-                "/property:GenerateFullPaths=true",
+                "dotnet build App.csproj /property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
             "problemMatcher": "$msCompile"
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "${workspaceFolder}/App/App.csproj",
-                "/property:GenerateFullPaths=true",
+                "dotnet build App.csproj /property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
             "problemMatcher": "$msCompile"

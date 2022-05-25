@@ -72,11 +72,10 @@ export default function CategoryForm({ openModal, onClose: handleCloseForm }: Ca
       defaultValues: {
         data: {
           details: [{
-            name: '123',
+            name: '',
           }, {
             name: '',
-          }
-          ]
+          }]
         }
       },
       resolver: yupResolver(schema),
@@ -84,7 +83,7 @@ export default function CategoryForm({ openModal, onClose: handleCloseForm }: Ca
 
   const handleFormSubmit = (formValues: IBaseAddOrUpdateBodyRequest<ICategoryAddOrUpdateModel>) => {
     try {
-      dispatch(categoryActions.addOrUpdate(formValues.data));
+      dispatch(categoryActions.addOrUpdateCategory(formValues.data));
       handleClose();
       // await onSubmit?.(formValues);
     } catch (error: any) {
@@ -119,7 +118,7 @@ export default function CategoryForm({ openModal, onClose: handleCloseForm }: Ca
           </AppBar>
           <Container maxWidth="sm">
             <fieldset>
-              <legend>Personalia:</legend>
+              <legend>Detail:</legend>
               <AppBar position="static" color="default">
                 <Tabs
                   value={tabId}

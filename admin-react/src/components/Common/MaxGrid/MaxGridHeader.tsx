@@ -58,11 +58,16 @@ export function MaxGridHeader(props: IMaxGridHeaderProps) {
 
         </Paper>
         <Box>
-          <Tooltip title="Add" aria-label="add">
-            <Fab color="primary" onClick={onAdd}>
-              <AddIcon />
-            </Fab>
-          </Tooltip>
+          {
+            onAdd == undefined ? null :
+              (
+                <Tooltip title="Add" aria-label="add">
+                  <Fab color="primary" onClick={onAdd}>
+                    <AddIcon />
+                  </Fab>
+                </Tooltip>
+              )
+          }
         </Box>
       </Box>
     </>

@@ -1,17 +1,21 @@
-import { Paper, TableContainer } from '@material-ui/core';
-import { useAppDispatch, useAppSelector } from 'app/hooks';
-import { MaxGridFooter } from 'components/Common';
-import { MaxGridHeader } from 'components/Common/MaxGrid/MaxGridHeader';
-import * as React from 'react';
-import { useEffect } from 'react';
-import { categoryActions, selectCategoryTable, selectCategoryTablePagination, selectFilterCategoryRequest } from './categorySlice';
-import CategoryForm from './components/CategoryForm';
-import { CategoryTable } from './components/CategoryTable';
+import { Paper, TableContainer } from "@material-ui/core";
+import { useAppDispatch, useAppSelector } from "app/hooks";
+import { MaxGridFooter } from "components/Common";
+import { MaxGridHeader } from "components/Common/MaxGrid/MaxGridHeader";
+import * as React from "react";
+import { useEffect } from "react";
+import {
+  categoryActions,
+  selectCategoryTable,
+  selectCategoryTablePagination,
+  selectFilterCategoryRequest,
+} from "./categorySlice";
+import CategoryForm from "./components/CategoryForm";
+import { CategoryTable } from "./components/CategoryTable";
 
-export interface ICategoryProps {
-}
+export interface ICategoryProps {}
 
-export function Category(props: ICategoryProps) {
+export const Category: React.FunctionComponent<ICategoryProps> = (props) => {
   const filter = useAppSelector(selectFilterCategoryRequest);
   const pagination = useAppSelector(selectCategoryTablePagination);
   const dispatch = useAppDispatch();
@@ -19,12 +23,12 @@ export function Category(props: ICategoryProps) {
 
   const handleCloseForm = () => {
     setOpenModal(false);
-  }
+  };
 
   const addCategory = () => {
     dispatch(categoryActions.fetchCategoryAdd());
     setOpenModal(true);
-  }
+  };
 
   const tableCategories = useAppSelector(selectCategoryTable);
   useEffect(() => {
@@ -32,18 +36,31 @@ export function Category(props: ICategoryProps) {
   }, [dispatch, filter]);
 
   const categoryForm = React.useMemo(() => {
-    return (<CategoryForm openModal={openModal} onClose={handleCloseForm}></CategoryForm>);
+    return (
+      <CategoryForm
+        openModal={openModal}
+        onClose={handleCloseForm}
+      ></CategoryForm>
+    );
   }, [openModal]);
 
-  const handleEditItem = (categoryId: number | undefined) => {
-    dispatch(categoryActions.fetchCategoryUpdate(categoryId));
-    setOpenModal(true);
-  }
+  const handleEditItem = React.useCallback(
+    (categoryId: number | undefined) => {
+      dispatch(categoryActions.fetchCategoryUpdate(categoryId));
+      setOpenModal(true);
+    },
+    [dispatch]
+  );
 
   const handleChangePage = (event: any, newPage: number) => {
     if (pagination.pageIndex != newPage)
-      dispatch(categoryActions.setFilter({ key: "pagination.pageIndex", value: newPage }))
-  }
+      dispatch(
+        categoryActions.setFilter({
+          key: "pagination.pageIndex",
+          value: newPage,
+        })
+      );
+  };
 
   return (
     <>
@@ -52,15 +69,22 @@ export function Category(props: ICategoryProps) {
         <MaxGridHeader
           onSearch={(event) => event.preventDefault()}
           onAdd={addCategory}
-          placeholderSearch='placeholder Search'
+          placeholderSearch="placeholder Search"
         />
-        <CategoryTable tableCategories={tableCategories} onEdit={handleEditItem} onDelete={(id) => { }} />
+        <CategoryTable
+          tableCategories={tableCategories}
+          onEdit={handleEditItem}
+          onDelete={(id) => {}}
+        />
         {/* Pagination */}
-        <MaxGridFooter pagination={pagination} onChangePageIndex={handleChangePage} />
+        <MaxGridFooter
+          pagination={pagination}
+          onChangePageIndex={handleChangePage}
+        />
       </TableContainer>
 
       {/* edit/add */}
       {categoryForm}
     </>
   );
-}
+};

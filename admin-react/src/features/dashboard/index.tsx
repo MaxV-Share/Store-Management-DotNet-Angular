@@ -1,9 +1,15 @@
-import { Box, Grid, LinearProgress, makeStyles, Typography } from "@material-ui/core";
+import {
+  Box,
+  Grid,
+  LinearProgress,
+  makeStyles,
+  Typography,
+} from "@material-ui/core";
 import {
   ChatBubble,
   ChatRounded,
   LinearScaleSharp,
-  PeopleAlt
+  PeopleAlt,
 } from "@material-ui/icons";
 import { useAppDispatch, useAppSelector } from "app/hooks";
 import * as React from "react";
@@ -17,7 +23,7 @@ import {
   selectDashboardStatistics,
   selectHighestStudentList,
   selectLowestStudentList,
-  selectRankingByCityList
+  selectRankingByCityList,
 } from "./dashboardSlice";
 
 const useStyles = makeStyles((theme) => ({
@@ -33,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Dashboard() {
+export function Dashboard() {
   const dispatch = useAppDispatch();
   const loading = useAppSelector(selectDashboardLoading);
   const statistics = useAppSelector(selectDashboardStatistics);
