@@ -17,10 +17,14 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="MockQueryable.Moq" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\App.Services\App.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="MockQueryable.Moq" />
+  </ItemGroup>
 </Project>

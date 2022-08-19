@@ -43,7 +43,7 @@ namespace App.Services
             _configuration = configuration;
             _signInManager = signInManager;
             _cache = cache;
-            _jwtOptions = jwtOptions.Value;
+            _jwtOptions = jwtOptions?.Value;
             _userService = userService;
         }
         public async Task<BaseResponse<string>> LoginAsync(LoginDTO request)
