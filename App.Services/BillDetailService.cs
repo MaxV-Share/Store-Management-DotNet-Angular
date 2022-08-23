@@ -21,12 +21,15 @@ namespace App.Services
         }
         public async Task<IEnumerable<BillDetailViewModel>> GetByBillIdAsync(int id, string langId)
         {
-            var entities = await _unitOffWork.Repository<BillDetail, int>().GetNoTrackingEntities()
-                                            .Include(e => e.Product.ProductDetails.Where(e => e.LangId == langId))
-                                            .Include(e => e.Product.ProductDetails.Where(e => e.LangId == langId))
-                                            .Include(e => e.Product.Category.CategoryDetails.Where(e => e.LangId == langId))
-                                            .Where(e => e.BillId == id)
-                                            .ToListAsync();
+            if (id == null || id == 0)
+            {
+                return new List<BillDetailViewModel>();
+            }
+            var entities = await _unitOffWork.Repository<BillDetail, int>().GetNoTrackingEntities().Include(e => e.Product.ProductDetails.Where(e => e.LangId == langId))
+                                        .Include(e => e.Product.ProductDetails.Where(e => e.LangId == langId))
+                                        .Include(e => e.Product.Category.CategoryDetails.Where(e => e.LangId == langId))
+                                        .Where(e => e.BillId == id)
+                                        .ToListAsync();
             var result = _mapper.Map<List<BillDetailViewModel>>(entities);
 
             return result;

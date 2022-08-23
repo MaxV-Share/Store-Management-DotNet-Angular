@@ -53,7 +53,7 @@ namespace App.Services
             if (user == null || !await _userManager.CheckPasswordAsync(user, request.Password))
                 return new BaseResponse<string>(StatusCodes.Status404NotFound, "UserName or Password is incorrect");
 
-            IEnumerable<string> userRoles = await _userManager.GetRolesAsync(user);
+            var userRoles = await _userManager.GetRolesAsync(user);
             var authClaims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name,

@@ -62,9 +62,8 @@ namespace App.Services.Base
         /// <returns></returns>
         public virtual async Task<IEnumerable<TViewModel>> GetAllDTOAsync()
         {
-            await Task.Delay(3000);
-            var query = _unitOffWork.Repository<TEntity, TKey>();
-            var result = await _mapper.ProjectTo<TViewModel>(query.GetNoTrackingEntities()).ToListAsync();
+            var query = _unitOffWork.Repository<TEntity, TKey>().GetNoTrackingEntities();
+            var result = await _mapper.ProjectTo<TViewModel>(query).ToListAsync();
             return result;
         }
         public virtual async Task<TViewModel> GetByIdAsync(TKey id)
@@ -117,13 +116,12 @@ namespace App.Services.Base
         {
             var entitiesNew = new List<TEntity>();
             _mapper.Map(request, entitiesNew);
-            IEnumerable<TEntity> response = new List<TEntity>();
             var affectedCount = await _unitOffWork.Repository<TEntity, TKey>().CreateAsync(entitiesNew);
             if (affectedCount <= 0)
             {
                 throw new NullReferenceException();
             }
-            var result = _mapper.Map<IEnumerable<TViewModel>>(response);
+            var result = _mapper.Map<IEnumerable<TViewModel>>(request);
             return result;
         });
     }
